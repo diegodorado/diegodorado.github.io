@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+
+<head>
+  <title></title>
+  <link rel="stylesheet" href="main.css" type="text/css">
+</head>
+
+<body>
+  <button onclick="tick()">tick</button>
+  <div id="universe">
+
+  </div>
+
+  <p>
+    MIDI Input:
+    <select id=midiIn onchange='changeMidiIn();'>
+			<option value="">Not connected</option>
+		</select>
+    MIDI Output:
+    <select id=midiOut onchange='changeMidiOut();'>
+			<option value="">Not connected</option>
+		</select>
+  </p>
+
+  <script src="main.js"></script>
+</body>
+</html>
