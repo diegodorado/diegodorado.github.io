@@ -1,0 +1,118 @@
+/*https://reillydonovan.com/  */
+@import "mixins"
+$black: #222
+$white: #ddd
+
+html,body
+  margin: 0
+  padding: 0
+  min-width: 520px
+
+html
+  background-color: $black
+
+body
+  font-family: 'Inconsolata', sans-serif
+  font-size: 20px
+  color: $white
+
+a, a:visited
+  color: $white
+
+header
+  display: table
+  width: 100%
+  margin: 50px 0
+  h1,nav
+    display: table-cell
+    vertical-align: baseline
+    margin: 0
+    padding: 0
+  h1
+    font-size: 1.75em
+    a
+      text-decoration: none
+  nav
+    font-size: 1em
+    text-align: right
+    a
+      text-decoration: none
+
+section.posts
+  padding: 0
+  margin: 50px 0 0 0
+  flex-flow: row wrap
+  display: flex
+  justify-content: left
+
+
+article.post
+  box-sizing: border-box
+  margin: 0 20px 20px 0
+  border: 1px solid $white
+  overflow: hidden
+  position: relative
+  width: calc(100% - 2px)
+  &:before
+    content: ""
+    float: left
+    padding-top: 100%
+  .gatsby-image-wrapper
+    width: 100% !important
+    height: 100% !important
+  +breakpoint(sm)
+    width: 320px
+    height: 320px
+  .card
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    text-align: center
+    bottom: 0
+  h3
+    display: table
+    height: 100%
+    margin: 0
+    padding: 0
+    width: 100%
+    a
+      display: table-cell
+      vertical-align: middle
+      background: $black
+      text-decoration: none
+      opacity: 0
+      transition: opacity 0.3s ease
+      &:hover,&:active
+        opacity: 0.958
+        outline: 0
+
+#app
+  margin: 0 auto 100px
+  width: 95%
+  +breakpoint(xs)
+    article.post
+      margin-right: 0
+  +breakpoint(sm)
+    width: 700px
+    article.post
+      margin-right: 20px
+      &:nth-child(2n)
+        margin-right: 0
+  +breakpoint(lg)
+    width: 1000px
+    article.post
+      margin-right: 20px
+      &:nth-child(2n)
+        margin-right: 20px
+      &:nth-child(3n)
+        margin-right: 0
+
+
+
+html
+  overflow-y: scroll
+  scrollbar-width: none /* Firefox */
+  -ms-overflow-style: none  /* IE 10+ */
+  &::-webkit-scrollbar  /* WebKit */
+    width: 0
