@@ -16,10 +16,10 @@ class WorkIndex extends React.Component {
         <SEO
           title="diego dorado"
         />
-        <p>I am Diego Dorado, programmer and electronic artist. I am passionate about research projects that combine technological innovation with artistic expressions.
+        <p className="spacey">I am Diego Dorado, programmer and electronic artist. I am passionate about research projects that combine technological innovation with artistic expressions.
         </p>
         <p>
-        Some of my recent works:
+        What {"I've"} been working on:
         </p>
         <section className="posts">
           {posts.map(({ node }) => {
