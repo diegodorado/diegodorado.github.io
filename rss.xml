@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[diego dorado]]></title><description><![CDATA[diego dorado portfolio.]]></description><link>http://diegodorado.github.io/</link><generator>RSS for Node</generator><lastBuildDate>Sat, 02 Mar 2019 23:30:57 GMT</lastBuildDate><item><title><![CDATA[Human Aided Music]]></title><link>http://diegodorado.github.io//blog/human-aided-music/</link><guid isPermaLink="false">http://diegodorado.github.io//blog/human-aided-music/</guid><pubDate>Sat, 22 Jun 2019 00:00:00 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[Human Aided Music]]></title><link>http://diegodorado.github.io//works/human-aided-music/</link><guid isPermaLink="false">http://diegodorado.github.io//works/human-aided-music/</guid><pubDate>Sat, 22 Jun 2019 00:00:00 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[Ceiborg]]></title><link>http://diegodorado.github.io//blog/ceiborg/</link><guid isPermaLink="false">http://diegodorado.github.io//blog/ceiborg/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded>&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre style=&quot;counter-reset: linenumber 0&quot; class=&quot;language-javascript line-numbers&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// In your gatsby-config.js&lt;/span&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[diego dorado]]></title><description><![CDATA[diego dorado portfolio.]]></description><link>http://diegodorado.github.io/</link><generator>RSS for Node</generator><lastBuildDate>Sun, 03 Mar 2019 16:19:31 GMT</lastBuildDate><item><title><![CDATA[Human Aided Music]]></title><link>http://diegodorado.github.io//works/human-aided-music/</link><guid isPermaLink="false">http://diegodorado.github.io//works/human-aided-music/</guid><pubDate>Sat, 22 Jun 2019 00:00:00 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[Ceiborg]]></title><link>http://diegodorado.github.io//blog/ceiborg/</link><guid isPermaLink="false">http://diegodorado.github.io//blog/ceiborg/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded>&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre style=&quot;counter-reset: linenumber 0&quot; class=&quot;language-javascript line-numbers&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// In your gatsby-config.js&lt;/span&gt;
 plugins&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     resolve&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token template-string&quot;&gt;&lt;span class=&quot;token string&quot;&gt;`gatsby-transformer-remark`&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
@@ -8,7 +8,7 @@ plugins&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span c
       &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot; style=&quot;white-space: normal; width: auto; left: 0;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[Instrumento Óptico]]></title><link>http://diegodorado.github.io//blog/i-o/</link><guid isPermaLink="false">http://diegodorado.github.io//blog/i-o/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[Blue Mountain]]></title><link>http://diegodorado.github.io//works/blue-mountain/</link><guid isPermaLink="false">http://diegodorado.github.io//works/blue-mountain/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[Ceiborg]]></title><link>http://diegodorado.github.io//works/ceiborg/</link><guid isPermaLink="false">http://diegodorado.github.io//works/ceiborg/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded>&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre style=&quot;counter-reset: linenumber 0&quot; class=&quot;language-javascript line-numbers&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// In your gatsby-config.js&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot; style=&quot;white-space: normal; width: auto; left: 0;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[CV-2612]]></title><link>http://diegodorado.github.io//works/cv2612/</link><guid isPermaLink="false">http://diegodorado.github.io//works/cv2612/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[Ceiborg]]></title><link>http://diegodorado.github.io//works/ceiborg/</link><guid isPermaLink="false">http://diegodorado.github.io//works/ceiborg/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded>&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre style=&quot;counter-reset: linenumber 0&quot; class=&quot;language-javascript line-numbers&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// In your gatsby-config.js&lt;/span&gt;
 plugins&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     resolve&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token template-string&quot;&gt;&lt;span class=&quot;token string&quot;&gt;`gatsby-transformer-remark`&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
@@ -18,42 +18,8 @@ plugins&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span c
       &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot; style=&quot;white-space: normal; width: auto; left: 0;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[Instrumento Óptico]]></title><link>http://diegodorado.github.io//works/i-o/</link><guid isPermaLink="false">http://diegodorado.github.io//works/i-o/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[LHCVMM]]></title><description><![CDATA[Look at this Video:]]></description><link>http://diegodorado.github.io//works/lhcvmm/</link><guid isPermaLink="false">http://diegodorado.github.io//works/lhcvmm/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded>&lt;p&gt;
-  &lt;a
-    class=&quot;gatsby-resp-image-link&quot;
-    href=&quot;/static/a59ce622b0e6451afd1b84944ce8548e/ecfab/cover.png&quot;
-    style=&quot;display: block&quot;
-    target=&quot;_blank&quot;
-    rel=&quot;noopener&quot;
-  &gt;
-  
-  &lt;span
-    class=&quot;gatsby-resp-image-wrapper&quot;
-    style=&quot;position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;&quot;
-  &gt;
-    &lt;span
-      class=&quot;gatsby-resp-image-background-image&quot;
-      style=&quot;padding-bottom: 97.87037037037037%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAIAAAAC64paAAAACXBIWXMAAAsSAAALEgHS3X78AAAC2UlEQVQ4y21Uy27TQBSdGXtsxx4/EiczfiRtVAg0TZPm1QdpqUhboYCaFey6AsQSCYmPYEkXrPoLgMSGj2GL+AA+ABHu9agtNLVmMXM9Z+65j3OJ9JQSSeqniUiUUI2wUQ/yzM9SkUqhYJP5eT1swEb5Cq/hSqSoyUCSRIAJwEkWpHmYx27scpczkxGGizLLsAI7gHfrYQ534GYBltKrARjd5mGW+Mo2bXL5UUL10keDGmUnqgdApMALBUACNPIgh2fg97+YK6TBDPj0Ex53NR6cK08RHa3BzGUkcAZjOSpP9iaBCLjJ4RjYfj2oA0TTTiHIZSSCCYK9krd+v/1k9rQaV/EaZVWvCvmTniRZlIGJQWpuEqYWR9e2ZSup5qfz6aOpaSBBx3SAuXQl6bQ2Qj8k/8MCl3ab1DHRc1yOXr54tT/ZBzwEosMBzhAvmR3PDiaHa8019E8ZNwDA3j1ji1/02wWrCeJ6Ua/bjcIojuOr6CpuBZiT6eFxZ71TKcc6sQwTTMer7McnsvhDvn6kghcmel2/Im0BZtsyra1un3NLWy3OqcErNvn5mS5+k8WCvJkjF24yzRnujEc73XubvVaXzGfzUX+kywjcJnsP2uvtUETnr43vX8jFW3qnillg9Lp4SiZnz89G7RE5PTkdDhDcutsaD8eDrcHR9Ojk+LHFTK/gS24r/nZ3+/z9B+KbAovpepDPep5z03p4cLi50dE9WnC92XPQxWU7Luoc5E7R0oDvbfZ2d3ZXGiv9rT5DIF3uHIyuVM6CTAEYpFd1Y03GcZyVxmpztTkcDHV6lpEuL0GHKBSyQlXBIXIijdfVdiznVqRtWFqSgETaqOdC9HEp5ozrDrvR6voIEkDZw1QQ4FYqPyEKBwjoM8mL6eHbPk6CSxZaySWzBEMi02IWxSTxajACSM2r4nwRqUKVyTTIYPqAbqABIRbYgBHTg39VgmMAr9WEhOf+AlSLVWvlaHTeAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
-    &gt;
-      &lt;img
-        class=&quot;gatsby-resp-image-image&quot;
-        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
-        alt=&quot;cover&quot;
-        title=&quot;&quot;
-        src=&quot;/static/a59ce622b0e6451afd1b84944ce8548e/40fad/cover.png&quot;
-        srcset=&quot;/static/a59ce622b0e6451afd1b84944ce8548e/707e9/cover.png 148w,
-/static/a59ce622b0e6451afd1b84944ce8548e/649e0/cover.png 295w,
-/static/a59ce622b0e6451afd1b84944ce8548e/40fad/cover.png 590w,
-/static/a59ce622b0e6451afd1b84944ce8548e/b3fef/cover.png 885w,
-/static/a59ce622b0e6451afd1b84944ce8548e/ecfab/cover.png 1080w&quot;
-        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
-      /&gt;
-    &lt;/span&gt;
-  &lt;/span&gt;
-  
-  &lt;/a&gt;
-    &lt;/p&gt;
-&lt;h1&gt;Look at this Video:&lt;/h1&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;span aria-hidden=&quot;true&quot; class=&quot;line-numbers-rows&quot; style=&quot;white-space: normal; width: auto; left: 0;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[LHCVMM]]></title><description><![CDATA[Multidisciplinary digital art project in which the installation scenery is exploited and the creation of a space intervened by the…]]></description><link>http://diegodorado.github.io//works/lhcvmm/</link><guid isPermaLink="false">http://diegodorado.github.io//works/lhcvmm/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded>&lt;p&gt;Multidisciplinary digital art project in which the installation scenery is exploited and the creation of a space intervened by the repercussions of the interaction between audio and visuals.&lt;/p&gt;
+&lt;h2&gt;Look at the Video&lt;/h2&gt;
 &lt;p&gt;&lt;div&gt;
           &lt;div
             class=&quot;gatsby-resp-iframe-wrapper&quot;
@@ -74,4 +40,89 @@ plugins&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span c
         }
       &lt;/style&gt;
           &lt;/div&gt;
-          &lt;/div&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[LiveCoding]]></title><link>http://diegodorado.github.io//works/live-coding/</link><guid isPermaLink="false">http://diegodorado.github.io//works/live-coding/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[Live-Emojing]]></title><link>http://diegodorado.github.io//works/live-emojing/</link><guid isPermaLink="false">http://diegodorado.github.io//works/live-emojing/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded></content:encoded></item></channel></rss>
+          &lt;/div&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[LiveCoding]]></title><description><![CDATA[Livecoding is a form of performatic art and a creative technique based upon the use of improvised interactive programming.]]></description><link>http://diegodorado.github.io//works/live-coding/</link><guid isPermaLink="false">http://diegodorado.github.io//works/live-coding/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded>&lt;p&gt;Livecoding is a form of performatic art and a creative technique based upon the use of improvised interactive programming.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Instrumento Óptico]]></title><description><![CDATA[video: ]]></description><link>http://diegodorado.github.io//works/i-o/</link><guid isPermaLink="false">http://diegodorado.github.io//works/i-o/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded>&lt;p&gt;video: &lt;code class=&quot;language-text&quot;&gt;https://youtu.be/5pKCk0m2zpQ&lt;/code&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Live-Emojing]]></title><description><![CDATA[Livecoding technique I developed with the intention of including the audience in the performance. Spectators input  patterns in an intuitive…]]></description><link>http://diegodorado.github.io//works/live-emojing/</link><guid isPermaLink="false">http://diegodorado.github.io//works/live-emojing/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded>&lt;p&gt;Livecoding technique I developed with the intention of including the audience in the performance. Spectators input  patterns in an intuitive manner by sending series of emojis via social networks.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Blue Mountain]]></title><description><![CDATA[Blue Mountain  is a musical and pictorial journey of beautiful soundscapes and fantastic nature that leads to a peaceful contemplation. An…]]></description><link>http://diegodorado.github.io//works/blue-mountain/</link><guid isPermaLink="false">http://diegodorado.github.io//works/blue-mountain/</guid><pubDate>Sun, 28 Jan 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;strong&gt;Blue Mountain&lt;/strong&gt; is a musical and pictorial journey of beautiful soundscapes and fantastic nature that leads to a peaceful contemplation.&lt;/p&gt;
+&lt;p&gt;An exploratory audiovisual landscape approached through virtual reality technology. Each element that conform the virtual environment has a certain pictorial-musical representation. Depending on which path the user takes, the sound environment is modiﬁed as it moves through space.&lt;/p&gt;
+&lt;p&gt;…&lt;a href=&quot;http://bluemountainvr.com/&quot;&gt;Go to project site&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Watch the trailer&lt;/h2&gt;
+&lt;p&gt;&lt;div&gt;
+          &lt;div
+            class=&quot;gatsby-resp-iframe-wrapper&quot;
+            style=&quot;padding-bottom: 56.49999999999999%; position: relative; height: 0; overflow: hidden;margin-bottom: 1.0725rem&quot;
+          &gt;
+            &lt;div class=&quot;embedVideo-container&quot;&gt;
+            &lt;iframe src=&quot;https://www.youtube.com/embed/ONDT5KO7gb8?rel=0&quot; class=&quot;embedVideo-iframe&quot; allowfullscreen style=&quot;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+          &quot;&gt;&lt;/iframe&gt;
+        &lt;/div&gt;
+      &lt;style&gt;
+        .embedVideo-iframe {
+          border: 0
+        }
+      &lt;/style&gt;
+          &lt;/div&gt;
+          &lt;/div&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2&gt;&lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/ee7b5733635cfac8fbb3ab3cc7cd5370/2fbda/b.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 1000px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 62.5%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAAAsSAAALEgHS3X78AAADqElEQVQ4yxWQa0zTZxTG/8kQYUScgDIEWkBKwUIovdGCAi0tpbTcCi0thXIp5eIE5RapIgNEFFDDTeUSGBvLFs2IW+ayLNG5GJb4ZYmf9mHZMpNtX5ZsCdncZrbktz8fTs55k/P8nuc9woi9m+uhD3H4pyhvuIzR8zZF7mlK3DfwtK2wMf2IgYH3sDZfo7juMvauBYJT92gY2sLVv4W98y6uvlVcvas4grcRes3NLPatEWibxuqdwCIKy/w3xb6M2TOP0TWH1TOD3T1Odd0wrQMr1J9fp+atFaq7V6jtXsPdK8J7Nuno20aYdIZ4Nvuc9cnH1HYtYveL4uYZyjtWKfUtYm6cF/st6upHqbd143UNU900gbVtAXtgFXfPNgNDD7gx8YibE48RApYmFkW34fZFCmxnKSnvwVLaSX7lCMU+USQmrQosY2ucxl3ShLPQhdY6iM45Q6t4kq2ru6xfecrA4CfY295FsFnlmIw6TmSdIltdhkFZQZG6FpmqDnXFCOWtt7nU+w59gXnaS7yY9C5OOi7itg8y4F9gOfQF/WfvU+RdFn+yhODz51Fk0pGUrueU0Yoxt4zcrDLSsx1k6jyUOieYFQXr4ikWzH6MeeVUWjrxOceQZVeI5UChrEOWW88JpQdBay7mzVQ18VIdcRIN+Rmn0WQaUShspIrLxQYfHWVBzpsbGTFYcKk01FR2YHOe46TGTkKKjpiEPGKOa4lJLESQWbqIl5lIkOYjlWrRygzIZAVIsoyiq43CwgaGart4eCHERqOLjc4abl1sZ2qwjQavk8w8McjxHI7E5/LGMTVCjqOfY+kmYpLyOZqkQiPXo1AXojxtQl1gw2dr4X7vGC/ubfL99jQ/7HSw91MPv37byc4dF9U1xSRlKEVoHtFxuQhy8xmSVU7is0zEpWpJkWpo7a5gc7uZSns5494Gvhq7xC9PPmDv5x3+3Avx8u8WXv0X4OXvAUYvlJEsVxAdKycyWoaQUtBEktrJ4UQtUbEKjkqU5OgLCbSY+Gi8lGfXzTxfOsOPn95l78Ua/76a5J8/2vnrt3a++8ZLMGggLjGFA5GJhIUnIkQczuLA62mERUgJj5JyKDYFpSqDuXNqPrti4MupAr6+auLpaAW7s1XsrlfxZLOK9+esBP165LmZRB2REnZQwmvhyQj7Q1iE+DiYTLjoEnkonipLGkvDKrZDOh6M6Xko1ufj+Xw8qudOv47W+hw0BjmJ6WkiTCKm24ftMyT8D0zKEyVlO3WNAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;&lt;/span&gt;
+    &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;box-shadow:inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;alt text&quot;
+        title=&quot;&quot;
+        src=&quot;/static/ee7b5733635cfac8fbb3ab3cc7cd5370/bc5e8/b.png&quot;
+        srcset=&quot;/static/ee7b5733635cfac8fbb3ab3cc7cd5370/dfab8/b.png 250w,
+/static/ee7b5733635cfac8fbb3ab3cc7cd5370/b3e9c/b.png 500w,
+/static/ee7b5733635cfac8fbb3ab3cc7cd5370/bc5e8/b.png 1000w,
+/static/ee7b5733635cfac8fbb3ab3cc7cd5370/0f43a/b.png 1500w,
+/static/ee7b5733635cfac8fbb3ab3cc7cd5370/2fbda/b.png 2000w&quot;
+        sizes=&quot;(max-width: 1000px) 100vw, 1000px&quot;
+      /&gt;
+  &lt;/span&gt;
+  &lt;/a&gt;&lt;/h2&gt;
+&lt;h2&gt;&lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/d9c46af5c9ac5962f847b53c791aa101/2fbda/f.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 1000px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 62.5%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAAAsSAAALEgHS3X78AAADhklEQVQ4yzWT6VPTVxSGfx+0dKyjhVaQxZhQRZRUlFhQ0MCQIqtL2EZwMuyya4FSZJMgGCKQMgrCCBWHCIIRCCGy1G1UpkXplCw4be2H/itPr6H9cOZ+uOc+8973PUcaal/kVe9r3jUv4Gi34ro5h6vbxoY4HW0zrF214Oqy8/fwChumJ547V/c8683TTMU3kBioZsc2BVs/8WeLVxBSS5WZxTq7eCwajVbPA6d+lqcFZga1dzFkDjFWbuFVnZXVmnHRY9uE3pxntfo+TcoLfOWtxMsrgC1bfZHGry6z3rKIo2MGZ5dQpZ/BkjlM2UkDcdEdqJNNZOvuUXuhn4XaaTb0NhydsziNc7hv2FnIMpIeFIfPdoUA7kJ6ViNg1x7juCHUicaFvDEq1J2EKcsIVjVy4NQ1QqOqUJ+/RUPhMNN5A/w1+EZ8X1hksOIQX++LKkLpE8anXn5IL4v6hTqr53L1uynaNT1kZ93h0LFy5AeLCPn6EkpVKVGaRmKOX6IhsZmVegvvTUu4e+24jXae634kZ4+aLz/bi/S21izUzeG8Pssj4VfGiSZiE/WEhp7n6H4tGdHVFCS1U3rOSLVuiP5qC4MJjTjbZvnH4uLPkTesNz7CFJmP6ovDSB/VOUUYv9VPoVdfR6UsJkSRRIQ8ge5MI8uVE/xcMcZQwV0680apONNBlSqP1yVDfBj5RUAduMUULGZ3UR6cjOTqnhMjYuNZ4SgXj9Qgl2cQ6BstQqlguWQUi26Ap+WTvLwySfHJKsLlGhJFTaS0iFDm2ehbEqnbWft+gsl4/X9Awxzms32oQwrxl6Wzd08qXal6HhcP8M74gjX9c9YarLQlN7J/dwxhvpF0ROTz+w+TnvHZHCMbK4UPNoGO1mkMIs2D8mx8AtKQKbQkH83lTqmRJ60PsV8Z4UXtQyo1TciCUpD5xVISmsNK6U8ibRFMjxBlsnmWQHIL+q/VZsrDKwkMSMHbX4NsXyKRqjRqtFkst+m4d7mArNgKjhwuJUCRy25ZJtpDZSzlj/C+VygUQHevzbNlkrvLhj33FmmKLHb5qYXC4xwIi6Huooa3g8ls3D9DvU6L6pt0/IPPscMvhZ2+SZxQ5PAgrcdjlwfoKRvS2uUpRhJaiPL/Fm+fCBT7wmktjGT9dhwfxk/zh/k0y4Z4Io9FC1g02z4XtVP4GJDK7VPNuMS+f7Tt//oXfqFxP2V3+lAAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;&lt;/span&gt;
+    &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;box-shadow:inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;alt text&quot;
+        title=&quot;&quot;
+        src=&quot;/static/d9c46af5c9ac5962f847b53c791aa101/bc5e8/f.png&quot;
+        srcset=&quot;/static/d9c46af5c9ac5962f847b53c791aa101/dfab8/f.png 250w,
+/static/d9c46af5c9ac5962f847b53c791aa101/b3e9c/f.png 500w,
+/static/d9c46af5c9ac5962f847b53c791aa101/bc5e8/f.png 1000w,
+/static/d9c46af5c9ac5962f847b53c791aa101/0f43a/f.png 1500w,
+/static/d9c46af5c9ac5962f847b53c791aa101/2fbda/f.png 2000w&quot;
+        sizes=&quot;(max-width: 1000px) 100vw, 1000px&quot;
+      /&gt;
+  &lt;/span&gt;
+  &lt;/a&gt;&lt;/h2&gt;</content:encoded></item></channel></rss>
