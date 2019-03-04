@@ -19,7 +19,7 @@ class WorkIndex extends React.Component {
         <p className="spacey">I am Diego Dorado, programmer and electronic artist. I am passionate about research projects that combine technological innovation with artistic expressions.
         </p>
         <p>
-        What {"I've"} been working on:
+        This is what {"I've"} been working on lately:
         </p>
         <section className="posts">
           {posts.map(({ node }) => {

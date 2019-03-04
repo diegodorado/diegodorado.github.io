@@ -1,7 +1,7 @@
 import React from "react"
-import { Link, graphql } from "gatsby"
+import { graphql } from "gatsby"
 import Img from 'gatsby-image'
-import Swiper from 'react-id-swiper/lib/custom'
+import CyclicFade from '../components/cyclic-fade'
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
@@ -12,26 +12,6 @@ class PicsIndex extends React.Component {
     const pics = data.allFile.edges
     const posts = data.allInstaNode.edges
 
-    const params = {
-          //spaceBetween: 30,
-          keyboard: {
-            enabled: true,
-            onlyInViewport: false,
-          },
-          centeredSlides: true,
-          speed: 800,
-          effect: 'fade',
-          ///loop: false, //loop fails to load images =(
-          autoplay: {
-            delay: 5000,
-            disableOnInteraction: true
-          },
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev'
-          }
-        }
-
     return (
       <Layout location={this.props.location} title={siteTitle}>
         <SEO
@@ -39,13 +19,14 @@ class PicsIndex extends React.Component {
         />
         <p className="spacey">Random pics {"I've"} collected, mostly taken by <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/nicolascroceph" >Nicolás Croce</a>.
         </p>
-        <Swiper {...params}>
+        {/*<CyclicFade {...{speed: 2000}}>*/}
+        <CyclicFade speed={2000}>
           {pics.map(({ node }) => {
             return (
               <Img key={node.id} fluid={node.childImageSharp.fluid} />
               )
             })}
-        </Swiper>
+        </CyclicFade>
         <p className="spacey">
           These are from Instagram.<br/> Follow me there! <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/diegdorado/" >@diegdorado</a>
         </p>

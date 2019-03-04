@@ -1,6 +1,6 @@
 ---
 title: Blue Mountain
-date: "2018-01-28"
+date: "2017-11-01"
 description: A musical and pictorial journey of beautiful soundscapes and fantastic nature that leads to a peaceful contemplation.
 cover: "./cover.png"
 ---

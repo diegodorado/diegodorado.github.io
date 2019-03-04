@@ -33,14 +33,30 @@ exports.createPages = ({ graphql, actions }) => {
     }
 
     // Create blog posts pages.
-    const posts = result.data.allMarkdownRemark.edges
+    const posts = result.data.allMarkdownRemark.edges.filter(p => p.node.fields.type==="blog")
+    const works = result.data.allMarkdownRemark.edges.filter(p => p.node.fields.type==="works")
+
+    works.forEach((work, index) => {
+      const previous = index === works.length - 1 ? null : works[index + 1].node
+      const next = index === 0 ? null : works[index - 1].node
+      createPage({
+        path: work.node.fields.slug,
+        component: workPost,
+        context: {
+          slug: work.node.fields.slug,
+          previous,
+          next,
+        },
+      })
+    })
+
 
     posts.forEach((post, index) => {
       const previous = index === posts.length - 1 ? null : posts[index + 1].node
       const next = index === 0 ? null : posts[index - 1].node
       createPage({
         path: post.node.fields.slug,
-        component: (post.node.fields.type=="blog") ? blogPost : workPost,
+        component: blogPost,
         context: {
           slug: post.node.fields.slug,
           previous,
@@ -48,6 +64,9 @@ exports.createPages = ({ graphql, actions }) => {
         },
       })
     })
+
+
+
   })
 }
 
