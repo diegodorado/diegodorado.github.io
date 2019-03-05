@@ -1,6 +1,16 @@
+import React from "react"
 import { navigate } from "gatsby"
 
-export default function Home() {
-  navigate("/work")
-  return null
+class Home extends React.Component {
+
+  componentDidMount() {
+    navigate("/work")
+  }
+
+  render() {
+    return null
+  }
+
 }
+
+export default Home
