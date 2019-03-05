@@ -1,0 +1,405 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Live Emojing</title>
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/iclc.css">
+	<link rel="stylesheet" href="css/theme/black.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/solarized-dark.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>
+				<h3>Live-Emojing</h3>
+				<p style="font-size:160px">😎</p>
+				<p class="fragment fade-in">
+					a livecoding technique to include the audience.
+				</p>
+
+			</section>
+			<section>
+				<h3>About me</h3>
+				<p style="font-size:0.8em">
+(IG/FB: <span style="color:#ff0099">&nbsp;@diegdorado&nbsp;</span>)
+<br />
+<br />
+I'm Diego Dorado,  <span style="color:#ff0099">&nbsp;programmer and electronic artist&nbsp;</span>  from Argentina.
+<br />
+<br />
+I am passionate about research projects that combines <span style="color:#ff0099">&nbsp;technological innovation with artistic expressions&nbsp;</span>.
+<br />
+<br />
+As a creative coder, I have worked with microcontrollers, videogames, AR/VR, fulldome, audiovisuals, live coding, data sonification and e-textiles.
+				</p>
+
+			</section>
+			<section>
+				<h3>Live-Emojing</h3>
+				<p style="font-size:160px">🤔</p>
+				<p>How is that?</p>
+			</section>
+			<section>
+				<p >
+					People sends 😎😱🤖 from their 📱
+				</p>
+				<p class="fragment fade-in">
+					These 😎😱🤖 gets into the code editor <br />📟👾
+				</p>
+				<p class="fragment fade-in">
+					And modify the music <br />we code alltogether<br /> 🎹🎷🎉😂🎊
+				</p>
+			</section>
+
+			<section>
+				<h3>Why emojis?</h3>
+				<ul>
+					<li class="fragment fade-in">Very familiar</li>
+					<li class="fragment fade-in">Antinatural in Code</li>
+					<li class="fragment fade-in">Language-less</li>
+				</ul>
+				<aside class="notes">
+					I found in Emojis a key to attract the public to reading the code, It’s appeal comes as a result of
+					it being both a very familiar element and at the same time very antinatural to programming
+					languages. This contrast makes it stand out.
+					Emojis communicate quickly, easily and make no language distinction
+				</aside>
+
+			</section>
+
+
+			<section>
+				<h3>Advertising (?)</h3>
+				<p style="text-align:left">
+					If you haven't, install Telegram.
+					<br /><br />
+					Search for this bot: <a href> @tidalfun_bot</a>
+					<br /><br />
+					(you'll see why shortly)
+				</p>
+			</section>
+
+			<section>
+				<h3>Interests</h3>
+				<ul>
+					<li class="fragment fade-in">Audience Participation</li>
+					<li class="fragment fade-in">Everyone can Code</li>
+					<li class="fragment fade-in">Code can be a social activity</li>
+				</ul>
+				<aside class="notes">
+					Besides my interest in having the audience participate in the performance, I have the intention
+					of bringing down the idea that programming is inaccessible. Socializing the code by inviting the
+					spectator to intervene.
+				</aside>
+			</section>
+			<section>
+				<section>
+					<p>How to engage "Code Reading"?</p>
+					<ul>
+						<li class="fragment fade-in">Font Size</li>
+						<li class="fragment fade-in">Blank Page</li>
+						<li class="fragment fade-in">Code Localization​​</li>
+					</ul>
+					<aside class="notes">
+						My interest to make the audience take part in the livecoding experience brought to me the idea
+						of “​ livecoding with emojis​​ “
+						I had previously tried to reach out for such interaction by other means.
+					</aside>
+				</section>
+				<section data-transition="fade-in fade-out">
+					<p>Font Size</p>
+					<aside class="notes">
+						Enlarging the font to its maximum size so that reading the code would be comfortable to the
+						audience.
+
+						Larger font size invites us to reading it.
+					</aside>
+				</section>
+				<section data-transition="fade-in fade-out">
+					<pre><code class="haskell" data-trim data-noescape style="font-size:13px">
+  d1 $ fast 2  $ stack[
+    s "[[swbd ] <swsn swsn:1> ]" # orbit 3 # gain 1.12 # room 0.23,
+		-- n (run 12 ) # s "tabla2" # gain 1.1,
+		s "{feel:2 ~ feel:1*<1 2 1 16> }%6",
+		note (mono $ "<{0 -12 ~ 0}%6 {0 -12 7}%6>"+(cP "[]" "notes")) # s "midi" # midichan "0" ,
+		jux (rev) $ slow 4 $ striate' "24 48" 0.2 $ s "chant" # n (cP "[0]" "notes") # shape 0.6  # orbit 1 # delay 0.5 # delayt 0.33 # delayfb 0.4,
+		-- (every 4 (fast 1.5)) $ s "{feel:2 ~ feel:1 }%12",
+		-- note (scale "ritusen" ("0(8,12)"+(slow 5 $ run 8)+7+(irand 4))) # s "midi" # midichan "[4,8]" ,
+		-- note (scale "ritusen" ("[0*4]"+(irand 8))) # s "midi" # midichan "4" # sus 0.2 # gain 0.8,
+    $"0(8,12)"+(cP "[]" "notes"))) # s "midi" # midichan "5" ,
+	  s "~"
+	] |*| gain 0.3
+	</code></pre>
+				</section>
+				<section data-transition="fade-in fade-out">
+					<p>vs</p>
+				</section>
+				<section data-transition="fade-in fade-out">
+					<pre><code class="haskell" data-trim data-noescape style="font-size:50px;line-height:70px">
+					d1 $ s "bd sd"
+
+					d2 $ s "hh*4" # cutoff 2500
+	</code></pre>
+				</section>
+				<section data-transition="fade-in fade-out">
+					<p>Blank Page</p>
+					<aside class="notes">
+						Starting out from a blank page with simple sequences that were easy to relate to the audio
+						being generated and gradually becoming more complex.
+
+						The blank sheet generates a lot of curiosity and gives an opportunity to try to follow the initial
+						logical sequences
+					</aside>
+				</section>
+				<section data-transition="fade-in fade-out">
+					<pre>
+						<code class="haskell" data-trim data-noescape style="font-size:50px;line-height:70px">
+					d1
+					</code>
+				</pre>
+				</section>
+				<section data-transition="fade-in fade-out">
+					<pre>
+						<code class="haskell" data-trim data-noescape style="font-size:50px;line-height:70px">
+					d1 $ sound "bd"
+					</code>
+				</pre>
+				</section>
+				<section data-transition="fade-in fade-out">
+					<pre>
+					<code class="haskell" data-trim data-noescape style="font-size:50px;line-height:70px">
+				d1 $ sound "bd(3,8)"
+				</code>
+			</pre>
+				</section>
+				<section data-transition="fade-in fade-out">
+					<pre>
+					<code class="haskell" data-trim data-noescape style="font-size:50px;line-height:70px">
+				d1 $ sound "bd(3,8) sd"
+				</code>
+			</pre>
+				</section>
+				<section data-transition="fade-in fade-out">
+					<pre>
+					<code class="haskell" data-trim data-noescape style="font-size:50px;line-height:70px">
+				d1 $ sound "bd(3,8) sd*2"
+				</code>
+			</pre>
+				</section>
+				<section data-transition="fade-in fade-out">
+					<pre>
+					<code class="haskell" data-trim data-noescape style="font-size:50px;line-height:70px">
+				d1 $ every 4 (fast 2) $ sound "bd(3,8) sd*2"
+				</code>
+			</pre>
+				</section>
+
+
+				<section data-transition="fade-in fade-out">
+					<p>Code Localization​​</p>
+					<aside class="notes">
+						I created aliases in our native language of some function names or code
+						blocks to replace their original English names as a way to engage Non-English speakers during
+						presentations.
+						Displaying the code written in native language draws attention, eliminates the difficulty of the
+						language barrier and focuses attention on what the code is really about.
+					</aside>
+				</section>
+
+				<section data-transition="fade-in fade-out">
+					<pre>
+					<code class="haskell" data-trim data-noescape style="font-size:40px;line-height:60px">
+let pista1 = d1
+    pista2 = d2
+    sonido = sound
+    cada_tanto = sometimes
+    despacito = slow 4
+    primeros_8 = run 8
+    empezar_desde = begin
+    comprimir = shape
+		cortar =  cut "1"
+				</code>
+			</pre>
+				</section>
+
+				<section data-transition="fade-in fade-out">
+					<pre>
+					<code class="haskell" data-trim data-noescape style="font-size:40px;line-height:60px">
+pista1 $ sonido "bombo tacho" # comprimir 0.2
+
+pista2 $ cada_tanto despacito $ primeros_8 $ sonido "numbers" # empezar_desde 0.2 # comprimir 0.7 # cortar
+				</code>
+			</pre>
+				</section>
+
+
+
+			</section>
+
+			<section>
+				<h3>Proof of Concept</h3>
+				<pre class="fragment fade-in">
+				<code class="haskell" data-trim data-noescape >
+	emoji x = sound (fromString $ concatMap (\c) ->
+    if c == '💚' then s "bd:6"
+    else if c == '✊' then s "sn:4"
+    else if c == '😬' then s "dr"
+    else if c == '😎' then s "dr:1"
+    else if c == '👄' then s "feel:1"
+    else if c == '💋' then s "kiss:2"
+    else if c == '😘' then s "kiss"
+    else if c == '😸' then s "cat"
+	)
+
+	d1 $ emoji "💚(3,8) ✊*2"
+			</code>
+		</pre>
+				<aside class="notes">
+					Initially I wrote a haskell function to map 7 emojis to 7 different samples in tidalcycles’ livecoding
+					environment.
+					In this first proof of concept the emojis were not received but rather typed in the Atom editor
+					(thanks to the autocomplete-emojis package)Emojis mapping function in Tidalcycles
+				</aside>
+			</section>
+
+
+			<section>
+				<h3>Demo</h3>
+				<p>Let's see a short demo.</p>
+				<pre>
+				<code class="haskell" data-trim data-noescape >
+	d1 $ sound "[💚(3,8),✊ 👊*2]"
+			</code>
+		</pre>
+			</section>
+
+
+
+			<section>
+				<h3>Emoji Mapping</h3>
+				<pre>
+				<code class="json" data-trim data-noescape >
+//emojis.json				[
+["💚","bd"],
+["💪✊👊","feel:"],
+["😨😩😰😱😵","chant:"],
+//...
+			</code>
+		</pre>
+				<pre>
+		<code class="haskell" data-trim data-noescape >
+d1 $ sound "[💚(3,8),✊ 👊*2]"
+-- turns into
+d1 $ sound "[[bd](3,8),[feel:1] [feel:2]*2]"
+	</code>
+</pre>
+				<ul>
+					<li>Some emojis aren't mapped to sounds</li>
+					<li>My emojis are outdated (from 2016)</li>
+				</ul>
+			</section>
+
+			<section>
+				<h3>Send and Emoji</h3>
+				<p style="text-align:left">
+					telegram: <a href> @tidalfun_bot</a>
+					<br />
+					facebook: <a href>facebook.com/diegdorado/</a>
+					<br />
+					<br />
+					<ul>
+						<li>Your message will appear in the editor</li>
+						<li>I'll try to get your profile pic</li>
+						<li>There is a 30'' countdown</li>
+					</ul>
+				</p>
+			</section>
+
+
+			<section>
+				<h3>Get prepared</h3>
+				<p>
+					👍👈👉👆👇
+				</p>
+			</section>
+
+			<section>
+				<h3>Bonus</h3>
+				<p>
+					<br />
+				  🤖 Bot dixit:
+					<br /><br />
+					<i>To give you inspiration, <br />I'll tell you a well known story<br /></i><br />
+					👧😯🐇🕐🏃⚫🌳
+				</p>
+			</section>
+
+
+			<section>
+				<h3>Enough Talking...</h3>
+				<p style="font-size:160px">😴</p>
+			</section>
+
+
+			<section>
+				<h3>Let's start live-emojing!</h3>
+				<p style="font-size:160px">🐙</p>
+			</section>
+
+
+
+		</div>
+	</div>
+
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.js"></script>
+
+	<script>
+		// More info about config & dependencies:
+		// - https://github.com/hakimel/reveal.js#configuration
+		// - https://github.com/hakimel/reveal.js#dependencies
+		Reveal.initialize({
+			dependencies: [{
+					src: 'plugin/markdown/marked.js'
+				},
+				{
+					src: 'plugin/markdown/markdown.js'
+				},
+				{
+					src: 'plugin/notes/notes.js',
+					async: true
+				},
+				{
+					src: 'plugin/highlight/highlight.js',
+					async: true,
+					callback: function() {
+						hljs.getLanguage('haskell').k += ' d1 d2';
+						hljs.initHighlightingOnLoad();
+					}
+				}
+			]
+		});
+		setTimeout(function() {
+			//Reveal.slide(5);
+		}, 100);
+	</script>
+</body>
+
+</html>
