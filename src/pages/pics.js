@@ -8,18 +8,14 @@ import SEO from "../components/seo"
 class PicsIndex extends React.Component {
   render() {
     const { data } = this.props
-    const siteTitle = data.site.siteMetadata.title
     const pics = data.allFile.edges
     const posts = data.allInstaNode.edges
 
     return (
-      <Layout location={this.props.location} title={siteTitle}>
-        <SEO
-          title="diego dorado"
-        />
+      <Layout location={this.props.location} >
+        <SEO title="pics" />
         <p className="spacey">Random pics {"I've"} collected, mostly taken by <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/nicolascroceph" >Nicolás Croce</a>.
         </p>
-        {/*<CyclicFade {...{speed: 2000}}>*/}
         <CyclicFade speed={2000}>
           {pics.map(({ node }) => {
             return (
@@ -53,11 +49,6 @@ export default PicsIndex
 
 export const pageQuery = graphql`
   query {
-    site {
-      siteMetadata {
-        title
-      }
-    }
     allFile(filter: {extension: {regex: "/(jpg)|(jpeg)|(png)/"}, relativeDirectory: {eq: "pics"}}) {
         edges {
           node {

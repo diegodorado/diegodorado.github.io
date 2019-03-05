@@ -5,4 +5,4 @@ description: Multidisciplinary digital art project in which the installation sce
 cover: "./cover.jpg"
 ---
 
-video: `https://youtu.be/5pKCk0m2zpQ`
+`video: https://youtu.be/5pKCk0m2zpQ`
