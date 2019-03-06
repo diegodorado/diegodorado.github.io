@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[diego dorado]]></title><description><![CDATA[diego dorado portfolio.]]></description><link>http://diegodorado.github.io/</link><generator>RSS for Node</generator><lastBuildDate>Tue, 05 Mar 2019 18:43:48 GMT</lastBuildDate><item><title><![CDATA[Ceiborg]]></title><link>http://diegodorado.github.io//blog/ceiborg/</link><guid isPermaLink="false">http://diegodorado.github.io//blog/ceiborg/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded>&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre style=&quot;counter-reset: linenumber 0&quot; class=&quot;language-javascript line-numbers&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// In your gatsby-config.js&lt;/span&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[diego dorado]]></title><description><![CDATA[diego dorado portfolio.]]></description><link>http://diegodorado.github.io/</link><generator>RSS for Node</generator><lastBuildDate>Wed, 06 Mar 2019 04:31:48 GMT</lastBuildDate><item><title><![CDATA[Ceiborg]]></title><link>http://diegodorado.github.io//blog/ceiborg/</link><guid isPermaLink="false">http://diegodorado.github.io//blog/ceiborg/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded>&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre style=&quot;counter-reset: linenumber 0&quot; class=&quot;language-javascript line-numbers&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// In your gatsby-config.js&lt;/span&gt;
 plugins&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     resolve&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token template-string&quot;&gt;&lt;span class=&quot;token string&quot;&gt;`gatsby-transformer-remark`&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
@@ -341,7 +341,13 @@ I think they can be highly educational in the field of programming, as an introd
 Due to the experience so far and the possibilities of extending this tool, I envision a new expressive medium to explore.
 I am working to publish the repositories of these plugins with their respective documentation and instructions with certainty that new and interesting applications will emerge from their disclosure.&lt;/p&gt;
 &lt;p&gt;And above all:&lt;/p&gt;
-&lt;h1&gt;have fun with emoji based music! 😆&lt;/h1&gt;</content:encoded></item><item><title><![CDATA[Human Aided Music]]></title><description><![CDATA[Human Aided Music  is a Human-Machine percussion duo where the machine learns from the human. It proposes a fluid dialogue between both, to…]]></description><link>http://diegodorado.github.io//works/human-aided-music/</link><guid isPermaLink="false">http://diegodorado.github.io//works/human-aided-music/</guid><pubDate>Sun, 03 Mar 2019 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;strong&gt;Human Aided Music&lt;/strong&gt; is a Human-Machine percussion duo where the machine learns from the human. It proposes a fluid dialogue between both, to the point where no one distinguishes who leads the music.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;h2&gt;to have fun with emoji based music! 😆&lt;/h2&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;</content:encoded></item><item><title><![CDATA[Human Aided Music]]></title><description><![CDATA[Human Aided Music  is a Human-Machine percussion duo where the machine learns from the human. It proposes a fluid dialogue between both, to…]]></description><link>http://diegodorado.github.io//works/human-aided-music/</link><guid isPermaLink="false">http://diegodorado.github.io//works/human-aided-music/</guid><pubDate>Sun, 03 Mar 2019 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;strong&gt;Human Aided Music&lt;/strong&gt; is a Human-Machine percussion duo where the machine learns from the human. It proposes a fluid dialogue between both, to the point where no one distinguishes who leads the music.&lt;/p&gt;
 &lt;p&gt;
   &lt;span
     class=&quot;gatsby-resp-image-wrapper&quot;
@@ -535,7 +541,54 @@ The title also plays with this aesthetic cross: the term &lt;em&gt;computer-aide
 &lt;p&gt;The machine has a &lt;em&gt;machine-animal-humanoid&lt;/em&gt; hybrid aspect without gender definition. It has all the signs of the imperfect and &lt;em&gt;unfinishedness&lt;/em&gt;: lack of symmetry, fragments of different technologies and materials, and evidence of recent repairs.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;em&gt;A unique creature rather than a device. A clear trace of having been sired.&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;</content:encoded></item><item><title><![CDATA[Instrumento Óptico]]></title><link>http://diegodorado.github.io//works/i-o/</link><guid isPermaLink="false">http://diegodorado.github.io//works/i-o/</guid><pubDate>Wed, 01 Aug 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;div&gt;
+&lt;/blockquote&gt;</content:encoded></item><item><title><![CDATA[I-O]]></title><description><![CDATA[I-O  is a collective of artists where I collaborate by programming audio-reactive visuals. Theirs presentations are characterized by an…]]></description><link>http://diegodorado.github.io//works/i-o/</link><guid isPermaLink="false">http://diegodorado.github.io//works/i-o/</guid><pubDate>Wed, 01 Aug 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;strong&gt;I-O&lt;/strong&gt; is a collective of artists where I collaborate by programming audio-reactive visuals.&lt;/p&gt;
+&lt;center&gt;
+  &lt;video autoplay loop muted &gt;
+    &lt;source src=&quot;/intro-ffce02d9c886ee5c37dbf136cbbab25e.webm&quot; type=&quot;video/webm&quot; /&gt;
+    &lt;source src=&quot;/intro-1d969844fca58b19abdad7b15fa20e05.mp4&quot; type=&quot;video/mp4&quot; /&gt;
+  &lt;/video&gt;
+&lt;/center&gt;
+&lt;br&gt;
+&lt;p&gt;Theirs presentations are characterized by an electronic, visceral and experimental environmental sound surrounded by psychedelic projections that transform the stage into a kind of augmented reality.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;I-O&lt;/strong&gt; (&lt;em&gt;optical instrument&lt;/em&gt;)
+interpreted by a group of collective artists called: &lt;strong&gt;I-O&lt;/strong&gt;. It consists of two chapters &lt;em&gt;Dysecdysis&lt;/em&gt; and &lt;em&gt;Incorporo&lt;/em&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3&gt;Origin&lt;/h3&gt;
+&lt;p&gt;In november 2017 &lt;a href=&quot;&quot;&gt;Josefina Barreix&lt;/a&gt; launched a solo EP produced with &lt;a href=&quot;&quot;&gt;Andrés Marino&lt;/a&gt; and published by FUNGI Records.&lt;/p&gt;
+&lt;center&gt;
+&lt;iframe style=&quot;border: 0; max-width: 700px;width: 90%; height: 208px;&quot; src=&quot;https://bandcamp.com/EmbeddedPlayer/album=2520081075/size=large/bgcol=333333/linkcol=ffffff/artwork=small/transparent=true/&quot; seamless&gt;&lt;/iframe&gt;
+&lt;/center&gt;
+&lt;br&gt;
+&lt;center&gt;&lt;a href=&quot;https://fungirecords.bandcamp.com/album/instrumento-ptico&quot;&gt;Bandcamp&lt;/a&gt;
+| &lt;a href=&quot;https://open.spotify.com/album/3TxWEBQPKrpgCBArsjTbwU&quot;&gt;Spotify&lt;/a&gt;
+| &lt;a href=&quot;https://soundcloud.com/jsfnbrrx/sets/instrumento-optico&quot;&gt;Soundcloud&lt;/a&gt;
+| &lt;a href=&quot;https://itunes.apple.com/us/album/instrumento-%C3%B3ptico-single/1310744889&quot;&gt;Itunes&lt;/a&gt;&lt;/center&gt;
+&lt;br&gt;&lt;br&gt;
+&lt;p&gt;Album details:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Composer/Producer: Josefina Barreix &amp;#x26; Andres Marino&lt;/li&gt;
+&lt;li&gt;Ideo Music Technician: Andres Marino&lt;/li&gt;
+&lt;li&gt;La Siesta del Fauno Technician: María Eugenia García&lt;/li&gt;
+&lt;li&gt;Synths programming: María Eugenia García y Ernesto Romeo&lt;/li&gt;
+&lt;li&gt;Ideo Music Mixer: Pablo Del Fauno Gil &amp;#x26; Andrés Marino&lt;/li&gt;
+&lt;li&gt;Masterizado por Pablo Del Fauno Gil y Andrés Marino en La Siesta del Fauno Estudio-Laboratorio&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Josefina Barreix (Voz y letra)
+Andrés Marino (Programación, Rhodes y Wurlitzer)&lt;/p&gt;
+&lt;p&gt;Featuring:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Flor Wosh (coros en “Dysecdysis”)&lt;/li&gt;
+&lt;li&gt;Ernesto Romeo (sintetizadores en “Incorporo”)&lt;/li&gt;
+&lt;li&gt;Violeta Garcia (cello en “Incorporo”)&lt;/li&gt;
+&lt;li&gt;Santiago Colombatto (cuencos en “Incorporo”)&lt;/li&gt;
+&lt;li&gt;Abelardo Saravia (coros en “Incorporo”)&lt;/li&gt;
+&lt;li&gt;Melina Moguilevsky (coros en “Incorporo”)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Album Artwork: Guillermina Teves
+Photographie: Lea Bon&lt;/p&gt;
+&lt;p&gt;In its beginning, &lt;strong&gt;I-O&lt;/strong&gt; was launched as a solo EP from Josefina Barreix (Director), produced with Andrés Marino and published by FUNGI Records (nov 2017).&lt;/p&gt;
+&lt;p&gt;During 2018 they performed in various spaces around Buenos Aires under scene. The team and the scenery adapting itself according to the space provided. The &lt;strong&gt;I-O&lt;/strong&gt; collective is formed by artists from different disciplines: visuals, audio/sound, programming and scenic design.&lt;/p&gt;
+&lt;p&gt;&lt;div&gt;
           &lt;div
             class=&quot;gatsby-resp-iframe-wrapper&quot;
             style=&quot;padding-bottom: 56.49999999999999%; position: relative; height: 0; overflow: hidden;margin-bottom: 1.0725rem&quot;
@@ -555,7 +608,30 @@ The title also plays with this aesthetic cross: the term &lt;em&gt;computer-aide
         }
       &lt;/style&gt;
           &lt;/div&gt;
-          &lt;/div&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[CV-2612]]></title><link>http://diegodorado.github.io//works/cv2612/</link><guid isPermaLink="false">http://diegodorado.github.io//works/cv2612/</guid><pubDate>Tue, 01 May 2018 00:00:00 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[LiveCoding]]></title><description><![CDATA[Livecoding is a form of performatic art and a creative technique based upon the use of improvised interactive programming.]]></description><link>http://diegodorado.github.io//works/live-coding/</link><guid isPermaLink="false">http://diegodorado.github.io//works/live-coding/</guid><pubDate>Thu, 01 Feb 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Livecoding is a form of performatic art and a creative technique based upon the use of improvised interactive programming.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Ceiborg]]></title><link>http://diegodorado.github.io//works/ceiborg/</link><guid isPermaLink="false">http://diegodorado.github.io//works/ceiborg/</guid><pubDate>Mon, 01 Jan 2018 00:00:00 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[Blue Mountain]]></title><description><![CDATA[Blue Mountain  is a musical and pictorial journey of beautiful soundscapes and fantastic nature that leads to a peaceful contemplation. An…]]></description><link>http://diegodorado.github.io//works/blue-mountain/</link><guid isPermaLink="false">http://diegodorado.github.io//works/blue-mountain/</guid><pubDate>Wed, 01 Nov 2017 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;strong&gt;Blue Mountain&lt;/strong&gt; is a musical and pictorial journey of beautiful soundscapes and fantastic nature that leads to a peaceful contemplation.&lt;/p&gt;
+          &lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;chela
+&lt;div&gt;
+          &lt;div
+            class=&quot;gatsby-resp-iframe-wrapper&quot;
+            style=&quot;padding-bottom: 56.49999999999999%; position: relative; height: 0; overflow: hidden;margin-bottom: 1.0725rem&quot;
+          &gt;
+            &lt;div class=&quot;embedVideo-container&quot;&gt;
+            &lt;iframe src=&quot;https://www.youtube.com/embed/_gTlaWTMAgI?rel=0&quot; class=&quot;embedVideo-iframe&quot; allowfullscreen style=&quot;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+          &quot;&gt;&lt;/iframe&gt;
+        &lt;/div&gt;
+      &lt;style&gt;
+        .embedVideo-iframe {
+          border: 0
+        }
+      &lt;/style&gt;
+          &lt;/div&gt;
+          &lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;Scenic Design and Setting &gt; Francisca Armando y Joaquín Oneglia&lt;/p&gt;</content:encoded></item><item><title><![CDATA[CV-2612]]></title><link>http://diegodorado.github.io//works/cv2612/</link><guid isPermaLink="false">http://diegodorado.github.io//works/cv2612/</guid><pubDate>Tue, 01 May 2018 00:00:00 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[LiveCoding]]></title><description><![CDATA[Livecoding is a form of performatic art and a creative technique based upon the use of improvised interactive programming.]]></description><link>http://diegodorado.github.io//works/live-coding/</link><guid isPermaLink="false">http://diegodorado.github.io//works/live-coding/</guid><pubDate>Thu, 01 Feb 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Livecoding is a form of performatic art and a creative technique based upon the use of improvised interactive programming.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Ceiborg]]></title><link>http://diegodorado.github.io//works/ceiborg/</link><guid isPermaLink="false">http://diegodorado.github.io//works/ceiborg/</guid><pubDate>Mon, 01 Jan 2018 00:00:00 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[Blue Mountain]]></title><description><![CDATA[Blue Mountain  is a musical and pictorial journey of beautiful soundscapes and fantastic nature that leads to a peaceful contemplation. An…]]></description><link>http://diegodorado.github.io//works/blue-mountain/</link><guid isPermaLink="false">http://diegodorado.github.io//works/blue-mountain/</guid><pubDate>Wed, 01 Nov 2017 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;strong&gt;Blue Mountain&lt;/strong&gt; is a musical and pictorial journey of beautiful soundscapes and fantastic nature that leads to a peaceful contemplation.&lt;/p&gt;
 &lt;p&gt;An exploratory audiovisual landscape approached through virtual reality technology. Each element that conform the virtual environment has a certain pictorial-musical representation. Depending on which path the user takes, the sound environment is modiﬁed as it moves through space.&lt;/p&gt;
 &lt;p&gt;…&lt;a href=&quot;http://bluemountainvr.com/&quot;&gt;Go to project site&lt;/a&gt;&lt;/p&gt;
 &lt;h2&gt;Watch the trailer&lt;/h2&gt;
