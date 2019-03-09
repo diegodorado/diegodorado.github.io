@@ -26,7 +26,7 @@ class PicsIndex extends React.Component {
         <p className="spacey">
           These are from Instagram.<br/> Follow me there! <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/diegdorado/" >@diegdorado</a>
         </p>
-        <section className="posts">
+        <section className="posts ig">
             {posts.map(({ node }) => {
               return (
                 <article className="post" key={node.id}>

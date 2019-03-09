@@ -29,6 +29,7 @@
     "gatsby-remark-smartypants": "^2.0.8",
     "gatsby-source-filesystem": "^2.0.23",
     "gatsby-source-instagram": "^0.2.5",
+    "gatsby-transformer-json": "^2.1.8",
     "gatsby-transformer-remark": "^2.3.0",
     "gatsby-transformer-sharp": "^2.1.14",
     "node-sass": "^4.11.0",
@@ -38,6 +39,7 @@
     "react-dom": "^16.8.3",
     "react-helmet": "^5.2.0",
     "react-typography": "^0.16.18",
+    "reactjs-localstorage": "0.0.7",
     "susy": "^3.0.5",
     "typography": "^0.16.18"
   },
@@ -59,6 +61,7 @@
     "build": "gatsby build",
     "deploy": "gatsby build && gh-pages -d public -b master",
     "develop": "gatsby develop",
+    "dev-m": "gatsby develop -H 0.0.0.0 -p 8000",
     "format": "prettier --write src/**/*.{js,jsx}",
     "start": "npm run develop",
     "serve": "gatsby serve",

@@ -10,16 +10,14 @@ class WorkPostTemplate extends React.Component {
     const siteTitle = this.props.data.site.siteMetadata.title
     let { previous, next } = this.props.pageContext
 
-    if (previous) {
-      previous = <Link to={previous.fields.slug}>previous</Link>
-    } else {
-      previous = <span>...</span>
-    }
-    if (next) {
-      next = <Link to={next.fields.slug}>next</Link>
-    } else {
-      next = <span>...</span>
-    }
+    previous = previous ? <Link to={previous.fields.slug}>{`=>`}</Link>
+                        : <span>...</span>
+    next = next ? <Link to={next.fields.slug}>{`<=`}</Link>
+                : <span>...</span>
+
+    const pagination = <nav className="pagination">
+                         {next} <Link to={`/work`}>all works</Link> {previous}
+                       </nav>
 
     return (
       <Layout location={this.props.location} title={siteTitle}>
@@ -27,11 +25,12 @@ class WorkPostTemplate extends React.Component {
           title={post.frontmatter.title}
           description={post.frontmatter.description || post.excerpt}
         />
-        <h2 className="work-title">{post.frontmatter.title}</h2>
+        <div className="work-title">
+          <h2>{post.frontmatter.title}</h2>
+          {pagination}
+        </div>
         <div className="work-post" dangerouslySetInnerHTML={{ __html: post.html }} />
-        <nav className="pagination">
-          {previous} | <Link to={`/work`}>all works</Link> | {next}
-        </nav>
+        {pagination}
       </Layout>
     )
   }

@@ -204,4 +204,4 @@ Due to the experience so far and the possibilities of extending this tool, I env
 I am working to publish the repositories of these plugins with their respective documentation and instructions with certainty that new and interesting applications will emerge from their disclosure.
 
 And above all:
-# have fun with emoji based music! 😆
+## to have fun with emoji based music! 😆

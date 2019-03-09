@@ -1,0 +1,30 @@
+header
+  @extend %no-select
+  display: table
+  width: 100%
+  margin: 50px 0
+  h1,nav
+    display: block
+    vertical-align: baseline
+    margin: 0
+    padding: 0
+
+  +breakpoint(xs)
+    h1,nav
+      display: table-cell
+
+  h1
+    font-size: 1.75em
+  a
+    cursor: pointer
+    text-decoration: none
+    line-height: 1.5em
+    display: inline-block
+    padding: 0 0.5em
+    &.active
+      text-decoration: underline
+  nav
+    font-size: 1em
+    text-align: right
+    a
+      text-decoration: none

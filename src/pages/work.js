@@ -10,16 +10,15 @@ class WorkIndex extends React.Component {
     const { data } = this.props
     const siteTitle = data.site.siteMetadata.title
     const posts = data.allMarkdownRemark.edges
+    const first = posts[0].node.fields.slug
 
     return (
       <Layout location={this.props.location} title={siteTitle}>
-        <SEO
-          title="diego dorado"
-        />
+        <SEO title="work" />
         <p className="spacey">I am Diego Dorado, programmer and electronic artist. I am passionate about research projects that combine technological innovation with artistic expressions.
         </p>
         <p>
-        This is what {"I've"} been working on lately:
+          <Link to={first}>Explore</Link> the projects that {"I've"} been working on
         </p>
         <section className="posts">
           {posts.map(({ node }) => {
@@ -31,6 +30,9 @@ class WorkIndex extends React.Component {
                     <Link to={node.fields.slug}>{node.frontmatter.title}</Link>
                   </h3>
                 </div>
+                <h3>
+                  <Link to={node.fields.slug}>{node.frontmatter.title}</Link>
+                </h3>
               </article>
               )
             })}

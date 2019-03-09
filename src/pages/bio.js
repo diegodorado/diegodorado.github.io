@@ -10,7 +10,7 @@ class BioIndex extends React.Component {
     return (
       <Layout location={this.props.location} >
         <SEO title="bio" />
-        <p className="spacey">{"I'm"} Diego Dorado, programmer and electronic artist. I am passionate about research projects that combine technological innovation with artistic expressions.
+        <p className="spacey">{"I'm"} Diego Dorado, livecoder, programmer and electronic artist. I am passionate about research projects that combine technological innovation with artistic expressions.
         </p>
         <Img fluid={data.file.childImageSharp.fluid} />
         <p className="spacey">

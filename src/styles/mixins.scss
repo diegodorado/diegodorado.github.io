@@ -23,3 +23,19 @@
     @warn "Breakpoint mixin supports: xs, sm, md, lg";
   }
 }
+
+/*
+:root {
+  filter: invert(100%);
+  body{
+    background-color:  $white;
+    background-color:  white;
+  }
+  img,iframe,video{
+    filter: invert(100%);
+  }
+  article.post{
+    border: 0;
+  }
+}
+*/

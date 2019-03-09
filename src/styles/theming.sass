@@ -1,0 +1,81 @@
+$black: #222
+$white: #ddd
+
+body.dark
+  background-color: $black
+  &, a, a:visited
+    color: $white
+
+  article.post
+    border-color: $white
+    .card h3 a
+      background: $black
+
+  section.texts article
+    border-color: $white
+    &:hover
+      background: lighten($black,1.5)
+
+  .work-post hr
+    background-image: linear-gradient(to right, $black 40%, $white  0%)
+
+  header
+    a.active
+      color: lighten($white,1.3)
+      text-shadow: 2px 2px 4px #666,-2px -2px 6px #666
+    nav a:first-child
+      transform: rotateY(0deg)
+
+
+
+body.light
+  background-color: $white
+  &, a, a:visited
+    color: $black
+
+  article.post
+    border-color: lighten($black,25)
+    .card h3 a
+      background: $white
+
+  section.texts article
+    border-color: $white
+    &:hover
+      background: lighten($black,1.5)
+
+  .work-post hr
+    background-image: linear-gradient(to right, $white  40%, $black 0%)
+
+  header
+    a.active
+      color: darken($black,1.3)
+      text-shadow: 2px 2px 4px #999,-2px -2px 6px #999
+    nav a:first-child
+      transform: rotateY(720deg)
+
+
+//transitions
+body
+  transition: background-color 2s
+  &, a, a:visited
+    transition: color 2s
+    color: $white
+
+  article.post
+    transition: border-color 2s
+    .card h3 a
+      transition: background-color 2s,opacity 0.5s ease
+
+  section.texts article
+    transition: border-color 2s
+    &:hover
+      transition: background-color 2s
+
+  .work-post hr
+    transition: background-image 2s
+
+  header
+    a.active
+      transition: color 2s, text-shadow 2s
+    nav a:first-child
+      transition: transform 2s
