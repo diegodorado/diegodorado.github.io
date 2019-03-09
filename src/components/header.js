@@ -37,8 +37,7 @@ const original = 'diego dorado'
 class Header extends React.Component {
   constructor(props){
     super(props);
-    const theme = reactLocalStorage.get('theme', 'dark')
-    this.state = {title: original, theme: theme}
+    this.state = {title: original, theme: 'dark'}
   }
 
   getDiff(){
@@ -67,6 +66,9 @@ class Header extends React.Component {
 
   componentWillUnmount(){
     clearInterval(this.intervalId);
+    const theme = reactLocalStorage.get('theme', 'dark')
+    this.setState({theme: theme})
+
   }
 
   onMouseClick = (e) => {
