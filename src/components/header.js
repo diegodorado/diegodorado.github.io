@@ -62,18 +62,17 @@ class Header extends React.Component {
 
   componentDidMount(){
     this.intervalId = setInterval(this.timer.bind(this), 100);
+    const theme = reactLocalStorage.get('theme', 'dark')
+    this.setState({theme: theme})
   }
 
   componentWillUnmount(){
     clearInterval(this.intervalId);
-    const theme = reactLocalStorage.get('theme', 'dark')
-    this.setState({theme: theme})
-
   }
 
   onMouseClick = (e) => {
     e.preventDefault()
-    const new_theme = (this.state.theme==='dark') ? 'light' : 'dark'
+    const new_theme = (reactLocalStorage.get('theme', 'dark')==='dark') ? 'light' : 'dark'
     this.setState({theme: new_theme})
     reactLocalStorage.set('theme', new_theme)
   }
