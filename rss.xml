@@ -1,4 +1,133 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[diego dorado]]></title><description><![CDATA[diego dorado portfolio.]]></description><link>http://diegodorado.github.io/</link><generator>RSS for Node</generator><lastBuildDate>Sun, 10 Mar 2019 19:04:26 GMT</lastBuildDate><item><title><![CDATA[Ceiborg]]></title><link>http://diegodorado.github.io//blog/ceiborg/</link><guid isPermaLink="false">http://diegodorado.github.io//blog/ceiborg/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded>&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre style=&quot;counter-reset: linenumber 0&quot; class=&quot;language-javascript line-numbers&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// In your gatsby-config.js&lt;/span&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[diego dorado]]></title><description><![CDATA[diego dorado portfolio.]]></description><link>http://diegodorado.github.io/</link><generator>RSS for Node</generator><lastBuildDate>Tue, 12 Mar 2019 06:13:22 GMT</lastBuildDate><item><title><![CDATA[I-O 2]]></title><description><![CDATA[Instrumento Optico Intro IO is an audiovisual and scenographic performance about the recovery of our languages and the relationship with…]]></description><link>http://diegodorado.github.io//works/i-o/presentation/</link><guid isPermaLink="false">http://diegodorado.github.io//works/i-o/presentation/</guid><content:encoded>&lt;p&gt;Instrumento Optico&lt;/p&gt;
+&lt;h1&gt;Intro&lt;/h1&gt;
+&lt;p&gt;IO is an audiovisual and scenographic performance about the recovery of our languages and the relationship with nature through a process of spiritual and material detoxification.&lt;/p&gt;
+&lt;h1&gt;Concept&lt;/h1&gt;
+&lt;p&gt;The work is presented in Spanish, Ranquel (native language), and sounds that represent emotion. Words sometimes obfuscate their purpose and their real connection with emotion, as they are tied to the singular perception and experiences each subject has.&lt;/p&gt;
+&lt;p&gt;There are universal  sounds that overcome the barriers of dialects and languages. Sound as a primary language is a first step towards detoxification.&lt;/p&gt;
+&lt;p&gt;The work is comprised of four moments of a mythical story: “Euphoria”, “Dysecdysis”, “Diaphanus” and “Incorporo”.&lt;/p&gt;
+&lt;h2&gt;Euphoria&lt;/h2&gt;
+&lt;p&gt;Dopamine fills the brain with a feeling of confidence and exaggerated well-being. The self-exalted one takes refuge in itself, getting isolation and solitude. Reality does not satisfy his desires and leads him to that feeling of deep disappointment and the need to rebel against the established.&lt;/p&gt;
+&lt;h2&gt;Dysecdysis&lt;/h2&gt;
+&lt;p&gt;A skin disease of a reptile that occurs when the shedding of the dead outer skin fails. This process of detoxification can only be overcome by the replacement of the old by the new.&lt;/p&gt;
+&lt;h2&gt;Diaphanus&lt;/h2&gt;
+&lt;p&gt;Transparent or translucent; which allows light to pass through. It means to appear, not in a deceptive way, but what is manifestly real, what is present for the senses and has strength of evidence.&lt;/p&gt;
+&lt;h2&gt;Incorporo&lt;/h2&gt;
+&lt;p&gt;So that the human being can learn something from the nature, other intelligences must exist before nature itself, without body, volume or consistency. They belongs to the spirit and can not be perceived by the senses.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=_gTlaWTMAgI&quot;&gt;https://www.youtube.com/watch?v=_gTlaWTMAgI&lt;/a&gt;
+&lt;a href=&quot;https://open.spotify.com/album/3TxWEBQPKrpgCBArsjTbwU?si=WQL0w93YSoi948TPJ1BJtw&quot;&gt;https://open.spotify.com/album/3TxWEBQPKrpgCBArsjTbwU?si=WQL0w93YSoi948TPJ1BJtw&lt;/a&gt;
+&lt;a href=&quot;http://diegodorado.github.io/works/i-o/&quot;&gt;http://diegodorado.github.io/works/i-o/&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Credits&lt;/h2&gt;
+&lt;p&gt;Josefina Barreix, Andres Marino, Sofia Efron, Clara Aguayo, Celeste Lambert Frutos, Francisca Armando	, Franco Verrascina, Diego Dorado&lt;/p&gt;
+&lt;h2&gt;Support received by&lt;/h2&gt;
+&lt;p&gt;Universidad Tres de Febrero Artes Electronicas (University)
+La Siesta del Fauno Estudio Laboratorio( lab studio)
+YAELTEX  (Custom MIDI Controllers Makers)&lt;/p&gt;
+&lt;h2&gt;Work Technical Details&lt;/h2&gt;
+&lt;p&gt;Soft:&lt;/p&gt;
+&lt;h2&gt;Audio&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Ableton Live 9.7 and 10&lt;/li&gt;
+&lt;li&gt;Custom Max4Live patches&lt;/li&gt;
+&lt;li&gt;Primary VSTs&lt;/li&gt;
+&lt;li&gt;The Finger, by Tim Exile&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;Stutter, by Izotope&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;Aparillo, by Sugar Bytes&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;Keyscape, by Spectrasonics&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;Battery 4, by Native Instruments&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;Kontakt 5, by Native Instruments&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;Cryogen, by Glitchmachines&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;FabFilter Pro R&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;Argotlunar by Michael Ourednik&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Visuals&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;3D Studio Max 2014&lt;/li&gt;
+&lt;li&gt;DAZ Studio&lt;/li&gt;
+&lt;li&gt;ZBrush 2018&lt;/li&gt;
+&lt;li&gt;Cinema 4D&lt;/li&gt;
+&lt;li&gt;Unity 2018&lt;/li&gt;
+&lt;li&gt;Visual Studio 2018&lt;/li&gt;
+&lt;li&gt;keijiro Plugins&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;Klak&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;MidiKlak&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;MidiJack&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ul&gt;
+&lt;li&gt;OscJack&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Hard
+Audio&lt;/p&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;3 Macbook Pro&lt;/li&gt;
+&lt;li&gt;1 Apollo Twin Audio interface&lt;/li&gt;
+&lt;li&gt;1 Focusrite Clarett&lt;/li&gt;
+&lt;li&gt;1 Presonus Audiobox&lt;/li&gt;
+&lt;li&gt;1 Ableton Push2&lt;/li&gt;
+&lt;li&gt;1 Launchpad&lt;/li&gt;
+&lt;li&gt;1 Icreative Icon&lt;/li&gt;
+&lt;li&gt;1 Nanokontrol2&lt;/li&gt;
+&lt;li&gt;1 Midiplus Origin37&lt;/li&gt;
+&lt;li&gt;1 Electric Keyboard Yamaha P95&lt;/li&gt;
+&lt;li&gt;2 Shure SM58&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Visuals&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;1 Laptop&lt;/li&gt;
+&lt;li&gt;1 Projector&lt;/li&gt;
+&lt;li&gt;1 Xbox One wireless controller&lt;/li&gt;
+&lt;li&gt;1 Akai Apc40 mk2&lt;/li&gt;
+&lt;li&gt;1 Apple AirPort Express Base Station&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;STARTS Prize&lt;/p&gt;
+&lt;p&gt;Inclusion and sustainability are at the core of this project that advocates recovering the native languages ​​that have been so neglected over the years as well as fosters a relationship with nature that seems to have been lost in time&lt;/p&gt;
+&lt;p&gt;30 minutes.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Ceiborg]]></title><link>http://diegodorado.github.io//blog/ceiborg/</link><guid isPermaLink="false">http://diegodorado.github.io//blog/ceiborg/</guid><pubDate>Tue, 28 May 2019 22:40:32 GMT</pubDate><content:encoded>&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre style=&quot;counter-reset: linenumber 0&quot; class=&quot;language-javascript line-numbers&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// In your gatsby-config.js&lt;/span&gt;
 plugins&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     resolve&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token template-string&quot;&gt;&lt;span class=&quot;token string&quot;&gt;`gatsby-transformer-remark`&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
@@ -535,7 +664,7 @@ The title also plays with this aesthetic cross: the term &lt;em&gt;computer-aide
 &lt;p&gt;The machine has a &lt;em&gt;machine-animal-humanoid&lt;/em&gt; hybrid aspect without gender definition. It has all the signs of the imperfect and &lt;em&gt;unfinishedness&lt;/em&gt;: lack of symmetry, fragments of different technologies and materials, and evidence of recent repairs.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;em&gt;A unique creature rather than a device. A clear trace of having been sired.&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;</content:encoded></item><item><title><![CDATA[I-O]]></title><description><![CDATA[I-O  is a collective of artists where I collaborate by programming audio-reactive visuals. Theirs presentations are characterized by an…]]></description><link>http://diegodorado.github.io//works/i-o/</link><guid isPermaLink="false">http://diegodorado.github.io//works/i-o/</guid><pubDate>Wed, 01 Aug 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;strong&gt;I-O&lt;/strong&gt; is a collective of artists where I collaborate by programming audio-reactive visuals.&lt;/p&gt;
+&lt;/blockquote&gt;</content:encoded></item><item><title><![CDATA[I-O]]></title><description><![CDATA[I-O  is an audiovisual and scenographic performance about the recovery of our languages and the relationship with nature through a process…]]></description><link>http://diegodorado.github.io//works/i-o/</link><guid isPermaLink="false">http://diegodorado.github.io//works/i-o/</guid><pubDate>Wed, 01 Aug 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;strong&gt;I-O&lt;/strong&gt; is an audiovisual and scenographic performance about the recovery of our languages and the relationship with nature through a process of spiritual and material detoxification.&lt;/p&gt;
 &lt;center&gt;
   &lt;video autoplay loop muted style=&quot;max-width:100%&quot;&gt;
     &lt;source src=&quot;/intro-ffce02d9c886ee5c37dbf136cbbab25e.webm&quot; type=&quot;video/webm&quot; /&gt;
@@ -543,14 +672,12 @@ The title also plays with this aesthetic cross: the term &lt;em&gt;computer-aide
   &lt;/video&gt;
 &lt;/center&gt;
 &lt;br&gt;
-&lt;p&gt;Theirs presentations are characterized by an electronic, visceral and experimental environmental sound surrounded by psychedelic projections that transform the stage into a kind of augmented reality.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;I-O&lt;/strong&gt; (&lt;em&gt;optical instrument&lt;/em&gt;)
-interpreted by a group of collective artists called: &lt;strong&gt;I-O&lt;/strong&gt;. It consists of two chapters &lt;em&gt;Dysecdysis&lt;/em&gt; and &lt;em&gt;Incorporo&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Inclusion and sustainability are at the core of this project that advocates recovering the native languages ​​that have been so neglected over the years as well as fosters a relationship with nature that seems to have been lost in time.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h3&gt;Origin&lt;/h3&gt;
-&lt;p&gt;In november 2017 &lt;a href=&quot;&quot;&gt;Josefina Barreix&lt;/a&gt; launched a solo EP produced with &lt;a href=&quot;&quot;&gt;Andrés Marino&lt;/a&gt; and published by FUNGI Records.&lt;/p&gt;
+&lt;p&gt;The project began in november 2017, when &lt;a href=&quot;&quot;&gt;Josefina Barreix&lt;/a&gt; launched a solo EP produced with &lt;a href=&quot;&quot;&gt;Andrés Marino&lt;/a&gt; and published by &lt;a href=&quot;&quot;&gt;FUNGI Records&lt;/a&gt;.&lt;/p&gt;
 &lt;center&gt;
-&lt;iframe style=&quot;border: 0; max-width: 700px;width: 90%; height: 208px;&quot; src=&quot;https://bandcamp.com/EmbeddedPlayer/album=2520081075/size=large/bgcol=333333/linkcol=ffffff/artwork=small/transparent=true/&quot; seamless&gt;&lt;/iframe&gt;
+&lt;iframe style=&quot;border: 0; max-width: 700px;width: 90%; height: 220px;&quot; src=&quot;https://bandcamp.com/EmbeddedPlayer/album=2520081075/size=large/bgcol=333333/linkcol=ffffff/artwork=small/transparent=true/&quot; seamless&gt;&lt;/iframe&gt;
 &lt;/center&gt;
 &lt;br&gt;
 &lt;center&gt;&lt;a href=&quot;https://fungirecords.bandcamp.com/album/instrumento-ptico&quot;&gt;Bandcamp&lt;/a&gt;
@@ -558,53 +685,104 @@ interpreted by a group of collective artists called: &lt;strong&gt;I-O&lt;/stron
 | &lt;a href=&quot;https://soundcloud.com/jsfnbrrx/sets/instrumento-optico&quot;&gt;Soundcloud&lt;/a&gt;
 | &lt;a href=&quot;https://itunes.apple.com/us/album/instrumento-%C3%B3ptico-single/1310744889&quot;&gt;Itunes&lt;/a&gt;&lt;/center&gt;
 &lt;br&gt;&lt;br&gt;
-&lt;p&gt;Album details:&lt;/p&gt;
+&lt;p&gt;The album was composed and produced by Josefina Barreix &amp;#x26; Andres Marino, mixed by Pablo Del Fauno Gil &amp;#x26; Andrés Marino in &lt;em&gt;Ideo Music Studio&lt;/em&gt;, and mastered by Pablo Del Fauno Gil in &lt;em&gt;La Siesta del Fauno Studio-Lab&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;The album was a success and attracted the attention of many people who wanted to take part on it. That is why it has featuring Flor Wosh (choirs in “Dysecdysis”), Ernesto Romeo (synthesizers in “Incorporo”), Violeta García (violoncello in “Incorporo”), Santiago Colombatto (bowls in “Incorporo”), Abelardo Saravia (choirs in “Incorporo”), Melina Moguilevsky (choirs in “Incorporo”), Guillermina Teves (album cover) and Lea Bon (photography).&lt;/p&gt;
+&lt;p&gt;Even &lt;a href=&quot;http://www.indierockmag.com/&quot;&gt;Indie Rock Magazine&lt;/a&gt; got interested and wrote an &lt;a href=&quot;http://www.indierockmag.com/article31854.html&quot;&gt;article about it&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;All this excitement led to the idea of ​​taking the EP to the next level, transforming it into an &lt;strong&gt;audiovisual and scenographic performance&lt;/strong&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3&gt;Concept&lt;/h3&gt;
+&lt;p&gt;The work is presented in Spanish, Ranquel (native language), and sounds that represent emotion. Words sometimes obfuscate their purpose and their real connection with emotion, as they are tied to the singular perception and experiences each subject has.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;There are universal  sounds that overcome the barriers of dialects and languages. Sound as a primary language is a first step towards detoxification.&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 1000px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 57.48792270531401%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAALABQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAQDBf/EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/aAAwDAQACEAMQAAAB5lMe+oTD/8QAGhABAAIDAQAAAAAAAAAAAAAAAQACERIhMf/aAAgBAQABBQIpmVprH2qxYvf/xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAEDAQE/AT//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAECAQE/AT//xAAWEAADAAAAAAAAAAAAAAAAAAAAIEH/2gAIAQEABj8CIv8A/8QAGxAAAgIDAQAAAAAAAAAAAAAAAAERQSExUWH/2gAIAQEAAT8hUHJ6sSWkSvYztDpZP//aAAwDAQACAAMAAAAQHN//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAEDAQE/ED//xAAVEQEBAAAAAAAAAAAAAAAAAAAAEf/aAAgBAgEBPxBX/8QAGxABAQACAwEAAAAAAAAAAAAAAREAITFBYVH/2gAIAQEAAT8QO07PmAJqLG9++4cAt6jkAEHL3IQqGRyXLn//2Q==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;iolive2&quot;
+        title=&quot;&quot;
+        src=&quot;/static/0daf43a3e872c393f0f661386212175e/63044/iolive2.jpg&quot;
+        srcset=&quot;/static/0daf43a3e872c393f0f661386212175e/77566/iolive2.jpg 250w,
+/static/0daf43a3e872c393f0f661386212175e/5fca9/iolive2.jpg 500w,
+/static/0daf43a3e872c393f0f661386212175e/63044/iolive2.jpg 1000w,
+/static/0daf43a3e872c393f0f661386212175e/56c56/iolive2.jpg 1035w&quot;
+        sizes=&quot;(max-width: 1000px) 100vw, 1000px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  &lt;/p&gt;
+&lt;p&gt;The work is comprised of four moments of a mythical story: “Euphoria”, “Dysecdysis”, “Diaphanus” and “Incorporo”.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h4&gt;Euphoria&lt;/h4&gt;
+&lt;p&gt;Dopamine fills the brain with a feeling of confidence and exaggerated well-being. The self-exalted one takes refuge in itself, getting isolation and solitude. Reality does not satisfy his desires and leads him to that feeling of deep disappointment and the need to rebel against the established.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;h4&gt;Dysecdysis&lt;/h4&gt;
+&lt;p&gt;A skin disease of a reptile that occurs when the shedding of the dead outer skin fails. This process of detoxification can only be overcome by the replacement of the old by the new.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;h4&gt;Diaphanus&lt;/h4&gt;
+&lt;p&gt;Transparent or translucent; which allows light to pass through. It means to appear, not in a deceptive way, but what is manifestly real, what is present for the senses and has strength of evidence.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;h4&gt;Incorporo&lt;/h4&gt;
+&lt;p&gt;So that the human being can learn something from the nature, other intelligences must exist before nature itself, without body, volume or consistency. They belongs to the spirit and can not be perceived by the senses.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3&gt;Aesthetics&lt;/h3&gt;
+&lt;p&gt;
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 1000px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 53.2%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAALABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAMEAgX/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIQAxAAAAHjUyMNjg//xAAZEAABBQAAAAAAAAAAAAAAAAACAAESICH/2gAIAQEAAQUCUhoLZ//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQMBAT8BP//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQIBAT8BP//EABYQAQEBAAAAAAAAAAAAAAAAABABMf/aAAgBAQAGPwIwp//EABoQAQADAQEBAAAAAAAAAAAAAAEAESExUXH/2gAIAQEAAT8hzJSBz2LbgqHYmfUKuT//2gAMAwEAAgADAAAAEHMP/8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAwEBPxA//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAgEBPxA//8QAGhABAAMAAwAAAAAAAAAAAAAAAQARITFBUf/aAAgBAQABPxAx3eyAE5cBd+S6XDL4ubF+wKKwzOLJ/9k=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;iolive4&quot;
+        title=&quot;&quot;
+        src=&quot;/static/0fdf9cb6343f41938fffc92bae67c60b/63044/iolive4.jpg&quot;
+        srcset=&quot;/static/0fdf9cb6343f41938fffc92bae67c60b/77566/iolive4.jpg 250w,
+/static/0fdf9cb6343f41938fffc92bae67c60b/5fca9/iolive4.jpg 500w,
+/static/0fdf9cb6343f41938fffc92bae67c60b/63044/iolive4.jpg 1000w&quot;
+        sizes=&quot;(max-width: 1000px) 100vw, 1000px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  &lt;/p&gt;
+&lt;p&gt;The voice is a broad instrument that moves from recognizable human places such as tribal shoutings, whispered poems, ritual choirs and gated vocals towards less familiar digital textures such as granular percussion background echo and synthesized pads&lt;/p&gt;
+&lt;p&gt;Melancholic wurlitzers and increasingly tense cellos harmonize the sound universe while the rhythm is given by synthetic basses, stuttered drums and samples ranging from metal, glass and fire to jungle field recordings.&lt;/p&gt;
+&lt;p&gt;The visual prefers the absence of tone so that the main voice is highlighted with a specially handcrafted red cape.
+An old abandoned temple emerges in the vast ocean, suspended in a three-dimensional void.
+Matter evolves from lonely dust to glowing particles, organically alive  and extremely sensitive to sound.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3&gt;Presentations&lt;/h3&gt;
+&lt;p&gt;Since its inception, IO was presented in the following venues.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Composer/Producer: Josefina Barreix &amp;#x26; Andres Marino&lt;/li&gt;
-&lt;li&gt;Ideo Music Technician: Andres Marino&lt;/li&gt;
-&lt;li&gt;La Siesta del Fauno Technician: María Eugenia García&lt;/li&gt;
-&lt;li&gt;Synths programming: María Eugenia García y Ernesto Romeo&lt;/li&gt;
-&lt;li&gt;Ideo Music Mixer: Pablo Del Fauno Gil &amp;#x26; Andrés Marino&lt;/li&gt;
-&lt;li&gt;Masterizado por Pablo Del Fauno Gil y Andrés Marino en La Siesta del Fauno Estudio-Laboratorio&lt;/li&gt;
+&lt;li&gt;03/18  | Chela Cultural Center´ | Buenos Aires, AR&lt;/li&gt;
+&lt;li&gt;09/18  | UNTREF´´´´´´´´´´´´´´´´ | Buenos Aires, AR&lt;/li&gt;
+&lt;li&gt;09/18  | Roseti Cultural Center | Buenos Aires, AR&lt;/li&gt;
+&lt;li&gt;12/18  | La casa de la pampa´´´ | Buenos Aires, AR&lt;/li&gt;
+&lt;li&gt;02/19  | La Invisible´´´´´´´´´´ | Montevideo, UR   &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Josefina Barreix (Voz y letra)
-Andrés Marino (Programación, Rhodes y Wurlitzer)&lt;/p&gt;
-&lt;p&gt;Featuring:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Flor Wosh (coros en “Dysecdysis”)&lt;/li&gt;
-&lt;li&gt;Ernesto Romeo (sintetizadores en “Incorporo”)&lt;/li&gt;
-&lt;li&gt;Violeta Garcia (cello en “Incorporo”)&lt;/li&gt;
-&lt;li&gt;Santiago Colombatto (cuencos en “Incorporo”)&lt;/li&gt;
-&lt;li&gt;Abelardo Saravia (coros en “Incorporo”)&lt;/li&gt;
-&lt;li&gt;Melina Moguilevsky (coros en “Incorporo”)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Album Artwork: Guillermina Teves
-Photographie: Lea Bon&lt;/p&gt;
-&lt;p&gt;In its beginning, &lt;strong&gt;I-O&lt;/strong&gt; was launched as a solo EP from Josefina Barreix (Director), produced with Andrés Marino and published by FUNGI Records (nov 2017).&lt;/p&gt;
-&lt;p&gt;During 2018 they performed in various spaces around Buenos Aires under scene. The team and the scenery adapting itself according to the space provided. The &lt;strong&gt;I-O&lt;/strong&gt; collective is formed by artists from different disciplines: visuals, audio/sound, programming and scenic design.&lt;/p&gt;
 &lt;p&gt;&lt;div&gt;
-          &lt;div
-            class=&quot;gatsby-resp-iframe-wrapper&quot;
-            style=&quot;padding-bottom: 56.49999999999999%; position: relative; height: 0; overflow: hidden;margin-bottom: 1.0725rem&quot;
-          &gt;
-            &lt;div class=&quot;embedVideo-container&quot;&gt;
-            &lt;iframe src=&quot;https://www.youtube.com/embed/5pKCk0m2zpQ?rel=0&quot; class=&quot;embedVideo-iframe&quot; allowfullscreen style=&quot;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-          &quot;&gt;&lt;/iframe&gt;
-        &lt;/div&gt;
-      &lt;style&gt;
-        .embedVideo-iframe {
-          border: 0
-        }
-      &lt;/style&gt;
-          &lt;/div&gt;
-          &lt;/div&gt;&lt;/p&gt;
-&lt;p&gt;chela
-&lt;div&gt;
           &lt;div
             class=&quot;gatsby-resp-iframe-wrapper&quot;
             style=&quot;padding-bottom: 56.49999999999999%; position: relative; height: 0; overflow: hidden;margin-bottom: 1.0725rem&quot;
@@ -624,8 +802,87 @@ Photographie: Lea Bon&lt;/p&gt;
         }
       &lt;/style&gt;
           &lt;/div&gt;
-          &lt;/div&gt;&lt;/p&gt;
-&lt;p&gt;Scenic Design and Setting &gt; Francisca Armando y Joaquín Oneglia&lt;/p&gt;</content:encoded></item><item><title><![CDATA[CV-2612]]></title><link>http://diegodorado.github.io//works/cv2612/</link><guid isPermaLink="false">http://diegodorado.github.io//works/cv2612/</guid><pubDate>Tue, 01 May 2018 00:00:00 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[LiveCoding]]></title><description><![CDATA[Livecoding is a form of performatic art and a creative technique based upon the use of improvised interactive programming.]]></description><link>http://diegodorado.github.io//works/live-coding/</link><guid isPermaLink="false">http://diegodorado.github.io//works/live-coding/</guid><pubDate>Thu, 01 Feb 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Livecoding is a form of performatic art and a creative technique based upon the use of improvised interactive programming.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Ceiborg]]></title><link>http://diegodorado.github.io//works/ceiborg/</link><guid isPermaLink="false">http://diegodorado.github.io//works/ceiborg/</guid><pubDate>Mon, 01 Jan 2018 00:00:00 GMT</pubDate><content:encoded></content:encoded></item><item><title><![CDATA[Blue Mountain]]></title><description><![CDATA[Blue Mountain  is a musical and pictorial journey of beautiful soundscapes and fantastic nature that leads to a peaceful contemplation. An…]]></description><link>http://diegodorado.github.io//works/blue-mountain/</link><guid isPermaLink="false">http://diegodorado.github.io//works/blue-mountain/</guid><pubDate>Wed, 01 Nov 2017 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;strong&gt;Blue Mountain&lt;/strong&gt; is a musical and pictorial journey of beautiful soundscapes and fantastic nature that leads to a peaceful contemplation.&lt;/p&gt;
+          &lt;/div&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[CV-2612]]></title><description><![CDATA[Still updating my web…
+]]></description><link>http://diegodorado.github.io//works/cv2612/</link><guid isPermaLink="false">http://diegodorado.github.io//works/cv2612/</guid><pubDate>Tue, 01 May 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Still updating my web…
+
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 1000px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 100%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAUABQDASIAAhEBAxEB/8QAGQABAAMBAQAAAAAAAAAAAAAAAAEEBQID/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAIB/9oADAMBAAIQAxAAAAHjzr2VZzSJkNgH/8QAHBAAAgICAwAAAAAAAAAAAAAAAQIAAxIhERMx/9oACAEBAAEFAsshYoI4mxB4LKljqGYDXWGn/8QAFREBAQAAAAAAAAAAAAAAAAAAESD/2gAIAQMBAT8BI//EABcRAAMBAAAAAAAAAAAAAAAAAAABERD/2gAIAQIBAT8BbULv/8QAGhAAAgMBAQAAAAAAAAAAAAAAAREAECETof/aAAgBAQAGPwJD2srRkXOGmXP/xAAcEAEBAQACAwEAAAAAAAAAAAABEQAhYUFRcaH/2gAIAQEAAT8hgPzYMp1uS+GaHMpdRFlyYOgPzOTbDEkfeV0rrf/aAAwDAQACAAMAAAAQFPg8/8QAGBEAAwEBAAAAAAAAAAAAAAAAAAERMSH/2gAIAQMBAT8QWknpC8Ef/8QAFhEBAQEAAAAAAAAAAAAAAAAAARBB/9oACAECAQE/EDB0hCf/xAAdEAEAAwEAAgMAAAAAAAAAAAABABEhQTFRYYHB/9oACAEBAAE/EBCCCAhnDZaUbE+u+ZsDDR2UNTCleL/YHpCX5d8jwidNb9xhaCEY6ShQb2VCHiqr+Z//2Q==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;banana&quot;
+        title=&quot;&quot;
+        src=&quot;/static/25fcec3b576a249d96876b73e7525ceb/63044/banana.jpg&quot;
+        srcset=&quot;/static/25fcec3b576a249d96876b73e7525ceb/77566/banana.jpg 250w,
+/static/25fcec3b576a249d96876b73e7525ceb/5fca9/banana.jpg 500w,
+/static/25fcec3b576a249d96876b73e7525ceb/63044/banana.jpg 1000w,
+/static/25fcec3b576a249d96876b73e7525ceb/880a8/banana.jpg 1080w&quot;
+        sizes=&quot;(max-width: 1000px) 100vw, 1000px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  &lt;/p&gt;</content:encoded></item><item><title><![CDATA[LiveCoding]]></title><description><![CDATA[Livecoding is a form of performatic art and a creative technique based upon the use of improvised interactive programming. Still updating my…]]></description><link>http://diegodorado.github.io//works/live-coding/</link><guid isPermaLink="false">http://diegodorado.github.io//works/live-coding/</guid><pubDate>Thu, 01 Feb 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Livecoding is a form of performatic art and a creative technique based upon the use of improvised interactive programming.&lt;/p&gt;
+&lt;p&gt;Still updating my web…
+
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 1000px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 66.54135338345864%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAANABQDASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAMBAgQF/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/9oADAMBAAIQAxAAAAHksz1SBw1//8QAGBABAQEBAQAAAAAAAAAAAAAAAQIAAxL/2gAIAQEAAQUCDzPOC5TU4pNz6sH/xAAWEQEBAQAAAAAAAAAAAAAAAAAAASH/2gAIAQMBAT8BjH//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAECAQE/AT//xAAbEAABBAMAAAAAAAAAAAAAAAAAAQIRIRBRYf/aAAgBAQAGPwLo/aFYoiEP/8QAGhAAAwEBAQEAAAAAAAAAAAAAABEhATFRYf/aAAgBAQABPyHo9D8mTz4UFDRfgQ21dP/aAAwDAQACAAMAAAAQfA//xAAXEQADAQAAAAAAAAAAAAAAAAAAARFB/9oACAEDAQE/EH1lH//EABYRAQEBAAAAAAAAAAAAAAAAAAABEf/aAAgBAgEBPxCsr//EABwQAQEAAgMBAQAAAAAAAAAAAAERACExQWFR0f/aAAgBAQABPxAYaeFlwTTXOgW36vnGUgqBF97xxcrrd+mXTFQ+icTEJt2GvX5n/9k=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;cover&quot;
+        title=&quot;&quot;
+        src=&quot;/static/f07d67ee7a5b57e389d9e3887836a1c9/63044/cover.jpg&quot;
+        srcset=&quot;/static/f07d67ee7a5b57e389d9e3887836a1c9/77566/cover.jpg 250w,
+/static/f07d67ee7a5b57e389d9e3887836a1c9/5fca9/cover.jpg 500w,
+/static/f07d67ee7a5b57e389d9e3887836a1c9/63044/cover.jpg 1000w,
+/static/f07d67ee7a5b57e389d9e3887836a1c9/849b5/cover.jpg 1500w,
+/static/f07d67ee7a5b57e389d9e3887836a1c9/3c534/cover.jpg 2000w,
+/static/f07d67ee7a5b57e389d9e3887836a1c9/45625/cover.jpg 3000w,
+/static/f07d67ee7a5b57e389d9e3887836a1c9/05990/cover.jpg 4256w&quot;
+        sizes=&quot;(max-width: 1000px) 100vw, 1000px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  &lt;/p&gt;</content:encoded></item><item><title><![CDATA[Ceiborg]]></title><description><![CDATA[Still updating my web…
+]]></description><link>http://diegodorado.github.io//works/ceiborg/</link><guid isPermaLink="false">http://diegodorado.github.io//works/ceiborg/</guid><pubDate>Mon, 01 Jan 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Still updating my web…
+
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 1000px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 150.28248587570621%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAeABQDASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAMBBAUC/8QAFwEAAwEAAAAAAAAAAAAAAAAAAQQFA//aAAwDAQACEAMQAAABx5tS4KZ2UMtKi1UOkkBlL//EAB0QAAICAgMBAAAAAAAAAAAAAAECAAMREhAhMUL/2gAIAQEAAQUCx3wK2LNWK1m6hHbeZjefJn//xAAbEQABBAMAAAAAAAAAAAAAAAABAAIDEBEhIv/aAAgBAwEBPwEs6xUkYRZtf//EABgRAAMBAQAAAAAAAAAAAAAAAAABAxEC/9oACAECAQE/AY2w1HDwV+j/xAAeEAABAwQDAAAAAAAAAAAAAAAAARARAiEiURJBcf/aAAgBAQAGPwKEe0RtTlXlUrZdGi7J7Bc//8QAHBABAAMAAwEBAAAAAAAAAAAAAQARITFBYXEQ/9oACAEBAAE/IVFTZ4lJ+Nkj4JZDo05GlsEPYUJHpcyNAOKOI6rKdTbg0/pfIheamT//2gAMAwEAAgADAAAAEDQZ8P/EABgRAAMBAQAAAAAAAAAAAAAAAAABESEx/9oACAEDAQE/EHtkmDzCjeQq0Z//xAAWEQEBAQAAAAAAAAAAAAAAAAABABH/2gAIAQIBAT8QTGwhsrUgmDf/xAAaEAEAAwEBAQAAAAAAAAAAAAABABEhQTFR/9oACAEBAAE/EAiFcC7lNrvUMTYPRBbgPlL3OQNcijEfbPWGwhoaSaOFalG+Z2KaE4pBexRAYsUEzn5cCswoOoJQuhD6Hk//2Q==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;cover&quot;
+        title=&quot;&quot;
+        src=&quot;/static/eedf2d387b4b2e27e8e0a6a3d89539c3/63044/cover.jpg&quot;
+        srcset=&quot;/static/eedf2d387b4b2e27e8e0a6a3d89539c3/77566/cover.jpg 250w,
+/static/eedf2d387b4b2e27e8e0a6a3d89539c3/5fca9/cover.jpg 500w,
+/static/eedf2d387b4b2e27e8e0a6a3d89539c3/63044/cover.jpg 1000w,
+/static/eedf2d387b4b2e27e8e0a6a3d89539c3/849b5/cover.jpg 1500w,
+/static/eedf2d387b4b2e27e8e0a6a3d89539c3/3c534/cover.jpg 2000w,
+/static/eedf2d387b4b2e27e8e0a6a3d89539c3/c9ef0/cover.jpg 2832w&quot;
+        sizes=&quot;(max-width: 1000px) 100vw, 1000px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  &lt;/p&gt;</content:encoded></item><item><title><![CDATA[Blue Mountain]]></title><description><![CDATA[Blue Mountain  is a musical and pictorial journey of beautiful soundscapes and fantastic nature that leads to a peaceful contemplation. An…]]></description><link>http://diegodorado.github.io//works/blue-mountain/</link><guid isPermaLink="false">http://diegodorado.github.io//works/blue-mountain/</guid><pubDate>Wed, 01 Nov 2017 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;strong&gt;Blue Mountain&lt;/strong&gt; is a musical and pictorial journey of beautiful soundscapes and fantastic nature that leads to a peaceful contemplation.&lt;/p&gt;
 &lt;p&gt;An exploratory audiovisual landscape approached through virtual reality technology. Each element that conform the virtual environment has a certain pictorial-musical representation. Depending on which path the user takes, the sound environment is modiﬁed as it moves through space.&lt;/p&gt;
 &lt;p&gt;…&lt;a href=&quot;http://bluemountainvr.com/&quot;&gt;Go to project site&lt;/a&gt;&lt;/p&gt;
 &lt;h2&gt;Watch the trailer&lt;/h2&gt;
