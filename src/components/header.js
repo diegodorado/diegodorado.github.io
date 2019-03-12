@@ -85,11 +85,14 @@ class Header extends React.Component {
           <Link to={`/`}>{this.state.title}</Link>
         </h1>
         <nav>
-          <a title="change theme color" href="/" onClick={this.onMouseClick}>◐</a>|<PLink to={`/work`}>Work</PLink>|<PLink to={`/bio`}>Bio</PLink>|<PLink to={`/pics`} >Pics</PLink> {/* | <PLink to={`/texts`}>Texts</PLink>*/}
+          <a title="change theme color" href="/" onClick={this.onMouseClick}><span>◐</span></a>|<PLink to={`/work`}>Work</PLink>|<PLink to={`/bio`}>Bio</PLink>|<PLink to={`/pics`} >Pics</PLink> {/* | <PLink to={`/texts`}>Texts</PLink>*/}
         </nav>
       </header>
     )
   }
+
+
+
 }
 
 export default Header

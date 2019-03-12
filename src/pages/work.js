@@ -51,7 +51,7 @@ export const pageQuery = graphql`
         title
       }
     }
-    allMarkdownRemark(filter:{fields:{type:{eq:"works"}}} sort: { fields: [frontmatter___date], order: DESC }) {
+    allMarkdownRemark(filter:{fileAbsolutePath:{regex:"/.*index.md/"} fields:{type:{eq:"works"}}} sort: { fields: [frontmatter___date], order: DESC }) {
       edges {
         node {
           excerpt
