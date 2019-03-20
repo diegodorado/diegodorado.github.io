@@ -1,0 +1,150 @@
+
+
+.live-emojing
+  .expand
+    @extend %no-select
+    z-index: 1000
+    display: block
+    position: absolute
+    top: 0
+    right: 0
+    padding: 16px
+    outline: 0
+
+  touch-action: pan-y
+  input,button, label
+    font-size: 1.5em
+    border:  0
+    box-sizing: border-box
+    outline: 0
+    width: 100%
+  input:required:valid
+    border: 3px solid cyan
+  input:required:invalid
+    border: 3px solid #f00
+  button
+    cursor: pointer
+    &:hover
+      background: #999
+  .setup
+    label
+      display: inline-block
+      width: 30%
+      text-align: right
+    input
+      width: 70%
+      text-align: right
+      padding: 0 0.5em
+    button
+      margin-left: 30%
+      width: 70%
+  .nick
+    button
+      margin-top: 20px
+  .emoji-mart
+    @extend %no-select
+    background: white
+  .emoji-mart-scroll
+    height: 50vh
+  .emoji-mart-emoji, .emoji-mart-anchor
+    &:hover,&:hover span
+      cursor: pointer
+
+  .emoji-mart-search, .emoji-mart-bar
+    display: none
+
+  .emoji-mart-category-label
+    visibility: hidden
+  .emoji-mart-category .emoji-mart-emoji:hover:before
+    width: 115%
+    height: 115%
+    background: #eee
+  .play
+    @extend %no-select
+    .dice
+      font-size: 2em
+      text-decoration: none
+      animation: pulsate 2s infinite alternate
+      line-height: 2em
+      vertical-align: middle
+      display: inline-block
+    .preview
+      font-size: 1.5em
+      border: 1px solid white
+      padding: 0.75em 0.5em
+      word-break: break-all
+      white-space: pre-wrap
+      margin-bottom: 0
+      border-bottom: 0
+      .carret
+        display: inline-block
+        width: 0px
+        position: relative
+        &::after
+          animation: blink 1s infinite steps(1, end)
+          display: block
+          position: absolute
+          left: -6px
+          bottom: -20px
+          content: ""
+          width: 0
+          height: 0
+          border-style: solid
+          border-width: 0 7px 10px 7px
+          border-color: transparent transparent #ffffff transparent
+
+
+
+    nav
+      width: 100%
+      border: 1px solid white
+      box-sizing: border-box
+      display: flex
+      align-items: stretch
+      svg
+        flex-grow: 1
+        padding: 0.75em 0
+        height: 1.5em
+        cursor: pointer
+        &:active
+          background: #ddd
+          color: black
+
+
+html.full-screen
+  overflow: hidden
+  .live-emojing
+    .expand
+      top: calc(50vh - 6em)
+      svg:nth-child(1)
+        display: none
+    header
+      height: 0
+      margin: 0
+    .nick, .setup, .hint, header h1
+      display: none
+    #app
+      margin: 0
+      width: 100%
+    .play
+      .input
+        height: 50vh
+        position: relative
+        nav
+          position: absolute
+          bottom: 0
+          background: #222
+        .preview
+          margin: 0
+          height: 50vh
+
+
+html.normal
+  .live-emojing
+    .expand
+      animation: expand 2s infinite alternate
+      svg
+        width: 40px
+        height: 40px
+        &:nth-child(2)
+          display: none

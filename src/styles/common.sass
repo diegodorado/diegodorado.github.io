@@ -25,3 +25,26 @@ p
   -webkit-touch-callout: none
   -o-user-select: none
   -moz-user-select: none
+  -webkit-tap-highlight-color: rgba(0,0,0,0)
+  -webkit-tap-highlight-color: transparent
+
+@keyframes pulsate
+  from
+    transform: scale(1) rotate(0deg)
+  to
+    transform: scale(0.9) rotate(45deg)
+
+@keyframes expand
+  from
+    transform: scale(1)
+  to
+    transform: scale(0.9)
+
+
+@keyframes blink
+  0%
+    opacity: 0
+  50%
+    opacity: 1
+  100%
+    opacity: 0

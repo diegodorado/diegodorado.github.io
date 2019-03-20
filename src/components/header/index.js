@@ -2,6 +2,7 @@ import React from "react"
 import { Link } from "gatsby"
 import {reactLocalStorage} from 'reactjs-localstorage'
 import Helmet from "react-helmet"
+import Brand from "./brand"
 
 const meta = [
   {
@@ -30,45 +31,18 @@ const partiallyActive = () => ({ isPartiallyCurrent }) => ({
 const PLink = ({  ...rest }) => (
   <Link getProps={partiallyActive()} {...rest} />
 )
-const swaps = [['i','1'],['e','3'],['o','0'],['g','6'],['a','4']]
-const original = 'diego dorado'
-
 
 class Header extends React.Component {
   constructor(props){
     super(props);
-    this.state = {title: original, theme: 'dark'}
-  }
-
-  getDiff(){
-    let diff = 0
-    for(let i=0;i<original.length;i++){
-      diff += (this.state.title[i]===original[i]) ? 0 : 1
-    }
-    return diff
-  }
-
-  timer() {
-    let i = Math.floor(Math.random()*swaps.length)
-    let from = Math.round(Math.random())
-    if(this.getDiff()>3) from = 1
-    let to = from ? 0 : 1
-    if(Math.random()<0.51){
-      this.setState({
-        title: this.state.title.replace(swaps[i][from],swaps[i][to])
-      })
-    }
+    this.state = {theme: 'dark'}
   }
 
   componentDidMount(){
-    this.intervalId = setInterval(this.timer.bind(this), 100);
     const theme = reactLocalStorage.get('theme', 'dark')
     this.setState({theme: theme})
   }
 
-  componentWillUnmount(){
-    clearInterval(this.intervalId);
-  }
 
   onMouseClick = (e) => {
     e.preventDefault()
@@ -81,16 +55,13 @@ class Header extends React.Component {
     return (
       <header>
         <Helmet bodyAttributes={{class:this.state.theme }}  meta={meta} />
-        <h1>
-          <Link to={`/`}>{this.state.title}</Link>
-        </h1>
+        <Brand title="diego dorado" />
         <nav>
           <a title="change theme color" href="/" onClick={this.onMouseClick}><span>◐</span></a>|<PLink to={`/work`}>Work</PLink>|<PLink to={`/bio`}>Bio</PLink>|<PLink to={`/pics`} >Pics</PLink> {/* | <PLink to={`/texts`}>Texts</PLink>*/}
         </nav>
       </header>
     )
   }
-
 
 
 }

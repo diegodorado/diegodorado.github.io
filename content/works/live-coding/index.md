@@ -5,6 +5,8 @@ description: Livecoding is a form of performatic art and a creative technique ba
 cover: "./cover.jpg"
 ---
 
+
+
 Livecoding is a form of performatic art and a creative technique based upon the use of improvised interactive programming.
 
 Still updating my web...

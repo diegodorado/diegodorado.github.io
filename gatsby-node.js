@@ -92,3 +92,14 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
   }
 }
+
+/*
+exports.onCreatePage = ({ page, actions }) => {
+  const { createPage, deletePage } = actions
+  deletePage(page)
+  if(page.path=== '/live-emojing/' || page.path==='/offline-plugin-app-shell-fallback/'|| page.path==='/404/'){
+    console.log('live emojing')
+    createPage(page)
+  }
+}
+*/
