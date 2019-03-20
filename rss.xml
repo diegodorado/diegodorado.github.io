@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[diego dorado]]></title><description><![CDATA[diego dorado portfolio.]]></description><link>http://diegodorado.github.io/</link><generator>RSS for Node</generator><lastBuildDate>Tue, 12 Mar 2019 06:13:22 GMT</lastBuildDate><item><title><![CDATA[I-O 2]]></title><description><![CDATA[Instrumento Optico Intro IO is an audiovisual and scenographic performance about the recovery of our languages and the relationship with…]]></description><link>http://diegodorado.github.io//works/i-o/presentation/</link><guid isPermaLink="false">http://diegodorado.github.io//works/i-o/presentation/</guid><content:encoded>&lt;p&gt;Instrumento Optico&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[diego dorado]]></title><description><![CDATA[diego dorado portfolio.]]></description><link>http://diegodorado.github.io/</link><generator>RSS for Node</generator><lastBuildDate>Wed, 20 Mar 2019 04:34:43 GMT</lastBuildDate><item><title><![CDATA[I-O 2]]></title><description><![CDATA[Instrumento Optico Intro IO is an audiovisual and scenographic performance about the recovery of our languages and the relationship with…]]></description><link>http://diegodorado.github.io//works/i-o/presentation/</link><guid isPermaLink="false">http://diegodorado.github.io//works/i-o/presentation/</guid><content:encoded>&lt;p&gt;Instrumento Optico&lt;/p&gt;
 &lt;h1&gt;Intro&lt;/h1&gt;
 &lt;p&gt;IO is an audiovisual and scenographic performance about the recovery of our languages and the relationship with nature through a process of spiritual and material detoxification.&lt;/p&gt;
 &lt;h1&gt;Concept&lt;/h1&gt;
@@ -148,21 +148,19 @@ plugins&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span c
   &gt;
     &lt;span
       class=&quot;gatsby-resp-image-background-image&quot;
-      style=&quot;padding-bottom: 66.54135338345864%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAACToAAAk6AGCYwUcAAADQElEQVQ4yz2TW08bVxSFz8x4PB5fxuPrGOMLxgZcjA3mYlBpKQkQTEpIaQuBBAgUGkXKSxsVJQ0SChJJoyhtlYhKjSqkqHlJr1Kee5GQ+pC39ql/oT/j67FN+3B09uw5e2vttdYWWiCOEAp2NU9y9gK6U0P3evHF0gh3AOGyEapJ2GlH9/jkW4HL8GEFw3i9/uZ3o751y6OdBgEnj1VeQcTHEbqNbqcp95f5+vNtxoa6SRYG8IUS2MEIh7f32Fm7ihEINWtVlxuhaK2GlqG2Aj2M0TPHO0uX2L70usy5WTtjwZ87HF4f/R/J8Gt9vPrhJ765f8hgvkDUL6fQ3Cia3kLq91uszpTp7R5AMSK8er7IP79dIZ8KYuiCjVoHnXETzWU2C6o9Jf7+5XdOnh1zbf5t+hIdWIYcXXXJ/xLcuUoAXs7w/EZXs2Dj3SEe3Twrx4ueolIlZwGc4gXM3DROJMF3Xz6hXqtx42KdmzPTGC7PKY/yxCyN/SWb995oNcgGTSbK3c04VSwxubCES9Ww0wNkJnZYnarT29NPf9Lh5PiI9cvriGgOYdotAAl3SyFDntGkzW66l1ImSySZZXv3gMr4FJYVIZ7K0d4/Ra1vDD3dRyadoTIygbCziFRJitEmx5Y8LnYJMraCpmlU2uJEA1GseBtrqx/woH4Z3392aKppovilzWJ5ygsfY3QOIULtqJEMwhuRSkseRwo2MW/DP5J0TSasKKFEO8MLo2SHO7i4vsD1K6ucGxzg3uYWy/VZ8slJXsz/TJczgvBIQTzSPrq8laZjXJg+A08ogGKVUEOSD2lgX0qiHX+TzY0P2Zl/n7ZalPy0Q+3sGHM9K/wYPGAiNCnfugkm8rjNYEsUw/ZgZoOondKYMT9aYyTboRIrkqvOcX7xKk8fPuHhV5+xfKdOcTKCWbCkqcNNGt6qDfLHt0fcXTlPxCM5dNtyVEugZCXcglwrXbreG6aWLJMbmmdr5Rov7j/g6M4+x5/e4q/Du7x8vMejvW1uSzqefrLJyRe73Jqr4XOpjY2RzQKSw2zDQ6c7qSpEI1nsXFkq6kgrGAhH5quC/KDN5myV7w8+4tfH+zzb3eLe8hmmi6lm7b/TE4NO5FS6BAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+      style=&quot;padding-bottom: 66.5625%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAACToAAAk6AGCYwUcAAADO0lEQVQ4yz2T7U9bZRjGn9PT9/b0nL7TAqW0jEopHbW0zI0xgVnexpwLo7DCBnNkiX4wOJ1IMjGx0yXEODeTGUOiWYwJiyb62cXwxRi/7KN/gv/Gz7sF/HCdc+c+933lua7rPEpXCk1gxDMYhToqehblsHBYXZwuFfl2b4Mz5X4S2SJeK07QDNPc3uF24wZOv4Vq7esOedvatTJcx4UjhLN/hivX6txaek16TlYnAvDyNs071aMZwchAgb+e/8x3D5qUMlnChoGyOdBs9mNCf4DrbwyR7x9GuUL8/eNb/PuiQW+nicuhWKv0kI660e1eWdAo5Qb55/c/OPx+n835OQrxHvxOH0rT299VrWjAbxd59m5fu3Hjapm9rUl8VuT4VBp2l59Ybh53zyTRUJyDrx4zU63yzuVpti5O4dBd/ytQ0YDO/UWLq+fC7UaP6WascKpdd4u88YVFdM1GMDVM99gt6hM1BvqHKCbiHO4/obHSQIXTKI95RNjh0NqFUzCaMLnbNUA+1UO4M83G3V2K56YwjBCx7l6SxUlGC2ewd+VJycxQeQxlplCdefGuQ2RLOG/2KVKmQtd1hhJRwv4wgViCRn2DL2oreE+ktNN0o3wxkZXh9MIWznQJZSXRQt1ywtCRjyN9JhGPLNg8AmkYYYLxJCMLVVIjKS6vXuLOSp1aaZjm+gZL0zXSiXEO5n4hGy9LkBKIO4iy+05+HR2Pz4k7KPEbeWyW+OHy4u2MEjl7nptrm2wuXCNZiZCZjFGZGGUut8xBYJcxa1xmnfhjaexu40iJy3ThSZlovcIe8aP7ouJLjEKkn97hWWavrPH04SMePnnA4vY0uQsh3Bk/LvG1RXCh8ip/PvuG3eVZQm5761KIVEOYUxJOVry0O8WPICOJQXrL86wvb/JT83Mef3yf/e17vPxsl18f7bC38zYfrS7w9P2bHH75AfdmKvjstpaPQuZvEQoiR4krm0ZYjDbTg9i746i4pBeV/rAiW7JYr5V4/ul7vPj6E374cIPm0utM5bpOwpOHW5AUhAQeIZWQnKEYHfM11KyFVomiTXpxXDJwTIvUU4qA7JxPBblezbFcfoVkoHVbNP4DbkKD2RX+XmcAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
     &gt;
       &lt;img
         class=&quot;gatsby-resp-image-image&quot;
         style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
         alt=&quot;cover&quot;
         title=&quot;&quot;
-        src=&quot;/static/96c410efdf15592e9c9bfa1512d62a61/0f755/cover.png&quot;
-        srcset=&quot;/static/96c410efdf15592e9c9bfa1512d62a61/88890/cover.png 250w,
-/static/96c410efdf15592e9c9bfa1512d62a61/99ef7/cover.png 500w,
-/static/96c410efdf15592e9c9bfa1512d62a61/0f755/cover.png 1000w,
-/static/96c410efdf15592e9c9bfa1512d62a61/aaaad/cover.png 1500w,
-/static/96c410efdf15592e9c9bfa1512d62a61/596b5/cover.png 2000w,
-/static/96c410efdf15592e9c9bfa1512d62a61/c4f57/cover.png 3000w,
-/static/96c410efdf15592e9c9bfa1512d62a61/79255/cover.png 4256w&quot;
+        src=&quot;/static/2acd17e2b25a8dc98a4e669b905c5928/0f755/cover.png&quot;
+        srcset=&quot;/static/2acd17e2b25a8dc98a4e669b905c5928/88890/cover.png 250w,
+/static/2acd17e2b25a8dc98a4e669b905c5928/99ef7/cover.png 500w,
+/static/2acd17e2b25a8dc98a4e669b905c5928/0f755/cover.png 1000w,
+/static/2acd17e2b25a8dc98a4e669b905c5928/aaaad/cover.png 1500w,
+/static/2acd17e2b25a8dc98a4e669b905c5928/b2148/cover.png 1920w&quot;
         sizes=&quot;(max-width: 1000px) 100vw, 1000px&quot;
       /&gt;
     &lt;/span&gt;
@@ -715,11 +713,11 @@ The title also plays with this aesthetic cross: the term &lt;em&gt;computer-aide
         style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
         alt=&quot;iolive2&quot;
         title=&quot;&quot;
-        src=&quot;/static/0daf43a3e872c393f0f661386212175e/63044/iolive2.jpg&quot;
-        srcset=&quot;/static/0daf43a3e872c393f0f661386212175e/77566/iolive2.jpg 250w,
-/static/0daf43a3e872c393f0f661386212175e/5fca9/iolive2.jpg 500w,
-/static/0daf43a3e872c393f0f661386212175e/63044/iolive2.jpg 1000w,
-/static/0daf43a3e872c393f0f661386212175e/56c56/iolive2.jpg 1035w&quot;
+        src=&quot;/static/9ba2315c695045d11016d8c974dc3f38/63044/iolive2.jpg&quot;
+        srcset=&quot;/static/9ba2315c695045d11016d8c974dc3f38/77566/iolive2.jpg 250w,
+/static/9ba2315c695045d11016d8c974dc3f38/5fca9/iolive2.jpg 500w,
+/static/9ba2315c695045d11016d8c974dc3f38/63044/iolive2.jpg 1000w,
+/static/9ba2315c695045d11016d8c974dc3f38/56c56/iolive2.jpg 1035w&quot;
         sizes=&quot;(max-width: 1000px) 100vw, 1000px&quot;
       /&gt;
     &lt;/span&gt;
@@ -828,8 +826,22 @@ Matter evolves from lonely dust to glowing particles, organically alive  and ext
     &lt;/span&gt;
   &lt;/span&gt;
   &lt;/p&gt;</content:encoded></item><item><title><![CDATA[LiveCoding]]></title><description><![CDATA[Livecoding is a form of performatic art and a creative technique based upon the use of improvised interactive programming. Still updating my…]]></description><link>http://diegodorado.github.io//works/live-coding/</link><guid isPermaLink="false">http://diegodorado.github.io//works/live-coding/</guid><pubDate>Thu, 01 Feb 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Livecoding is a form of performatic art and a creative technique based upon the use of improvised interactive programming.&lt;/p&gt;
-&lt;p&gt;Still updating my web…
-
+&lt;p&gt;Still updating my web…&lt;/p&gt;
+&lt;div&gt;
+          &lt;div
+            class=&quot;gatsby-resp-iframe-wrapper&quot;
+            style=&quot;padding-bottom: 56.25%; position: relative; height: 0; overflow: hidden;margin-bottom: 1.0725rem&quot;
+          &gt;
+            &lt;iframe src=&quot;https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fdiegdorado%2Fvideos%2F377292743101880%2F&amp;amp;show_text=0&amp;amp;width=560&quot; style=&quot;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+          &quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; allowtransparency=&quot;true&quot; allowfullscreen=&quot;true&quot;&gt;&lt;/iframe&gt;
+          &lt;/div&gt;
+          &lt;/div&gt;
+&lt;p&gt;
   &lt;span
     class=&quot;gatsby-resp-image-wrapper&quot;
     style=&quot;position: relative; display: block;  max-width: 1000px; margin-left: auto; margin-right: auto;&quot;
