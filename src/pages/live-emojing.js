@@ -10,7 +10,7 @@ class LiveEmojingIndex extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      readyState: 0,
+      readyState: 3,
       lastMsg: '',
       nick: '',
     }
@@ -55,7 +55,7 @@ class LiveEmojingIndex extends React.Component {
 
   render() {
 
-    const connected = (this.state.readyState === 3)//WebSocket.OPEN)
+    const connected = (this.state.readyState === 1)//WebSocket.OPEN)
     const play = connected && this.state.nick!==''
 
     return (
