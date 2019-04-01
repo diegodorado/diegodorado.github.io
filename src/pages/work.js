@@ -15,6 +15,12 @@ class WorkIndex extends React.Component {
     return (
       <Layout location={this.props.location} title={siteTitle}>
         <SEO title="work" />
+        <p className="spacey" style={{fontSize: '1.25em'}}>
+          <em>New!: </em><Link to="/live-emojing" style={{textDecoration: 'none'}}>Try Live Emojing Playground 😎</Link>
+        </p>
+
+
+
         <p className="spacey">I am Diego Dorado, programmer and electronic artist. I am passionate about research projects that combine technological innovation with artistic expressions.
         </p>
         <p>

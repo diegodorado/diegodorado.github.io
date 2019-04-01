@@ -27,32 +27,11 @@ class LiveEmojingIndex extends React.Component {
   componentDidMount(){
     this.ddp = new simpleDDP(opts);
 
-    (async ()=>{
-
-      console.log('connecting...');
-      await this.ddp.connect();
-      console.log('connected');
-
-      console.log('subscribing...');
-      let sub = this.ddp.subscribe('emojis.all','dft')
-
-      await sub.ready();
-      console.log('ready');
-
-      this.ddp.collection('emojis').onChange((data)=>{
-        const next = data.changed.next
-        console.log(next.pattern)
-      })
-
-    })();
-
-
     this.ddp.on('connected', () => {
       this.setState({connected: true});
     })
 
     this.ddp.on('disconnected', () => {
-      console.log('// for example show alert to user')
       this.setState({connected: false});
     })
 
