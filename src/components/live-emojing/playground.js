@@ -1,5 +1,7 @@
 import React from "react"
 import PropTypes from 'prop-types'
+import Helmet from "react-helmet"
+
 import {reactLocalStorage} from 'reactjs-localstorage'
 import { Picker } from 'mr-emoji'
 import '../../../node_modules/mr-emoji/css/emoji-mart.css'
@@ -9,6 +11,8 @@ import { FaBackspace,
          FaCaretUp,
          FaUpload,
          FaDice,
+         FaExpand,
+         FaCompress
         } from 'react-icons/fa'
 import {alphaEmoji,
         randomPattern,
@@ -24,10 +28,18 @@ class Playground extends React.Component {
     super(props);
     this.state = {
       left: '',
-      right: ''
+      right: '',
+      expanded: false,
+      highlighted: false
     }
   }
 
+
+
+  onExpandClick = (e) => {
+    e.preventDefault()
+    this.setState({ expanded: !this.state.expanded })
+  }
 
 
   componentDidMount(){
@@ -126,11 +138,16 @@ class Playground extends React.Component {
   }
 
   commit = () => {
+    //todo: highlight canvas!
     const p = this.state.left+this.state.right
     reactLocalStorage.set('pattern', p)
     this.props.onCommit(p)
-    this.setState({lastMsg: p});
+    this.setState({lastMsg: p, highlighted: true});
+    setTimeout(() => {this.setState({highlighted:false})},300)
   }
+
+
+
 
   render() {
 
@@ -144,9 +161,16 @@ class Playground extends React.Component {
 
     return (
       <div className="play">
+        <Helmet htmlAttributes={{class:(this.state.expanded ? 'full-screen':'normal') }} />
         {hint}
         <div className="input">
-          <pre className="preview">{this.state.left}{carret}{this.state.right}</pre>
+          <pre className={this.state.highlighted ? 'highlight preview' : 'preview' }>
+            {this.state.left}{carret}{this.state.right}
+            <a className="expand" href="/" onClick={this.onExpandClick}>
+              <FaExpand/>
+              <FaCompress/>
+            </a>
+          </pre>
           <nav>
             <FaCaretLeft onClick={this.onLeftClick}/>
             <FaCaretRight onClick={this.onRightClick}/>

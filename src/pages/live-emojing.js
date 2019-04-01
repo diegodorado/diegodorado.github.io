@@ -1,69 +1,76 @@
 import React from "react"
 import Layout from "../components/le-layout"
 import SEO from "../components/seo"
-import Connection from '../components/live-emojing/connection'
 import Nick from '../components/live-emojing/nick'
 import Playground from '../components/live-emojing/playground'
+import simpleDDP from 'simpleddp'
+import ws from 'isomorphic-ws'
+
+const opts = {
+    endpoint: "ws://av.thundernize.com/websocket",
+    SocketConstructor: ws,
+    reconnectInterval: 5000
+}
 
 
 class LiveEmojingIndex extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      readyState: 3,
+      connected: false,
       lastMsg: '',
       nick: '',
     }
   }
 
-  tryConnection = (state) => {
-    console.log(state)
-    //todo: close connection if open already
-    this.client = new WebSocket(`ws://${state.host}:${state.port}`)
 
-    this.client.onopen =  () => {
-      this.setState({readyState: this.client.readyState});
-    }
-    this.client.onerror = () => {
-      this.setState({readyState: this.client.readyState});
-    }
+  componentDidMount(){
+    this.ddp = new simpleDDP(opts);
 
-    this.client.onmessage = (msg) => {
-      this.setState({readyState: this.client.readyState});
-      console.log(msg)
-    }
+    (async ()=>{
 
-    this.client.onclose =  ()=> {
-      this.setState({readyState: this.client.readyState});
-    }
+      console.log('connecting...');
+      await this.ddp.connect();
+      console.log('connected');
+
+      console.log('subscribing...');
+      let sub = this.ddp.subscribe('emojis.all','dft')
+
+      await sub.ready();
+      console.log('ready');
+
+      this.ddp.collection('emojis').onChange((data)=>{
+        const next = data.changed.next
+        console.log(next.pattern)
+      })
+
+    })();
+
+
+    this.ddp.on('connected', () => {
+      this.setState({connected: true});
+    })
+
+    this.ddp.on('disconnected', () => {
+      console.log('// for example show alert to user')
+      this.setState({connected: false});
+    })
 
   }
-
-  closeConnection = () => {
-    this.client.close()
-  }
-
 
   onCommitPattern = (pattern) => {
-    const data = JSON.stringify({
-      user_id: null,
-      who: this.state.nick,
-      text: pattern
-    })
-    this.client.send(data)
+    this.ddp.call('emojis.send', 'dft', this.state.nick, pattern)
   }
 
   render() {
 
-    const connected = (this.state.readyState === 1)//WebSocket.OPEN)
-    const play = connected && this.state.nick!==''
+    const play = this.state.connected && this.state.nick!==''
 
     return (
       <Layout location={this.props.location} >
         <SEO title="live emojing" />
         <div>
-          <Connection tryConnection={this.tryConnection}  closeConnection={this.closeConnection} connected={connected}/>
-          <Nick onChanged={(nick)=>{this.setState({nick:nick})} } connected={connected}/>
+          <Nick onChanged={(nick)=>{this.setState({nick:nick})} } connected={this.state.connected}/>
           {(play ? <Playground onCommit={this.onCommitPattern}/> : null)}
         </div>
       </Layout>

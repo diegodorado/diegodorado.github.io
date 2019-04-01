@@ -59,7 +59,7 @@ class Nick extends React.Component {
   }
 
   render() {
-    let nick = null
+    let nick = 'Sorry, connection error.'
 
     if (this.state.connected) {
       if(this.state.confirmed){

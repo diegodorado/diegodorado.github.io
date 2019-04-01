@@ -6,7 +6,6 @@
     z-index: 1000
     display: block
     position: absolute
-    top: 0
     right: 0
     padding: 16px
     outline: 0
@@ -76,6 +75,9 @@
       white-space: pre-wrap
       margin-bottom: 0
       border-bottom: 0
+      box-sizing: border-box
+      &.highlight
+        animation: flash 0.5s
       .carret
         display: inline-block
         width: 0px
@@ -115,7 +117,7 @@ html.full-screen
   overflow: hidden
   .live-emojing
     .expand
-      top: calc(50vh - 6em)
+      bottom: 2em
       svg:nth-child(1)
         display: none
     header
@@ -142,6 +144,7 @@ html.full-screen
 html.normal
   .live-emojing
     .expand
+      top: 0
       animation: expand 2s infinite alternate
       svg
         width: 40px
