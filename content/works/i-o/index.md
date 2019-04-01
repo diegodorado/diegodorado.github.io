@@ -1,7 +1,7 @@
 ---
 title: I-O
 date: "2018-08-01"
-description: Multidisciplinary digital art project in which the installation scenery is exploited and the creation of a space intervened by the repercussions of the interaction between audio and visuals.
+description: I-O is an audiovisual and scenographic performance about the recovery of our languages and the relationship with nature through a process of spiritual and material detoxification.
 cover: "./cover.jpg"
 ---
 
@@ -48,39 +48,38 @@ All this excitement led to the idea of ​​taking the EP to the next level, tr
 ---
 ### Concept
 
-The work is presented in Spanish, Ranquel (native language), and sounds that represent emotion. Words sometimes obfuscate their purpose and their real connection with emotion, as they are tied to the singular perception and experiences each subject has.
+Although during the presentation words are expressed vocally both in Spanish and Ranquel (native language spoken by pre-columbian cultures), abstract emotional sounds take the actual spotlight. Words sometimes serve as barriers, obfuscating true purpose and emotion.
 
->>>>*There are universal  sounds that overcome the barriers of dialects and languages. Sound as a primary language is a first step towards detoxification.*
+>>>>*There are universal sounds capable of overcoming the inevitable distances inherent of dialects and languages. Sound, as a primary language is the first step towards personal detoxification.*
 
 
 ![](./iolive2.jpg)
 
-The work is comprised of four moments of a mythical story: "Euphoria", "Dysecdysis", "Diaphanus" and "Incorporo".
+The opus is comprised of four moments of a mythical story: "Euphoria", "Dysecdysis", "Diaphanus" and "Incorporo".
 
 >#### Euphoria
->Dopamine fills the brain with a feeling of confidence and exaggerated well-being. The self-exalted one takes refuge in itself, getting isolation and solitude. Reality does not satisfy his desires and leads him to that feeling of deep disappointment and the need to rebel against the established.
+>Dopamine fills the brain with a feeling of confidence and an exaggerated sense of well-being. The self-exalted individual seeks for internal shelter; isolation and solitude follow. Reality does not satisfy his desires and leads him to deep disappointment and the need to rebel against the established.
 
 >#### Dysecdysis
->A skin disease of a reptile that occurs when the shedding of the dead outer skin fails. This process of detoxification can only be overcome by the replacement of the old by the new.
+>Named after a condition which causes failure in reptiles' outer skin shedding. This process of detoxification can only be overcome by the replacement of the old by the new.
 
 >#### Diaphanus
->Transparent or translucent; which allows light to pass through. It means to appear, not in a deceptive way, but what is manifestly real, what is present for the senses and has strength of evidence.
+>Transparent or translucent; allows light to pass through. It means to appear, not in a deceptive way, but to show what is manifestly real, what is perceivable by the senses and has strength of evidence.
 
 >#### Incorporo
->So that the human being can learn something from the nature, other intelligences must exist before nature itself, without body, volume or consistency. They belongs to the spirit and can not be perceived by the senses.
+>In order for the human being to learn something from nature, other intelligences must exist before nature itself, without a body, volume or consistency. These intelligences belong to the spirit and cannot be perceived by the senses.
 
 ---
 ### Aesthetics
 
 ![](./iolive4.jpg)
 
-The voice is a broad instrument that moves from recognizable human places such as tribal shoutings, whispered poems, ritual choirs and gated vocals towards less familiar digital textures such as granular percussion background echo and synthesized pads
+The voice is a broad instrument that oscillates from recognizable human uses such as tribal screams, whispered poems, ritual choirs and gated vocals towards less familiar digital textures such as granular percussion, background echo and synthesized pads.
 
-Melancholic wurlitzers and increasingly tense cellos harmonize the sound universe while the rhythm is given by synthetic basses, stuttered drums and samples ranging from metal, glass and fire to jungle field recordings.
+Melancholic Wurlitzers and increasingly tense cellos harmonize the sound universe while the rhythm is given by multiple lines of synthetic bass, stuttered drums and samples ranging from metal, glass and fire to jungle field recordings.
 
-The visual prefers the absence of tone so that the main voice is highlighted with a specially handcrafted red cape.
-An old abandoned temple emerges in the vast ocean, suspended in a three-dimensional void.
-Matter evolves from lonely dust to glowing particles, organically alive  and extremely sensitive to sound.
+The visual aspect deals with an absence of tone leaving the main voice to be highlighted with a specially handcrafted red cape. An abandoned temple emerges in the vast ocean, suspended in a three-dimensional void.
+Matter evolves from lonely dust to glowing particles, organically alive and extremely sensitive to sound.
 
 
 ---

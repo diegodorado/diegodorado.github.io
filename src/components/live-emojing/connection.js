@@ -1,6 +1,15 @@
 import React from "react"
 import PropTypes from 'prop-types'
 import {reactLocalStorage} from 'reactjs-localstorage'
+import simpleDDP from 'simpleddp'
+import ws from 'isomorphic-ws'
+
+const opts = {
+    endpoint: "ws://localhost:3000/websocket",
+    SocketConstructor: ws,
+    reconnectInterval: 5000
+}
+
 
 class Connection extends React.Component {
 
@@ -37,6 +46,40 @@ class Connection extends React.Component {
     // /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/.test(window.location.host)
     this.setState({host: host, port: port})
     this.props.tryConnection(this.state);
+
+    const ddp = new simpleDDP(opts);
+
+
+    (async ()=>{
+
+      console.log('connecting...');
+      await ddp.connect();
+      console.log('connected');
+
+      console.log('subscribing...');
+      let sub = ddp.subscribe('emojis.all','dft')
+
+      await sub.ready();
+      console.log('ready');
+
+      ddp.collection('emojis').onChange((data)=>{
+        const next = data.changed.next
+        console.log(next.pattern)
+      })
+
+    })();
+
+
+    ddp.on('connected', () => {
+      console.log('// do something')
+    })
+
+    ddp.on('disconnected', () => {
+      console.log('// for example show alert to user')
+    })
+
+
+
   }
 
 

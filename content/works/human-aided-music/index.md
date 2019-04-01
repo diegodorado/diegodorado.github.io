@@ -1,7 +1,7 @@
 ---
 title: Human Aided Music
 date: "2019-03-03"
-description: A musical and pictorial journey of beautiful soundscapes and fantastic nature that leads to a peaceful contemplation.
+description: Human Aided Music is a Human-Machine percussion duo where the machine learns from the human. It proposes a fluid dialogue between both, to the point where no one distinguishes who leads the music.
 cover: "./cover.jpg"
 ---
 
