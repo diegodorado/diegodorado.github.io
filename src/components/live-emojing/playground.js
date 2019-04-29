@@ -8,7 +8,6 @@ import '../../../node_modules/mr-emoji/css/emoji-mart.css'
 import { FaBackspace,
          FaCaretLeft,
          FaCaretRight,
-         FaCaretUp,
          FaUpload,
          FaDice,
          FaExpand,
@@ -89,7 +88,7 @@ class Playground extends React.Component {
         this.setState({right: r.join('')});
       }
     }
-    else if(e.key == 'Enter'){
+    else if(e.key === 'Enter'){
       this.onCommitClick(e)
     }
   }
@@ -153,7 +152,7 @@ class Playground extends React.Component {
 
     let carret = (<span className="carret"></span>)
 
-    let hint = (<p className="hint">Hint: Throw a <a className="dice" href="/" onClick={this.onRandomClick}>🎲</a>
+    let hint = (<p className="hint">Hint: Throw a <a className="dice" href="/" onClick={this.onRandomClick}><span role="img" aria-label="dice">🎲</span></a>
       <br/>Then hit <a href="/" onClick={this.onCommitClick}><FaUpload /></a> to send your pattern.</p>)
     if ( this.state.lastMsg){
       hint = (<p className="hint">Sent: {this.state.lastMsg}</p>)

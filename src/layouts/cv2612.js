@@ -1,8 +1,8 @@
 import React from "react"
-import Brand from "./header/brand"
+import Brand from "../components/header/brand"
 import Helmet from "react-helmet"
 
-class LELayout extends React.Component {
+class Layout extends React.Component {
 
   render() {
     const { children } = this.props
@@ -10,8 +10,8 @@ class LELayout extends React.Component {
     return (
       <div id="app">
         <header>
-          <Helmet bodyAttributes={{class:'dark live-emojing'}} />
-          <Brand title="Live Emojing 😎"/>
+          <Helmet bodyAttributes={{class:'dark cv2612'}} />
+          <Brand title="CV2612"/>
         </header>
         <main>{children}</main>
       </div>
@@ -19,4 +19,4 @@ class LELayout extends React.Component {
   }
 }
 
-export default LELayout
+export default Layout
