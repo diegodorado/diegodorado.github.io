@@ -1,14 +1,48 @@
 .slider
-  margin: 10px 0
-  padding: 3px 7px
+  position: relative
+  padding: 0
   border: 2px solid transparent
+  width: 230px
   &.learn
     background: rgba(0,255,255,0.12)
-    &:hover
-      cursor: pointer
-      border: 2px dashed rgba(0,255,255,0.2)
-    &.active
-      border: 2px dashed rgba(0,255,255,0.35)
     &.mapped
       background: rgba(0,255,255,0.35)
       border-color: transparent
+    &.active
+      border: 2px dashed rgba(0,255,255,0.35)
+    &:hover
+      cursor: pointer
+      border: 2px dashed rgba(0,255,255,0.2)
+  label
+    line-height: 10px
+    width: 32px
+    display: inline-block
+    vertical-align: super
+  span
+    position: absolute
+    top: 3px
+    left: 50%
+    z-index: 10
+    color: #333
+    height: 25px
+    line-height: 25px
+    pointer-events: none
+  input
+    -webkit-appearance: none
+    width: 190px
+    height: 25px
+    background: #d3d3d3
+    outline: none
+    &::-webkit-slider-thumb
+      -webkit-appearance: none
+      appearance: none
+      width: 25px
+      height: 25px
+      background: #509eec
+      cursor: pointer
+    &::-moz-range-thumb
+      appearance: none
+      width: 25px
+      height: 25px
+      background: #509eec
+      cursor: pointer

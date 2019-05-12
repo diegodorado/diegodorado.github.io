@@ -7,82 +7,93 @@ import {reactLocalStorage} from 'reactjs-localstorage'
 class Slider extends React.Component {
   static contextType = CV2612Context
   constructor(props) {
-    super(props);
-    console.log(props)
-    this.state = { value: props.value};
+    super(props)
+    //todo: read from device
+    this.state = { value: props.min, code: `${props.ch}_${props.op}_${props.name}`};
 
-  }
-
-  componentWillReceiveProps(nextProps){
-    if(nextProps.value !== this.props.value){
-      this.setState({ value: nextProps.value })
-    }
   }
 
   componentDidMount(){
     this.context.controls.push(this)
-    const cc = reactLocalStorage.get('cc_'+this.props.code,null)
-    const ch = reactLocalStorage.get('ch_'+this.props.code,null)
+    const cc = reactLocalStorage.get('cc_'+this.state.code,null)
+    const ch = reactLocalStorage.get('ch_'+this.state.code,null)
     if(cc && ch)
       this.setState({cc: parseInt(cc),ch: parseInt(ch)})
   }
 
   setMapping(cc,ch){
     this.setState({cc: cc,ch: ch})
-    reactLocalStorage.set('cc_'+this.props.code,cc)
-    reactLocalStorage.set('ch_'+this.props.code,ch)
-    //this.forceUpdate()
+    reactLocalStorage.set('cc_'+this.state.code,cc)
+    reactLocalStorage.set('ch_'+this.state.code,ch)
+  }
+
+  isMapped(){
+    return (typeof(this.state.ch)==='number'  && typeof(this.state.cc)==='number')
   }
 
   onChange = (ev) =>{
     ev.preventDefault()
-    this.setState({ value: ev.target.value })
-    //this.props.onChange(this)
+
+    const min = parseInt(this.props.min)
+    const max = parseInt(this.props.max)
+    const val = Math.round(parseInt(ev.target.value) * 127 - min )/(max-min)
+
+    this.updateValue(val)
+
+    if(this.props.env)
+      this.context.updateEnvelope(this.props.ch,this.props.op)
+    if(this.context.learning)
+      this.context.setActiveControl(this)
+
+  }
+
+  updateValue(val){
+    const min = parseInt(this.props.min)
+    const max = parseInt(this.props.max)
+    const v = Math.round(min + (max-min)*val/127)
+    this.setState({value: v})
+    if(this.props.onChange)
+      this.props.onChange(v)
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(prevState.value !== this.state.value){
+      //if(this.isMapped()){
+        //send the midi cc or sysex
+        this.context.sendCtrl(this)
+      //}
+    }
   }
 
   onClick = (ev) =>{
     ev.preventDefault()
     if(this.context.learning){
-      this.context.activeControl = this
-      for(const c of this.context.controls)
-        c.forceUpdate()
+      this.context.setActiveControl(this)
     }
   }
 
-  updateValue(val){
-    const min = parseInt(this.props.max)
-    const max = parseInt(this.props.min)
-    const v = Math.round(min + (max-min)*val/127)
-    this.setState({value: v})
-    //this.props.onChange(this)
-  }
-
   render() {
-    const mapped = (typeof(this.state.ch)==='number'  && typeof(this.state.cc)==='number')
     let className = 'slider'
     if(this.context.learning) className += ' learn'
     if(this.context.activeControl === this) className += ' active'
-    if(mapped) className += ' mapped'
+    if(this.isMapped()) className += ' mapped'
 
     return (
       <div className={className} onClick={this.onClick} >
-        <span>{this.props.name}</span>
+        <label>{this.props.name}</label>
         <input type="range" step="1" min={this.props.min} max={this.props.max} value={this.state.value} onChange={this.onChange} />
         <span>
-          {(this.context.learning ? (mapped ? `${this.state.ch}:${this.state.cc}` : 'n/a')+` ___ `: null) }
+          {this.state.value + (this.context.learning ? (this.isMapped() ? ` - ${this.state.ch}:${this.state.cc}` : ' - n/a'): '') }
         </span>
-        <span>{this.state.value}</span>
       </div>
-    );
+    )
   }
 }
 
 Slider.defaultProps = {
   min: 0,
   max: 10,
-  value: 0
+  env: false
 };
-
-
 
 export default Slider;

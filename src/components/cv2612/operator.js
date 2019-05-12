@@ -1,30 +1,25 @@
 import React from 'react'
-//import './index.sass'
 import Slider from "../slider"
+import {CV2612Context} from "../cv2612/cv2612Context"
 
 class Operator extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ch: 0,
-      op: 0,
-      ar:0,
-      d1:0,
-      sl:0,
-      d2:0,
-      rr:0,
-      tl:0,
-    }
-  }
+  static contextType = CV2612Context
 
   envelopePoints(){
-    const x1 = (31-this.state.ar)/31*100
-    const y1 = this.state.tl/127*100
-    const x2 = x1+(31-this.state.d1)/31*100
-    const y2 = y1+(100-y1)*(this.state.sl/15)
-    const x3 = x2+(31-this.state.d2)/31*100
+    // get an object of controls that matches
+    // channel and operator
+    const env = this.context.controls
+              .filter(c => c.props.env && c.props.ch === this.props.ch
+                                       && c.props.op === this.props.op)
+              .map(c => [c.props.name,c.state.value])
+              .reduce((o,i)=>{o[i[0]]=i[1];return o},{})
+    const x1 = (31-env.ar)/31*100
+    const y1 = env.tl/127*100
+    const x2 = x1+(31-env.d1)/31*100
+    const y2 = y1+(100-y1)*(env.sl/15)
+    const x3 = x2+(31-env.d2)/31*100
     const y3 = y2+(100-y2)*(0.5)
-    const x4 = x3+(31-this.state.rr)/31*100
+    const x4 = x3+(31-env.rr)/31*100
 
     const points = [
         [0,100],
@@ -33,42 +28,42 @@ class Operator extends React.Component {
         [x3,y3],
         [x4,100]
       ]
-    return points.map((p)=>p.join(',')).join(' ')
+    return points.map((p)=>p.join(',')).join(' ').replace(/NaN/g,'0')
   }
 
-  onSliderChange(slider){
-    let s = {}
-    s[slider.props.name] = slider.state.value
-    this.setState(s)
-    //console.log(this,slider)
+  componentDidMount(){
+    this.context.operators.push(this)
   }
 
   render() {
-
     return (
       <div className="operator">
-        <table>
-          <tbody>
-          <tr>
-            <td>
-              <Slider name="ar" min="0" max="31"  code={`${this.state.ch}_${this.state.op}_ar`}/>
-              <Slider name="d1" min="0" max="31"  code={`${this.state.ch}_${this.state.op}_d1`}/>
-              <Slider name="sl" min="0" max="15"  code={`${this.state.ch}_${this.state.op}_sl`}/>
-              <Slider name="d2" min="0" max="31"  code={`${this.state.ch}_${this.state.op}_d2`}/>
-              <Slider name="rr" min="0" max="31"  code={`${this.state.ch}_${this.state.op}_rr`}/>
-              <Slider name="tl" min="0" max="127" code={`${this.state.ch}_${this.state.op}_tl`}/>
-            </td>
-            <td>
-              <svg height="100" width="400" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg" style={{stroke: '#509eec'}}>
-                <polyline points={this.envelopePoints()} />
-              </svg>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <h4>Operator {this.props.op+1}</h4>
+        <Slider env={true} name="ar" min="0" max="31"  ch={this.props.ch} op={this.props.op} />
+        <Slider env={true} name="d1" min="0" max="31"  ch={this.props.ch} op={this.props.op} />
+        <Slider env={true} name="sl" min="0" max="15"  ch={this.props.ch} op={this.props.op} />
+        <Slider env={true} name="d2" min="0" max="31"  ch={this.props.ch} op={this.props.op} />
+        <Slider env={true} name="rr" min="0" max="31"  ch={this.props.ch} op={this.props.op} />
+        <Slider env={true} name="tl" min="0" max="127" ch={this.props.ch} op={this.props.op} />
+
+        <Slider name="mul" min="0" max="15" ch={this.props.ch} op={this.props.op} />
+        <Slider name="det" min="0" max="7" ch={this.props.ch} op={this.props.op} />
+        <Slider name="rs" min="0" max="3" ch={this.props.ch} op={this.props.op} />
+        <Slider name="am" min="0" max="1" ch={this.props.ch} op={this.props.op} />
+
+        <svg height="100" width="400" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
+          <polyline points={this.envelopePoints()} />
+        </svg>
       </div>
     )
   }
 }
+
+
+Operator.defaultProps = {
+  ch: 0,
+  op: 0
+};
+
 
 export default Operator;
