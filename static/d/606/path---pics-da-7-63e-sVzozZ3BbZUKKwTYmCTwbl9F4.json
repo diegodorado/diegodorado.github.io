@@ -1,0 +1,1 @@
+{"errors":[{"message":"Cannot query field \"allInstaNode\" on type \"Query\".","locations":[{"line":15,"column":3}]}],"pageContext":{"isCreatedByStatefulCreatePages":true}}
