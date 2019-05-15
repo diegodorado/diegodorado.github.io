@@ -1,6 +1,6 @@
 import React from "react"
 import { graphql } from "gatsby"
-import Layout from "../components/layout"
+import Layout from "../layouts/main"
 import SEO from "../components/seo"
 
 class BlogPostTemplate extends React.Component {

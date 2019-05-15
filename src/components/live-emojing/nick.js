@@ -76,7 +76,7 @@ class Nick extends React.Component {
             <p>
               Choose a nickname.
             </p>
-            <input placeholder="funky-duck" type="text" value={this.state.nick} onChange={this.onChange} required pattern="^[A-Za-z0-9_-]{3,15}$" onKeyPress={this.onKeyPress} />
+            <input placeholder="funky-duck" type="text" value={this.state.nick} onChange={this.onChange} autoFocus required pattern="^[A-Za-z0-9_-]{3,15}$" onKeyPress={this.onKeyPress} />
             <button onClick={this.onConfirm}>{"Let's"} Play</button>
           </div>
         )

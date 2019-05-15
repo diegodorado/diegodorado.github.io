@@ -1,5 +1,5 @@
 import React from "react"
-import Brand from "./header/brand"
+import Brand from "../components/header/brand"
 import Helmet from "react-helmet"
 
 class LELayout extends React.Component {

@@ -1,15 +1,142 @@
+$blue: #509eec
+
 .cv2612
+  header
+    display: none
+  #app
+    margin: 0 auto
+  table
+    width: 100%
+
+  select, button, input
+    font-family: inherit
   h4
     padding: 0
-    margin: 0
-    margin-bottom: 10px
+    margin: 10px 0
+    text-align: left
+  h5
+    padding: 0
+    margin: 10px 0
     text-align: center
-  svg
-    width: 220px
-    stroke: #509eec
-    stroke-width: 4px
+  .envelope
+    svg
+      width: 220px
+      stroke: $blue
+      stroke-width: 4px
   table
     td
       padding: 0
   .vert
     transform: rotate(270deg)
+
+  pre.algorithm
+    margin: 0
+    padding: 0 0 0 10px
+    font-family: 'Courier New'
+    line-height: 0.65em
+    font-size: 1em
+    color: $blue
+
+  nav
+    position: relative
+    @extend %no-select
+    margin: 10px auto
+    width: 100%
+    border: 1px solid white
+    box-sizing: border-box
+    display: flex
+    align-items: stretch
+    span
+      flex-grow: 0.5
+      padding: 0.5em 0
+      height: 1em
+      pointer-events: none
+      text-align: center
+    a
+      flex-grow: 1
+      text-decoration: none
+      padding: 0.5em 0
+      height: 1em
+      cursor: pointer
+      text-align: center
+      &.active,&:active, &:hover
+        background: #ddd
+        color: black
+
+    a[title]:after
+      content: attr(title)
+      position: absolute
+      top: -32px
+      padding: 4px
+      height: 20px
+      right: 0
+      word-break: keep-all
+      width: 300px
+      background: white
+      color: #509eec
+      opacity: 0
+      transition: opacity 0.3s linear
+      pointer-events: none
+    a[title]:hover:after
+      opacity: 0.8
+    select
+      flex-grow: 5
+      font-size: 1.2em
+      outline: 0
+      margin: 3px 5px
+      border: 0
+      option
+        text-align: center
+    &.midi
+      select
+        max-width: 25%
+        font-size: 1em
+
+.slider
+  position: relative
+  padding: 0
+  border: 2px solid transparent
+  width: 230px
+  &.learn
+    background: rgba(0,255,255,0.12)
+    &.mapped
+      background: rgba(0,255,255,0.35)
+      border-color: transparent
+    &.active
+      border: 2px dashed rgba(0,255,255,0.35)
+    &:hover
+      cursor: pointer
+      border: 2px dashed rgba(0,255,255,0.2)
+  label
+    line-height: 10px
+    width: 32px
+    display: inline-block
+    vertical-align: super
+  span
+    position: absolute
+    top: 3px
+    left: 50%
+    z-index: 10
+    color: #333
+    height: 25px
+    line-height: 25px
+    pointer-events: none
+  input
+    -webkit-appearance: none
+    width: 190px
+    height: 25px
+    background: #d3d3d3
+    outline: none
+    &::-webkit-slider-thumb
+      -webkit-appearance: none
+      appearance: none
+      width: 25px
+      height: 25px
+      background: #509eec
+      cursor: pointer
+    &::-moz-range-thumb
+      appearance: none
+      width: 25px
+      height: 25px
+      background: #509eec
+      cursor: pointer

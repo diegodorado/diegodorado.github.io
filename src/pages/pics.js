@@ -2,7 +2,7 @@ import React from "react"
 import { graphql } from "gatsby"
 import Img from 'gatsby-image'
 import CyclicFade from '../components/cyclic-fade'
-import Layout from "../components/layout"
+import Layout from "../layouts/main"
 import SEO from "../components/seo"
 
 class PicsIndex extends React.Component {

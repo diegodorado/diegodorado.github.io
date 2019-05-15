@@ -1,6 +1,6 @@
 import React from "react"
-import Footer from "./footer"
-import Header from "./header"
+import Footer from "../components/footer"
+import Header from "../components/header"
 
 class Layout extends React.Component {
 

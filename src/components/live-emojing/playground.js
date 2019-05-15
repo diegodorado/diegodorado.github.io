@@ -8,7 +8,7 @@ import '../../../node_modules/mr-emoji/css/emoji-mart.css'
 import { FaBackspace,
          FaCaretLeft,
          FaCaretRight,
-         FaUpload,
+         FaPlay,
          FaDice,
          FaExpand,
          FaCompress
@@ -153,7 +153,7 @@ class Playground extends React.Component {
     let carret = (<span className="carret"></span>)
 
     let hint = (<p className="hint">Hint: Throw a <a className="dice" href="/" onClick={this.onRandomClick}><span role="img" aria-label="dice">🎲</span></a>
-      <br/>Then hit <a href="/" onClick={this.onCommitClick}><FaUpload /></a> to send your pattern.</p>)
+      <br/>Then hit <a href="/" onClick={this.onCommitClick}><FaPlay /></a> to send your pattern.</p>)
     if ( this.state.lastMsg){
       hint = (<p className="hint">Sent: {this.state.lastMsg}</p>)
     }
@@ -175,7 +175,7 @@ class Playground extends React.Component {
             <FaCaretRight onClick={this.onRightClick}/>
             <FaBackspace  onClick={this.onBackspaceClick} onMouseUp={this.onBackspaceUp} onMouseDown={this.onBackspaceDown} />
             <FaDice onClick={this.onRandomClick}/>
-            <FaUpload onClick={this.onCommitClick}/>
+            <FaPlay onClick={this.onCommitClick}/>
           </nav>
         </div>
         <Picker style={{width:'100%',borderRadius:'0',border:0}} showPreview={false} emojiSize={36} native={true} onClick={this.addEmoji} i18n={i18nEmojis} recent={recentEmojis} custom={customEmojis} color="#222" include={includeEmojis}/>
