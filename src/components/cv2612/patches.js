@@ -26,7 +26,7 @@ class Patches extends React.Component {
 
   componentDidMount(){
     const patches = reactLocalStorage.getObject('patches',[])
-    if(patches.length===0){
+    if(patches.length===0 || Object.keys(patches).length===0){
       this.loadDefaultPatches()
     }else{
       this.setState({patches:patches})
@@ -84,17 +84,6 @@ class Patches extends React.Component {
   }
 
 
-  loadPatch = (name, d) => {
-    const patch = dmp2patch(name,d)
-    if(patch !== null){
-      //is there any risk here?
-      const patches = this.state.patches
-      patches.push(patch)
-      this.save(patches)
-    }
-
-  }
-
   addDmpPatch = (name, d) => {
     const patch = dmp2patch(name,d)
     if(patch !== null){
@@ -118,6 +107,7 @@ class Patches extends React.Component {
 
   onChange = (ev) => {
     this.setState({current: ev.target.value})
+    ev.target.blur()
   }
 
   onSave = (e) => {

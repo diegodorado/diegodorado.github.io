@@ -60,6 +60,9 @@ export const dmp2patch = (name,d) =>{
 export const emptyParams = () =>{
   const params = {}
   params[`6_4_lfo`] = 0
+  params[`6_4_dly`] = 0
+  params[`6_4_dlyt`] = 0
+  params[`6_4_dlyf`] = 0
   for(let ch=0;ch<=6;ch++){
     //repeat for 6 channels, and omni channel too
     params[`${ch}_4_fms`] = 0
@@ -92,7 +95,8 @@ const bitness = (param) =>{
     ['sl','rr','mul'],
     ['ar','d2','d1'],
     [],
-    ['tl']
+    ['tl'],
+    ['dly','dlyt','dlyf'],
   ]
   let bits = 1
   for(let group of groups){

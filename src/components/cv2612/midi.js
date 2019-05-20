@@ -1,12 +1,10 @@
 import React from 'react'
 import {CV2612Context} from "./context"
-import {emptyMapping} from "./utils/patches-utils"
 import {reactLocalStorage} from 'reactjs-localstorage'
+import Emulator from './emulator'
 import { FaSlidersH,
          FaTrash,
-         FaGhost,
-         FaVolume,
-         FaVolumeSlash
+         FaGhost
         } from 'react-icons/fa'
 
 
@@ -17,14 +15,13 @@ class Midi extends React.Component {
 
   midiInId = ''
   midiOutId = ''
+  midiAccess= null
 
   constructor(props) {
     super(props)
     this.state = {
-      midiAccess: null,
       midiIns: [],
       midiOuts: [],
-      lastMsg: '',
     }
 
   }
@@ -32,7 +29,7 @@ class Midi extends React.Component {
   componentDidMount(){
     navigator.requestMIDIAccess( { sysex: true }).then(
       (ma)=>{
-        this.setState({midiAccess: ma})
+        this.midiAccess = ma
         this.refreshMidiPorts()
         ma.onstatechange = this.onMIDIStateChange
       },()=>console.log('Could not access your MIDI devices.'))
@@ -60,7 +57,7 @@ class Midi extends React.Component {
     this.midiInId = id
     this.setState({midiInId: id})
     reactLocalStorage.set('midiInId',id)
-    const midiIn = this.state.midiAccess.inputs.get(id)
+    const midiIn = this.midiAccess.inputs.get(id)
     if(midiIn){
       midiIn.onmidimessage = this.onMIDIMessage
     }else{
@@ -97,9 +94,8 @@ class Midi extends React.Component {
   }
 
   sendMidi = (data) => {
-    const ma = this.state.midiAccess
+    const ma = this.midiAccess
     if(ma===null){
-      console.log('Null midi Access')
       return
     }
     const midiOut = ma.outputs.get(this.midiOutId)
@@ -111,13 +107,11 @@ class Midi extends React.Component {
   }
 
   onMIDIStateChange = (e) => {
-    // Print information about the (dis)connected MIDI controller
-    console.log(e.port.name, e.port.manufacturer, e.port.state, e.port.type)
     this.refreshMidiPorts()
   }
 
   refreshMidiPorts() {
-    const ma = this.state.midiAccess
+    const ma = this.midiAccess
     const inputs = Array.from(ma.inputs.values())
     const outputs = Array.from(ma.outputs.values())
     this.setState({midiIns:inputs, midiOuts:outputs})
@@ -156,6 +150,9 @@ class Midi extends React.Component {
           0x01, 0x00, 0x00, 0x00, 0xF7] //version - end
       if(JSON.stringify(data) === JSON.stringify(idReply)){
         this.setState({lastMsg: `CV2612 found!` })
+      }else{
+        console.log('sysex reply ')
+        console.log(data)
       }
       return
     }
@@ -187,15 +184,14 @@ class Midi extends React.Component {
 
   onPanicClick = (e) => {
     e.preventDefault()
-    this.context.midi.sendSysexSet([0x06,0x04,0x10],0x00)
+    this.sendMidi([0xFF])
   }
 
   onClearClick = (e) => {
     e.preventDefault()
-    this.context.midi.sendSysexSet([0x06,0x04,0x11],0x00)
+    this.sendSysexSet([0x06,0x04,0x11],0x00)
   }
 
-  //the navigation here came handy...
   onToggleSoundClick = (e) => {
     e.preventDefault()
     this.context.toggleSound()
@@ -204,9 +200,6 @@ class Midi extends React.Component {
   render() {
     return (
       <div>
-        <p>
-          {this.state.lastMsg ||'Click learn to bind a controller'}
-        </p>
         <nav className="midi">
           <span>In</span>
           <select value={this.state.midiInId} onChange={this.onChangeMidiIn}>
@@ -219,7 +212,7 @@ class Midi extends React.Component {
           <a className={this.context.learning ? 'learning':''} href="/" title="Click to Learn" onClick={this.onLearnClick}><FaSlidersH/></a>
           <a href="/" title="Click if panic" onClick={this.onPanicClick}><FaGhost/></a>
           <a href="/" title="Click to clear midi mapping" onClick={this.onClearClick}><FaTrash/></a>
-          <a href="/" title="Toggles Sound" onClick={this.onToggleSoundClick}>{this.context.soundOn ?<FaVolume/>:<FaVolumeSlash/>}</a>
+          <Emulator />
         </nav>
       </div>
     )

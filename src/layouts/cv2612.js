@@ -11,7 +11,7 @@ class Layout extends React.Component {
       <div id="app">
         <header>
           <Helmet bodyAttributes={{class:'dark cv2612'}} />
-          <Brand title="CV2612"/>
+          <Brand title="diego dorado"/>
         </header>
         <main>{children}</main>
       </div>

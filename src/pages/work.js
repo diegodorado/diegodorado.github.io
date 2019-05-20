@@ -15,7 +15,7 @@ class WorkIndex extends React.Component {
       <Layout location={this.props.location} title={siteTitle}>
         <SEO title="work" />
         <p className="spacey" style={{fontSize: '1.25em'}}>
-          <em>New!: </em><Link to="/live-emojing" style={{textDecoration: 'none'}}>Try Live Emojing Playground <span role="img" aria-label="smile">😎</span></Link>
+          <em>New!: </em><Link to="/live-emojing" style={{textDecoration: 'none'}}>Live Emojing <span role="img" aria-label="smile">😎</span></Link><em> and</em> <Link to="/cv2612">CV 2612</Link>
         </p>
 
 

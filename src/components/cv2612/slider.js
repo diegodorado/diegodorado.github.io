@@ -34,7 +34,7 @@ class Slider extends React.Component {
     if(mapped) className += ' mapped'
 
     return (
-      <div className={className} onClick={this.onClick} >
+      <div className={className} onClick={this.onClick} code={this.code}>
         <label>{this.props.name}</label>
         <input type="range" step={1} min={0} max={this.max} value={this.context.params[this.code]}
          onChange={this.onChange} />
