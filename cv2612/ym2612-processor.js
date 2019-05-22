@@ -11,6 +11,7 @@ class YM2612Generator extends AudioWorkletProcessor {
     this.ym.init(7670448, 44100);	// call this if the clock and/or output sample rate ever need to change
     this.ym.config(9)
     this.ym.reset()
+    this.ym.write(0x27,0x00)
     this.ym.write(0x28,0x00)
 
     this.port.onmessage = (event) => {
