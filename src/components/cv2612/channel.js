@@ -14,8 +14,9 @@ class Channel extends React.Component {
           <tbody>
             <tr>
               <td><Slider name="lfo" /></td>
+              <td><Slider name="en" /></td>
               <td></td>
-              <td><Slider name="al" ch={this.props.ch} /></td>
+              <td></td>
               <td>
                 <pre className="algorithm">
                   {algorithmAscii(this.context.params[`${this.props.ch}_4_al`])}
@@ -27,9 +28,10 @@ class Channel extends React.Component {
               <td><Slider name="ams" ch={this.props.ch} /></td>
               <td><Slider name="fms" ch={this.props.ch} /></td>
               <td><Slider name="st"  ch={this.props.ch} /></td>
-              <td></td>
+              <td><Slider name="al" ch={this.props.ch} /></td>
             </tr>
             <tr>
+              <td><Operator ch={this.props.ch} op={4} /></td>
               <td><Operator ch={this.props.ch} op={0} /></td>
               <td><Operator ch={this.props.ch} op={1} /></td>
               <td><Operator ch={this.props.ch} op={2} /></td>

@@ -9,7 +9,7 @@ class Operator extends React.Component {
   render() {
     return (
       <div className="operator">
-        <h5>Op {this.props.op+1}</h5>
+        <h5>Op {this.props.op===4? 'Omni': this.props.op+1}</h5>
         <Slider name="ar" ch={this.props.ch} op={this.props.op} />
         <Slider name="d1" ch={this.props.ch} op={this.props.op} />
         <Slider name="sl" ch={this.props.ch} op={this.props.op} />

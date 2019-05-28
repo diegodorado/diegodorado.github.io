@@ -60,13 +60,48 @@
     background: #eee
   .play
     @extend %no-select
-    .dice
+    canvas
+      position: fixed
+      top: 0
+      left: 0
+      filter: drop-shadow(5px 5px 10px white)
+      pointer-events: none
+      z-index: -1
+    .hint
+      white-space: pre
+    .dice-btn,.play-btn, .fullscreen-btn
+      cursor: pointer
       font-size: 2em
       text-decoration: none
-      animation: pulsate 2s infinite alternate
       line-height: 2em
       vertical-align: middle
       display: inline-block
+    .dice-btn
+      animation: pulsate 2s infinite alternate
+    .play-btn, .fullscreen-btn
+      animation: expand 2.3s infinite alternate
+
+
+    .input
+      position: relative
+      .clipper
+        @extend %no-select
+        pointer-events: none
+        z-index: 1000
+        opacity: 0
+        position: absolute
+        bottom: 0
+        right: 0
+        padding: 10px
+        font-size: 2.5em
+        animation: expand 1.3s infinite alternate
+        transition: opacity 0.5s linear
+      &.error
+        pre
+          filter: grayscale(1)
+        .clipper
+          opacity: 1
+
     .preview
       font-size: 1.5em
       border: 1px solid white
@@ -76,6 +111,7 @@
       margin-bottom: 0
       border-bottom: 0
       box-sizing: border-box
+      position: relative
       &.highlight
         animation: flash 0.5s
       .carret
@@ -117,7 +153,6 @@ html.full-screen
   overflow: hidden
   .live-emojing
     .expand
-      bottom: 2em
       svg:nth-child(1)
         display: none
     header
@@ -149,5 +184,5 @@ html.normal
       svg
         width: 40px
         height: 40px
-        &:nth-child(2)
-          display: none
+      svg:nth-child(2)
+        display: none

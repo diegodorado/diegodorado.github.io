@@ -1,7 +1,6 @@
 import React from 'react'
 import {CV2612Context} from "./context"
 import {reactLocalStorage} from 'reactjs-localstorage'
-import Emulator from './emulator'
 import { FaSlidersH,
          FaTrash,
          FaGhost
@@ -13,6 +12,7 @@ import { FaSlidersH,
 class Midi extends React.Component {
   static contextType = CV2612Context
 
+  midiCtrlInId = ''
   midiInId = ''
   midiOutId = ''
   midiAccess= null
@@ -42,6 +42,10 @@ class Midi extends React.Component {
     this.setMidiIn(ev.target.value)
   }
 
+  onChangeMidiCtrlIn = (ev) => {
+    this.setMidiCtrlIn(ev.target.value)
+  }
+
   onChangeMidiOut = (ev) => {
     this.setMidiOut(ev.target.value)
   }
@@ -64,6 +68,21 @@ class Midi extends React.Component {
       console.log('Midi In error')
     }
   }
+
+
+  setMidiCtrlIn(id){
+    this.midiCtrlInId = id
+    this.setState({midiCtrlInId: id})
+    reactLocalStorage.set('midiCtrlInId',id)
+    const midiIn = this.midiAccess.inputs.get(id)
+    if(midiIn){
+      midiIn.onmidimessage = this.onCtrlMIDIMessage
+    }else{
+      console.log('Midi Ctrl In error')
+    }
+  }
+
+
 
   sendHandshake(){
     // device ID request
@@ -114,21 +133,31 @@ class Midi extends React.Component {
     const ma = this.midiAccess
     const inputs = Array.from(ma.inputs.values())
     const outputs = Array.from(ma.outputs.values())
+
     this.setState({midiIns:inputs, midiOuts:outputs})
 
     if(inputs.length){
-      let id = reactLocalStorage.get('midiInId')
+      let id = reactLocalStorage.get('midiInId','')
       // is last id still available??
-      if( !inputs.map(i=>i.id).includes(id) ){
+      if( id!=='' && !inputs.map(i=>i.id).includes(id) ){
         id = inputs[0].id
       }
       if(id !== this.midiInId)
         this.setMidiIn(id)
+
+      id = reactLocalStorage.get('midiCtrlInId','')
+      // is last id still available??
+      if( id!=='' && !inputs.map(i=>i.id).includes(id) ){
+        id = inputs[0].id
+      }
+      if(id !== this.midiCtrlInId)
+        this.setMidiCtrlIn(id)
+
     }
     if(outputs.length){
-      let id = reactLocalStorage.get('midiOutId')
+      let id = reactLocalStorage.get('midiOutId','')
       // is last id still available??
-      if( !outputs.map(o=>o.id).includes(id) ){
+      if( id!=='' &&  !outputs.map(o=>o.id).includes(id) ){
         id = outputs[0].id
       }
       if(id !== this.midiOutId)
@@ -136,26 +165,15 @@ class Midi extends React.Component {
     }
   }
 
-  onMIDIMessage = (msg) => {
 
-    if(msg.target.id !== this.midiInId)
+
+  onCtrlMIDIMessage = (msg) => {
+
+    if(msg.target.id !== this.midiCtrlInId)
       return
 
     const data = Array.from(msg.data)
     const type = data[0] & 0xf0
-
-    if(type===0xF0){ // sysex
-      const idReply = [0xF0, 0x7E, 0x00, 0x06, 0x02,  //identity reply
-          0x26, 0x26, 0x12, 0x00, 0x00, // ID - family code - model number
-          0x01, 0x00, 0x00, 0x00, 0xF7] //version - end
-      if(JSON.stringify(data) === JSON.stringify(idReply)){
-        this.setState({lastMsg: `CV2612 found!` })
-      }else{
-        console.log('sysex reply ')
-        console.log(data)
-      }
-      return
-    }
 
     if(type === 0xB0){
       const ch = data[0] & 0x0f
@@ -173,6 +191,30 @@ class Midi extends React.Component {
       }else{
         this.context.emulator.noteOff(data[1])
       }
+    }
+
+  }
+
+
+  onMIDIMessage = (msg) => {
+
+    if(msg.target.id !== this.midiInId)
+      return
+
+    const data = Array.from(msg.data)
+    const type = data[0] & 0xf0
+
+    if(type===0xF0){ // sysex
+      const idReply = [0xF0, 0x7E, 0x00, 0x06, 0x02,  //identity reply
+          0x26, 0x26, 0x12, 0x00, 0x00, // ID - family code - model number
+          0x01, 0x00, 0x00, 0x00, 0xF7] //version - end
+      if(JSON.stringify(data) === JSON.stringify(idReply)){
+        this.setState({lastMsg: `CV2612 found!` })
+      }else{
+        //console.log('sysex reply ')
+        //console.log(data)
+      }
+      return
     }
 
   }
@@ -199,22 +241,26 @@ class Midi extends React.Component {
 
   render() {
     return (
-      <div>
-        <nav className="midi">
-          <span>In</span>
-          <select value={this.state.midiInId} onChange={this.onChangeMidiIn}>
-            {this.state.midiIns.map((i) =><option key={i.id} value={i.id}>{i.name}</option>)}
-          </select>
-          <span>Out</span>
-          <select value={this.state.midiOutId} onChange={this.onChangeMidiOut}>
-            {this.state.midiOuts.map((o) =><option key={o.id} value={o.id}>{o.name}</option>)}
-          </select>
-          <a className={this.context.learning ? 'learning':''} href="/" title="Click to Learn" onClick={this.onLearnClick}><FaSlidersH/></a>
-          <a href="/" title="Click if panic" onClick={this.onPanicClick}><FaGhost/></a>
-          <a href="/" title="Click to clear midi mapping" onClick={this.onClearClick}><FaTrash/></a>
-          <Emulator />
-        </nav>
-      </div>
+      <nav className="midi">
+        <span>Ctrl</span>
+        <select value={this.state.midiCtrlInId} onChange={this.onChangeMidiCtrlIn}>
+          <option key="" value="">Not Connected</option>
+          {this.state.midiIns.map((i) =><option key={i.id} value={i.id}>{i.name}</option>)}
+        </select>
+        <span>In</span>
+        <select value={this.state.midiInId} onChange={this.onChangeMidiIn}>
+          <option key="" value="">Not Connected</option>
+          {this.state.midiIns.map((i) =><option key={i.id} value={i.id}>{i.name}</option>)}
+        </select>
+        <span>Out</span>
+        <select value={this.state.midiOutId} onChange={this.onChangeMidiOut}>
+          <option key="" value="">Not Connected</option>
+          {this.state.midiOuts.map((o) =><option key={o.id} value={o.id}>{o.name}</option>)}
+        </select>
+        <a className={this.context.learning ? 'learning':''} href="/" title="Click to Learn" onClick={this.onLearnClick}><FaSlidersH/></a>
+        <a href="/" title="Click if panic" onClick={this.onPanicClick}><FaGhost/></a>
+        <a href="/" title="Click to clear midi mapping" onClick={this.onClearClick}><FaTrash/></a>
+      </nav>
     )
   }
 }

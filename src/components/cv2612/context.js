@@ -1,5 +1,5 @@
 import React from "react"
-import {emptyParams, emptyMapping} from "./utils/patches-utils"
+import {emptyParams, emptyMapping, bitness} from "./utils/patches-utils"
 import obj_diff from "./utils/obj_diff"
 import {reactLocalStorage} from 'reactjs-localstorage'
 
@@ -20,8 +20,8 @@ class CV2612Provider extends React.Component {
       learning: false,
       activeParameter: null,
       envelopes: {},
-      params: emptyParams(),
       mapping: emptyMapping(),
+      params: emptyParams(),
       filters:{ch: 6},
       soundOn: false,
       setActiveParameter: this.setActiveParameter,
@@ -35,6 +35,7 @@ class CV2612Provider extends React.Component {
   }
 
   componentDidMount(){
+
     const savedMapping = reactLocalStorage.getObject('mapping',{})
     if(Object.keys(savedMapping).length>0){
       let mapping = {...this.state.mapping}
@@ -43,10 +44,6 @@ class CV2612Provider extends React.Component {
       }
       this.setState({mapping:mapping})
     }
-  }
-
-  componentWillUnmount() {
-    //this.state.emulator.destroy()
   }
 
   handleCC = (ch,cc, val)=>{
@@ -63,7 +60,8 @@ class CV2612Provider extends React.Component {
 
     for (let [k, m] of Object.entries(this.state.mapping)) {
       if(m.cc === cc && m.ch === ch){
-        const resolution = Math.pow(2,m.bits)
+        const bits = bitness(k)
+        const resolution = Math.pow(2,bits)
         const step = 128/resolution
         const v = Math.floor(val/step)
         this.updateParam(k,v)
@@ -97,20 +95,18 @@ class CV2612Provider extends React.Component {
         this.state.midi.sendSysexSet(addr,value)
       }
     }
+
     this.state.emulator.update(ch,op,param,value,this.state.params)
   }
 
 
   sendParameters = (params) => {
-    const count = Object.entries(params).length
 
     for (let [code, value] of Object.entries(params)) {
       this.sendParameter(code,value)
     }
 
   }
-
-
 
   setActiveParameter = (param) => {
     this.setState({activeParameter: param})
@@ -122,12 +118,13 @@ class CV2612Provider extends React.Component {
     this.setState({params: params})
   }
 
-  updateParams = (newParams) => {
+  updateParams = (newParams, loadingPatch) => {
     let params = {...this.state.params}
     for (let [code, value] of Object.entries(newParams)) {
       params[code] = value
     }
     this.setState({params: params})
+    this.loadingPatch =  loadingPatch
   }
 
   filterChannel= (ch) => {
@@ -136,38 +133,49 @@ class CV2612Provider extends React.Component {
     this.setState({filters})
   }
 
-
   componentDidUpdate(prevProps, prevState) {
     //which params have changed?
+
     const diff = obj_diff(prevState.params, this.state.params)
     if(Object.entries(diff).length>0){
       this.sendParameters(diff)
-      this.updateChannelsIfOmniChanged(diff)
+      if(this.loadingPatch)
+        this.loadingPatch = false
+      else
+        this.updateOmniIfChanged(diff)
       this.updateEnvelopesIfChanged(diff)
     }
   }
 
-
-
-  updateChannelsIfOmniChanged(diff){
-
-    // if any omni channel parameter has changed
+  // if any omni channel/op parameter has changed
+  updateOmniIfChanged(diff){
+    const params = {}
 
     //todo: exclude lfo
-    const omnis = Object.keys(diff).filter((a) => a.startsWith('6'))
-
-    if(omnis.length>0){
-      const params = {}
-
-      for(let o of omnis){
-        const p = o.split('_')
-        for(let i=0;i<6;i++){
-          params[`${i}_${p[1]}_${p[2]}`] = diff[o]
+    for(let k of Object.keys(diff)){
+      const p = k.split('_')
+      //is omni channel?
+      if(p[0]==='6'){
+        for(let i=0;i<=6;i++){
+          //is omni param?
+          if(p[1]==='4')
+            for(let j=0;j<=4;j++)
+              params[`${i}_${j}_${p[2]}`] = diff[k]
+          else
+            params[`${i}_${p[1]}_${p[2]}`] = diff[k]
         }
+      }else{
+        //is omni param?
+        if(p[1]==='4')
+          for(let i=0;i<=4;i++)
+            params[`${p[0]}_${i}_${p[2]}`] = diff[k]
       }
-
-      this.updateParams(params)
     }
+
+    if(Object.entries(params).length>0){
+      this.updateParams(params,false)
+    }
+
   }
 
 

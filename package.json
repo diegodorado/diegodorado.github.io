@@ -5,6 +5,8 @@
   "author": "Diego Dorado <diegodorado@gmail.com>",
   "dependencies": {
     "audiokeys": "^0.1.1",
+    "fraction.js": "^4.0.12",
+    "freesound": "0.0.4",
     "gatsby": "^2.4.5",
     "gatsby-image": "^2.0.30",
     "gatsby-plugin-favicon": "^3.1.5",
@@ -44,6 +46,7 @@
     "reactjs-localstorage": "0.0.7",
     "simpleddp": "^2.0.0",
     "susy": "^3.0.5",
+    "tone": "^13.4.9",
     "typography": "^0.16.18"
   },
   "devDependencies": {

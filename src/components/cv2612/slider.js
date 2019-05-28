@@ -1,17 +1,15 @@
 import React from 'react'
 import {CV2612Context} from "./context"
+import {bitness} from "./utils/patches-utils"
 
 class Slider extends React.Component {
   static contextType = CV2612Context
   constructor(props) {
     super(props)
     this.code = `${props.ch}_${props.op}_${props.name}`
+    const bits = bitness(this.code)
+    this.max = Math.pow(2,bits)-1
     this.state = {}
-  }
-
-  componentWillMount(){
-    const map =this.context.mapping[this.code]
-    this.max = Math.pow(2,map.bits)-1
   }
 
   onChange = (ev) =>{

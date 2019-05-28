@@ -1,12 +1,32 @@
 $blue: #509eec
 
+
+
+
+
 .cv2612
-  //header
-  //  display: none
   #app
-    margin: 0 auto
+    margin: 0 auto 100px
+    width: 1200px
+
   table
     width: 100%
+  .emulator
+    @extend %no-select
+    margin: 10px auto
+    width: 100%
+    border: 1px solid white
+    box-sizing: border-box
+    display: flex
+    align-items: stretch
+    nav
+      border-width: 0 1px 1px 0
+      margin: 0 auto auto
+
+    canvas
+      margin: 6px
+      box-sizing: border-box
+      border: 1px solid rgba(255,255,255,0.4)
 
   select, button, input
     font-family: inherit
@@ -88,9 +108,12 @@ $blue: #509eec
       option
         text-align: center
     &.midi
+      .learning
+        background: #ddd
+        color: black
       select
-        max-width: 25%
-        font-size: 1em
+        max-width: 15%
+        font-size: 0.8em
 
 .slider
   position: relative

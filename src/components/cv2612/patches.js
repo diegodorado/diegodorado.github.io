@@ -71,16 +71,19 @@ class Patches extends React.Component {
       const i = parseInt(this.state.current)
       const patch = this.state.patches[i]
       if(patch)
-        this.context.updateParams(patch.params)
+        this.loadPatch(patch)
     }
 
     if(prevState.patches.length !== this.state.patches.length){
       this.setState({current:0})
       const patch = this.state.patches[0]
       if(patch)
-        this.context.updateParams(patch.params)
+        this.loadPatch(patch)
     }
+  }
 
+  loadPatch(patch) {
+    this.context.updateParams(patch.params,true)
   }
 
 

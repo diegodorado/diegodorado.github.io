@@ -8,7 +8,7 @@ import { FaVolume,
 //todo: update for all 6 channels
 //todo: unload properly
 
-const kb = new AudioKeys({polyphony: 1,rows: 1,priority: 'last'})
+const kb = new AudioKeys({polyphony: 1,rows: 1,priority: 'last',octave: 2})
 
 
 class Emulator extends React.Component {
@@ -18,41 +18,135 @@ class Emulator extends React.Component {
   constructor(props) {
     super(props)
     this.state = {soundOn: false}
+
   }
 
   componentDidMount(){
+
+    this.audioCtx = new AudioContext()
+    if(this.audioCtx.state==='running')
+       this.initialize()
+
+
     this.notes = []
     this.context.emulator = this
     kb.down(this.onKeyDown)
     kb.up(this.onKeyUp)
-  }
 
+    this.scope = this.refs.scope.getContext("2d")
+    this.scope.fillStyle = 'rgba(0, 20, 0, 0.1)'
+    this.scope.lineWidth = 2;
+    this.scope.strokeStyle = '#509eec'
+    this.spectrum = this.refs.spectrum.getContext("2d")
+    this.spectrum.fillStyle = 'rgba(0, 20, 0, 0.1)'
+    this.spectrum.lineWidth = 1;
+    this.spectrum.strokeStyle = '#509eec'
+
+    this.stopAnimation = false
+    requestAnimationFrame(this.tick)
+
+  }
 
   componentWillUnmount(){
-    if(this.audioCtx!==null){
-      this.audioCtx = null
-    }
+    this.audioCtx.suspend()
     kb._listeners.down = []
     kb._listeners.up = []
-    console.log(kb._listeners)
+    this.stopAnimation = true
   }
 
+  tick = () => {
+    if (this.stopAnimation)
+       return
+
+    this.drawScope()
+    this.drawSpectrum()
+    requestAnimationFrame(this.tick)
+  }
+
+  drawScope(){
+
+    const ctx = this.scope
+    const width = ctx.canvas.width
+    const height = ctx.canvas.height
+    const l = this.analyser ? this.analyser.fftSize : width
+    const timeData = new Uint8Array(l).fill(128)
+    const scaling = height / 256
+
+    if(this.analyser)
+      this.analyser.getByteTimeDomainData(timeData)
+
+
+    ctx.fillRect(0, 0, width, height)
+    ctx.beginPath()
+
+    const e = timeData.reduce( (acc, it, i, a) => {
+      return ((acc===0) && (i>0) && (i<l-10) && a[i-1]<128 && a[i+10]>128) ? i : acc
+    } , 0)
+
+    for (let x = e; x < l && x - e < width; x++)
+      ctx.lineTo(x - e, height - timeData[x] * scaling)
+
+    ctx.stroke()
+  }
+
+  drawSpectrum() {
+    const ctx = this.spectrum
+    const width = ctx.canvas.width
+    const height = ctx.canvas.height
+    const l = this.analyser ? this.analyser.frequencyBinCount : width
+    const freqData = new Uint8Array(l)
+    const scaling = height / 256
+    const scalingX = width / l
+
+    if(this.analyser)
+      this.analyser.getByteFrequencyData(freqData)
+
+    ctx.fillRect(0, 0, width, height)
+    ctx.beginPath()
+
+    const toLog = (value, min, max) =>{
+      const exp = (value-min) / (max-min)
+      return min * Math.pow(max/min, exp)
+    }
+
+
+    for (let i = 1; i < l; i++) {
+      var logindex = toLog(i,1,l-1)
+      //As the logindex will probably be decimal, we need to interpolate (in this case linear interpolation)
+      const low = Math.floor(logindex)
+      const high = Math.ceil(logindex)
+      const lv = freqData[low]
+      const hv = freqData[high]
+      const w = (logindex-low)/(high-low)
+      const v = lv + (hv-lv)*w
+
+      ctx.lineTo(i*scalingX, height - v * scaling)
+
+    }
+
+    ctx.stroke()
+  }
 
 
   initialize(){
-
-    this.audioCtx = new AudioContext()
 
     this.audioCtx.audioWorklet.addModule('/cv2612/ym2612-processor.js').then(() => {
       this.ym2612Node = new AudioWorkletNode(this.audioCtx, 'ym2612-generator', { outputChannelCount: [2] })
       this.ym2612Node.port.onmessage = (event) => {console.log(event.data)}
       this.ym2612Node.connect(this.audioCtx.destination)
 
+      this.analyser = this.audioCtx.createAnalyser()
+      this.analyser.fftSize = 1024
+      this.ym2612Node.connect(this.analyser)
+
       this.write(0x27,0x00) //chan3 normal mode
       this.write(0x28,0x00)
       // load all patch params
       this.context.sendParameters(this.context.params)
     })
+
+     this.setState({soundOn: true})
+
   }
 
 
@@ -66,6 +160,9 @@ class Emulator extends React.Component {
   }
 
   onKeyDown = (note) => {
+    if(note.note<0 || note.note>127 )
+      return
+
     this.context.midi.sendMidi([0x90,note.note,0x70])
 
     if(!this.ym2612Node)
@@ -83,6 +180,9 @@ class Emulator extends React.Component {
   }
 
   onKeyUp = (note) => {
+    if(note.note<0 || note.note>127 )
+      return
+
     this.context.midi.sendMidi([0x80,note.note,0x00])
 
     if(!this.ym2612Node)
@@ -130,27 +230,39 @@ class Emulator extends React.Component {
     if(!this.ym2612Node)
       return
 
-    console.log(address.toString(16),value.toString(16))
+    //console.log(address.toString(16),value.toString(16))
     this.ym2612Node.port.postMessage([address,value])
   }
 
 
   update = (ch,op,param,value,params) =>{
+    const globals = ['lfo','en']
+    const channels = ['fb','ams','fms','st','al']
+    const operators = ['ar','d1','sl','d2','rr','tl','mul','det','rs','am']
 
-    if(ch===6){
-      for(let chan=0;chan<6;chan++)
-        this.update(chan,op,param,value,params)
+
+    // register filters... somehow messy
+    if((ch===6 || op===4) && operators.includes(param))
       return
-    }
+
+    if((ch===6) && channels.includes(param))
+      return
+
+    if((op!==4) && channels.includes(param))
+      return
+
+    if((op!==4 || ch!==6) && globals.includes(param))
+      return
+
 
     const ch_off = (Math.floor(ch/3) * 0x100 + ch%3 )
     const mask = (key,size,shift) =>{
       return (params[`${ch}_${op}_${key}`] & (Math.pow(2,size)-1))<<shift
     }
 
-    if(param==='lfo' ){
-      //todo: disable lfo when value is 0?
-      this.write(0x22, (0x01<<3) | (value & 0x07));
+    if(param==='lfo' || param==='en' ){
+      const v = mask('en',1,3)|mask('lfo',3,0)
+      this.write(0x22, v)
     }
     else if(param==='det' || param==='mul' ){
       const v = mask('det',3,4)|mask('mul',4,0)
@@ -188,20 +300,27 @@ class Emulator extends React.Component {
 
   onToggleSoundClick = (e) => {
     e.preventDefault()
-    if(this.state.soundOn){
-      this.ym2612Node.disconnect(this.audioCtx.destination)
-    }else{
-      if (this.audioCtx===null)
+
+    if(this.audioCtx.state === 'running') {
+      this.audioCtx.suspend().then(() => {
+        this.setState({soundOn: false})
+      });
+    } else if(this.audioCtx.state === 'suspended') {
+      this.audioCtx.resume().then(()=> {
         this.initialize()
-      else
-        this.ym2612Node.connect(this.audioCtx.destination)
+      });
     }
-    this.setState({soundOn: !this.state.soundOn})
   }
 
   render() {
     return (
-      <a href="/" title="Toggles Sound" onClick={this.onToggleSoundClick}>{this.state.soundOn ?<FaVolume/>:<FaVolumeSlash/>}</a>
+      <div className="emulator">
+        <nav>
+          <a href="/" title="Toggles Sound" onClick={this.onToggleSoundClick}>{this.state.soundOn ?<FaVolume/>:<FaVolumeSlash/>}</a>
+        </nav>
+        <canvas ref="scope" width={200} height={60} />
+        <canvas ref="spectrum" width={200} height={60} />
+      </div>
     )
   }
 
