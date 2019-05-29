@@ -72,3 +72,10 @@ export const randomPattern = ()=>{
   }
   return p
 }
+
+export const sanitizeEmojiId = (name) =>{
+  name = name.replace('-','_').replace('+','plus')
+  if(parseInt(name).toString()===name)
+    name = 'num'+name
+  return name
+}

@@ -23,13 +23,13 @@ class LiveEmojingIndex extends React.Component {
   }
 
   componentDidMount(){
-    this.ddp = new simpleDDP(opts);
-    this.ddp.on('connected', () => this.setState({connected: true}))
-    this.ddp.on('disconnected', () => this.setState({connected: false}))
+    //this.ddp = new simpleDDP(opts);
+    //this.ddp.on('connected', () => this.setState({connected: true}))
+    //this.ddp.on('disconnected', () => this.setState({connected: false}))
   }
 
   onCommitPattern = (pattern) => {
-    this.ddp.call('emojis.send', 'dft', this.state.nick, pattern)
+    //this.ddp.call('emojis.send', 'dft', this.state.nick, pattern)
   }
 
   render() {
@@ -37,7 +37,8 @@ class LiveEmojingIndex extends React.Component {
       <Layout location={this.props.location} >
         <SEO title="live emojing" />
         <div>
-          <Nick onChanged={(nick)=>{this.setState({nick:nick})} } connected={this.state.connected}/>
+          {//<Nick onChanged={(nick)=>{this.setState({nick:nick})} } connected={this.state.connected}/>
+          }
           <Playground onCommit={this.onCommitPattern}/>
         </div>
       </Layout>
