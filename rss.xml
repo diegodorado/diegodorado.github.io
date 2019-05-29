@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[diego dorado]]></title><description><![CDATA[diego dorado portfolio.]]></description><link>http://diegodorado.github.io/</link><generator>RSS for Node</generator><lastBuildDate>Wed, 29 May 2019 05:48:55 GMT</lastBuildDate><item><title><![CDATA[Poem of HUKO]]></title><description><![CDATA[El Poema de HUKO por Instrumento Optico Prolegómenos En la nada absoluta, libre de imagen, apenas un murmuro profundo, grave y…]]></description><link>http://diegodorado.github.io//works/i-o/poem/</link><guid isPermaLink="false">http://diegodorado.github.io//works/i-o/poem/</guid><content:encoded>&lt;h1&gt;El Poema de HUKO&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[diego dorado]]></title><description><![CDATA[diego dorado portfolio.]]></description><link>http://diegodorado.github.io/</link><generator>RSS for Node</generator><lastBuildDate>Wed, 29 May 2019 22:23:19 GMT</lastBuildDate><item><title><![CDATA[Poem of HUKO]]></title><description><![CDATA[El Poema de HUKO por Instrumento Optico Prolegómenos En la nada absoluta, libre de imagen, apenas un murmuro profundo, grave y…]]></description><link>http://diegodorado.github.io//works/i-o/poem/</link><guid isPermaLink="false">http://diegodorado.github.io//works/i-o/poem/</guid><content:encoded>&lt;h1&gt;El Poema de HUKO&lt;/h1&gt;
 &lt;p&gt;&lt;em&gt;por Instrumento Optico&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Prolegómenos&lt;/h2&gt;
 &lt;p&gt;En la nada absoluta, libre de imagen, apenas un murmuro profundo, grave y omnidireccional existía.&lt;/p&gt;
@@ -820,8 +820,10 @@ Matter evolves from lonely dust to glowing particles, organically alive and extr
         }
       &lt;/style&gt;
           &lt;/div&gt;
-          &lt;/div&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[CV-2612]]></title><description><![CDATA[MIDI Specs CV2612 has two 3.5mm TRS MIDI connectors: MIDI In and MIDI Out.
-MIDI Out can act as a software MIDI Thru if  THRU_ENABLE  is…]]></description><link>http://diegodorado.github.io//works/cv2612/</link><guid isPermaLink="false">http://diegodorado.github.io//works/cv2612/</guid><pubDate>Tue, 01 May 2018 00:00:00 GMT</pubDate><content:encoded>&lt;h3&gt;MIDI Specs&lt;/h3&gt;
+          &lt;/div&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[CV-2612]]></title><description><![CDATA[CV2612 is an eurorack module based on the classic FM chip used by Sega Genesis: the  great YM2612. It has MIDI i/o, and yes! it has  control…]]></description><link>http://diegodorado.github.io//works/cv2612/</link><guid isPermaLink="false">http://diegodorado.github.io//works/cv2612/</guid><pubDate>Tue, 01 May 2018 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;CV2612 is an eurorack module based on the classic FM chip used by Sega Genesis: the  great YM2612.&lt;br&gt;
+It has MIDI i/o, and yes! it has &lt;strong&gt;control voltage inputs&lt;/strong&gt;!&lt;br&gt;
+It is on its final development stage and we hope to see it on the market soon.&lt;/p&gt;
+&lt;h3&gt;MIDI Specs&lt;/h3&gt;
 &lt;p&gt;CV2612 has two 3.5mm TRS MIDI connectors: MIDI In and MIDI Out.
 MIDI Out can act as a software MIDI Thru if &lt;strong&gt;THRU_ENABLE&lt;/strong&gt; is &lt;strong&gt;1&lt;/strong&gt;.&lt;/p&gt;
 &lt;h4&gt;Note Messages&lt;/h4&gt;
