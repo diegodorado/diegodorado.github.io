@@ -13,7 +13,8 @@ import { FaBackspace,
          FaExpand,
          FaCompress,
          FaVolume,
-         FaVolumeSlash
+         FaVolumeSlash,
+         FaQuestionCircle,
         } from 'react-icons/fa'
 import {alphaEmoji,
         randomPattern,
@@ -34,10 +35,16 @@ const git_raw = 'https://raw.githubusercontent.com/diegodorado/emoji-samples/mas
 class Playground extends React.Component {
   schedules = []
   glyphs = []
+  tapCount = 0
   listingData = null
+
   constructor(props){
     super(props);
     this.state = {
+      tapped: false,
+      tempo: '',
+      tapping: false,
+      showInstructions: true,
       isDesktop: false,
       left: '',
       right: '',
@@ -50,10 +57,8 @@ class Playground extends React.Component {
     }
   }
 
-  onExpandClick = (e) => {
-    e.preventDefault()
-    this.setState({ expanded: !this.state.expanded })
-  }
+
+
 
   componentDidMount(){
     if(Tone.context.state==='running')
@@ -67,8 +72,12 @@ class Playground extends React.Component {
     this.setState({isDesktop: (typeof window.orientation === "undefined")})
 
     const pattern = reactLocalStorage.get('pattern', randomPattern())
-    this.setState({left: pattern, right: ''})
+    const showInstructions = (reactLocalStorage.get('showInstructions', 'true')=== 'true')
+    console.log(showInstructions)
+
+    this.setState({left: pattern, right: '',showInstructions})
     document.addEventListener("keydown", this.onKeyPress, false)
+    document.addEventListener("fullscreenchange", this.onFullScreenChange, false)
     window.addEventListener('resize', this.onWindowResize, false)
 
     this.canvas = this.refs.canvas.getContext("2d")
@@ -90,11 +99,44 @@ class Playground extends React.Component {
 
   componentWillUnmount(){
     document.removeEventListener("keydown", this.onKeyPress, false)
+    document.removeEventListener("fullscreenchange", this.onFullScreenChange, false)
     window.removeEventListener('resize', this.onWindowResize, false)
 
     Tone.context.suspend()
     this.stopAnimation = true
   }
+
+  onFullScreenChange = () =>{
+    this.setState({ expanded: this.isFullScreen()})
+  }
+
+  isFullScreen() {
+    const fse= document.fullscreenElement
+        || document.mozFullScreenElement
+        || document.webkitFullscreenElement
+        || document.msFullscreenElement
+    return (fse !== undefined)
+  }
+
+  onExpandClick = (e) => {
+    const el = document.documentElement
+    const rfs = el.requestFullscreen
+        || el.webkitRequestFullScreen
+        || el.mozRequestFullScreen
+        || el.msRequestFullscreen
+    const cfs = document.exitFullscreen
+        || document.mozCancelFullScreen
+        || document.webkitExitFullscreen
+        || document.msExitFullscreen
+
+    e.preventDefault()
+    e.stopPropagation()
+    if(this.isFullScreen())
+      cfs.call(document)
+    else
+      rfs.call(el)
+  }
+
 
   onWindowResize = () =>{
     this.setState({canvasSize:[window.innerWidth,window.innerHeight/2]})
@@ -116,6 +158,14 @@ class Playground extends React.Component {
     const height = ctx.canvas.height
     ctx.clearRect(0, 0, width, height)
     ctx.font = `${width/10}px Arial`
+
+
+    if(this.tapped>0){
+      this.tapped -= 0.3
+      ctx.fillStyle = 'green'
+      ctx.fillRect(20, 10, 150, 100)
+    }
+
 
     for(let i = this.glyphs.length-1; i >= 0 ; i--){
       const g = this.glyphs[i]
@@ -147,17 +197,16 @@ class Playground extends React.Component {
 
   onCommitClick = (e) => {
     e.preventDefault()
+    e.stopPropagation()
     this.commit()
   }
 
 
   onKeyPress = (e) => {
-
     if( e.ctrlKey /* || e.altKey || e.metaKey || e.shiftKey   || e.repeat*/ )
       return
 
     const c = e.key.toLowerCase()
-    console.log(c,e)
     if( c.length===1 &&  c >='a' && c <='z'){
       const i = c.charCodeAt(0) - 'a'.charCodeAt(0)
       this.setState({ left: this.state.left + alphaEmoji[i] })
@@ -201,6 +250,7 @@ class Playground extends React.Component {
 
   onRandomClick = (e) => {
     e.preventDefault()
+    e.stopPropagation()
     this.setState({left: randomPattern(),right:''})
   }
 
@@ -213,6 +263,7 @@ class Playground extends React.Component {
     }
   }
 
+  //todo: make this work on mobile
   onBackspaceDown = (e) => {
     this.backspaceOn = Date.now()
 
@@ -243,6 +294,25 @@ class Playground extends React.Component {
     }
   }
 
+  onHideInstructionsClick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    const showInstructions = false
+    reactLocalStorage.set('showInstructions', showInstructions)
+    this.setState({showInstructions})
+  }
+
+
+  onToggleHelpClick = (e) => {
+    e.preventDefault()
+    const showInstructions = !this.state.showInstructions
+    console.log(showInstructions)
+    reactLocalStorage.set('showInstructions', showInstructions)
+    this.setState({showInstructions})
+  }
+
+
+
   onSoundToggle = (e) => {
     e.preventDefault()
 
@@ -254,9 +324,21 @@ class Playground extends React.Component {
       })
     } else if(Tone.context.state === 'suspended') {
       Tone.context.resume().then(()=> {
-        this.initAudio()
+        Tone.Transport.start()
+        this.setState({soundOn: true})
       })
     }
+  }
+
+
+
+  clearTransportSchedules(){
+    Tone.Transport.cancel()
+    for(let eventId of this.schedules)
+      // this is not working properoly
+      Tone.Transport.clear(eventId)
+
+    this.schedules = []
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -277,12 +359,6 @@ class Playground extends React.Component {
     }
   }
 
-  clearTransportSchedules(){
-    for(let eventId of this.schedules)
-      Tone.Transport.clear(eventId)
-    this.schedules = []
-    Tone.Transport.cancel()
-  }
 
   commit = () => {
     if(this.state.error)
@@ -292,7 +368,7 @@ class Playground extends React.Component {
     reactLocalStorage.set('pattern', p)
     this.props.onCommit(p)
 
-    this.setState({lastMsg: p, highlighted: true});
+    this.setState({highlighted: true});
     setTimeout(() => {this.setState({highlighted:false})},300)
 
     if(this.state.soundOn){
@@ -306,6 +382,7 @@ class Playground extends React.Component {
     const p = this.state.left+this.state.right
     const emojis = Object.values(emojiIndex.emojis)
 
+    //todo: decide if this is going to be used or not
     let f ='['
     for (let c of emojiArray(p)){
       const e = emojis.filter((e)=>e.native===c)
@@ -325,8 +402,7 @@ class Playground extends React.Component {
     const id = sanitizeEmojiId(e.id)
     if(this.listingData!==null){
       const path = this.listingData[id]
-      console.log(path)
-      if(path)
+      if(path && !this.players.has(id))
         this.players.add(id,encodeURI(`${git_raw}${path}`),()=> console.log(`loaded ${id}!`))
     }
   }
@@ -442,9 +518,43 @@ class Playground extends React.Component {
       chance: 1})
   }
 
+  //todo: decide which emojis to show
   emojisToShowFilter = (e)=>{
     const emoji = emojiIndex.emojis[e.short_names[0]]
     return (emoji && alphaEmoji.includes(emoji.native))
+  }
+
+  onInstructionsClick = (e)=>{
+    this.onPreviewClick(e)
+  }
+
+  onPreviewClick = (e)=>{
+    this.setState({tapped:true, tapping: true})
+    setTimeout(()=> this.setState({tapped:false}),40)
+
+    setTimeout(()=> {
+      if((Tone.Transport.seconds)>3.5){
+        this.tapCount = 0
+        this.setState({tapping: false})
+      }
+    },4000)
+
+
+    const bpm = Math.round(60/Tone.Transport.seconds)
+    Tone.Transport.stop().start()
+
+    //is bpm in a razonable range?
+    if(bpm < 20)
+      this.setState({tempo: (this.tapCount===0) ? 'tap again' :  'too slow!'})
+    else if(bpm > 240)
+      this.setState({tempo: (this.tapCount===0) ? 'tap again' : 'too fast!'})
+    else{
+      this.setState({tempo: bpm})
+      Tone.Transport.bpm.value = bpm
+    }
+
+    this.tapCount++
+
   }
 
   render() {
@@ -454,21 +564,28 @@ class Playground extends React.Component {
       <div className="play">
         <Helmet htmlAttributes={{class:(this.state.expanded ? 'full-screen':'normal') }} />
         <canvas ref="canvas" width={this.state.canvasSize[0]} height={this.state.canvasSize[1]} />
-        <p className="hint">
-          Throw a <a className="dice-btn" href="/" onClick={this.onRandomClick}><span role="img" aria-label="dice">🎲</span></a> {this.state.isDesktop && (<>[TAB] </>)}.
-          Play it <a className="play-btn" href="/" onClick={this.onCommitClick}><FaPlay /></a> {this.state.isDesktop && (<>[ENTER] </>)}.
-          Go full screen <FaExpand className="fullscreen-btn" onClick={this.onExpandClick}/>
-          {this.state.isDesktop && (<><br/>Use your magic keyboard! (alpha keys are emojis)</>)}
-        </p>
-        {this.state.lastMsg && <p className="hint">d1 $  s "{this.state.lastMsg}"</p>}
-
+        {this.state.showInstructions &&
+          <div className="instructions" onClick={this.onInstructionsClick}>
+            <p><em>Sadly, no active sessions were found... So {`you'll`} have to play alone.</em></p>
+            <h4>Instructions:</h4>
+            <ul>
+              <li>Throw a <a className="dice-btn" href="/" onClick={this.onRandomClick}><span role="img" aria-label="dice">🎲</span></a> {this.state.isDesktop && (<>[TAB] </>)}.</li>
+              <li>Play <a className="play-btn" href="/" onClick={this.onCommitClick}><FaPlay /></a> {this.state.isDesktop && (<>[ENTER] </>)}.</li>
+              <li>Go full screen <FaExpand className="fullscreen-btn" onClick={this.onExpandClick}/></li>
+              <li>Tap screen to set tempo</li>
+              {this.state.isDesktop && (<li>Try your magical keyboard!</li>)}
+              <li>Got it? Then <a href="/" onClick={this.onHideInstructionsClick}>hide this</a></li>
+            </ul>
+          </div>}
         <a className="expand" href="/" onClick={this.onExpandClick}>
           <FaExpand/>
           <FaCompress/>
         </a>
-        <div className={`${this.state.error ? 'error' : '' } input`}>
+        <FaQuestionCircle className="help" onClick={this.onToggleHelpClick}/>
+        <div className={`${this.state.tapping ? 'tapping' : '' }  ${this.state.error ? 'error' : '' } input`}>
           <span className="clipper">🤔</span>
-          <pre className={`${this.state.highlighted ? 'highlight' : '' } preview`}>
+          <span className="tempo">{(parseInt(this.state.tempo)===this.state.tempo)? <><i>{this.state.tempo}</i> bpm</> : this.state.tempo}</span>
+          <pre onClick={this.onPreviewClick} className={`${this.state.tapped ? 'tapped' : '' } ${this.state.highlighted ? 'highlight' : '' } preview`}>
             {this.state.left}{carret}{this.state.right}
           </pre>
           <nav>
@@ -486,7 +603,6 @@ class Playground extends React.Component {
   }
 }
 
-//And don't forget that the child will need this function declared in its propTypes:
 
 Playground.propTypes = {
   onCommit: PropTypes.func.isRequired,

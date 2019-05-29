@@ -10,6 +10,22 @@
     padding: 16px
     outline: 0
 
+  .help
+    cursor: pointer
+    z-index: 1000
+    display: block
+    position: absolute
+    top: 0
+    right: 60px
+    padding: 16px
+    outline: 0
+    animation: expand 2s infinite alternate
+    width: 40px
+    height: 40px
+
+  header
+    margin: 10px 0
+
   touch-action: pan-y
   input,button, label
     font-size: 1.5em
@@ -67,6 +83,12 @@
       filter: drop-shadow(5px 5px 10px white)
       pointer-events: none
       z-index: -1
+    .instructions
+      ul
+        li
+          line-height: 2em
+          *
+            line-height: 1em
     .hint
       white-space: pre
     .dice-btn,.play-btn, .fullscreen-btn
@@ -84,6 +106,30 @@
 
     .input
       position: relative
+      .tempo
+        @extend %no-select
+        pointer-events: none
+        opacity: 0
+        z-index: 1000
+        background: rgba(0,0,0,0.75)
+        border-radius: 50%
+        color: magenta
+        top: 1px
+        right: 1px
+        font-size: 1.5em
+        transition: opacity 0.5s linear
+        width: 3em
+        position: fixed
+        border-radius: 50%
+        padding: 25px
+        height: 3em
+        line-height: 1.2em
+        text-align: center
+        white-space: pre-wrap
+
+        i
+          font-style: normal
+          font-size: 2em
       .clipper
         @extend %no-select
         pointer-events: none
@@ -101,6 +147,9 @@
           filter: grayscale(1)
         .clipper
           opacity: 1
+      &.tapping
+        .tempo
+          opacity: 1
 
     .preview
       font-size: 1.5em
@@ -112,8 +161,14 @@
       border-bottom: 0
       box-sizing: border-box
       position: relative
+      background: transparent
+      transition: background 0.3s linear
+
       &.highlight
         animation: flash 0.5s
+      &.tapped
+        transition: none
+        background: rgb(255,0,255)
       .carret
         display: inline-block
         width: 0px
@@ -152,13 +207,15 @@
 html.full-screen
   overflow: hidden
   .live-emojing
+    .help
+      display: none
     .expand
       svg:nth-child(1)
         display: none
     header
       height: 0
       margin: 0
-    .nick, .setup, .hint, header h1
+    .nick, .setup, .hint, header h1, .instructions
       display: none
     #app
       margin: 0

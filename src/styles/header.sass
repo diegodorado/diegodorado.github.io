@@ -1,3 +1,10 @@
+//heavier rule to override theming
+#app header nav a.labs:hover
+  text-shadow: 3px 3px 3px magenta,-3px -3px 3px magenta
+  transition: none
+  i
+    animation: none
+
 header
   @extend %no-select
   display: table
@@ -23,8 +30,32 @@ header
     padding: 0 0.5em
     &.active
       text-decoration: underline
+    &.labs
+      animation: atention 20s
+      i
+        font-style: normal
+        animation: typing 10s infinite steps(1, end) forwards
+        opacity: 1
+        @for $i from 1 through 4
+          &:nth-child(#{$i})
+            animation-delay: ($i/8)+s
+
   nav
     font-size: 1em
     text-align: right
     a
       text-decoration: none
+
+
+@keyframes typing
+  from, to, 20%
+    opacity: 1
+  10%
+    opacity: 0
+
+
+@keyframes atention
+  from
+    text-shadow: 4px 4px 4px magenta,-4px -4px 4px magenta,4px -4px 4px magenta,-4px 4px 4px magenta
+  to
+    text-shadow: 2px 2px 4px #666,-2px -2px 6px #666

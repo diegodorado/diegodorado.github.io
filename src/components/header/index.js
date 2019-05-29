@@ -24,13 +24,15 @@ const meta = [
 ]
 
 
-const partiallyActive = () => ({ isPartiallyCurrent }) => ({
-  className: (isPartiallyCurrent ? `active` : ``),
+const partiallyActive = className => ({ isPartiallyCurrent }) => ({
+  className: `${className} ${isPartiallyCurrent ? 'active': ''}`,
 })
 
-const PLink = ({  ...rest }) => (
-  <Link getProps={partiallyActive()} {...rest} />
+const PLink = ({ className, ...rest }) => (
+  <Link getProps={partiallyActive(className)} {...rest} />
 )
+
+
 
 class Header extends React.Component {
   constructor(props){
@@ -57,7 +59,17 @@ class Header extends React.Component {
         <Helmet bodyAttributes={{class:this.state.theme }}  meta={meta} />
         <Brand title="diego dorado" />
         <nav>
-          <a title="change theme color" href="/" onClick={this.onMouseClick}><span>◐</span></a>|<PLink to={`/work`}>Work</PLink>|<PLink to={`/bio`}>Bio</PLink>|<PLink to={`/pics`} >Pics</PLink> {/* | <PLink to={`/log`}>Log</PLink>*/}
+          <a title="change theme color" href="/" onClick={this.onMouseClick}><span>◐</span></a>
+          |<PLink to={`/work`}>Work</PLink>
+          |<PLink className="labs" to={`/labs`} >
+            <i>L</i>
+            <i>a</i>
+            <i>b</i>
+            <i>s</i>
+            </PLink>
+          |<PLink to={`/pics`}>Pics</PLink>
+          |<PLink to={`/bio`}>Bio</PLink>
+          {/* | <PLink to={`/log`}>Log</PLink>*/}
         </nav>
       </header>
     )

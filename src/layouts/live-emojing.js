@@ -11,7 +11,7 @@ class LELayout extends React.Component {
       <div id="app">
         <header>
           <Helmet bodyAttributes={{class:'dark live-emojing'}} />
-          <Brand title="Live Emojing"/>
+          <Brand title="live emojing"/>
         </header>
         <main>{children}</main>
       </div>

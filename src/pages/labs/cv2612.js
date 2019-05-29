@@ -1,7 +1,7 @@
 import React from "react"
-import Layout from "../layouts/cv2612"
-import SEO from "../components/seo"
-import Device from "../components/cv2612/device"
+import Layout from "../../layouts/cv2612"
+import SEO from "../../components/seo"
+import Device from "../../components/cv2612/device"
 
 
 class CV2612Index extends React.Component {

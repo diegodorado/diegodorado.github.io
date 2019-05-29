@@ -1,8 +1,8 @@
 import React from "react"
-import Layout from "../layouts/live-emojing"
-import SEO from "../components/seo"
-import Nick from '../components/live-emojing/nick'
-import Playground from '../components/live-emojing/playground'
+import Layout from "../../layouts/live-emojing"
+import SEO from "../../components/seo"
+import Nick from '../../components/live-emojing/nick'
+import Playground from '../../components/live-emojing/playground'
 import simpleDDP from 'simpleddp'
 import ws from 'isomorphic-ws'
 
