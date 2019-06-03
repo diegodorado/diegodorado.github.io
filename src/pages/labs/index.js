@@ -31,6 +31,14 @@ class LabsIndex extends React.Component {
               You can have a taste of its sound as it has an emulator.
             </p>
           </li>
+          <li>
+            <h4><Link to={`/labs/fmtribe`} >FM TRIBE</Link></h4>
+            <p>FMTribe by is an OPL3 synth/drum machine/thingie focused on live jamming for DOS.
+            <br/>
+            Developed by <a href="https://github.com/munshkr" target="_blank">munshkr</a> and brought to the browser thanks to <a href="https://js-dos.com/" target="_blank">js-dos</a>.
+            Checkout <a href="https://github.com/munshkr/fmtribe" target="_blank">fmtribe sources</a>.</p>
+          </li>
+
         </ul>
         <p className="spacey">
           There are also miscellaneous contents listed that would otherwise be hidden <em>(even for me)</em>

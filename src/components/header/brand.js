@@ -8,7 +8,7 @@ class Brand extends React.Component {
 
   constructor(props){
     super(props)
-    this.state = {title: props.title}
+    this.state = {title: props.title, swaps: props.swaps || swaps}
   }
 
   getDiff(){
@@ -20,6 +20,7 @@ class Brand extends React.Component {
   }
 
   timer() {
+    const swaps = this.state.swaps
     let i = Math.floor(Math.random()*swaps.length)
     let from = Math.round(Math.random())
     if(this.getDiff()>3) from = 1
@@ -53,6 +54,7 @@ class Brand extends React.Component {
 
 Brand.propTypes = {
   title: PropTypes.string.isRequired,
+  swaps: PropTypes.array,
 };
 
 

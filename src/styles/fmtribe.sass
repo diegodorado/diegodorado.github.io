@@ -1,0 +1,55 @@
+.fmtribe
+  .return
+    position: absolute
+    z-index: 100
+    width: 50px
+    height: 50px
+    top: 20px
+    right: 20px
+    cursor: pointer
+  nav
+    border: 1px solid white
+    display: flex
+    margin-bottom: 40px
+  nav span
+    padding: 10px
+    flex-grow: 1
+    display: inline-block
+    border-right: 1px solid white
+    text-align: center
+    cursor: pointer
+    background: $black
+  .canvas-wrapper
+    position: absolute
+    background: black
+    top: 0
+    left: 0
+    right: 0
+    display: none
+    &.loaded
+      display: block
+    canvas
+      width: 100vw
+      height: calc((9/16)*100vw)
+    @media (min-aspect-ratio:16/9)
+      canvas
+        height: 100vh
+        width: calc((16/9)*100vh)
+
+  .start
+    text-align: center
+
+  button
+    background: $white
+    color: $black
+    border: 1px solid $black
+    margin: 10px
+    padding: 10px
+    font-size: 2em
+    font-family: monospace
+    font-weight: bold
+    cursor: pointer
+    outline: 0
+
+  nav .active, button:hover, nav span:hover
+    filter: invert(1)

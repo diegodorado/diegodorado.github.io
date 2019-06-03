@@ -182,8 +182,8 @@ class Playground extends React.Component {
   initAudio(){
     //chain a compressor
     const comp = new Tone.Compressor(-30, 3).toMaster()
-    this.samples = ['8','a','b','dot','duf','d','f','h','^k','k', 'm','n','o', 'pf', 'phs','psh','^p','s','^tss','t', 'u']
-    const urls = this.samples.reduce((o,n)=> Object.assign(o,{[n]:`/live-emojing/audio/beatbox/${n}.wav`}),{})
+    this.samples = '0123456789abcdefghijklmnopqrstuvwxyzABC'.split('')
+    const urls = this.samples.reduce((o,n)=> Object.assign(o,{[n]:`/live-emojing/samples/${n}.wav`}),{})
     this.players = new Tone.Players (urls , () => this.setState({samplesLoaded:true}) ).connect(comp)
     Tone.context.latencyHint = 'playback'
     Tone.Transport.start()
@@ -413,6 +413,9 @@ class Playground extends React.Component {
       .reduce((o,e)=>Object.assign(o,{[e.native]:sanitizeEmojiId(e.id)}),{})
 
     const process_emoji = (params) =>{
+      if(!this.state.samplesLoaded)
+        return
+
       const eid = emoji_ids[params.node.value]
       const index = emojis.indexOf(params.node.value) % this.samples.length
       //choose a remote or local sample
@@ -573,7 +576,7 @@ class Playground extends React.Component {
               <li>Play <a className="play-btn" href="/" onClick={this.onCommitClick}><FaPlay /></a> {this.state.isDesktop && (<>[ENTER] </>)}.</li>
               <li>Go full screen <FaExpand className="fullscreen-btn" onClick={this.onExpandClick}/></li>
               <li>Tap screen to set tempo</li>
-              {this.state.isDesktop && (<li>Try your magical keyboard!</li>)}
+              {this.state.isDesktop && (<li>Magical keyboard! ( A={alphaEmoji[0]}, B={alphaEmoji[1]}, so on)</li>)}
               <li>Got it? Then <a href="/" onClick={this.onHideInstructionsClick}>hide this</a></li>
             </ul>
           </div>}
