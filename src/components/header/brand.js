@@ -33,11 +33,11 @@ class Brand extends React.Component {
   }
 
   componentDidMount(){
-    this.intervalId = setInterval(this.timer.bind(this), 100);
+    //this.intervalId = setInterval(this.timer.bind(this), 100);
   }
 
   componentWillUnmount(){
-    clearInterval(this.intervalId);
+    //clearInterval(this.intervalId);
   }
 
   render() {

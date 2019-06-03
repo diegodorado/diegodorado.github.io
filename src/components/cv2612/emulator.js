@@ -18,7 +18,7 @@ class Emulator extends React.Component {
   constructor(props) {
     super(props)
     this.state = {soundOn: false}
-
+    this.fftSize = 1024
   }
 
   componentDidMount(){
@@ -43,6 +43,9 @@ class Emulator extends React.Component {
     this.spectrum.strokeStyle = '#509eec'
 
     this.stopAnimation = false
+    this.timeData = new Uint8Array(this.fftSize).fill(128)
+    this.freqData = new Uint8Array(this.fftSize)
+
     requestAnimationFrame(this.tick)
 
   }
@@ -52,15 +55,18 @@ class Emulator extends React.Component {
     kb._listeners.down = []
     kb._listeners.up = []
     this.stopAnimation = true
+    this.timeData = null
+    this.freqData = null
+
   }
 
   tick = () => {
     if (this.stopAnimation)
        return
 
-    this.drawScope()
-    this.drawSpectrum()
-    requestAnimationFrame(this.tick)
+    //this.drawScope()
+    //this.drawSpectrum()
+    //requestAnimationFrame(this.tick)
   }
 
   drawScope(){
@@ -68,23 +74,22 @@ class Emulator extends React.Component {
     const ctx = this.scope
     const width = ctx.canvas.width
     const height = ctx.canvas.height
-    const l = this.analyser ? this.analyser.fftSize : width
-    const timeData = new Uint8Array(l).fill(128)
+    const l = this.fftSize
     const scaling = height / 256
 
     if(this.analyser)
-      this.analyser.getByteTimeDomainData(timeData)
+      this.analyser.getByteTimeDomainData(this.timeData)
 
 
     ctx.fillRect(0, 0, width, height)
     ctx.beginPath()
 
-    const e = timeData.reduce( (acc, it, i, a) => {
+    const e = this.timeData.reduce( (acc, it, i, a) => {
       return ((acc===0) && (i>0) && (i<l-10) && a[i-1]<128 && a[i+10]>128) ? i : acc
     } , 0)
 
     for (let x = e; x < l && x - e < width; x++)
-      ctx.lineTo(x - e, height - timeData[x] * scaling)
+      ctx.lineTo(x - e, height - this.timeData[x] * scaling)
 
     ctx.stroke()
   }
@@ -93,13 +98,12 @@ class Emulator extends React.Component {
     const ctx = this.spectrum
     const width = ctx.canvas.width
     const height = ctx.canvas.height
-    const l = this.analyser ? this.analyser.frequencyBinCount : width
-    const freqData = new Uint8Array(l)
+    const l = this.fftSize
     const scaling = height / 256
     const scalingX = width / l
 
     if(this.analyser)
-      this.analyser.getByteFrequencyData(freqData)
+      this.analyser.getByteFrequencyData(this.freqData)
 
     ctx.fillRect(0, 0, width, height)
     ctx.beginPath()
@@ -115,8 +119,8 @@ class Emulator extends React.Component {
       //As the logindex will probably be decimal, we need to interpolate (in this case linear interpolation)
       const low = Math.floor(logindex)
       const high = Math.ceil(logindex)
-      const lv = freqData[low]
-      const hv = freqData[high]
+      const lv = this.freqData[low]
+      const hv = this.freqData[high]
       const w = (logindex-low)/(high-low)
       const v = lv + (hv-lv)*w
 
@@ -136,7 +140,7 @@ class Emulator extends React.Component {
       this.ym2612Node.connect(this.audioCtx.destination)
 
       this.analyser = this.audioCtx.createAnalyser()
-      this.analyser.fftSize = 1024
+      this.analyser.fftSize = this.fftSize
       this.ym2612Node.connect(this.analyser)
 
       this.write(0x27,0x00) //chan3 normal mode
