@@ -34,7 +34,7 @@ module.exports = {
       resolve: `gatsby-source-instagram`,
       options: {
         username: 'diegdorado',
-        access_token: "EAAdxZC9ZCkPZBkBALlAxjmCmEXgs7LkphofDqqqZA95OdiUFCtewY6FFNRz3DqjzbX2xFz3fktHqQ2dujP5plK0Axh6DxjNe8Y7HzPbkyiwaY4v3sJCagx1B71lh7FQ2SZBtxLqOld0QbVSVJnYlJuJE2sInW4rMrL768VhsqQaLlFR2ZCilSbMAE21SGGaycZD",
+        access_token: "EAAAAYG3haF0BAAwnSTuANzi6SnVlupueYmLJR0itWeG1dJv2RGjpWkHIJ13OMuF5ZBTx6BKwlaDNM77sx2GEnWLmACtIEFdQkcN0OiZCzjcZB5oYEQLE7AFjDrQ99Y5HwtXcE9WNTYJKLUqSxjOQgsRhdt5vF4sFVONsnpSQQZDZD",
         instagram_id: "17841404423342614",
       },
     },

@@ -152,7 +152,7 @@ class Playground extends React.Component {
 
   drawEmojis(){
 
-    const off = (Tone.Transport.seconds- Math.floor(Tone.Transport.seconds))
+    //const off = (Tone.Transport.seconds- Math.floor(Tone.Transport.seconds))
     const ctx = this.canvas
     const width = ctx.canvas.width
     const height = ctx.canvas.height
@@ -383,6 +383,7 @@ class Playground extends React.Component {
     const emojis = Object.values(emojiIndex.emojis)
 
     //todo: decide if this is going to be used or not
+    /*
     let f ='['
     for (let c of emojiArray(p)){
       const e = emojis.filter((e)=>e.native===c)
@@ -394,6 +395,15 @@ class Playground extends React.Component {
       }
     }
     f+=']'
+    */
+
+    for (let c of emojiArray(p)){
+      const e = emojis.filter((e)=>e.native===c)
+      if(e.length>0)
+        this.ensureEmojiSample(e[0])
+    }
+
+
   }
 
   // this function ensures each emoji has a unique sound
@@ -586,7 +596,7 @@ class Playground extends React.Component {
         </a>
         <FaQuestionCircle className="help" onClick={this.onToggleHelpClick}/>
         <div className={`${this.state.tapping ? 'tapping' : '' }  ${this.state.error ? 'error' : '' } input`}>
-          <span className="clipper">🤔</span>
+          <span className="clipper" role="img" aria-label="doubt">🤔</span>
           <span className="tempo">{(parseInt(this.state.tempo)===this.state.tempo)? <><i>{this.state.tempo}</i> bpm</> : this.state.tempo}</span>
           <pre onClick={this.onPreviewClick} className={`${this.state.tapped ? 'tapped' : '' } ${this.state.highlighted ? 'highlight' : '' } preview`}>
             {this.state.left}{carret}{this.state.right}

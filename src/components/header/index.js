@@ -25,7 +25,7 @@ const meta = [
 
 
 const partiallyActive = className => ({ isPartiallyCurrent }) => ({
-  className: `${className} ${isPartiallyCurrent ? 'active': ''}`,
+  className: `${className?className:''} ${isPartiallyCurrent ? 'active': ''}`,
 })
 
 const PLink = ({ className, ...rest }) => (

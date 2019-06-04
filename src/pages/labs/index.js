@@ -6,7 +6,6 @@ import SEO from "../../components/seo"
 
 class LabsIndex extends React.Component {
   render() {
-    const { data } = this.props
     return (
       <Layout location={this.props.location} >
         <SEO title="bio" />
@@ -35,8 +34,8 @@ class LabsIndex extends React.Component {
             <h4><Link to={`/labs/fmtribe`} >FM TRIBE</Link></h4>
             <p>FMTribe by is an OPL3 synth/drum machine/thingie focused on live jamming for DOS.
             <br/>
-            Developed by <a href="https://github.com/munshkr" target="_blank">munshkr</a> and brought to the browser thanks to <a href="https://js-dos.com/" target="_blank">js-dos</a>.
-            Checkout <a href="https://github.com/munshkr/fmtribe" target="_blank">fmtribe sources</a>.</p>
+            Developed by <a href="https://github.com/munshkr" target="_blank" rel="noopener noreferrer">munshkr</a> and brought to the browser thanks to <a href="https://js-dos.com/" target="_blank" rel="noopener noreferrer">js-dos</a>.
+            Checkout <a href="https://github.com/munshkr/fmtribe" target="_blank" rel="noopener noreferrer">fmtribe sources</a>.</p>
           </li>
 
         </ul>

@@ -61,34 +61,64 @@ body.light
 
 
 
-//transitions
-body
-  transition: background-color 2s
-  &, a, a:visited
-    transition: color 2s
-    color: $white
+//disable transitions
+.dont-run-this
+  body
+    transition: background-color 2s
+    &, a, a:visited
+      transition: color 2s
+      color: $white
 
+    article.post
+      transition: border-color 3s
+      .card h3 a
+        transition: background-color 2s,opacity 0.5s ease
+
+    section.texts article
+      transition: border-color 2s
+      &:hover
+        transition: background-color 2s
+
+    .work-post hr
+      transition: background-image 2s
+
+    header
+      a.active
+        transition: color 2s, text-shadow 2s
+      nav a:first-child
+        span
+          transition: transform 1s
+          display: inline-block
+
+
+  body.dark
+    .gatsby-image-wrapper ,article.post, video, iframe
+      animation: fade-in1 4s ease
+
+  body.light
+    .gatsby-image-wrapper ,article.post, video, iframe
+      animation: fade-in2 4s ease
+
+
+
+//simpler transitions
+body
+  transition: opacity 2s
   article.post
-    transition: border-color 3s
     .card h3 a
-      transition: background-color 2s,opacity 0.5s ease
+      transition: opacity 0.5s ease
 
   section.texts article
-    transition: border-color 2s
     &:hover
-      transition: background-color 2s
+      transition: opacity 0.5s ease
 
   .work-post hr
-    transition: background-image 2s
+    transition: opacity 0.5s ease
 
   header
-    a.active
-      transition: color 2s, text-shadow 2s
     nav a:first-child
       span
         transition: transform 1s
-        display: inline-block
-
 
 body.dark
   .gatsby-image-wrapper ,article.post, video, iframe
@@ -97,6 +127,7 @@ body.dark
 body.light
   .gatsby-image-wrapper ,article.post, video, iframe
     animation: fade-in2 4s ease
+
 
 @keyframes fade-in1
   from

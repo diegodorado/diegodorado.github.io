@@ -82,8 +82,8 @@ class FMTribeIndex extends React.Component {
         {!this.state.started && <div id="info" className="usage">
           <p>FMTribe by is an OPL3 synth/drum machine/thingie focused on live jamming for DOS.
           <br/>
-          Developed by <a href="https://github.com/munshkr" target="_blank">munshkr</a> and brought to the browser thanks to <a href="https://js-dos.com/" target="_blank">js-dos</a>.
-          Checkout <a href="https://github.com/munshkr/fmtribe" target="_blank">fmtribe sources</a>.</p>
+          Developed by <a href="https://github.com/munshkr" target="_blank" rel="noopener noreferrer">munshkr</a> and brought to the browser thanks to <a href="https://js-dos.com/" target="_blank" rel="noopener noreferrer">js-dos</a>.
+          Checkout <a href="https://github.com/munshkr/fmtribe" target="_blank" rel="noopener noreferrer">fmtribe sources</a>.</p>
           <nav>
             <span onClick={()=> this.setState({tab:0})} >Usage</span>
             <span onClick={()=> this.setState({tab:1})} >Step Sequencer</span>

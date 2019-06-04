@@ -33,7 +33,7 @@ class PicsIndex extends React.Component {
                   <Img fixed={node.localFile.childImageSharp.fixed} />
                   <div className="card">
                     <h3>
-                      <a target="_blank" rel="noopener noreferrer" href={'http://instagram.com/p/'+node.id} >{node.caption}</a>
+                      <a target="_blank" rel="noopener noreferrer" href={'http://instagram.com/p/'+node.id} >{node.caption}{node.mediaType}</a>
                     </h3>
                   </div>
                 </article>
@@ -62,11 +62,12 @@ export const pageQuery = graphql`
           }
         }
       }
-    allInstaNode(sort:{fields:[likes],order:DESC} limit:6) {
+    allInstaNode(filter: {, mediaType: { in: ["IMAGE", "CAROUSEL_ALBUM"]}},sort:{fields:[likes],order:DESC} limit:12) {
       edges {
         node {
           id
           caption
+          mediaType
           localFile {
             childImageSharp {
               fixed(width: 320, height: 320) {

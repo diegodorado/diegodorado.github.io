@@ -16,3 +16,9 @@ export const onClientEntry = () => {
       window.location.replace(newUrl)
   }
 }
+
+/*
+export const shouldUpdateScroll = (a) => {
+  return false
+}
+*/

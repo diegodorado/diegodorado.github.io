@@ -65,9 +65,11 @@ class Sequencer extends React.Component {
   render() {
     //todo: fixme
     return null
+    /*
     return (
       <button onClick={this.onClick}>{this.state.sequencerOn ? 'Stop Seq':'Start Seq'}</button>
     )
+    */
   }
 }
 

@@ -31,8 +31,10 @@ header
     &.active
       text-decoration: underline
     &.labs
-      animation: atention 20s
+      animation: atention 10s
+      will-change: opacity
       i
+        will-change: opacity
         font-style: normal
         animation: typing 10s infinite steps(1, end) forwards
         opacity: 1
@@ -56,6 +58,9 @@ header
 
 @keyframes atention
   from
-    text-shadow: 4px 4px 4px magenta,-4px -4px 4px magenta,4px -4px 4px magenta,-4px 4px 4px magenta
+    opacity: 0
+    //although pretty, this isnt performant at all
+    //text-shadow: 4px 4px 4px magenta,-4px -4px 4px magenta,4px -4px 4px magenta,-4px 4px 4px magenta
   to
-    text-shadow: 2px 2px 4px #666,-2px -2px 6px #666
+    opacity: 1
+    //text-shadow: 2px 2px 4px #666,-2px -2px 6px #666

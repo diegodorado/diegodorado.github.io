@@ -1,8 +1,10 @@
 import React from "react"
 import Layout from "../../layouts/live-emojing"
 import SEO from "../../components/seo"
-import Nick from '../../components/live-emojing/nick'
 import Playground from '../../components/live-emojing/playground'
+
+/*
+import Nick from '../../components/live-emojing/nick'
 import simpleDDP from 'simpleddp'
 import ws from 'isomorphic-ws'
 
@@ -11,6 +13,7 @@ const opts = {
     SocketConstructor: ws,
     reconnectInterval: 5000
 }
+*/
 
 class LiveEmojingIndex extends React.Component {
   constructor(props){

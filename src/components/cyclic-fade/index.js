@@ -4,8 +4,6 @@ import './index.sass'
 
 class CyclicFade extends Component {
 
-
-
   constructor(props) {
     super(props);
     this.state = {
@@ -13,7 +11,6 @@ class CyclicFade extends Component {
       paused: false
     };
   }
-
 
   onMouseEnter = (e) => {
     this.setState({paused: true})
@@ -68,8 +65,7 @@ class CyclicFade extends Component {
     return (
         <div className="cyclic-fade-container" onClick={this.onMouseClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
             {children.map((each, key) => (
-              <div key={key} className="cyclic-fade-child"
-                style={{ opacity: key === index ? '1' : '0' }}>
+              <div key={key} className={`cyclic-fade-child ${key === index ? 'active' : ''}`}>
                 {each}
               </div>
             ))}
