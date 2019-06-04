@@ -61,6 +61,7 @@ class Header extends React.Component {
         <nav>
           <a title="change theme color" href="/" onClick={this.onMouseClick}><span>◐</span></a>
           |<PLink to={`/work`}>Work</PLink>
+          |<PLink to={`/music`}>Music</PLink>
           |<PLink className="labs" to={`/labs`} >
             <i>L</i>
             <i>a</i>

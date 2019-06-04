@@ -1,9 +1,10 @@
 //heavier rule to override theming
-#app header nav a.labs:hover
-  text-shadow: 3px 3px 3px magenta,-3px -3px 3px magenta
-  transition: none
-  i
-    animation: none
+.dont-use-this
+  #app header nav a.labs:hover
+    text-shadow: 3px 3px 3px magenta,-3px -3px 3px magenta
+    transition: none
+    i
+      animation: none
 
 header
   @extend %no-select
@@ -31,8 +32,8 @@ header
     &.active
       text-decoration: underline
     &.labs
-      animation: atention 10s
-      will-change: opacity
+      //animation: atention 10s
+      //will-change: opacity
       i
         will-change: opacity
         font-style: normal
