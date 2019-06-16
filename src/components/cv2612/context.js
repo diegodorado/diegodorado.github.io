@@ -6,7 +6,7 @@ import {reactLocalStorage} from 'reactjs-localstorage'
 export const CV2612Context = React.createContext()
 export const CV2612Consumer = CV2612Context.Consumer
 
-const ctrlmap = ['ar','d1','sl','d2','rr','tl','mul','det','rs','am','al','fb','ams','fms','st','lfo']
+const ctrlmap = ['ar','d1','sl','d2','rr','tl','mul','det','rs','am','al','fb','ams','fms','st','lfo','en']
 
 // Create the provider using a traditional React.Component class
 class CV2612Provider extends React.Component {
@@ -80,8 +80,10 @@ class CV2612Provider extends React.Component {
     const op = parseInt(parts[1])
     const param = parts[2]
     const pId = ctrlmap.indexOf(param)
-    //console.log(pId,param,code, [ch,op,pId,value])
-    if(pId!==-1){
+
+    if(pId===-1){
+      console.error(`Unexpected param ${param} in code ${code}`)
+    }else{
 
        //todo: implement omni channel on chip side
        // and avoid resending parameters triggered by omni channel
@@ -94,14 +96,16 @@ class CV2612Provider extends React.Component {
         const addr = [ch,op,pId]
         this.state.midi.sendSysexSet(addr,value)
       }
+
+      this.state.emulator.update(ch,op,param,value,this.state.params)
+
     }
 
-    this.state.emulator.update(ch,op,param,value,this.state.params)
   }
 
 
   sendParameters = (params) => {
-
+    //todo: send a bulk sysex message  instead
     for (let [code, value] of Object.entries(params)) {
       this.sendParameter(code,value)
     }

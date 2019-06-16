@@ -91,8 +91,11 @@ class Midi extends React.Component {
 
   }
 
+  sysexCount = 0
   sendSysex = (data) => {
     this.sendMidi(data)
+    this.sysexCount++
+    console.log('sysexCount',this.sysexCount)
   }
 
   sendSysexSet = (addr,value) => {
@@ -168,6 +171,7 @@ class Midi extends React.Component {
 
 
   onCtrlMIDIMessage = (msg) => {
+    //warning: filter loopback messages somehow
 
     if(msg.target.id !== this.midiCtrlInId)
       return
@@ -209,7 +213,7 @@ class Midi extends React.Component {
           0x26, 0x26, 0x12, 0x00, 0x00, // ID - family code - model number
           0x01, 0x00, 0x00, 0x00, 0xF7] //version - end
       if(JSON.stringify(data) === JSON.stringify(idReply)){
-        this.setState({lastMsg: `CV2612 found!` })
+        console.log(`CV2612 found!`)
       }else{
         //console.log('sysex reply ')
         //console.log(data)

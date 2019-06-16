@@ -46,7 +46,7 @@ class Emulator extends React.Component {
     this.timeData = new Uint8Array(this.fftSize).fill(128)
     this.freqData = new Uint8Array(this.fftSize)
 
-    requestAnimationFrame(this.tick)
+    //requestAnimationFrame(this.tick)
 
   }
 
@@ -64,9 +64,9 @@ class Emulator extends React.Component {
     if (this.stopAnimation)
        return
 
-    //this.drawScope()
-    //this.drawSpectrum()
-    //requestAnimationFrame(this.tick)
+    this.drawScope()
+    this.drawSpectrum()
+    requestAnimationFrame(this.tick)
   }
 
   drawScope(){
