@@ -1,7 +1,16 @@
 {
   "translation": {
     "Work": "Work",
+    "Music": "Music",
+    "Pics": "Pics",
+    "Bio": "Bio",
     "Intro": "I am Diego Dorado, live coder, programmer and electronic artist. I am passionate about research projects that combine technological innovation with artistic expressions.",
-    "MusicIntro": "Hi there. These are some tracks I have produced in the past. They are all uploaded to <0>soundcloud</0>, but I like to see them here. =)"
+    "Explore": "<0>Explore</0> the projects that I've been working on.",
+    "MusicIntro": "Hi there. These are some tracks I have produced in the past. They are all uploaded to <0>soundcloud</0>, but I like to see them here. =)",
+    "Random Pics": "Random pics, by <0>Nicolás Croce</0>.",
+    "These are from Instagram.":"These are from Instagram.",
+    "Follow me there!":"Follow me there!",
+
+    "":""
   }
 }

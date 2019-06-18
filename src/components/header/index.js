@@ -52,9 +52,9 @@ const Header = ({location}) => {
 
   const onChangeLanguageClick = e => {
     e.preventDefault()
-    const prevlang = i18n.language
-    i18n.changeLanguage(i18n.language==='es'?'en':'es')
-    const pathname = location.pathname.replace(`/${prevlang}/`,`/${i18n.language}/`)
+    const prevlang = i18n.languages[0]
+    i18n.changeLanguage(i18n.languages[0]==='es'?'en':'es')
+    const pathname = location.pathname.replace(`/${prevlang}/`,`/${i18n.languages[0]}/`)
     navigate(pathname)
   }
 
@@ -67,19 +67,20 @@ const Header = ({location}) => {
       <Helmet bodyAttributes={{class:theme }}  meta={meta} />
       <Brand title="diego dorado" />
       <nav>
-        <a href="/" onClick={onChangeLanguageClick} className={i18n.language==='es'?'active':''}>es</a>/
-        <a href="/" onClick={onChangeLanguageClick} className={i18n.language==='en'?'active':''}>en</a>
+        <a href="/" onClick={onChangeLanguageClick} className={i18n.languages[0]==='es'?'active':''}>es</a>/
+        <a href="/" onClick={onChangeLanguageClick} className={i18n.languages[0]==='en'?'active':''}>en</a>
         <a title="change theme color" href="/" onClick={onChangeThemeClick}><span>◐</span></a>
-        |<PLink to={`/work`}>{t('Work')}</PLink>
-        |<PLink to={`/music`}>Music</PLink>
+        <br/>
+        <PLink to={`/work`}>{t('Work')}</PLink>
+        |<PLink to={`/music`}>{t('Music')}</PLink>
         |<PLink className="labs" to={`/labs`} >
           <i>L</i>
           <i>a</i>
           <i>b</i>
           <i>s</i>
           </PLink>
-        |<PLink to={`/pics`}>Pics</PLink>
-        |<PLink to={`/bio`}>Bio</PLink>
+        |<PLink to={`/pics`}>{t('Pics')}</PLink>
+        |<PLink to={`/bio`}>{t('Bio')}</PLink>
         {/* | <PLink to={`/log`}>Log</PLink>*/}
       </nav>
     </header>

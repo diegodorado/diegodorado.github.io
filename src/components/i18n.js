@@ -11,18 +11,21 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    quotes : quotes,
     resources: { en, es },
     fallbackLng: 'en',
     whitelist: ['en','es'],
-    debug: true,
+    debug: process.env.NODE_ENV === "development",
+    saveMissing: process.env.NODE_ENV === "development",
+    updateMissing: process.env.NODE_ENV === "development",
     load: 'languageOnly',
-    saveMissing: true,
-    updateMissing: true,
     keySeparator: false, // we do not use keys in form messages.welcome
     interpolation: {
       escapeValue: false // react already safes from xss
     }
-  });
+  })
 
-  export default i18n;
+//todo: is this the right places for this??
+i18n.quotes = quotes
+
+
+export default i18n

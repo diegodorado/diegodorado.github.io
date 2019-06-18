@@ -175,7 +175,7 @@ exports.onCreatePage = ({ page, actions }) => {
   // So grab the lang from that string
   if(localized){
     const [page_path, locale] = page.path.split(`.`)
-    page.path = page_path + '/'
+    page.path = (page_path + '/').replace(`/index`,'')
     const localePage = generatePage(locale.replace('/',''))
     createPage(localePage)
   } else{

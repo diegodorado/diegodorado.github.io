@@ -21,7 +21,7 @@ const MusicIndex = ({ data, location }) => {
       <SEO title="music" />
       <p className="spacey">
         <Trans i18nKey="MusicIntro"
-          components={[<a href="https://soundcloud.com/diego-dorado/tracks">soundcloud</a>]} />
+          components={[<a href="https://soundcloud.com/diego-dorado/tracks" target="_blank" rel="noopener noreferrer">soundcloud</a>]} />
       </p>
       <SoundPlayer clientId={clientId} resolveUrl={resolveUrl} />
       {/*tracks.map(({ node }) => {

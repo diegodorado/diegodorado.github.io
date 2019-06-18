@@ -6,7 +6,7 @@ const Footer = () => {
   const [t, i18n] = useTranslation();
 
   //strange place to have the quotes...
-  const data = i18n.options.quotes[i18n.language]
+  const data = i18n.quotes[i18n.languages[0]]
   const [quote, setQuote] = useState(data[0])
 
   useEffect(() => {
