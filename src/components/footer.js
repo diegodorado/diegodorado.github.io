@@ -1,35 +1,25 @@
 import React, { useState, useEffect } from "react"
-import { useStaticQuery, graphql } from "gatsby"
-
+import { useTranslation } from 'react-i18next'
 
 const Footer = () => {
-  const data = useStaticQuery(graphql`
-    query {
-      allQuotesJson {
-        edges {
-          node {
-            author:_0
-            quote:_1
-          }
-        }
-      }
-    }
-  `)
-  const [quote, setQuote] = useState(data.allQuotesJson.edges[0].node)
+
+  const [t, i18n] = useTranslation();
+
+  //strange place to have the quotes...
+  const data = i18n.options.quotes[i18n.language]
+  const [quote, setQuote] = useState(data[0])
 
   useEffect(() => {
     const rand = Math.random()
-    const quotes = data.allQuotesJson.edges
-    setQuote(quotes[Math.floor(rand*quotes.length)].node)
+    setQuote(data[Math.floor(rand*data.length)])
   })
-
 
   return (
     <footer>
       <table>
         <tbody>
-          <tr><td><cite>{quote.quote}</cite></td></tr>
-          <tr><td><span>{quote.author}</span></td></tr>
+          <tr><td><cite>{quote[1]}</cite></td></tr>
+          <tr><td><span>{quote[0]}</span></td></tr>
         </tbody>
       </table>
     </footer>)

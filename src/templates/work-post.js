@@ -1,51 +1,52 @@
 import React from "react"
-import { Link, graphql } from "gatsby"
+import { graphql } from "gatsby"
 import Layout from "../layouts/main"
 import SEO from "../components/seo"
+import Link from "../components/link"
 
-class WorkPostTemplate extends React.Component {
-  render() {
-    const post = this.props.data.markdownRemark
-    const siteTitle = this.props.data.site.siteMetadata.title
-    let { previous, next } = this.props.pageContext
 
-    previous = previous ? <Link to={previous.fields.slug}>{`=>`}</Link>
-                        : <span>...</span>
-    next = next ? <Link to={next.fields.slug}>{`<=`}</Link>
-                : <span>...</span>
+const WorkPostTemplate = ({ data, pageContext, location }) => {
+  const post = data.markdownRemark
+  const siteTitle = data.site.siteMetadata.title
+  let { previous, next } = pageContext
 
-    const pagination = <nav className="pagination">
-                         {next} <Link to={`/work`}>all works</Link> {previous}
-                       </nav>
+  previous = previous ? <Link to={previous}>{`=>`}</Link>
+                      : <span>...</span>
+  next = next ? <Link to={next}>{`<=`}</Link>
+              : <span>...</span>
 
-    return (
-      <Layout location={this.props.location} title={siteTitle}>
-        <SEO
-          title={post.frontmatter.title}
-          description={post.frontmatter.description || post.excerpt}
-        />
-        <div className="work-title">
-          <h2>{post.frontmatter.title}</h2>
-          {pagination}
-        </div>
-        <div className="work-post" dangerouslySetInnerHTML={{ __html: post.html }} />
+  const pagination = <nav className="pagination">
+                       {next} <Link to={`/work`}>all works</Link> {previous}
+                     </nav>
+
+  return (
+    <Layout location={location} title={siteTitle}>
+      <SEO
+        title={post.frontmatter.title}
+        description={post.frontmatter.description || post.excerpt}
+      />
+      <div className="work-title">
+        <h2>{post.frontmatter.title}</h2>
         {pagination}
-      </Layout>
-    )
-  }
+      </div>
+      <div className="work-post" dangerouslySetInnerHTML={{ __html: post.html }} />
+      {pagination}
+    </Layout>
+  )
+
 }
 
 export default WorkPostTemplate
 
 export const pageQuery = graphql`
-  query WorkPostBySlug($slug: String!) {
+  query WorkPostBySlug($slug: String!,$locale: String!) {
     site {
       siteMetadata {
         title
         author
       }
     }
-    markdownRemark(fields: { slug: { eq: $slug } }) {
+    markdownRemark(fields: { locale:{in:[$locale,""]}, slug: { eq: $slug } }) {
       id
       excerpt(pruneLength: 160)
       html

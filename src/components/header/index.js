@@ -1,8 +1,9 @@
-import React from "react"
-import { Link } from "gatsby"
-import {reactLocalStorage} from 'reactjs-localstorage'
+import React, {useState, useEffect} from "react"
+import { navigate } from "gatsby"
+import Link from "../link"
 import Helmet from "react-helmet"
 import Brand from "./brand"
+import { useTranslation } from 'react-i18next'
 
 const meta = [
   {
@@ -28,54 +29,61 @@ const partiallyActive = className => ({ isPartiallyCurrent }) => ({
   className: `${className?className:''} ${isPartiallyCurrent ? 'active': ''}`,
 })
 
-const PLink = ({ className, ...rest }) => (
-  <Link getProps={partiallyActive(className)} {...rest} />
-)
 
 
 
-class Header extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {theme: 'dark'}
-  }
-
-  componentDidMount(){
-    const theme = reactLocalStorage.get('theme', 'dark')
-    this.setState({theme: theme})
-  }
+const Header = ({location}) => {
 
 
-  onMouseClick = (e) => {
+  const [theme, setTheme] = useState(
+    localStorage.getItem('theme') || 'dark',
+  )
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+  }, [theme])
+
+  const [t, i18n] = useTranslation();
+
+  const onChangeThemeClick = e => {
     e.preventDefault()
-    const new_theme = (reactLocalStorage.get('theme', 'dark')==='dark') ? 'light' : 'dark'
-    this.setState({theme: new_theme})
-    reactLocalStorage.set('theme', new_theme)
+    setTheme((theme==='dark') ? 'light' : 'dark')
   }
 
-  render() {
-    return (
-      <header>
-        <Helmet bodyAttributes={{class:this.state.theme }}  meta={meta} />
-        <Brand title="diego dorado" />
-        <nav>
-          <a title="change theme color" href="/" onClick={this.onMouseClick}><span>◐</span></a>
-          |<PLink to={`/work`}>Work</PLink>
-          |<PLink to={`/music`}>Music</PLink>
-          |<PLink className="labs" to={`/labs`} >
-            <i>L</i>
-            <i>a</i>
-            <i>b</i>
-            <i>s</i>
-            </PLink>
-          |<PLink to={`/pics`}>Pics</PLink>
-          |<PLink to={`/bio`}>Bio</PLink>
-          {/* | <PLink to={`/log`}>Log</PLink>*/}
-        </nav>
-      </header>
-    )
+  const onChangeLanguageClick = e => {
+    e.preventDefault()
+    const prevlang = i18n.language
+    i18n.changeLanguage(i18n.language==='es'?'en':'es')
+    const pathname = location.pathname.replace(`/${prevlang}/`,`/${i18n.language}/`)
+    navigate(pathname)
   }
 
+  const PLink = ({ className, ...rest }) => (
+    <Link getProps={partiallyActive(className)} {...rest} />
+  )
+
+  return (
+    <header>
+      <Helmet bodyAttributes={{class:theme }}  meta={meta} />
+      <Brand title="diego dorado" />
+      <nav>
+        <a href="/" onClick={onChangeLanguageClick} className={i18n.language==='es'?'active':''}>es</a>/
+        <a href="/" onClick={onChangeLanguageClick} className={i18n.language==='en'?'active':''}>en</a>
+        <a title="change theme color" href="/" onClick={onChangeThemeClick}><span>◐</span></a>
+        |<PLink to={`/work`}>{t('Work')}</PLink>
+        |<PLink to={`/music`}>Music</PLink>
+        |<PLink className="labs" to={`/labs`} >
+          <i>L</i>
+          <i>a</i>
+          <i>b</i>
+          <i>s</i>
+          </PLink>
+        |<PLink to={`/pics`}>Pics</PLink>
+        |<PLink to={`/bio`}>Bio</PLink>
+        {/* | <PLink to={`/log`}>Log</PLink>*/}
+      </nav>
+    </header>
+  )
 
 }
 

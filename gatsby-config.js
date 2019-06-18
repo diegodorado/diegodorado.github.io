@@ -1,5 +1,6 @@
 module.exports = {
   siteMetadata: {
+    langs: ['en','es'],
     title: `diego dorado`,
     author: `Diego Dorado`,
     description: `diego dorado portfolio.`,
@@ -12,8 +13,8 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/content/blog`,
-        name: `blog`,
+        path: `${__dirname}/content/assets`,
+        name: `assets`,
       },
     },
     {
@@ -21,13 +22,6 @@ module.exports = {
       options: {
         path: `${__dirname}/content/works`,
         name: `works`,
-      },
-    },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        path: `${__dirname}/content/assets`,
-        name: `assets`,
       },
     },
     {
@@ -96,8 +90,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `diego dorado site`,
-        short_name: `diegodorado`,
+        name: `diego dorado`,
+        short_name: `diego dorado`,
         start_url: `/`,
         background_color: `#222222`,
         theme_color: `#dddddd`,
