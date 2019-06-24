@@ -21,7 +21,7 @@ const WorkIndex = ({ data, location }) => {
       </p>
       <section className="posts">
         {posts.map(({ node }) => {
-          if(node.fields.locale==='' || node.fields.locale===i18n.language)
+          if(node.fields.locale==='' || node.fields.locale===i18n.languages[0])
           return (
             <article className="post" key={node.fields.slug}>
               <Img fixed={node.frontmatter.cover.childImageSharp.fixed} />

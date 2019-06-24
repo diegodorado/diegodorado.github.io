@@ -32,6 +32,13 @@ module.exports = {
         instagram_id: "17841404423342614",
       },
     },
+    {
+      resolve: `gatsby-source-medium`,
+      options: {
+        username: `@_anadorado_`,
+        limit: 200,
+      },
+    },
     /*{
 
       resolve: `gatsby-source-soundcloud`,
@@ -100,6 +107,7 @@ module.exports = {
       },
     },
     `gatsby-plugin-offline`,
+    //'gatsby-plugin-preload-link-crossorigin',
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-plugin-google-fonts`,

@@ -40,6 +40,7 @@ class Playground extends React.Component {
 
   constructor(props){
     super(props);
+
     this.state = {
       tapped: false,
       tempo: '',
@@ -71,9 +72,8 @@ class Playground extends React.Component {
 
     this.setState({isDesktop: (typeof window.orientation === "undefined")})
 
-    const pattern = reactLocalStorage.get('pattern', randomPattern())
+    const pattern = (this.props.pattern!=='')? this.props.pattern : reactLocalStorage.get('pattern', randomPattern())
     const showInstructions = (reactLocalStorage.get('showInstructions', 'true')=== 'true')
-    console.log(showInstructions)
 
     this.setState({left: pattern, right: '',showInstructions})
     document.addEventListener("keydown", this.onKeyPress, false)

@@ -4,6 +4,7 @@ import Link from "../link"
 import Helmet from "react-helmet"
 import Brand from "./brand"
 import { useTranslation } from 'react-i18next'
+import {reactLocalStorage} from 'reactjs-localstorage'
 
 const meta = [
   {
@@ -35,12 +36,12 @@ const partiallyActive = className => ({ isPartiallyCurrent }) => ({
 const Header = ({location}) => {
 
 
-  const [theme, setTheme] = useState(
-    localStorage.getItem('theme') || 'dark',
-  )
+  const [theme, setTheme] = useState('dark')
+
+  useEffect(() => setTheme(reactLocalStorage.get('theme', 'dark')), [])
 
   useEffect(() => {
-    localStorage.setItem('theme', theme);
+    reactLocalStorage.set('theme', theme);
   }, [theme])
 
   const [t, i18n] = useTranslation();

@@ -18,10 +18,15 @@ const opts = {
 class LiveEmojingIndex extends React.Component {
   constructor(props){
     super(props);
+
+    const parts = props.location.hash.split('#')
+    const pattern = (parts.length >1) ? decodeURIComponent(parts[1]) : ''
+
     this.state = {
       connected: false,
       lastMsg: '',
       nick: '',
+      pattern: pattern
     }
   }
 
@@ -42,7 +47,7 @@ class LiveEmojingIndex extends React.Component {
         <div>
           {//<Nick onChanged={(nick)=>{this.setState({nick:nick})} } connected={this.state.connected}/>
           }
-          <Playground onCommit={this.onCommitPattern}/>
+          <Playground pattern={this.state.pattern} onCommit={this.onCommitPattern}/>
         </div>
       </Layout>
     )
