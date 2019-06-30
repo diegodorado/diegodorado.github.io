@@ -1,97 +1,72 @@
-import React from "react"
-import PropTypes from 'prop-types'
+import React, {useState, useEffect, useContext} from "react"
 import {reactLocalStorage} from 'reactjs-localstorage'
+import LiveEmojingContext from './context.js'
 
-class Nick extends React.Component {
+const Nick = () =>{
 
-  constructor(props){
-    super(props);
-    this.state = {
-      nick: '',
-      valid: false,
-      confirmed: false
-    }
-  }
+  const context = useContext(LiveEmojingContext)
+  const [valid, setValid] = useState(false)
+  const [confirmed, setConfirmed] = useState(false)
+  const [understandsNameClick, setUnderstandsNameClick] = useState(false)
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.connected !== this.props.connected){
-      this.setState({connected:nextProps.connected});
-    }
-  }
-
-  componentDidMount(){
-    const nick = reactLocalStorage.get('nick', '')
+  useEffect(()=>{
+    const nick = reactLocalStorage.get('nick', 'funky-duck')
     if(nick!==''){
-      this.setState({nick: nick, valid: true, confirmed: true})
-      this.props.onChanged(nick)
+      context.setNick(nick)
+      setValid(true)
+      setConfirmed(true)
+    }
+
+    const understands = (reactLocalStorage.get('understandsNameClick', 'false')==='true')
+    setUnderstandsNameClick(understands)
+  },[])
+
+  const onChange = (e) => {
+    context.setNick(e.target.value)
+    setValid(e.target.validity.valid)
+  }
+
+  const onBlur = (e) => {
+    console.log('blurrrr')
+  }
+
+  const handleFocus = (event) => event.target.select();
+
+  const onChangeClick = (e) => {
+    e.preventDefault()
+    setConfirmed(false)
+    //hides help and save setting
+    reactLocalStorage.set('understandsNameClick', true)
+    setUnderstandsNameClick(true)
+  }
+
+  const confirm = () => {
+    if(valid){
+      reactLocalStorage.set('nick', context.nick)
+      setConfirmed(true)
     }
   }
 
-  onChange = (e) => {
-    this.setState({nick: e.target.value, valid: e.target.validity.valid});
-  }
-
-  onChangeClick = (e) => {
+  const onConfirm = (e) => {
     e.preventDefault()
-    this.setState({confirmed: false});
-    this.props.onChanged('')
+    confirm()
   }
 
-
-
-  confirm = () => {
-    if(this.state.valid){
-      reactLocalStorage.set('nick', this.state.nick)
-      this.setState({confirmed: true});
-      this.props.onChanged(this.state.nick)
-    }
-  }
-
-  onConfirm = (e) => {
-    e.preventDefault()
-    this.confirm()
-  }
-
-  onKeyPress = (event) => {
+  const onKeyPress = (event) => {
     if(event.key === 'Enter'){
-      this.confirm()
+      confirm()
     }
   }
 
-  render() {
-    let nick = 'Connecting...'
-
-    if (this.state.connected) {
-      if(this.state.confirmed){
-        nick = (
-          <div className="nick">
-            <p>
-              Hi {this.state.nick}! <em><a href="/" onClick={this.onChangeClick}>Change nick</a></em>
-            </p>
-          </div>
-        )
-      }else{
-        nick = (
-          <div className="nick">
-            <p>
-              Choose a nickname.
-            </p>
-            <input placeholder="funky-duck" type="text" value={this.state.nick} onChange={this.onChange} autoFocus required pattern="^[A-Za-z0-9_-]{3,15}$" onKeyPress={this.onKeyPress} />
-            <button onClick={this.onConfirm}>{"Let's"} Play</button>
-          </div>
-        )
+  return (
+    <>
+      {confirmed?
+        (<p><em>Hey</em> <a href="/" onClick={onChangeClick}>{context.nick}</a> ! {(!understandsNameClick)?<span> {'<--- '} Click the name to change it </span>:null}</p>):
+        (<input type="text" value={context.nick} onChange={onChange} onBlur={confirm} autoFocus required pattern="^[A-Za-z0-9_-]{3,15}$" onKeyPress={onKeyPress} onFocus={handleFocus} size={15} maxLength={15}/>)
       }
-    }
+    </>
+  )
 
-    return nick
-  }
 }
-
-//And don't forget that the child will need this function declared in its propTypes:
-
-Nick.propTypes = {
-  onChanged: PropTypes.func.isRequired,
-  connected: PropTypes.bool.isRequired,
-};
 
 export default Nick

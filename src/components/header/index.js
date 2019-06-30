@@ -1,15 +1,33 @@
-import React, {useState, useEffect} from "react"
-import { navigate } from "gatsby"
+import React from "react"
 import Link from "../link"
 import Helmet from "react-helmet"
 import Brand from "./brand"
+import LanguagesLinks from "./languages-links"
+import ThemeToggle from "./theme-toggle"
 import { useTranslation } from 'react-i18next'
-import {reactLocalStorage} from 'reactjs-localstorage'
 
 const meta = [
   {
     name: `viewport`,
-    content: `width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no`,
+    content: `width=device-width, initial-scale=1.0
+class LELayout extends React.Component {
+
+  render() {
+    const { children } = this.props
+
+    return (
+      <div id="app">
+        <header>
+          <Helmet bodyAttributes={{class:'dark live-emojing'}} />
+          <Brand title="live emojing"/>
+          <LanguagesLinks location={location}/>
+        </header>
+        <main>{children}</main>
+      </div>
+    )
+  }
+}
+, maximum-scale=1.0, user-scalable=no`,
   },
   {
     name: `theme-color`,
@@ -33,31 +51,10 @@ const partiallyActive = className => ({ isPartiallyCurrent }) => ({
 
 
 
+
 const Header = ({location}) => {
 
-
-  const [theme, setTheme] = useState('dark')
-
-  useEffect(() => setTheme(reactLocalStorage.get('theme', 'dark')), [])
-
-  useEffect(() => {
-    reactLocalStorage.set('theme', theme);
-  }, [theme])
-
   const [t, i18n] = useTranslation();
-
-  const onChangeThemeClick = e => {
-    e.preventDefault()
-    setTheme((theme==='dark') ? 'light' : 'dark')
-  }
-
-  const onChangeLanguageClick = e => {
-    e.preventDefault()
-    const prevlang = i18n.languages[0]
-    i18n.changeLanguage(i18n.languages[0]==='es'?'en':'es')
-    const pathname = location.pathname.replace(`/${prevlang}/`,`/${i18n.languages[0]}/`)
-    navigate(pathname)
-  }
 
   const PLink = ({ className, ...rest }) => (
     <Link getProps={partiallyActive(className)} {...rest} />
@@ -65,12 +62,11 @@ const Header = ({location}) => {
 
   return (
     <header>
-      <Helmet bodyAttributes={{class:theme }}  meta={meta} />
+      <Helmet meta={meta} />
       <Brand title="diego dorado" />
       <nav>
-        <a href="/" onClick={onChangeLanguageClick} className={i18n.languages[0]==='es'?'active':''}>es</a>/
-        <a href="/" onClick={onChangeLanguageClick} className={i18n.languages[0]==='en'?'active':''}>en</a>
-        <a title="change theme color" href="/" onClick={onChangeThemeClick}><span>◐</span></a>
+        <LanguagesLinks location={location}/>
+        <ThemeToggle />
         <br/>
         <PLink to={`/work`}>{t('Work')}</PLink>
         |<PLink to={`/music`}>{t('Music')}</PLink>

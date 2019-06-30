@@ -1,22 +1,18 @@
 import React from "react"
 import Brand from "../components/header/brand"
+import LanguagesLinks from "../components/header/languages-links"
 import Helmet from "react-helmet"
 
-class LELayout extends React.Component {
+const Layout = ({ children , location})  =>
+  <div id="app">
+    <header>
+      <Helmet bodyAttributes={{class:'dark live-emojing'}} />
+      <Brand title="live emojing"/>
+      <nav>
+        <LanguagesLinks location={location}/>
+      </nav>
+    </header>
+    <main>{children}</main>
+  </div>
 
-  render() {
-    const { children } = this.props
-
-    return (
-      <div id="app">
-        <header>
-          <Helmet bodyAttributes={{class:'dark live-emojing'}} />
-          <Brand title="live emojing"/>
-        </header>
-        <main>{children}</main>
-      </div>
-    )
-  }
-}
-
-export default LELayout
+export default Layout

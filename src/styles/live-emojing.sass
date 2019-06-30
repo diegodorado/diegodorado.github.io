@@ -1,7 +1,5 @@
-
-
 .live-emojing
-  .expand
+  .expand, .help, .config
     @extend %no-select
     z-index: 1000
     display: block
@@ -9,53 +7,74 @@
     right: 0
     padding: 16px
     outline: 0
-
-  .help
-    cursor: pointer
-    z-index: 1000
-    display: block
-    position: absolute
     top: 0
-    right: 60px
-    padding: 16px
-    outline: 0
-    animation: expand 2s infinite alternate
+    cursor: pointer
     width: 40px
     height: 40px
+    animation: expand 2s infinite alternate
+
+  .help
+    right: 60px
+  .config
+    right: 120px
 
   header
     margin: 10px 0
+    nav
+      text-align: left
+
 
   touch-action: pan-y
-  input,button, label
+  input
     font-size: 1.5em
     border:  0
     box-sizing: border-box
     outline: 0
-    width: 100%
   input:required:valid
     border: 3px solid cyan
   input:required:invalid
-    border: 3px solid #f00
+    border: 3px solid magenta
   button
-    cursor: pointer
+
     &:hover
       background: #999
-  .setup
-    label
+  .connection
+    .session
+      h3
+        text-align: center
+        margin-bottom: 0
+        font-size: 1.5em
+      .btn
+        background: cyan
+    .btn
+      border:  0
+      outline: 0
+      cursor: pointer
+      width: 40%
       display: inline-block
-      width: 30%
-      text-align: right
-    input
-      width: 70%
-      text-align: right
-      padding: 0 0.5em
-    button
-      margin-left: 30%
-      width: 70%
-  .nick
-    button
-      margin-top: 20px
+      text-align: center
+      padding: 3% 5%
+      margin: 5%
+      box-sizing: border-box
+      background: #ccc
+      color: black
+      text-decoration: none
+      font-size: 1.0em
+      word-wrap: normal
+      word-break: keep-all
+      white-space: nowrap
+      font-family: inherit
+      &:hover
+        background: #999
+    .avatar
+      border-radius: 50%
+      cursor: pointer
+      transition: transform 0.2s linear
+      float: left
+      margin: 0 20px 20px 0
+      &.loading
+        transform: scale(0.97)
+        filter: blur(2px) grayscale(1)
   .emoji-mart
     @extend %no-select
     background: white
