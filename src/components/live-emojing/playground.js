@@ -29,7 +29,7 @@ import parser from "./tidal"
 import Tone from "tone"
 import LiveEmojingContext from './context.js'
 
-//todo: split this file in smaller modules!
+//todo: split this file in smaller modules! please!!
 
 
 const git_raw = 'https://raw.githubusercontent.com/diegodorado/emoji-samples/master/'
@@ -63,7 +63,7 @@ const Playground = ({pattern}) =>{
   const [samplesLoaded, setSamplesLoaded] = useState(false)
   const [soundOn, setSoundOn] = useState(false)
   const [tempo, setTempo] = useState('')
-  const [left, setLeft] = useState(pattern)
+  const [left, setLeft] = useState('')
   const [right, setRight] = useState('')
   const [canvasWidth, setCanvasWidth] = useState(1)
   const [canvasHeight, setCanvasHeight] = useState(1)
@@ -71,52 +71,69 @@ const Playground = ({pattern}) =>{
 
   useEffect(()=>{
 
-    if(Tone.context.state==='running')
-       initAudio()
+    if(context.playingAlone){
+      if(Tone.context.state==='running')
+         initAudio()
 
-    //todo: use async/await
-    fetch(`${git_raw}listing.json`)
-      .then( r => r.json())
-      .then((data) => setListingData(data))
-      .catch((err) => {console.log(err)})
+      //todo: use async/await
+      fetch(`${git_raw}listing.json`)
+        .then( r => r.json())
+        .then((data) => setListingData(data))
+        .catch((err) => {console.log(err)})
+
+      canvasCtx = canvasRef.current.getContext("2d")
+      canvasCtx.lineWidth = 2
+      canvasCtx.fillStyle = 'blue'
+      canvasCtx.font = 'bold 100px Arial'
+
+      requestAnimationFrame(tick)
+    }
 
     setIsDesktop(typeof window.orientation === "undefined")
 
+    //todo: open play alone when pattern is on url
     //got pattern from url?
-    if(!left)
-      setLeft(reactLocalStorage.get('pattern', randomPattern()))
+    //setLeft( pattern ? pattern : reactLocalStorage.get('pattern', randomPattern()))
+    setLeft(left=> pattern ? pattern : reactLocalStorage.get('pattern', randomPattern()))
 
     setShowInstructions(reactLocalStorage.get('showInstructions', 'true')=== 'true')
 
-    document.addEventListener('keydown', onKeyPress, false)
-    document.addEventListener('fullscreenchange', onFullScreenChange, false)
-    window.addEventListener('resize', onWindowResize, false)
+    document.addEventListener('fullscreenchange', onFullScreenChange)
+    window.addEventListener('resize', onWindowResize)
 
-    canvasCtx = canvasRef.current.getContext("2d")
-    canvasCtx.lineWidth = 2
-    canvasCtx.fillStyle = 'blue'
-    canvasCtx.font = 'bold 100px Arial'
-
-    requestAnimationFrame(tick)
     onWindowResize()
 
 
     // Specify how to clean up after this effect:
-    return function cleanup() {
-      document.removeEventListener("keydown", onKeyPress, false)
-      document.removeEventListener("fullscreenchange", onFullScreenChange, false)
-      window.removeEventListener('resize', onWindowResize, false)
+    return () => {
+      document.removeEventListener("fullscreenchange", onFullScreenChange)
+      window.removeEventListener('resize', onWindowResize)
 
-      Tone.context.suspend()
-      stopAnimation = true
+      if(context.playingAlone){
+        Tone.context.suspend()
+        stopAnimation = true
+      }
     }
 
   },[])
 
 
+
+  useEffect(()=>{
+    //re-attach listener if left, right or error have changed
+    window.addEventListener('keydown', onKeyPress)
+    // Specify how to clean up after this effect:
+    return () => {
+      window.removeEventListener("keydown", onKeyPress)
+    }
+  },[left, right, error, soundOn])
+
+
+
   useEffect(()=>{
 
-    ensureEmojiSamples()
+    if(context.playingAlone)
+      ensureEmojiSamples()
 
     try {
       parsedGrammar = parser.parse(left+right)
@@ -170,6 +187,7 @@ const Playground = ({pattern}) =>{
 
 
   const onWindowResize = () =>{
+
     setCanvasWidth(window.innerWidth)
     setCanvasHeight(window.innerHeight/2)
   }
@@ -233,10 +251,12 @@ const Playground = ({pattern}) =>{
 
 
   const onKeyPress = (e) => {
+    //todo: implement copy/paste
     if( e.ctrlKey /* || e.altKey || e.metaKey || e.shiftKey   || e.repeat*/ )
       return
 
     const c = e.key.toLowerCase()
+
     if( c.length===1 &&  c >='a' && c <='z'){
       const i = c.charCodeAt(0) - 'a'.charCodeAt(0)
       setLeft( l => l + alphaEmoji[i])
@@ -329,6 +349,20 @@ const Playground = ({pattern}) =>{
     }
   }
 
+
+  const moveCarret = (isLeft,index) => {
+    const l = emojiArray(left)
+    const r = emojiArray(right)
+    const all = l.concat(r)
+
+    if(!isLeft)
+      index += l.length
+
+    setLeft(all.slice(0,index).join(''))
+    setRight(all.slice(index).join(''))
+  }
+
+
   const onHideInstructionsClick = (e) => {
     e.preventDefault()
     e.stopPropagation()
@@ -347,6 +381,8 @@ const Playground = ({pattern}) =>{
 
   const onSoundToggle = (e) => {
     e.preventDefault()
+    if(!context.playingAlone)
+      return
 
     if(Tone.context.state==='running') {
       clearTransportSchedules()
@@ -381,7 +417,6 @@ const Playground = ({pattern}) =>{
 
     const p = left+right
     reactLocalStorage.set('pattern', p)
-    //this.props.onCommit(p)
 
     setHighlighted(true)
     setTimeout(() => setHighlighted(false),300)
@@ -390,6 +425,10 @@ const Playground = ({pattern}) =>{
       clearTransportSchedules()
       schedule(parsedGrammar)
     }
+    if(!context.playingAlone){
+      context.sendPattern(p)
+    }
+
 
   }
 
@@ -558,6 +597,13 @@ const Playground = ({pattern}) =>{
   }
 
   const onPreviewClick = (e)=>{
+    //todo: review this tap behaviour
+    return
+
+
+    if(!context.playingAlone)
+      return
+
     setTapped(true)
     setTapping(true)
     setTimeout(()=> setTapped(false),40)
@@ -593,12 +639,21 @@ const Playground = ({pattern}) =>{
       <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight} />
       {showInstructions &&
         <div className="instructions" onClick={onInstructionsClick}>
+          {context.playingAlone ? null :
+            <div className="welcome">
+              <img src={context.avatarUrl} width={90} />
+              <p>
+                Hi {context.nick}.<br/>
+                You joined {context.channel}.<br/>
+                <em>(<a href="/" onClick={context.toggleConfiguring}>change</a>)</em>
+              </p>
+            </div>}
           <h4>Instructions:</h4>
           <ul>
             <li>Throw a <a className="dice-btn" href="/" onClick={onRandomClick}><span role="img" aria-label="dice">🎲</span></a> {isDesktop && (<>[TAB] </>)}.</li>
             <li>Play <a className="play-btn" href="/" onClick={onCommitClick}><FaPlay /></a> {isDesktop && (<>[ENTER] </>)}.</li>
             <li>Go full screen <FaExpand className="fullscreen-btn" onClick={onExpandClick}/></li>
-            <li>Tap screen to set tempo</li>
+            {(false && context.playingAlone) ? <li>Tap screen to set tempo</li>: null}
             {isDesktop && (<li>Magical keyboard! ( A={alphaEmoji[0]}, B={alphaEmoji[1]}, so on)</li>)}
             <li>Got it? Then <a href="/" onClick={onHideInstructionsClick}>hide this</a></li>
           </ul>
@@ -607,19 +662,20 @@ const Playground = ({pattern}) =>{
         <FaExpand/>
         <FaCompress/>
       </a>
-      <FaCog className="config" onClick={context.toggleConfiguring}/>
       <FaQuestionCircle className="help" onClick={onToggleHelpClick}/>
       <div className={`${ tapping ? 'tapping' : '' }  ${ error ? 'error' : '' } input`}>
         <span className="clipper" role="img" aria-label="doubt">🤔</span>
         <span className="tempo">{(parseInt(tempo)===tempo)? <><i>{tempo}</i> bpm</> : tempo}</span>
         <pre onClick={onPreviewClick} className={`${ tapped ? 'tapped' : '' } ${highlighted ? 'highlight' : '' } preview`}>
-          {left}<span className="carret"></span>{right}
+          {emojiArray(left).map((e,i) => <span key={i} onClick={()=>moveCarret(true,i)}>{e}</span>)}
+          <span className="carret"></span>
+          {emojiArray(right).map((e,i) => <span key={i} onClick={()=>moveCarret(false,i)}>{e}</span>)}
         </pre>
         <nav>
           <FaCaretLeft onClick={onLeftClick}/>
           <FaCaretRight onClick={onRightClick}/>
-          <FaBackspace  onClick={onBackspaceClick} onMouseUp={onBackspaceUp} onMouseDown={onBackspaceDown} />
-          {soundOn ? <FaVolume onClick={onSoundToggle}/> : <FaVolumeSlash onClick={onSoundToggle}/>}
+          <FaBackspace  onClick={onBackspaceClick} onTouchStart={onBackspaceDown} onTouchEnd={onBackspaceUp} onMouseDown={onBackspaceDown} onMouseUp={onBackspaceUp} onMouseLeave={onBackspaceUp}/>
+          {context.playingAlone ? (soundOn ? <FaVolume onClick={onSoundToggle}/> : <FaVolumeSlash onClick={onSoundToggle}/>): null}
           <FaDice onClick={onRandomClick}/>
           <FaPlay className="commit-btn" onClick={onCommitClick}/>
         </nav>

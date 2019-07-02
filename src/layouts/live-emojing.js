@@ -8,9 +8,10 @@ const Layout = ({ children , location})  =>
     <header>
       <Helmet bodyAttributes={{class:'dark live-emojing'}} />
       <Brand title="live emojing"/>
-      <nav>
-        <LanguagesLinks location={location}/>
-      </nav>
+      {//<nav>
+        //<LanguagesLinks location={location}/>
+      //</nav>
+    }
     </header>
     <main>{children}</main>
   </div>

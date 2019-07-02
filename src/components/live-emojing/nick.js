@@ -26,11 +26,7 @@ const Nick = () =>{
     setValid(e.target.validity.valid)
   }
 
-  const onBlur = (e) => {
-    console.log('blurrrr')
-  }
-
-  const handleFocus = (event) => event.target.select();
+  const handleFocus = (event) => event.target.select()
 
   const onChangeClick = (e) => {
     e.preventDefault()

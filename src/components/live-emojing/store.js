@@ -4,8 +4,8 @@ import simpleDDP from 'simpleddp'
 import ws from 'isomorphic-ws'
 
 const opts = {
-    // endpoint: "wss://av.thundernize.com/websocket",
-    endpoint: "ws://localhost:3000/websocket",
+    endpoint: "wss://av.thundernize.com/websocket",
+    //endpoint: "ws://localhost:3000/websocket",
     SocketConstructor: ws,
     reconnectInterval: 5000
 }
@@ -19,7 +19,6 @@ const LiveEmojingStore = ({children}) => {
   const [lastMsg, setLastMsg] = useState('')
   const [nick, setNick] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
-  const [pattern, setPattern] = useState('')
   const [servers, setServers] = useState([])
   const [channel, setChannel] = useState('')
   const [playingAlone, setPlayingAlone] = useState(false)
@@ -66,12 +65,12 @@ const LiveEmojingStore = ({children}) => {
     setChannel(channel)
   }
 
-  const sendPattern = ()=>{
-    ddp.call('emojis.send',channel, {nick,pattern})
+  const sendPattern = (pattern)=>{
+    ddp.call('emojis.send',channel, {nick, avatarUrl, pattern})
   }
 
   return (
-    <LiveEmojingContext.Provider value={{connected,nick,pattern,servers,joinChannel, setNick, sendPattern, avatarUrl, setAvatarUrl,toggleConfiguring,configuring,playAlone,playingAlone}}>
+    <LiveEmojingContext.Provider value={{connected,nick,servers,channel, joinChannel,setNick,sendPattern, avatarUrl, setAvatarUrl,toggleConfiguring,configuring,playAlone,playingAlone}}>
       {children}
     </LiveEmojingContext.Provider>
   )

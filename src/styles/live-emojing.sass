@@ -1,5 +1,5 @@
 .live-emojing
-  .expand, .help, .config
+  .expand, .help
     @extend %no-select
     z-index: 1000
     display: block
@@ -15,8 +15,6 @@
 
   .help
     right: 60px
-  .config
-    right: 120px
 
   header
     margin: 10px 0
@@ -39,7 +37,7 @@
     &:hover
       background: #999
   .connection
-    .session
+    .channel
       h3
         text-align: center
         margin-bottom: 0
@@ -103,6 +101,18 @@
       pointer-events: none
       z-index: -1
     .instructions
+      padding-top: 10px
+      .welcome
+        border: 2px dashed $white
+        padding: 12px
+        p
+          margin: 0
+          padding: 0 0 0 110px
+          text-align: center
+        img
+          border-radius: 50%
+          float: left
+
       ul
         li
           line-height: 2em
@@ -206,7 +216,6 @@
           border-color: transparent transparent #ffffff transparent
 
 
-
     nav
       width: 100%
       border: 1px solid white
@@ -229,12 +238,10 @@ html.full-screen
     .help
       display: none
     .expand
+      top: calc(50vh - 120px)
       svg:nth-child(1)
         display: none
-    header
-      height: 0
-      margin: 0
-    .nick, .setup, .hint, header h1, .instructions
+    header, .instructions
       display: none
     #app
       margin: 0
@@ -255,8 +262,6 @@ html.full-screen
 html.normal
   .live-emojing
     .expand
-      top: 0
-      animation: expand 2s infinite alternate
       svg
         width: 40px
         height: 40px
