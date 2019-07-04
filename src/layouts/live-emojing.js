@@ -1,6 +1,6 @@
 import React from "react"
 import Brand from "../components/header/brand"
-import LanguagesLinks from "../components/header/languages-links"
+//import LanguagesLinks from "../components/header/languages-links"
 import Helmet from "react-helmet"
 
 const Layout = ({ children , location})  =>

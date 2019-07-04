@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 const LanguagesLinks = ({location}) => {
 
-  const [t, i18n] = useTranslation();
+  const [, i18n] = useTranslation();
 
   const onChangeLanguageClick = e => {
     e.preventDefault()

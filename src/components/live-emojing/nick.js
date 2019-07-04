@@ -43,11 +43,6 @@ const Nick = () =>{
     }
   }
 
-  const onConfirm = (e) => {
-    e.preventDefault()
-    confirm()
-  }
-
   const onKeyPress = (event) => {
     if(event.key === 'Enter'){
       confirm()

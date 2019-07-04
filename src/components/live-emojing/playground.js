@@ -13,8 +13,7 @@ import { FaBackspace,
          FaCompress,
          FaVolume,
          FaVolumeSlash,
-         FaQuestionCircle,
-         FaCog
+         FaQuestionCircle
         } from 'react-icons/fa'
 import {alphaEmoji,
         randomPattern,
@@ -26,10 +25,14 @@ import {alphaEmoji,
         i18nEmojis } from './utils'
 
 import parser from "./tidal"
+import Pattern from "./pattern"
 import Tone from "tone"
 import LiveEmojingContext from './context.js'
 
 //todo: split this file in smaller modules! please!!
+const emojis = Object.values(emojiIndex.emojis).map((e)=>e.native)
+const emoji_ids = Object.values(emojiIndex.emojis)
+  .reduce((o,e)=>Object.assign(o,{[e.native]:sanitizeEmojiId(e.id)}),{})
 
 
 const git_raw = 'https://raw.githubusercontent.com/diegodorado/emoji-samples/master/'
@@ -137,6 +140,19 @@ const Playground = ({pattern}) =>{
 
     try {
       parsedGrammar = parser.parse(left+right)
+
+      const sounds = emojiArray(left+right)
+        .map(c => (c.codePointAt(0) < 128) ? c : `[${emoji_ids[c]}]`)
+        .join('')
+
+      console.log(sounds)
+      const pattern1 = Pattern(sounds)
+      console.log(parsedGrammar, 'querying 0 - 1:' )
+      pattern1.query( 0, 1 )
+      pattern1.print()
+      pattern1.query( 1,2 )
+      pattern1.print()
+
       setError(false)
     }
     catch(error) {
@@ -210,7 +226,7 @@ const Playground = ({pattern}) =>{
 
     if(tapped>0){
       //warning!
-      tapped -= 0.3
+      setTapped( t => t - 0.3)
       canvasCtx.fillStyle = 'green'
       canvasCtx.fillRect(20, 10, 150, 100)
     }
@@ -366,7 +382,6 @@ const Playground = ({pattern}) =>{
   const onHideInstructionsClick = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    const showInstructions = false
     reactLocalStorage.set('showInstructions', false)
     setShowInstructions(false)
   }
@@ -472,9 +487,6 @@ const Playground = ({pattern}) =>{
   }
 
   const schedule = (root)=>{
-    const emojis = Object.values(emojiIndex.emojis).map((e)=>e.native)
-    const emoji_ids = Object.values(emojiIndex.emojis)
-      .reduce((o,e)=>Object.assign(o,{[e.native]:sanitizeEmojiId(e.id)}),{})
 
     const process_emoji = (params) =>{
       if(!samplesLoaded)
@@ -598,6 +610,7 @@ const Playground = ({pattern}) =>{
 
   const onPreviewClick = (e)=>{
     //todo: review this tap behaviour
+    // eslint-disable-next-line
     return
 
 
@@ -641,7 +654,7 @@ const Playground = ({pattern}) =>{
         <div className="instructions" onClick={onInstructionsClick}>
           {context.playingAlone ? null :
             <div className="welcome">
-              <img src={context.avatarUrl} width={90} />
+              <img alt="" src={context.avatarUrl} width={90} />
               <p>
                 Hi {context.nick}.<br/>
                 You joined {context.channel}.<br/>
@@ -674,7 +687,7 @@ const Playground = ({pattern}) =>{
         <nav>
           <FaCaretLeft onClick={onLeftClick}/>
           <FaCaretRight onClick={onRightClick}/>
-          <FaBackspace  onClick={onBackspaceClick} onTouchStart={onBackspaceDown} onTouchEnd={onBackspaceUp} onMouseDown={onBackspaceDown} onMouseUp={onBackspaceUp} onMouseLeave={onBackspaceUp}/>
+          <FaBackspace  onClick={onBackspaceClick} onTouchStart={onBackspaceDown} onTouchEnd={onBackspaceUp} onMouseDown={onBackspaceDown} onMouseUp={onBackspaceUp} />
           {context.playingAlone ? (soundOn ? <FaVolume onClick={onSoundToggle}/> : <FaVolumeSlash onClick={onSoundToggle}/>): null}
           <FaDice onClick={onRandomClick}/>
           <FaPlay className="commit-btn" onClick={onCommitClick}/>

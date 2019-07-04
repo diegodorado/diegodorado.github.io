@@ -29,7 +29,7 @@ const WorkPostTemplate = ({ data, pageContext, location }) => {
         <h2>{post.frontmatter.title}</h2>
         {pagination}
       </div>
-      <div className="work-post" dangerouslySetInnerHTML={{ __html: post.html }} />
+      <div className={`${post.frontmatter.style ? post.frontmatter.style : ''} work-post`} dangerouslySetInnerHTML={{ __html: post.html }} />
       {pagination}
     </Layout>
   )
@@ -52,6 +52,7 @@ export const pageQuery = graphql`
       html
       frontmatter {
         title
+        style
         date(formatString: "MMMM DD, YYYY")
         description
       }

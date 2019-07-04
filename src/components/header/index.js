@@ -9,25 +9,7 @@ import { useTranslation } from 'react-i18next'
 const meta = [
   {
     name: `viewport`,
-    content: `width=device-width, initial-scale=1.0
-class LELayout extends React.Component {
-
-  render() {
-    const { children } = this.props
-
-    return (
-      <div id="app">
-        <header>
-          <Helmet bodyAttributes={{class:'dark live-emojing'}} />
-          <Brand title="live emojing"/>
-          <LanguagesLinks location={location}/>
-        </header>
-        <main>{children}</main>
-      </div>
-    )
-  }
-}
-, maximum-scale=1.0, user-scalable=no`,
+    content: `width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no`,
   },
   {
     name: `theme-color`,
@@ -54,7 +36,7 @@ const partiallyActive = className => ({ isPartiallyCurrent }) => ({
 
 const Header = ({location}) => {
 
-  const [t, i18n] = useTranslation();
+  const [t, ] = useTranslation();
 
   const PLink = ({ className, ...rest }) => (
     <Link getProps={partiallyActive(className)} {...rest} />

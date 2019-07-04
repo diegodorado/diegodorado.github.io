@@ -7,7 +7,7 @@ import SEO from "../components/seo"
 import { Trans, useTranslation } from 'react-i18next'
 
 const PicsIndex = ({ data, location }) => {
-  const [t, i18n] = useTranslation();
+  const [t, ] = useTranslation();
   const pics = data.allFile.edges
   const posts = data.allInstaNode.edges
 

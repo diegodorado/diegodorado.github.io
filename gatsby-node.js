@@ -188,3 +188,17 @@ exports.onCreatePage = ({ page, actions }) => {
 
 
 }
+
+// adds optional defaults to frontmatter
+exports.sourceNodes = ({ actions }) => {
+  const { createTypes } = actions
+  const typeDefs = `
+    type MarkdownRemark implements Node {
+      frontmatter: Frontmatter
+    }
+    type Frontmatter {
+      style: String
+    }
+  `
+  createTypes(typeDefs)
+}

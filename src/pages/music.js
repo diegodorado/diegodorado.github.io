@@ -2,14 +2,12 @@ import React from "react"
 import Layout from "../layouts/main"
 import SEO from "../components/seo"
 import SoundPlayer from '../components/sound-player'
-import { Trans, useTranslation } from 'react-i18next'
+import { Trans } from 'react-i18next'
 
 const clientId = '802921cdc630a9a0d66f25c665703b8c';
 const resolveUrl = 'https://soundcloud.com/diego-dorado/sets/music';
 
 const MusicIndex = ({ data, location }) => {
-  const [t, i18n] = useTranslation();
-
   //const { data } = this.props
   //const tracks = data.allSoundcloudtrack.edges
   return (

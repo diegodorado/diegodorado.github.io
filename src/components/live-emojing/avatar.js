@@ -24,7 +24,7 @@ const Avatar = () =>{
     }
 
     setLoadingAvatar(true)
-    const img = new Image
+    const img = new Image()
     img.onload = () => {
       reactLocalStorage.set('avatarUrl', url)
       context.setAvatarUrl(url)
@@ -47,7 +47,7 @@ const Avatar = () =>{
 
   return (
     <>
-      <img width={150} height={150} src={context.avatarUrl} onClick={onChangeAvatar} className={`${ loadingAvatar ? 'loading' : '' }  avatar`}/>
+      <img alt="" width={150} height={150} src={context.avatarUrl} onClick={onChangeAvatar} className={`${ loadingAvatar ? 'loading' : '' }  avatar`}/>
       {(!understandsAvatarClick)?<p>{'<--- '}Click the avatar to change it</p>:null}
     </>
   )

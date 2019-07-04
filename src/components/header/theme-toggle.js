@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from "react"
 import Helmet from "react-helmet"
-import { useTranslation } from 'react-i18next'
 import {reactLocalStorage} from 'reactjs-localstorage'
 
 const ThemeToggle = () => {
@@ -12,8 +11,6 @@ const ThemeToggle = () => {
   useEffect(() => {
     reactLocalStorage.set('theme', theme);
   }, [theme])
-
-  const [t, i18n] = useTranslation();
 
   const onChangeThemeClick = e => {
     e.preventDefault()

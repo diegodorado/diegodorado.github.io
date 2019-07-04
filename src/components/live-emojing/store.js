@@ -16,7 +16,6 @@ let ddp = null
 const LiveEmojingStore = ({children}) => {
 
   const [connected, setConnected] = useState(false)
-  const [lastMsg, setLastMsg] = useState('')
   const [nick, setNick] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
   const [servers, setServers] = useState([])

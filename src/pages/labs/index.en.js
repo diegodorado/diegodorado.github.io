@@ -15,7 +15,7 @@ const LabsIndex = ({location})  =>
         <p>
           Embrace live coding by playing with emojis.
           Try out some TidalCycles patterns right in the browser.
-          You may even join someone doing <Link to={`/works/live-emojing`} >live emojing</Link> if there is an open session.
+          You may even join someone doing <Link to={`/works/live-emojing`} >live emojing</Link> if there is an open channel.
         </p>
       </li>
       <li>
@@ -28,7 +28,7 @@ const LabsIndex = ({location})  =>
       </li>
       <li>
         <h4><Link to={`/labs/fmtribe`} >FM TRIBE</Link></h4>
-        <p>FMTribe by is an OPL3 synth/drum machine/thingie focused on live jamming for DOS.
+        <p>FMTribe is an OPL3 synth/drum machine/thingie focused on live jamming for DOS.
         <br/>
         Developed by <a href="https://github.com/munshkr" target="_blank" rel="noopener noreferrer">munshkr</a> and brought to the browser thanks to <a href="https://js-dos.com/" target="_blank" rel="noopener noreferrer">js-dos</a>.
         Checkout <a href="https://github.com/munshkr/fmtribe" target="_blank" rel="noopener noreferrer">fmtribe sources</a>.</p>
@@ -36,7 +36,7 @@ const LabsIndex = ({location})  =>
 
     </ul>
     <p className="spacey">
-      There are also miscellaneous contents listed that would otherwise be hidden <em>(even for me)</em>
+      There are also miscellaneous contents that would otherwise be hidden <em>(even for me)</em>
     </p>
     <ul>
       <li><a href="/live-emojing-presentation/" target="new" >Live Emojing Presentation</a></li>

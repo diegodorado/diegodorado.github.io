@@ -1,17 +1,16 @@
-import React, {useState, useEffect, useContext} from "react"
-import {reactLocalStorage} from 'reactjs-localstorage'
+import React, {useContext} from "react"
 import LiveEmojingContext from './context.js'
 import Nick from './nick.js'
 import Avatar from './avatar.js'
 import Emoji from '../emoji.js'
 import {FaEye,FaSignInAlt,FaPlay} from 'react-icons/fa'
-import { Trans, useTranslation } from 'react-i18next'
+import {useTranslation } from 'react-i18next'
 import Link from "../link"
 
 const Connection = () =>{
 
   const context = useContext(LiveEmojingContext)
-  const [t, i18n] = useTranslation();
+  const [t, ] = useTranslation();
 
 
   return (

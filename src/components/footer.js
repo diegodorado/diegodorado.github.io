@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 const Footer = () => {
 
+  // eslint-disable-next-line
   const [t, i18n] = useTranslation();
 
   //strange place to have the quotes...

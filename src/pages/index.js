@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import Layout from "../layouts/main"
 
 const Home = () => {
-  const [t, i18n] = useTranslation();
+  const [, i18n] = useTranslation();
   useEffect(() => navigate(`/${i18n.languages[0]}/work`), []);
   //return empty layout instead of null to avoid FOUC
   return (

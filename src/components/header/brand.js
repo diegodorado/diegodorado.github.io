@@ -3,7 +3,7 @@ import { Link } from "gatsby"
 import PropTypes from 'prop-types'
 
 const swaps = [['i','1'],['e','3'],['o','0'],['g','6'],['a','4']]
-
+//todo: improve performance
 class Brand extends React.Component {
 
   constructor(props){
@@ -33,11 +33,11 @@ class Brand extends React.Component {
   }
 
   componentDidMount(){
-    //this.intervalId = setInterval(this.timer.bind(this), 100);
+    this.intervalId = setInterval(this.timer.bind(this), 100);
   }
 
   componentWillUnmount(){
-    //clearInterval(this.intervalId);
+    clearInterval(this.intervalId);
   }
 
   render() {

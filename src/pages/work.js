@@ -20,8 +20,8 @@ const WorkIndex = ({ data, location }) => {
         <Trans i18nKey="Explore" components={[<Link to={first}>Explore</Link>]} />
       </p>
       <section className="posts">
-        {posts.map(({ node }) => {
-          if(node.fields.locale==='' || node.fields.locale===i18n.languages[0])
+        {posts.filter( ({node}) => (node.fields.locale==='' || node.fields.locale===i18n.languages[0]))
+        .map(({ node }) => {
           return (
             <article className="post" key={node.fields.slug}>
               <Img fixed={node.frontmatter.cover.childImageSharp.fixed} />
