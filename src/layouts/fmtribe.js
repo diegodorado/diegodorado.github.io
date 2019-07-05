@@ -1,5 +1,7 @@
 import React from "react"
 import Helmet from "react-helmet"
+import "../components/i18n"
+
 
 class FMTRIBELayout extends React.Component {
 

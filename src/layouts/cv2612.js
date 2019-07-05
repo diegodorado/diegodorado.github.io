@@ -1,6 +1,8 @@
 import React from "react"
 import Brand from "../components/header/brand"
 import Helmet from "react-helmet"
+import "../components/i18n"
+
 
 class Layout extends React.Component {
 
