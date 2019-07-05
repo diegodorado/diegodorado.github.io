@@ -139,19 +139,20 @@ const Playground = ({pattern}) =>{
       ensureEmojiSamples()
 
     try {
-      parsedGrammar = parser.parse(left+right)
 
-      const sounds = emojiArray(left+right)
-        .map(c => (c.codePointAt(0) < 128) ? c : `[${emoji_ids[c]}]`)
-        .join('')
+      if(context.playingAlone){
+        parsedGrammar = parser.parse(left+right)
 
-      console.log(sounds)
-      const pattern1 = Pattern(sounds)
-      console.log(parsedGrammar, 'querying 0 - 1:' )
-      pattern1.query( 0, 1 )
-      pattern1.print()
-      pattern1.query( 1,2 )
-      pattern1.print()
+      }else{
+        //use charlie's parser
+        const sounds = emojiArray(left+right)
+          .map(c => (c.codePointAt(0) < 128) ? c : `[${emoji_ids[c]}]`)
+          .join('')
+
+        const pattern1 = Pattern(sounds)
+        //pattern1.query( 1,2 )
+        //pattern1.print()
+      }
 
       setError(false)
     }

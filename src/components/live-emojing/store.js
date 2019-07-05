@@ -5,7 +5,7 @@ import ws from 'isomorphic-ws'
 
 const opts = {
     endpoint: "wss://av.thundernize.com/websocket",
-    //endpoint: "ws://localhost:3000/websocket",
+    // endpoint: "ws://localhost:3000/websocket",
     SocketConstructor: ws,
     reconnectInterval: 5000
 }

@@ -27,9 +27,12 @@ const Connection = () =>{
             <p>When joining a channel, be sure to be also watching it on another window or device. {`Doesn't`} make much sense to send your emojis and without seeing them in action.</p>
             {context.servers.map(s =>
               <div className="channel" key={s.id}>
-                <h3>"{s.channel}" channel</h3>
-                <button className="btn" onClick={(ev)=>context.joinChannel(s.channel)}>join <FaSignInAlt/></button>
-                <a className="btn" href={s.streamingUrl} target="_blank" rel="noopener noreferrer">watch <FaEye/></a>
+                <h3>"{s.channelName}" channel</h3>
+                <button className="btn" onClick={(ev)=>context.joinChannel(s.channelName)}>join <FaSignInAlt/></button>
+                {s.streamingUrl?
+                  <a className="btn" href={s.streamingUrl} target="_blank" rel="noopener noreferrer">watch <FaEye/></a>:
+                  <span><Emoji emoji="😞" /> no streaming url ...</span>
+                }
               </div>)}
           </>))
       : <p> <Emoji emoji="😭" /> Cannot get channels list.</p>}
