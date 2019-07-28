@@ -4,7 +4,7 @@ module.exports = {
     title: `diego dorado`,
     author: `Diego Dorado`,
     description: `diego dorado portfolio.`,
-    siteUrl: `http://diegodorado.github.io/`,
+    siteUrl: `http://diegodorado.com/`,
     social: {
       twitter: `diegodorado`,
     },
@@ -39,14 +39,13 @@ module.exports = {
         limit: 200,
       },
     },
-    /*{
-
+    {
       resolve: `gatsby-source-soundcloud`,
       options: {
         userID: '13960662',
         clientID: '802921cdc630a9a0d66f25c665703b8c'
       },
-    },*/
+    },
     {
       resolve: `gatsby-transformer-remark`,
       options: {

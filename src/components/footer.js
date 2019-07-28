@@ -14,7 +14,7 @@ const Footer = () => {
   useEffect(() => {
     const rand = Math.random()
     setQuote(data[Math.floor(rand*data.length)])
-  })
+  },[])
 
   return (
     <footer>

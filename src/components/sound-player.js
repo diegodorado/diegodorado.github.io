@@ -11,8 +11,6 @@ import { FaStepBackward,
          FaVolumeSlash,
         } from 'react-icons/fa'
 
-
-
 class PlaylistSoundPlayer extends React.Component {
   constructor(props) {
     super(props)
@@ -44,47 +42,6 @@ class PlaylistSoundPlayer extends React.Component {
     soundCloudAudio.play({ playlistIndex });
   }
 
-  onPreviousClick = (e) =>{
-    const { soundCloudAudio } = this.props;
-    let { activeIndex } = this.state
-
-    if (activeIndex === 0)
-      return
-
-    this.setState({activeIndex: --activeIndex})
-    soundCloudAudio && soundCloudAudio.previous();
-
-  }
-  onPlayClick = (e) =>{
-    const { playing, soundCloudAudio } = this.props;
-
-    if (!playing) {
-      soundCloudAudio && soundCloudAudio.play({
-        playlistIndex: soundCloudAudio._playlistIndex
-      })
-    } else {
-      soundCloudAudio && soundCloudAudio.pause()
-    }
-
-  }
-  onNextClick = (e) =>{
-    this.next()
-  }
-
-  next(){
-    const { playlist, soundCloudAudio } = this.props;
-
-    let { activeIndex } = this.state
-
-    activeIndex++
-
-    if (activeIndex > playlist.tracks.length - 1)
-      activeIndex = 0
-
-    this.setState({activeIndex: activeIndex})
-    soundCloudAudio && soundCloudAudio.play({ playlistIndex: activeIndex })
-
-  }
 
   onVolumeChange = (e) =>{
     const {soundCloudAudio} = this.props
@@ -107,19 +64,6 @@ class PlaylistSoundPlayer extends React.Component {
     }
   }
 
-
-
-
-  onProgressClick = (e) =>{
-    const { soundCloudAudio } = this.props
-    const xPos = (e.pageX - e.currentTarget.getBoundingClientRect().left) / e.currentTarget.offsetWidth
-
-    if (soundCloudAudio && !isNaN(soundCloudAudio.audio.duration))
-      soundCloudAudio.audio.currentTime = (xPos * soundCloudAudio.audio.duration)
-
-  }
-
-
   renderTrackList() {
     const { playlist } = this.props
 
@@ -141,12 +85,6 @@ class PlaylistSoundPlayer extends React.Component {
 
     return <ul>{tracks}</ul>
   }
-
-
-
-
-
-
 
   render() {
     const { playing, currentTime, duration } = this.props

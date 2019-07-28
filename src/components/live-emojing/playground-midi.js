@@ -62,10 +62,13 @@ const Playground = ({pattern}) =>{
   }
 
   const commit = () => {
-    const p = emojis.join('')
     setHighlighted(true)
     setTimeout(() => setHighlighted(false),300)
-    context.sendPattern(p)
+    setEmojis(es => {
+      const p = es.join('')
+      context.sendPattern(p)
+      return es
+    })
   }
 
   return (
