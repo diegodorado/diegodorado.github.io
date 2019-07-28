@@ -47,7 +47,6 @@
     "react-helmet": "^5.2.0",
     "react-i18next": "^10.11.1",
     "react-icons": "^3.5.0",
-    "react-soundplayer": "^1.0.4",
     "react-typography": "^0.16.18",
     "reactjs-localstorage": "0.0.7",
     "simpleddp": "^2.0.0",
@@ -60,7 +59,7 @@
     "gh-pages": "^2.0.1",
     "prettier": "^1.16.4"
   },
-  "homepage": "http://diegodorado.github.com/",
+  "homepage": "http://diegodorado.com/",
   "license": "MIT",
   "main": "n/a",
   "repository": {
@@ -72,7 +71,7 @@
     "deploy": "gatsby build && gh-pages -d public -b master",
     "develop": "gatsby develop",
     "dev-m": "gatsby develop -H 0.0.0.0 -p 8000",
-    "format": "prettier --write src/**/*.{js,jsx}",
+    "format": "prettier --write src/**/*.js",
     "start": "npm run develop",
     "serve": "gatsby serve"
   }
