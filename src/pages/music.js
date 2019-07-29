@@ -79,7 +79,7 @@ const MusicIndex = ({ data, location }) => {
     if(player===null)
       return
 
-    player.on('ended', next)
+    player.on('ended', () =>setIndex( i => i+(i<tracks.length-1 ? 1: 0)))
     player.on('timeupdate', () => {
       setCurrentTime(player.audio.currentTime)
     })
@@ -93,6 +93,7 @@ const MusicIndex = ({ data, location }) => {
 
 
   useEffect(()=>{
+
     setTrack(tracks[index].node)
 
     //do not run until player is set
@@ -149,7 +150,7 @@ const MusicIndex = ({ data, location }) => {
         {tracks.map(({ node },i) => {
             return (
               <li key={i} className={i===index?'active':''} onClick={() => setIndex(i)}>
-                  <span className="title">{node.title}</span>
+                  <span className="title">{i}-{node.title}</span>
                   <span className="time">{prettyTime(node.duration / 1000)}</span>
               </li>
             )
