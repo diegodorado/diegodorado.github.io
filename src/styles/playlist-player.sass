@@ -21,9 +21,13 @@
       &.active, &:hover
         background: #ddd
         color: black
+      &.mute
+        display: none
+        +breakpoint(lg)
+          display: inline-block
+
     .volume-slider
       flex-grow: 10
-      padding: 0 20px
       input
         border: 0
         -webkit-appearance: none

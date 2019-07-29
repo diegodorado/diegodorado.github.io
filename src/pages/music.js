@@ -139,8 +139,8 @@ const MusicIndex = ({ data, location }) => {
             :<FaPlay onClick={toggle}/>}
           <FaStepForward onClick={next}/>
           {muted ?
-             <FaVolumeOff onClick={onMuteClick} />
-             : <FaVolumeOn onClick={onMuteClick} />}
+             <FaVolumeOff className="mute" onClick={onMuteClick} />
+             : <FaVolumeOn className="mute" onClick={onMuteClick} />}
           <div className="volume-slider" >
             <input type="range" min="0" max="100" step="1" value={muted? 0 : volume} onChange={onVolumeChange} />
           </div>
