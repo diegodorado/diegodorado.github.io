@@ -4,6 +4,8 @@ import Layout from "../layouts/main"
 import SEO from "../components/seo"
 import { Trans } from 'react-i18next'
 
+import { FaVolumeSlash} from 'react-icons/fa'
+
 const MusicIndex = ({ data, location }) => {
   const tracks = data.allSoundcloudtrack.edges
   const [index, setIndex] = useState(0)
@@ -42,6 +44,13 @@ const MusicIndex = ({ data, location }) => {
             <img src={track.artwork_url.replace('large.jpg','t300x300.jpg')} />
           </div>
         </div>
+        <nav>
+          <FaVolumeSlash />
+          <div className="volume-slider" >
+            <input type="range" min="0" max="100" step="1" value="50" readOnly />
+          </div>
+          <span className="timer">00:00</span>
+        </nav>
         <ul>
         {tracks.map(({ node },i) => {
             return (
@@ -53,6 +62,8 @@ const MusicIndex = ({ data, location }) => {
           })}
         </ul>
       </div>
+
+
     </Layout>
   )
 }
