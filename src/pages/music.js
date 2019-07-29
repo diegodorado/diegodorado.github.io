@@ -4,7 +4,9 @@ import Layout from "../layouts/main"
 import SEO from "../components/seo"
 import { Trans } from 'react-i18next'
 
-import { FaVolumeSlash} from 'react-icons/fa'
+import { FaVolumeOff} from 'react-icons/fa/index.esm.js'
+
+
 
 const MusicIndex = ({ data, location }) => {
   const tracks = data.allSoundcloudtrack.edges
@@ -45,7 +47,7 @@ const MusicIndex = ({ data, location }) => {
           </div>
         </div>
         <nav>
-          <FaVolumeSlash />
+          <FaVolumeOff />
           <div className="volume-slider" >
             <input type="range" min="0" max="100" step="1" value="50" readOnly />
           </div>
