@@ -15,7 +15,7 @@ import { FaStepBackward,
 
 import SoundCloudAudio from 'soundcloud-audio'
 
-
+//todo: move to some env file
 const clientId = '802921cdc630a9a0d66f25c665703b8c'
 
 const MusicIndex = ({ data, location }) => {
@@ -128,7 +128,7 @@ const MusicIndex = ({ data, location }) => {
             </div>
           </div>
           <div className="image" onClick={toggle}>
-            <img src={track.artwork_url.replace('large.jpg','t300x300.jpg')} />
+            <img alt="artwork" src={track.artwork_url.replace('large.jpg','t300x300.jpg')} />
           </div>
         </div>
         <nav>

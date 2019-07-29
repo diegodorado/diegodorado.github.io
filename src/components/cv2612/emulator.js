@@ -1,8 +1,8 @@
 import React from 'react'
 import {CV2612Context} from "./context"
 import AudioKeys from 'audiokeys'
-import { FaVolume,
-         FaVolumeSlash
+import { FaVolumeOff as FaVolume,
+         FaVolumeMute as FaVolumeSlash
         } from 'react-icons/fa'
 
 //todo: update for all 6 channels

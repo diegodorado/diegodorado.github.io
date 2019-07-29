@@ -11,10 +11,11 @@ import { FaBackspace,
          FaDice,
          FaExpand,
          FaCompress,
-         FaVolume,
-         FaVolumeSlash,
+         FaVolumeOff as FaVolume,
+         FaVolumeMute as FaVolumeSlash,
          FaQuestionCircle
         } from 'react-icons/fa'
+
 import {alphaEmoji,
         randomPattern,
         emojiArray,
@@ -34,7 +35,7 @@ const emojis = Object.values(emojiIndex.emojis).map((e)=>e.native)
 const emoji_ids = Object.values(emojiIndex.emojis)
   .reduce((o,e)=>Object.assign(o,{[e.native]:sanitizeEmojiId(e.id)}),{})
 
-
+//todo: move to env file?
 const git_raw = 'https://raw.githubusercontent.com/diegodorado/emoji-samples/master/'
 const samples = '0123456789abcdefghijklmnopqrstuvwxyzABC'.split('')
 
@@ -149,9 +150,7 @@ const Playground = ({pattern}) =>{
           .map(c => (c.codePointAt(0) < 128) ? c : `[${emoji_ids[c]}]`)
           .join('')
 
-        const pattern1 = Pattern(sounds)
-        //pattern1.query( 1,2 )
-        //pattern1.print()
+        Pattern(sounds)
       }
 
       setError(false)
@@ -499,7 +498,7 @@ const Playground = ({pattern}) =>{
       const sample = players.has(eid) ? eid : samples[index]
 
       const id = Tone.Transport.scheduleRepeat( (time)=>{
-        if(Math.random()>params.chance)
+        if(sample===undefined || Math.random()>params.chance)
           return
         const p = players.get(sample)
         p.start(time)
@@ -609,12 +608,12 @@ const Playground = ({pattern}) =>{
     onPreviewClick(e)
   }
 
+
   const onPreviewClick = (e)=>{
     //todo: review this tap behaviour
-    // eslint-disable-next-line
     return
 
-
+    // eslint-disable-next-line
     if(!context.playingAlone)
       return
 
@@ -630,6 +629,7 @@ const Playground = ({pattern}) =>{
     },4000)
 
 
+    // eslint-disable-next-line
     const bpm = Math.round(60/Tone.Transport.seconds)
     Tone.Transport.stop().start()
 

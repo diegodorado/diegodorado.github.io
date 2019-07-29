@@ -29,7 +29,6 @@ const Playground = ({pattern}) =>{
 
   const onMIDIMessage = (msg) => {
     const data = Array.from(msg.data)
-    const type = data[0] & 0xf0
     if(data[0] === 0x90 && data[2]>0){
       if(data[1]===104 || data[1]===32)
         randomize()
