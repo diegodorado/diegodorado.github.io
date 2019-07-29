@@ -3,7 +3,7 @@ import { graphql } from "gatsby"
 import Layout from "../layouts/main"
 import SEO from "../components/seo"
 import { Trans } from 'react-i18next'
-//import prettyTime from '../components/prettyTime'
+import prettyTime from '../components/prettyTime'
 
 import { FaStepBackward,
          FaStepForward,
@@ -13,9 +13,8 @@ import { FaStepBackward,
          FaVolumeMute as FaVolumeOff } from 'react-icons/fa/index.esm.js'
 
 
-//import SoundCloudAudio from 'soundcloud-audio'
+import SoundCloudAudio from 'soundcloud-audio'
 
-const prettyTime = (time) => {return "00:00"}
 
 const clientId = '802921cdc630a9a0d66f25c665703b8c'
 
@@ -72,7 +71,7 @@ const MusicIndex = ({ data, location }) => {
   }
 
   useEffect(()=>{
-    //setPlayer(new SoundCloudAudio(clientId))
+    setPlayer(new SoundCloudAudio(clientId))
   },[])
 
   useEffect(()=>{
