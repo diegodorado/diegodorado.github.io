@@ -9,7 +9,7 @@ export const CV2612Consumer = CV2612Context.Consumer
 const ctrlmap = ['ar','d1','sl','d2','rr','tl','mul','det','rs','am','al','fb','ams','fms','st','lfo','en']
 
 // Create the provider using a traditional React.Component class
-class CV2612Provider extends React.Component {
+export class CV2612Provider extends React.Component {
 
   constructor(props){
     super(props);
@@ -236,5 +236,3 @@ class CV2612Provider extends React.Component {
     )
   }
 }
-
-export default CV2612Provider

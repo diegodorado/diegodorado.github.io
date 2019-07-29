@@ -1,6 +1,6 @@
 
 import React from "react"
-import CV2612Provider from "./context"
+import {CV2612Provider} from "./context"
 import Midi from "./midi"
 import Emulator from './emulator'
 import Sequencer from "./sequencer"
