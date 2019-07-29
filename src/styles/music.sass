@@ -4,16 +4,11 @@
   margin-bottom: 20px
   width: 100%
   box-sizing: border-box
-  display: flex
-  align-items: stretch
   border: 2px dashed $white
   .details
     @extend %no-select
     cursor: pointer
-    position: relative
-    height: 280px
     padding: 20px 10px 0 10px
-    flex-grow: 3
     overflow: hidden
     .text
       h3
@@ -28,10 +23,6 @@
       height: 120px
     .progress
       z-index: -1
-      right: 10px
-      left: 10px
-      bottom: 10px
-      background: $white
       .waveform
         bottom: 0
         right: 0
@@ -46,8 +37,6 @@
 
   .image
     cursor: pointer
-    flex: 0 0 300px
-    height: 300px
     box-shadow: 0px 0px 100px rgba($blue,0.3)
     /* For positioning the pseudo-element */
     position: relative
@@ -62,3 +51,45 @@
       /* Create the box shadow at expanded size. */
       box-shadow: -10px -10px 200px rgba($blue,0.5)
       animation: blink 8s linear infinite
+
+
+
+.track-details
+  position: relative
+  // 1:1 aspect ratio
+  width: 100%
+  padding-top: 100%
+  .image, .details
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+  .details
+    .progress
+      right: 0
+      left: 0
+      bottom: 0
+      background: rgba($white,0.25)
+      +breakpoint(lg)
+        right: 10px
+        left: 10px
+        bottom: 10px
+        background: $white
+  .image
+    z-index: -2
+    img
+      width: 100%
+
+  +breakpoint(lg)
+    padding-top: 0
+    display: flex
+    align-items: stretch
+    .image, .details
+      position: relative
+    .details
+      height: 280px
+      flex-grow: 3
+    .image
+      flex: 0 0 300px
+      height: 300px

@@ -9,7 +9,7 @@ import { FaStepBackward,
          FaStepForward,
          FaPause,
          FaPlay,
-         FaVolumeOff as FaVolumeOn,
+         FaVolumeDown as FaVolumeOn,
          FaVolumeMute as FaVolumeOff } from 'react-icons/fa/index.esm.js'
 
 
@@ -114,7 +114,7 @@ const MusicIndex = ({ data, location }) => {
         <div className="track-details">
           <div className="details"  onClick={onProgressClick}>
             <div className="text">
-              <h3>{track.title}</h3>
+              <h3><span>{track.title}</span></h3>
               <p>
                 {track.description.split('\r\n').map( (l,i) =>(
                   <span key={i} >{l} <br/></span>

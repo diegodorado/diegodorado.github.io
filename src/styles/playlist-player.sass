@@ -22,12 +22,11 @@
         background: #ddd
         color: black
     .volume-slider
-      flex-grow: 2
+      flex-grow: 10
       padding: 0 20px
       input
         border: 0
         -webkit-appearance: none
-        width: 180px
         height: 2em
         outline: none
         background: transparent
@@ -81,3 +80,7 @@
         flex-grow: 1
       .title
         flex-grow: 5
+        //ellipsis truncate
+        overflow: hidden
+        white-space: nowrap
+        text-overflow: ellipsis
