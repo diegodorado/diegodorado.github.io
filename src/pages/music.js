@@ -3,7 +3,8 @@ import { graphql } from "gatsby"
 import Layout from "../layouts/main"
 import SEO from "../components/seo"
 import { Trans } from 'react-i18next'
-import prettyTime from '../components/prettyTime'
+//import prettyTime from '../components/prettyTime'
+
 import { FaStepBackward,
          FaStepForward,
          FaPause,
@@ -13,6 +14,7 @@ import { FaStepBackward,
         } from 'react-icons/fa'
 //import SoundCloudAudio from 'soundcloud-audio'
 
+const prettyTime = (time) => {return "00:00"}
 
 const clientId = '802921cdc630a9a0d66f25c665703b8c'
 
