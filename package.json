@@ -50,13 +50,11 @@
     "react-typography": "^0.16.18",
     "reactjs-localstorage": "0.0.7",
     "simpleddp": "^2.0.0",
-    "soundcloud-audio": "^1.4.0",
     "susy": "^3.0.5",
     "tone": "^13.4.9",
     "typography": "^0.16.18"
   },
   "devDependencies": {
-    "gh-pages": "^2.0.1",
     "prettier": "^1.16.4"
   },
   "homepage": "http://diegodorado.com/",
@@ -68,7 +66,6 @@
   },
   "scripts": {
     "build": "gatsby build",
-    "deploy": "gatsby build && gh-pages -d public -b master",
     "develop": "gatsby develop",
     "dev-m": "gatsby develop -H 0.0.0.0 -p 8000",
     "format": "prettier --write src/**/*.js",

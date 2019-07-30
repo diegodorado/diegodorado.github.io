@@ -12,96 +12,188 @@ import { FaStepBackward,
          FaVolumeDown as FaVolumeOn,
          FaVolumeMute as FaVolumeOff } from 'react-icons/fa/index.esm.js'
 
-
-import SoundCloudAudio from 'soundcloud-audio'
+//todo: make the player a widget for the site ... or not
 
 //todo: move to some env file
 const clientId = '802921cdc630a9a0d66f25c665703b8c'
+let audio = null
+
+const ascii =  `
+                    ╔═╗    
+                    ║↑║    
+                    ╚═╝    
+╔═════════════╗  ╔═╗╔═╗╔═╗ 
+║  SPACE BAR  ║  ║←║║↓║║→║ 
+╚═════════════╝  ╚═╝╚═╝╚═╝ 
+`
+
 
 const MusicIndex = ({ data, location }) => {
-  const tracks = data.allSoundcloudtrack.edges
-  const [player, setPlayer] = useState(null)
+
+
+  const tracks = data.allSoundcloudtrack.edges.map(t => t.node)
+  const [playing, setPlaying] = useState(false)
   const [index, setIndex] = useState(0)
-  const [track, setTrack] = useState(tracks[0].node)
   const [volume, setVolume] = useState(100)
   const [muted, setMuted] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
 
-  const toggle = (e) => {
-    if (player.playing) {
-      player.pause()
-    } else {
-      player.play({ streamUrl: track.stream_url})
+  const play = () => {
+    const playPromise = audio.play()
+    // In browsers that don’t yet support this functionality,
+    // playPromise won’t be defined.
+    if (playPromise === undefined) {
+      setPlaying(true)
+    }else{
+      playPromise
+        .then(() => setPlaying(true))
+        .catch( (error)  => console.log(error))
     }
+
   }
 
-  const prev = (e) =>{
-    if(index>0)
-      setIndex( i => i-1)
+  const pause = () => {
+    audio.pause()
+    setPlaying(false)
   }
 
-  const next = (e) =>{
-    if(index<tracks.length-1)
-      setIndex( i => i+1)
+  const toggle = () => playing ? pause() : play()
+  const prev = () => setIndex( i => (i>0 ? i-1 : tracks.length-1))
+  const next = () => setIndex( i => (i<tracks.length-1 ? i+1: 0))
+
+
+
+  const seek = (dir) =>{
+    //trigger play if not playing already
+    if (!playing){
+      play()
+      return
+    }
+
+    if (!audio.readyState)
+      return
+
+    const delta = tracks[index].duration/1000/10
+    audio.currentTime += delta*dir
   }
 
   const onProgressClick = (e) =>{
     //trigger play if not playing already
-    if (!player.playing)
-      player.play({ streamUrl: track.stream_url})
+    if (!playing){
+      play()
+      return
+    }
+
+    if (!audio.readyState)
+      return
 
     const xPos = (e.pageX - e.currentTarget.getBoundingClientRect().left) / e.currentTarget.offsetWidth
-    const time = xPos*track.duration/1000
-    player.setTime(time)
+    const time = xPos*tracks[index].duration/1000
+    audio.currentTime = time
   }
 
   const onVolumeChange = (e) =>{
+    if (!audio.readyState)
+      return
+
     const vol = parseInt(e.target.value)
     const mut = (vol === 0)
-    player.audio.volume = (vol / 100)
-    player.audio.muted = mut
+    audio.volume = (vol / 100)
+    audio.muted = mut
     setVolume(vol)
     setMuted(mut)
   }
 
   const onMuteClick = (e) =>{
+    if (!audio.readyState)
+      return
+
     const mut = (!muted)
-    player.audio.muted = mut
+    audio.muted = mut
     setMuted(mut)
   }
 
+  const audioTimeUpdate = _ => setCurrentTime(audio.currentTime)
+
   useEffect(()=>{
-    setPlayer(new SoundCloudAudio(clientId))
+    audio = new Audio()
+    audio.addEventListener('ended', next)
+    audio.addEventListener('timeupdate',audioTimeUpdate)
+
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.setActionHandler('previoustrack', prev)
+      navigator.mediaSession.setActionHandler('nexttrack', next)
+      navigator.mediaSession.setActionHandler('play', play)
+      navigator.mediaSession.setActionHandler('pause', pause)
+    }
+
+    //cleanup
+    return ()=>{
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.setActionHandler('previoustrack', null)
+        navigator.mediaSession.setActionHandler('nexttrack', null)
+        navigator.mediaSession.setActionHandler('play', null)
+        navigator.mediaSession.setActionHandler('pause', null)
+      }
+
+      audio.pause()
+      audio.removeEventListener('ended', next)
+      audio.removeEventListener('timeupdate',audioTimeUpdate)
+      audio = null
+    }
   },[])
 
   useEffect(()=>{
-    //do not run until player is set
-    if(player===null)
-      return
+    const first_run = (audio.src==='')
+    audio.src = `${tracks[index].stream_url}?client_id=${clientId}`
 
-    player.on('ended', () =>setIndex( i => i+(i<tracks.length-1 ? 1: 0)))
-    player.on('timeupdate', () => {
-      setCurrentTime(player.audio.currentTime)
-    })
-    //cleanup
-    return ()=>{
-      player.stop()
-      player.unbindAll()
-      setPlayer(null)
+    if ('mediaSession' in navigator) {
+      /*global MediaMetadata*/
+      /*eslint no-undef: "error"*/
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: tracks[index].title,
+        artist: 'Diego Dorado',
+        album: 'Music',
+        artwork: [
+          { src: tracks[index].artwork_url.replace('large.jpg','t500x500.jpg')}
+        ]
+      });
     }
-  },[player])
+
+    if(!first_run)
+      play()
+
+  },[index])
 
 
   useEffect(()=>{
+    //re-attach listener if left, right or error have changed
+    window.addEventListener('keydown', onKeyPress)
+    // Specify how to clean up after this effect:
+    return () => {
+      window.removeEventListener('keydown', onKeyPress)
+    }
+  },[index, playing])
 
-    setTrack(tracks[index].node)
 
-    //do not run until player is set
-    if(player===null)
+
+  const onKeyPress = (e) => {
+    const c = e.key.toLowerCase()
+    if(c === ' '  || c === 'enter')
+      toggle()
+    else if(c === 'arrowleft')
+      seek(-1)
+    else if(c === 'arrowright')
+      seek(1)
+    else if(c === 'arrowup')
+      prev()
+    else if(c === 'arrowdown')
+      next()
+    else
       return
 
-    player.play({ streamUrl: tracks[index].node.stream_url})
-  },[index])
+    e.preventDefault()
+  }
 
 
   return (
@@ -111,32 +203,34 @@ const MusicIndex = ({ data, location }) => {
         <Trans i18nKey="MusicIntro"
           components={[<a href="https://soundcloud.com/diego-dorado/tracks" target="_blank" rel="noopener noreferrer">soundcloud</a>]} />
       </p>
+      <pre className="ascii-keyboard">{ascii}</pre>
+
       <div className="playlist-player">
         <div className="track-details">
           <div className="details"  onClick={onProgressClick}>
             <div className="text">
-              <h3><span>{track.title}</span></h3>
+              <h3><span>{tracks[index].title}</span></h3>
               <p>
-                {track.description.split('\r\n').map( (l,i) =>(
+                {tracks[index].description.split('\r\n').map( (l,i) =>(
                   <span key={i} >{l} <br/></span>
                 ))}
-                <em>{track.genre}</em><em>{track.tag_list}</em>
+                <em>{tracks[index].genre}</em><em>{tracks[index].tag_list}</em>
               </p>
             </div>
             <div className="progress">
-              <div className="fill" style={{width: `${currentTime*1000*100/track.duration}%`}} />
-              <div className="waveform" style={{backgroundImage: `url(${track.waveform_url})`}} />
+              <div className="fill" style={{width: `${currentTime*1000*100/tracks[index].duration}%`}} />
+              <div className="waveform" style={{backgroundImage: `url(${tracks[index].waveform_url})`}} />
             </div>
           </div>
-          <div className="image" onClick={toggle}>
-            <img alt="artwork" src={track.artwork_url.replace('large.jpg','t300x300.jpg')} />
+          <div className="image">
+            <img alt="artwork" src={tracks[index].artwork_url.replace('large.jpg','t500x500.jpg')} />
           </div>
         </div>
         <nav>
           <FaStepBackward onClick={prev}/>
-          {player && player.playing ?
-            <FaPause onClick={toggle}/>
-            :<FaPlay onClick={toggle}/>}
+          {playing ?
+            <FaPause onClick={pause}/>
+            :<FaPlay onClick={play}/>}
           <FaStepForward onClick={next}/>
           {muted ?
              <FaVolumeOff className="mute" onClick={onMuteClick} />
@@ -147,11 +241,11 @@ const MusicIndex = ({ data, location }) => {
           <span className="timer"> {prettyTime(currentTime)}</span>
         </nav>
         <ul>
-        {tracks.map(({ node },i) => {
+        {tracks.map((t,i) => {
             return (
               <li key={i} className={i===index?'active':''} onClick={() => setIndex(i)}>
-                  <span className="title">{node.title}</span>
-                  <span className="time">{prettyTime(node.duration / 1000)}</span>
+                  <span className="title">{t.title}</span>
+                  <span className="time">{prettyTime(t.duration / 1000)}</span>
               </li>
             )
           })}
