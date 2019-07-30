@@ -150,7 +150,7 @@ const MusicIndex = ({ data, location }) => {
         {tracks.map(({ node },i) => {
             return (
               <li key={i} className={i===index?'active':''} onClick={() => setIndex(i)}>
-                  <span className="title">{i}-{node.title}</span>
+                  <span className="title">{node.title}</span>
                   <span className="time">{prettyTime(node.duration / 1000)}</span>
               </li>
             )
