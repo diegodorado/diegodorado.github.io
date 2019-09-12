@@ -83,7 +83,7 @@ class Patches extends React.Component {
   }
 
   loadPatch(patch) {
-    this.context.updateParams(patch.params,true)
+    this.context.loadPatch(patch.params)
   }
 
 

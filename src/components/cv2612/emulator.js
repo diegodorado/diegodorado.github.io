@@ -1,5 +1,6 @@
 import React from 'react'
 import {CV2612Context} from "./context"
+import {emptyParams} from "./utils/patches-utils"
 import AudioKeys from 'audiokeys'
 import { FaVolumeOff as FaVolume,
          FaVolumeMute as FaVolumeSlash
@@ -19,6 +20,7 @@ class Emulator extends React.Component {
     super(props)
     this.state = {soundOn: false}
     this.fftSize = 1024
+    this.params = emptyParams()
   }
 
   componentDidMount(){
@@ -46,7 +48,7 @@ class Emulator extends React.Component {
     this.timeData = new Uint8Array(this.fftSize).fill(128)
     this.freqData = new Uint8Array(this.fftSize)
 
-    //requestAnimationFrame(this.tick)
+    requestAnimationFrame(this.tick)
 
   }
 
@@ -136,7 +138,7 @@ class Emulator extends React.Component {
 
     this.audioCtx.audioWorklet.addModule('/cv2612/ym2612-processor.js').then(() => {
       this.ym2612Node = new AudioWorkletNode(this.audioCtx, 'ym2612-generator', { outputChannelCount: [2] })
-      this.ym2612Node.port.onmessage = (event) => {console.log(event.data)}
+      //this.ym2612Node.port.onmessage = (event) => {console.log(event.data)}
       this.ym2612Node.connect(this.audioCtx.destination)
 
       this.analyser = this.audioCtx.createAnalyser()
@@ -146,11 +148,22 @@ class Emulator extends React.Component {
       this.write(0x27,0x00) //chan3 normal mode
       this.write(0x28,0x00)
       // load all patch params
-      this.context.sendParameters(this.context.params)
+      this.loadCurrentPatch()
     })
 
      this.setState({soundOn: true})
 
+  }
+
+  loadCurrentPatch = () => {
+
+    for (let [code, value] of Object.entries(this.context.params)) {
+      const parts = code.split('_')
+      const ch = parseInt(parts[0])
+      const op = parseInt(parts[1])
+      const param = parts[2]
+      this.update(ch,op,param,value)
+    }
   }
 
 
@@ -204,7 +217,7 @@ class Emulator extends React.Component {
   }
 
   setFrequency(f) {
-    let block = 2
+    let block = 4
     while (f >= 2048) {
       f /= 2
       block++
@@ -239,7 +252,7 @@ class Emulator extends React.Component {
   }
 
 
-  update = (ch,op,param,value,params) =>{
+  update = (ch,op,param,value) =>{
     const globals = ['lfo','en']
     const channels = ['fb','ams','fms','st','al']
     const operators = ['ar','d1','sl','d2','rr','tl','mul','det','rs','am']
@@ -258,10 +271,12 @@ class Emulator extends React.Component {
     if((op!==4 || ch!==6) && globals.includes(param))
       return
 
+    //cached values since we have to write the whole register every time
+    this.params[`${ch}_${op}_${param}`] = value
 
     const ch_off = (Math.floor(ch/3) * 0x100 + ch%3 )
     const mask = (key,size,shift) =>{
-      return (params[`${ch}_${op}_${key}`] & (Math.pow(2,size)-1))<<shift
+      return (this.params[`${ch}_${op}_${key}`] & (Math.pow(2,size)-1))<<shift
     }
 
     if(param==='lfo' || param==='en' ){

@@ -33,13 +33,6 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-source-medium`,
-      options: {
-        username: `@_anadorado_`,
-        limit: 200,
-      },
-    },
-    {
       resolve: `gatsby-source-soundcloud`,
       options: {
         userID: '13960662',

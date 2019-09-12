@@ -34,9 +34,8 @@ export const dmp2patch = (name,d) =>{
             params[`${ch}_4_al`] = d[5]
             params[`${ch}_4_ams`] = d[6]
             params[`${ch}_4_st`] = 3
-            for(let op=0;op<=4;op++){
-              //use first op as omni op
-              const o = (op===4?0:op)*11+7
+            for(let op=0;op<4;op++){
+              const o = op*11+7
               params[`${ch}_${op}_mul`] = d[o+0]
               params[`${ch}_${op}_tl`] = d[o+1]
               params[`${ch}_${op}_ar`] = d[o+2]
@@ -69,7 +68,7 @@ export const emptyParams = () =>{
     params[`${ch}_4_al`] = 0
     params[`${ch}_4_ams`] = 0
     params[`${ch}_4_st`] = 3
-    for(let op=0;op<=4;op++){
+    for(let op=0;op<4;op++){
       params[`${ch}_${op}_mul`] = 0
       params[`${ch}_${op}_tl`] = 0
       params[`${ch}_${op}_ar`] = 0

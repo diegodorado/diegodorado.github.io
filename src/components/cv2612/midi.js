@@ -95,22 +95,20 @@ class Midi extends React.Component {
   sendSysex = (data) => {
     this.sendMidi(data)
     this.sysexCount++
-    console.log('sysexCount',this.sysexCount)
   }
 
-  sendSysexSet = (addr,value) => {
+
+  sendSysexSet = (data) => {
     // send data header
     const msg = [0xF0, 0x41, 0x26, 0x12, 0x12]
-    // part 6 is a three bytes address
-    // part 7 is the data itself, in this case, a single 7-bit
-    // part 8 is the cheksum , 0x7F - the sum of address and value
-    const chksum = 0x7F - ((addr[0]+addr[1]+addr[2]+value)%0x7F)
-    msg.push(addr[0])
-    msg.push(addr[1])
-    msg.push(addr[2])
-    msg.push(value)
-    msg.push(chksum)
-    // part 9  is the end byte
+    let sum = 0
+    for(let d of data){
+      msg.push(d)
+      sum += d
+    }
+    // checksum
+    msg.push(0x7F - (sum%0x7F))
+    // end byte
     msg.push(0xF7)
     this.sendSysex(msg)
   }
@@ -190,6 +188,8 @@ class Midi extends React.Component {
     // resend noteon/off events
     if(type === 0x80 || type === 0x90){
       this.sendMidi(data)
+      this.sysexCount = 0
+
       if(type === 0x90){
         this.context.emulator.noteOn(data[1])
       }else{
@@ -201,7 +201,6 @@ class Midi extends React.Component {
 
 
   onMIDIMessage = (msg) => {
-
     if(msg.target.id !== this.midiInId)
       return
 
@@ -215,8 +214,7 @@ class Midi extends React.Component {
       if(JSON.stringify(data) === JSON.stringify(idReply)){
         console.log(`CV2612 found!`)
       }else{
-        //console.log('sysex reply ')
-        //console.log(data)
+        console.log('sysex reply ',data[5], this.sysexCount)
       }
       return
     }
@@ -235,7 +233,7 @@ class Midi extends React.Component {
 
   onClearClick = (e) => {
     e.preventDefault()
-    this.sendSysexSet([0x06,0x04,0x11],0x00)
+    this.sendSysexSet([0x06,0x04,0x11,0x00])
   }
 
   onToggleSoundClick = (e) => {

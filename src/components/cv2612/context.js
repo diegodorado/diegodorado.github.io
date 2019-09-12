@@ -22,20 +22,18 @@ export class CV2612Provider extends React.Component {
       envelopes: {},
       mapping: emptyMapping(),
       params: emptyParams(),
-      filters:{ch: 6},
+      filters:{ch: 0},
       soundOn: false,
       setActiveParameter: this.setActiveParameter,
       updateParam: this.updateParam,
-      updateParams: this.updateParams,
+      loadPatch: this.loadPatch,
       filterChannel: this.filterChannel,
       toggleLearning: this.toggleLearning,
       handleCC: this.handleCC,
-      sendParameters : this.sendParameters,
     }
   }
 
   componentDidMount(){
-
     const savedMapping = reactLocalStorage.getObject('mapping',{})
     if(Object.keys(savedMapping).length>0){
       let mapping = {...this.state.mapping}
@@ -64,7 +62,11 @@ export class CV2612Provider extends React.Component {
         const resolution = Math.pow(2,bits)
         const step = 128/resolution
         const v = Math.floor(val/step)
-        this.updateParam(k,v)
+        const parts = k.split('_')
+        const ch = parseInt(parts[0])
+        const op = parseInt(parts[1])
+        const param = parts[2]
+        this.updateParam(ch,op,param,k,v)
       }
     }
 
@@ -80,55 +82,62 @@ export class CV2612Provider extends React.Component {
     const op = parseInt(parts[1])
     const param = parts[2]
     const pId = ctrlmap.indexOf(param)
-
     if(pId===-1){
       console.error(`Unexpected param ${param} in code ${code}`)
     }else{
-
        //todo: implement omni channel on chip side
        // and avoid resending parameters triggered by omni channel
-      if(ch===6){
-        for(let chan=0;chan<5;chan++){
-          const addr = [chan,op,pId]
-          this.state.midi.sendSysexSet(addr,value)
-        }
-      }else{
-        const addr = [ch,op,pId]
-        this.state.midi.sendSysexSet(addr,value)
-      }
-
-      this.state.emulator.update(ch,op,param,value,this.state.params)
-
+      this.state.midi.sendSysexSet([ch,op,pId,value])
+      this.state.emulator.update(ch,op,param,value)
     }
+  }
 
+  sendVoice = (v) => {
+    console.log(`sendVoice ${v}`)
+    //filter out omni channel
+    const keys = Object.keys(this.state.params)
+      .filter( k => k.startsWith(`${v}_`))
+      .sort()
+    //[[am,ar,d1,d2,det,mul,rr,rs,sl,tl]*4 ,al,ams,fb,fms,st]
+    //[10*4+5] = 45
+    const data = keys.map( k => this.state.params[k])
+    data.unshift(v)
+    data.unshift(0x04)
+    this.state.midi.sendSysexSet(data)
   }
 
 
-  sendParameters = (params) => {
-    //todo: send a bulk sysex message  instead
-    for (let [code, value] of Object.entries(params)) {
-      this.sendParameter(code,value)
-    }
 
+  sendPatch = () => {
+    console.log('sendPatch')
+    this.state.emulator.loadCurrentPatch()
+    this.sendVoice(0)
   }
 
   setActiveParameter = (param) => {
     this.setState({activeParameter: param})
   }
 
-  updateParam = (code,value) => {
+  updateParam = (ch, op, param, code, value) => {
     let params = {...this.state.params}
     params[code] = value
+
+    //update for all channels?
+    if(!['lfo','en'].includes(param) && (ch===6)){
+      for (let c=0; c<6; c++)
+        params[`${c}_${op}_${param}`] = value
+    }
+
     this.setState({params: params})
   }
 
-  updateParams = (newParams, loadingPatch) => {
+  loadPatch = (newParams) => {
     let params = {...this.state.params}
     for (let [code, value] of Object.entries(newParams)) {
       params[code] = value
     }
     this.setState({params: params})
-    this.loadingPatch =  loadingPatch
+    this.loadingPatch =  true
   }
 
   filterChannel= (ch) => {
@@ -138,50 +147,27 @@ export class CV2612Provider extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    //which params have changed?
+    //we only care if params have changed
+    if(prevState.params===this.state.params)
+      return
 
-    const diff = obj_diff(prevState.params, this.state.params)
-    if(Object.entries(diff).length>0){
-      this.sendParameters(diff)
-      if(this.loadingPatch)
-        this.loadingPatch = false
-      else
-        this.updateOmniIfChanged(diff)
-      this.updateEnvelopesIfChanged(diff)
-    }
-  }
-
-  // if any omni channel/op parameter has changed
-  updateOmniIfChanged(diff){
-    const params = {}
-
-    //todo: exclude lfo
-    for(let k of Object.keys(diff)){
-      const p = k.split('_')
-      //is omni channel?
-      if(p[0]==='6'){
-        for(let i=0;i<=6;i++){
-          //is omni param?
-          if(p[1]==='4')
-            for(let j=0;j<=4;j++)
-              params[`${i}_${j}_${p[2]}`] = diff[k]
-          else
-            params[`${i}_${p[1]}_${p[2]}`] = diff[k]
+    if(this.loadingPatch){
+      this.loadingPatch = false
+      //send all params when loading a patch
+      this.sendPatch()
+      this.updateEnvelopesIfChanged(this.state.params)
+    }else{
+      //send only differences
+      const diff = obj_diff(prevState.params, this.state.params)
+      const entries = Object.entries(diff)
+      if(entries.length>0){
+        for (let [code, value] of entries) {
+          this.sendParameter(code,value)
         }
-      }else{
-        //is omni param?
-        if(p[1]==='4')
-          for(let i=0;i<=4;i++)
-            params[`${p[0]}_${i}_${p[2]}`] = diff[k]
+        this.updateEnvelopesIfChanged(diff)
       }
     }
-
-    if(Object.entries(params).length>0){
-      this.updateParams(params,false)
-    }
-
   }
-
 
   updateEnvelopesIfChanged(diff){
     //check if any envelope should change
@@ -200,6 +186,7 @@ export class CV2612Provider extends React.Component {
       envs.forEach( (e) => {
         const env = env_params
           .reduce((acc,i)=>{acc[`${i}`]=this.state.params[`${e}_${i}`];return acc},{})
+        // re-calculate changed envelope
         envelopes[e] = this.calculateEnvelopePoints(env)
       })
       this.setState({envelopes: envelopes})
