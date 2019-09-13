@@ -1,43 +1,56 @@
-import React, { useState } from 'react'
-//import QrReader from 'react-qr-reader'
+import React, { useState, useEffect } from 'react'
 import Link from "../../components/link"
 import Layout from "../../layouts/io"
 import SEO from "../../components/seo"
 
+// workaround to solve SSR
+//import QrReader from 'react-qr-reader'
 let QrReader = null
 try {
   QrReader = require('react-qr-reader')
 } catch (e) {
-  console.log(e)
+  console.log('Can not require qr reader')
 }
 
 
 const IoIndex = ({location})  =>{
-  const parts = location.hash.split('#')
-  const pattern = (parts.length >1) ? decodeURIComponent(parts[1]) : ''
-  console.log(pattern)
-
 
   const [phase, setPhase] = useState(1)
-  const [count, setCount] = useState(0)
-  const [shadow, setShadow] = useState('Nothing')
+  const [others, setOthers] = useState([])
+  const [myself, setMyself] = useState(0)
 
+  // try to load shadow from hash
+  useEffect( ()=> {
+    const parts = location.hash.split('#')
+    const i = (parts.length >1) ? parseInt(parts[1]) : 0
+    if(i>0){
+      setPhase(3)
+      setMyself(i)
+    }
+
+  },[])
 
   const handleScanSelf = data => {
     if (data){
-      setShadow(data)
       setPhase(3)
+      setMyself(parseInt(data))
     }
   }
 
 
   const handleScanOther = data => {
     if (data){
-      setShadow(data)
-      setPhase(5)
-      setCount(count+1)
+      const i = parseInt(data)
+      if(i>0){
+        setOthers(o => o.concat(i))
+        setPhase(5)
+      }
     }
   }
+
+  const count = () => (new Set(others)).size
+  const last = () => others[others.length - 1]
+
 
   const handleError = err => console.error(err)
 
@@ -48,11 +61,15 @@ const IoIndex = ({location})  =>{
 
   const phase2Msg  = <>
     <p>Para saber quién sos escaneá el QR de tu invitación al juego</p>
-    <QrReader className="qr-reader" delay={300} onError={handleError} onScan={handleScanSelf} />
+    <QrReader className="qr-reader" delay={300} onScan={handleScanSelf} onError={handleError} />
   </>
 
   const phase3Msg  = <>
-    <p>Bienvenido {shadow} Ahora podés comenzar a buscar tus Sombras Parejas.</p>
+    <p>
+      Bienvenido {myself}
+      <br/><br/>
+      ♈ ♉ ♊ ♋ ♌ ♍
+      Ahora podés comenzar a buscar tus Sombras Parejas.</p>
     <button onClick={()=> setPhase(4)} >continuar</button>
   </>
 
@@ -60,16 +77,16 @@ const IoIndex = ({location})  =>{
     <p>
       Escaneá los códigos QR de los demás participantes del juego.
       <br/><br/>
-      Llevas {count} de 12 reuniones realizadas
+      Llevas {count()} de 12 reuniones realizadas
     </p>
     <QrReader className="qr-reader" delay={300} onError={handleError} onScan={handleScanOther} />
   </>
 
   const phase5Msg  = <>
     <p>
-      El resultado de tu reunión con (quizás poner arquetipo tal 1 de 12, que incluso puede ser el mismo que a uno le tocó) es ... (aquí poner palabra que está asignada en el cuadro de doble entrada de miravilla.net)
+      El resultado de tu reunión con {last()} es {last()}
       <br/><br/>
-      Llevas {count} de 12 reuniones realizadas
+      Llevas {count()} de 12 reuniones realizadas
     </p>
     <button onClick={()=> setPhase(4)} >continuar la búsqueda</button>
   </>
@@ -78,10 +95,8 @@ const IoIndex = ({location})  =>{
     <p>
       video heka
     </p>
-    <button onClick={()=> setPhase(0)} >reiniciar</button>
+    <button onClick={()=> setPhase(0)} >volver a comenzar</button>
   </>
-
-
 
   return (
   <Layout location={location} >
