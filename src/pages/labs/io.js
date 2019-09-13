@@ -12,17 +12,48 @@ try {
   console.log('Can not require qr reader')
 }
 
+const getIndexFromHash = (url) => {
+  const parts = url.split('#')
+  return (parts.length >1) ? parseInt(parts[1]) : 0
+}
+
+const table = [
+  {name: 'Titán', symbol: '♈', relations: 'deseo,copula,pelea,defensattack,conquista,dote,danza,dragon,calculador,guru,retiro,civilizar'},
+  {name: 'Bestia', symbol: '♉',relations: 'materia,molde,ganado,diva,sirviente,jauladorada,minotauro,soma,cosechaysiembra,zeppelin,edenkitsch'},
+  {name: 'Dios bailarin', symbol: '♊',relations: 'verbo,juzgarbelleza,propagar,archivarakashico,seralivianar,psicoanalizar,predicar,comandar,coralear,masterthegame'},
+  {name: 'Ninfa pastor', symbol: '♋',relations: 'paraiso,bodamistica,aliciaenelpais,disneyworlds,embarazo,almamater,pachamama,navenodriza,catedral'},
+  {name: 'Héroe semidios', symbol: '♌',relations: 'egos,yukomishima,narciso,personaltrainer,johnywalker,davinci,maradona,bjork'},
+  {name: 'Reina esclava', symbol: '♍',relations: 'sistema,coregencia,gobiernoculto,teocracia,meritocracia,anarquia,utopia'},
+  {name: 'Príncipe consorte', symbol: '⚖',relations: 'cortejo,sexo,lunademiel,ballet,duodinamico,triada'},
+  {name: 'Bandida sacrificante', symbol: '♏',relations: 'farmaco,alcohol,tabaco,maria,ayahuasca'},
+  {name: 'Curador centauro', symbol: '♐',relations: 'banda,El Peloton,karmapolice,talkingheads'},
+  {name: 'Le gigante', symbol: '♑',relations: 'montana,montanarusa,tibet'},
+  {name: 'Genio loco', symbol: '♒',relations: 'red,io'},
+  {name: 'Adivina maga', symbol: '♓',relations: 'disolucion'},
+]
+
+const getRelation = (a,b) => {
+  const min = Math.min(a,b)-1
+  const max = Math.max(a,b)-1
+  const rels = table[min].relations.split(',')
+  console.log(a,b,rels[max-min])
+  return rels[max-min]
+}
+
+
+const symbol = (i)  => <span className="symbol">{table[i].symbol}</span>
+const name = (i)  => <span className="name">{table[i].name}</span>
+
 
 const IoIndex = ({location})  =>{
 
   const [phase, setPhase] = useState(1)
   const [others, setOthers] = useState([])
-  const [myself, setMyself] = useState(0)
+  const [myself, setMyself] = useState(1)
 
   // try to load shadow from hash
   useEffect( ()=> {
-    const parts = location.hash.split('#')
-    const i = (parts.length >1) ? parseInt(parts[1]) : 0
+    const i = getIndexFromHash(location.hash)
     if(i>0){
       setPhase(3)
       setMyself(i)
@@ -32,15 +63,18 @@ const IoIndex = ({location})  =>{
 
   const handleScanSelf = data => {
     if (data){
-      setPhase(3)
-      setMyself(parseInt(data))
+      const i = getIndexFromHash(data)
+      if(i>0){
+        setPhase(3)
+        setMyself(i)
+      }
     }
   }
 
 
   const handleScanOther = data => {
     if (data){
-      const i = parseInt(data)
+      const i = getIndexFromHash(data)
       if(i>0){
         setOthers(o => o.concat(i))
         setPhase(5)
@@ -50,30 +84,31 @@ const IoIndex = ({location})  =>{
 
   const count = () => (new Set(others)).size
   const last = () => others[others.length - 1]
-
+  const lastRelation = () => <span className="relation">{getRelation(myself,last())}</span>
 
   const handleError = err => console.error(err)
 
-  const phase1Msg  = <>
+  const phase1Msg  = () => <>
     <p>Bienvenido al Juego de las Sombras Parejas</p>
     <button onClick={()=> setPhase(2)} >comenzar</button>
   </>
 
-  const phase2Msg  = <>
+  const phase2Msg  = () => <>
     <p>Para saber quién sos escaneá el QR de tu invitación al juego</p>
     <QrReader className="qr-reader" delay={300} onScan={handleScanSelf} onError={handleError} />
   </>
 
-  const phase3Msg  = <>
+  const phase3Msg  = () => <>
     <p>
-      Bienvenido {myself}
-      <br/><br/>
-      ♈ ♉ ♊ ♋ ♌ ♍
+      Bienvenido {name(myself)}
+      <br/>
+      {symbol(myself)}
+      <br/>
       Ahora podés comenzar a buscar tus Sombras Parejas.</p>
     <button onClick={()=> setPhase(4)} >continuar</button>
   </>
 
-  const phase4Msg  = <>
+  const phase4Msg  = () => <>
     <p>
       Escaneá los códigos QR de los demás participantes del juego.
       <br/><br/>
@@ -82,10 +117,16 @@ const IoIndex = ({location})  =>{
     <QrReader className="qr-reader" delay={300} onError={handleError} onScan={handleScanOther} />
   </>
 
-  const phase5Msg  = <>
+  const phase5Msg  = () => <>
     <p>
-      El resultado de tu reunión con {last()} es {last()}
-      <br/><br/>
+      {name(myself)}
+      <br/>+
+      <br/>{name(last())}
+      <br/>=
+      <br/>{lastRelation()}
+      <br/>
+      {symbol(myself)}  {symbol(last())}
+      <br/>
       Llevas {count()} de 12 reuniones realizadas
     </p>
     <button onClick={()=> setPhase(4)} >continuar la búsqueda</button>
@@ -101,12 +142,12 @@ const IoIndex = ({location})  =>{
   return (
   <Layout location={location} >
     <SEO title="labs" />
-    {(phase===1) && phase1Msg}
-    {(phase===2) && phase2Msg}
-    {(phase===3) && phase3Msg}
-    {(phase===4) && phase4Msg}
-    {(phase===5) && phase5Msg}
-    {(phase===6) && phase6Msg}
+    {(phase===1) && phase1Msg()}
+    {(phase===2) && phase2Msg()}
+    {(phase===3) && phase3Msg()}
+    {(phase===4) && phase4Msg()}
+    {(phase===5) && phase5Msg()}
+    {(phase===6) && phase6Msg()}
   </Layout>)
 
 }
