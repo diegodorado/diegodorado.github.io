@@ -11,6 +11,9 @@ const LabsIndex = ({location})  =>
     </p>
     <ul>
       <li>
+        <h4><Link to={`/labs/io`} >IO HEKA</Link></h4>
+      </li>
+      <li>
         <h4><Link to={`/labs/live-emojing`} >Live Emojing Playground</Link></h4>
         <p>
           Descubre <strong>live coding</strong> jugando con emojis.

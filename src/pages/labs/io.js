@@ -3,6 +3,8 @@ import Link from "../../components/link"
 import Layout from "../../layouts/io"
 import SEO from "../../components/seo"
 
+import hekaVid from "../../../content/works/i-o/intro.mp4"
+
 // workaround to solve SSR
 //import QrReader from 'react-qr-reader'
 let QrReader = null
@@ -41,8 +43,8 @@ const getRelation = (a,b) => {
 }
 
 
-const symbol = (i)  => <span className="symbol">{table[i].symbol}</span>
-const name = (i)  => <span className="name">{table[i].name}</span>
+const symbol = (i)  => <span className="symbol">{table[i-1].symbol}</span>
+const name = (i)  => <span className="name">{table[i-1].name}</span>
 
 
 const IoIndex = ({location})  =>{
@@ -89,7 +91,7 @@ const IoIndex = ({location})  =>{
   const handleError = err => console.error(err)
 
   const phase1Msg  = () => <>
-    <p>Bienvenido al Juego de las Sombras Parejas</p>
+    <p>Bienvenide al Juego de las Sombras Parejas</p>
     <button onClick={()=> setPhase(2)} >comenzar</button>
   </>
 
@@ -100,7 +102,7 @@ const IoIndex = ({location})  =>{
 
   const phase3Msg  = () => <>
     <p>
-      Bienvenido {name(myself)}
+      Bienvenide {name(myself)}
       <br/>
       {symbol(myself)}
       <br/>
@@ -127,16 +129,27 @@ const IoIndex = ({location})  =>{
       <br/>
       {symbol(myself)}  {symbol(last())}
       <br/>
-      Llevas {count()} de 12 reuniones realizadas
+      {(count()===1) ? '¡Completaste las 12 reuniones!' :  `Llevas ${count()} de 12 reuniones realizadas`}
+
     </p>
-    <button onClick={()=> setPhase(4)} >continuar la búsqueda</button>
+    {(count()!==1) && <button onClick={()=> setPhase(4)} >continuar la búsqueda</button>}
+    {(count()===1) && <button onClick={()=> setPhase(6)} >reclama tu premio!</button>}
+
   </>
 
-  const phase6Msg  = <>
+  const phase6Msg  = () => <>
     <p>
-      video heka
+      ¡Felicitaciones! <br/>¡Completaste las 12 reuniones!
     </p>
-    <button onClick={()=> setPhase(0)} >volver a comenzar</button>
+    <video autoplay="true" loop="true" muted="true" style={{maxWidth:'100%'}}>
+      <source src={hekaVid} type="video/mp4"/>
+    </video>
+    <p>
+    Te damos un deseo en forma de mundo. Busca un miembro de Instrumento Óptico, muestra la manifestación de Heka y llévate lo que mereces.
+    <br/>
+    <span className="symbol">Ω</span>
+
+    </p>
   </>
 
   return (
