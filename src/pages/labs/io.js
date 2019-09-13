@@ -129,11 +129,11 @@ const IoIndex = ({location})  =>{
       <br/>
       {symbol(myself)}  {symbol(last())}
       <br/>
-      {(count()===1) ? '¡Completaste las 12 reuniones!' :  `Llevas ${count()} de 12 reuniones realizadas`}
+      {(count()===12) ? '¡Completaste las 12 reuniones!' :  `Llevas ${count()} de 12 reuniones realizadas`}
 
     </p>
-    {(count()!==1) && <button onClick={()=> setPhase(4)} >continuar la búsqueda</button>}
-    {(count()===1) && <button onClick={()=> setPhase(6)} >reclama tu premio!</button>}
+    {(count()!==12) && <button onClick={()=> setPhase(4)} >continuar la búsqueda</button>}
+    {(count()===12) && <button onClick={()=> setPhase(6)} >reclama tu premio!</button>}
 
   </>
 
