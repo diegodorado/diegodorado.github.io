@@ -12,6 +12,11 @@ const LabsIndex = ({location})  =>
     <ul>
       <li>
         <h4><Link to={`/labs/io`} >IO HEKA</Link></h4>
+        <p>
+        Juego de las Sombras Parejas (por Instrumento Óptico).
+        Una interacción lúdica basada en categorías de arquetipos y correspondencias zodiacales extraídos de la mitología clásica.
+        </p>
+
       </li>
       <li>
         <h4><Link to={`/labs/live-emojing`} >Live Emojing Playground</Link></h4>
