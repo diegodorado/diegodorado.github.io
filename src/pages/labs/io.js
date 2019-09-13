@@ -3,7 +3,7 @@ import Link from "../../components/link"
 import Layout from "../../layouts/io"
 import SEO from "../../components/seo"
 
-import hekaVid from "../../../content/works/i-o/intro.mp4"
+import hekaVid from "../../../content/works/i-o/heka.mp4"
 
 // workaround to solve SSR
 //import QrReader from 'react-qr-reader'
@@ -38,11 +38,10 @@ const getRelation = (a,b) => {
   const min = Math.min(a,b)-1
   const max = Math.max(a,b)-1
   const rels = table[min].relations.split(',')
-  console.log(a,b,rels[max-min])
   return rels[max-min]
 }
 
-
+const total = 12
 const symbol = (i)  => <span className="symbol">{table[i-1].symbol}</span>
 const name = (i)  => <span className="name">{table[i-1].name}</span>
 
@@ -90,8 +89,30 @@ const IoIndex = ({location})  =>{
 
   const handleError = err => console.error(err)
 
+  const stats  = () => <div className="stats">
+    {(count()===total) ? `¡Completaste las ${total} reuniones!` :  `Llevas ${count()} de ${total} reuniones realizadas`}
+    <ul>
+    {
+      others.reduce((a,b) => {a[b-1]=a[b-1]+1;return a},new Array(12).fill(0)).map((e,i) =>{
+          console.log(e,i)
+          return (e===0 ? null : <li key={i}>
+          {symbol(myself)}{symbol(i+1)}
+          {name(myself)} + {name(i+1)} = {getRelation(myself,i+1)}
+          {e>1 ? `  (¡${e} veces!)` : null}
+          </li>)
+      })
+    }
+    </ul>
+  </div>
+
+
   const phase1Msg  = () => <>
-    <p>Bienvenide al Juego de las Sombras Parejas</p>
+    <p>
+      Bienvenide al Juego de las Sombras Parejas
+      <br/>
+      <br/>
+      (permite el uso de la cámara para escanear los códigos)
+    </p>
     <button onClick={()=> setPhase(2)} >comenzar</button>
   </>
 
@@ -108,13 +129,14 @@ const IoIndex = ({location})  =>{
       <br/>
       Ahora podés comenzar a buscar tus Sombras Parejas.</p>
     <button onClick={()=> setPhase(4)} >continuar</button>
+    {stats()}
   </>
 
   const phase4Msg  = () => <>
     <p>
       Escaneá los códigos QR de los demás participantes del juego.
       <br/><br/>
-      Llevas {count()} de 12 reuniones realizadas
+      Llevas {count()} de {total} reuniones realizadas
     </p>
     <QrReader className="qr-reader" delay={300} onError={handleError} onScan={handleScanOther} />
   </>
@@ -129,27 +151,25 @@ const IoIndex = ({location})  =>{
       <br/>
       {symbol(myself)}  {symbol(last())}
       <br/>
-      {(count()===12) ? '¡Completaste las 12 reuniones!' :  `Llevas ${count()} de 12 reuniones realizadas`}
-
     </p>
-    {(count()!==12) && <button onClick={()=> setPhase(4)} >continuar la búsqueda</button>}
-    {(count()===12) && <button onClick={()=> setPhase(6)} >reclama tu premio!</button>}
-
+    {stats()}
+    {(count()!==total) && <button onClick={()=> setPhase(4)} >continuar la búsqueda</button>}
+    {(count()===total) && <button onClick={()=> setPhase(6)} >reclama tu premio!</button>}
   </>
 
   const phase6Msg  = () => <>
     <p>
-      ¡Felicitaciones! <br/>¡Completaste las 12 reuniones!
+      ¡Felicitaciones! <br/>¡Completaste las {total} reuniones!
     </p>
-    <video autoplay="true" loop="true" muted="true" style={{maxWidth:'100%'}}>
+    <video autoPlay={true} loop={true} muted={true} style={{maxWidth:'100%'}}>
       <source src={hekaVid} type="video/mp4"/>
     </video>
     <p>
     Te damos un deseo en forma de mundo. Busca un miembro de Instrumento Óptico, muestra la manifestación de Heka y llévate lo que mereces.
     <br/>
     <span className="symbol">Ω</span>
-
     </p>
+    {stats()}
   </>
 
   return (
