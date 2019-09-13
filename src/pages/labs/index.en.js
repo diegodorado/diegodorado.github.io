@@ -13,8 +13,7 @@ const LabsIndex = ({location})  =>
       <li>
         <h4><Link to={`/labs/io`} >IO HEKA</Link></h4>
          <p>
-         Matching Shadow Game (by Instrumento Óptico).
-          A playful interaction based on categories of archetypes and zodiacal correspondences drawn from classical mythology.
+          Matching Shadow Game (by Instrumento Óptico). A playful interaction based on categories of archetypes and zodiacal correspondences drawn from classical mythology.
          </p>
       </li>
       <li>

@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import Link from "../../components/link"
+import React, { useState, useEffect} from 'react'
 import Layout from "../../layouts/io"
-import SEO from "../../components/seo"
-
+import hekaTitle from "../../../content/works/i-o/heka.png"
 import hekaVid from "../../../content/works/i-o/heka.mp4"
 
 // workaround to solve SSR
@@ -45,9 +43,7 @@ const total = 12
 const symbol = (i)  => <span className="symbol">{table[i-1].symbol}</span>
 const name = (i)  => <span className="name">{table[i-1].name}</span>
 
-
 const IoIndex = ({location})  =>{
-
   const [phase, setPhase] = useState(1)
   const [others, setOthers] = useState([])
   const [myself, setMyself] = useState(1)
@@ -62,12 +58,18 @@ const IoIndex = ({location})  =>{
 
   },[])
 
+  const goTop = () =>{
+    if(window!==undefined) window.scroll(0,0)
+  }
+
+
   const handleScanSelf = data => {
     if (data){
       const i = getIndexFromHash(data)
       if(i>0){
         setPhase(3)
         setMyself(i)
+        goTop()
       }
     }
   }
@@ -79,8 +81,25 @@ const IoIndex = ({location})  =>{
       if(i>0){
         setOthers(o => o.concat(i))
         setPhase(5)
+        goTop()
       }
     }
+  }
+
+
+  const onStart = (ev) => {
+    goTop()
+    setPhase(2)
+  }
+
+  const onContinue = (ev) => {
+    goTop()
+    setPhase(4)
+  }
+
+  const onClaim = (ev) => {
+    goTop()
+    setPhase(6)
   }
 
   const count = () => (new Set(others)).size
@@ -94,12 +113,11 @@ const IoIndex = ({location})  =>{
     <ul>
     {
       others.reduce((a,b) => {a[b-1]=a[b-1]+1;return a},new Array(12).fill(0)).map((e,i) =>{
-          console.log(e,i)
-          return (e===0 ? null : <li key={i}>
-          {symbol(myself)}{symbol(i+1)}
-          {name(myself)} + {name(i+1)} = {getRelation(myself,i+1)}
-          {e>1 ? `  (¡${e} veces!)` : null}
-          </li>)
+        return (e===0 ? null : <li key={i}>
+        {symbol(myself)}{symbol(i+1)}
+        {name(myself)} + {name(i+1)} = {getRelation(myself,i+1)}
+        {e>1 ? `  (¡${e} veces!)` : null}
+        </li>)
       })
     }
     </ul>
@@ -113,7 +131,7 @@ const IoIndex = ({location})  =>{
       <br/>
       (permite el uso de la cámara para escanear los códigos)
     </p>
-    <button onClick={()=> setPhase(2)} >comenzar</button>
+    <button onClick={onStart} >comenzar</button>
   </>
 
   const phase2Msg  = () => <>
@@ -128,7 +146,7 @@ const IoIndex = ({location})  =>{
       {symbol(myself)}
       <br/>
       Ahora podés comenzar a buscar tus Sombras Parejas.</p>
-    <button onClick={()=> setPhase(4)} >continuar</button>
+    <button onClick={onContinue} >continuar</button>
     {stats()}
   </>
 
@@ -152,9 +170,9 @@ const IoIndex = ({location})  =>{
       {symbol(myself)}  {symbol(last())}
       <br/>
     </p>
+    {(count()!==total) && <button onClick={onContinue} >continuar la búsqueda</button>}
+    {(count()===total) && <button onClick={onClaim} >reclama tu premio!</button>}
     {stats()}
-    {(count()!==total) && <button onClick={()=> setPhase(4)} >continuar la búsqueda</button>}
-    {(count()===total) && <button onClick={()=> setPhase(6)} >reclama tu premio!</button>}
   </>
 
   const phase6Msg  = () => <>
@@ -173,14 +191,16 @@ const IoIndex = ({location})  =>{
   </>
 
   return (
-  <Layout location={location} >
-    <SEO title="labs" />
-    {(phase===1) && phase1Msg()}
-    {(phase===2) && phase2Msg()}
-    {(phase===3) && phase3Msg()}
-    {(phase===4) && phase4Msg()}
-    {(phase===5) && phase5Msg()}
-    {(phase===6) && phase6Msg()}
+  <Layout location={location}>
+    <img className="title" alt="HEKA" src={hekaTitle} />
+    <>
+      {(phase===1) && phase1Msg()}
+      {(phase===2) && phase2Msg()}
+      {(phase===3) && phase3Msg()}
+      {(phase===4) && phase4Msg()}
+      {(phase===5) && phase5Msg()}
+      {(phase===6) && phase6Msg()}
+    </>
   </Layout>)
 
 }
