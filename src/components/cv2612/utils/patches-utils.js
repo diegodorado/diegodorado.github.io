@@ -1,3 +1,52 @@
+
+export const globalParams = ['play_mode','cc_mode','X','Y','Z','vel_sensitivity','rgb_intensity']
+
+export const ctrlMap = ['ar','d1','sl','d2','rr','tl','mul','det','rs','am','al','fb','ams','fms','st','lfo','en']
+
+//rename to defaultParams
+export const emptyParams = () =>{
+  const params = {}
+
+  for (let g of globalParams) {
+    params[g] = 0
+  }
+
+  params[`6_4_lfo`] = 0
+  params[`6_4_en`] = 0
+  for(let ch=0;ch<6;ch++){
+    //repeat for 6 channels, and omni channel too
+    params[`${ch}_4_fms`] = 0
+    params[`${ch}_4_fb`] = 0
+    params[`${ch}_4_al`] = 0
+    params[`${ch}_4_ams`] = 0
+    params[`${ch}_4_st`] = 3
+    for(let op=0;op<4;op++){
+      params[`${ch}_${op}_mul`] = 0
+      params[`${ch}_${op}_tl`] = 0
+      params[`${ch}_${op}_ar`] = 0
+      params[`${ch}_${op}_d1`] = 0
+      params[`${ch}_${op}_sl`] = 0
+      params[`${ch}_${op}_rr`] = 0
+      params[`${ch}_${op}_am`] = 0
+      params[`${ch}_${op}_rs`] = 0
+      params[`${ch}_${op}_det`] = 0
+      params[`${ch}_${op}_d2`] = 0
+    }
+  }
+  return params
+}
+
+
+
+export const emptyMapping = () =>{
+  const mapping = emptyParams()
+  for (let key in mapping) {
+    mapping[key] = {cc:null, ch:null, global: globalParams.includes(key)}
+  }
+  return mapping
+}
+
+
 export const dmp2patch = (name,d) =>{
     //version 9 or 11, genesis, FM patch
     if( (d[0]===0x09 && d[1]===0x01 && d[2]===0x00)
@@ -24,9 +73,7 @@ export const dmp2patch = (name,d) =>{
           1 Byte: D2R
           1 Byte: SSGEG_Enabled <<3 | SSGEG
           */
-          const params = {}
-          params[`6_4_lfo`] = 0
-          params[`6_4_en`] = 0
+          const params = emptyParams()
           for(let ch=0;ch<=6;ch++){
             //repeat for 6 channels, and omni channel too
             params[`${ch}_4_fms`] = d[3]
@@ -57,34 +104,6 @@ export const dmp2patch = (name,d) =>{
 }
 
 
-export const emptyParams = () =>{
-  const params = {}
-  params[`6_4_lfo`] = 0
-  params[`6_4_en`] = 0
-  for(let ch=0;ch<=6;ch++){
-    //repeat for 6 channels, and omni channel too
-    params[`${ch}_4_fms`] = 0
-    params[`${ch}_4_fb`] = 0
-    params[`${ch}_4_al`] = 0
-    params[`${ch}_4_ams`] = 0
-    params[`${ch}_4_st`] = 3
-    for(let op=0;op<4;op++){
-      params[`${ch}_${op}_mul`] = 0
-      params[`${ch}_${op}_tl`] = 0
-      params[`${ch}_${op}_ar`] = 0
-      params[`${ch}_${op}_d1`] = 0
-      params[`${ch}_${op}_sl`] = 0
-      params[`${ch}_${op}_rr`] = 0
-      params[`${ch}_${op}_am`] = 0
-      params[`${ch}_${op}_rs`] = 0
-      params[`${ch}_${op}_det`] = 0
-      params[`${ch}_${op}_d2`] = 0
-    }
-  }
-  return params
-}
-
-
 export const bitness = (param) =>{
   const groups = [
     ['am','en'],
@@ -101,14 +120,6 @@ export const bitness = (param) =>{
       return bits
     bits++
   }
-  return 0
-}
-
-export const emptyMapping = () =>{
-  //todo, move bitness aways from mapping
-  const mapping = emptyParams()
-  for (let key in mapping) {
-    mapping[key] = {cc:null, ch:null}
-  }
-  return mapping
+  //default bitness
+  return 7
 }

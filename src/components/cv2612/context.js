@@ -1,12 +1,10 @@
 import React from "react"
-import {emptyParams, emptyMapping, bitness} from "./utils/patches-utils"
+import {ctrlMap, globalParams, emptyParams, emptyMapping, bitness} from "./utils/patches-utils"
 import obj_diff from "./utils/obj_diff"
 import {reactLocalStorage} from 'reactjs-localstorage'
 
 export const CV2612Context = React.createContext()
 export const CV2612Consumer = CV2612Context.Consumer
-
-const ctrlmap = ['ar','d1','sl','d2','rr','tl','mul','det','rs','am','al','fb','ams','fms','st','lfo','en']
 
 // Create the provider using a traditional React.Component class
 export class CV2612Provider extends React.Component {
@@ -26,6 +24,7 @@ export class CV2612Provider extends React.Component {
       soundOn: false,
       setActiveParameter: this.setActiveParameter,
       updateParam: this.updateParam,
+      sendVoice: this.sendVoice,
       loadPatch: this.loadPatch,
       filterChannel: this.filterChannel,
       toggleLearning: this.toggleLearning,
@@ -34,7 +33,7 @@ export class CV2612Provider extends React.Component {
   }
 
   componentDidMount(){
-    const savedMapping = reactLocalStorage.getObject('mapping',{})
+    const savedMapping = {} // reactLocalStorage.getObject('mapping',{})
     if(Object.keys(savedMapping).length>0){
       let mapping = {...this.state.mapping}
       for (let [code, value] of Object.entries(savedMapping)) {
@@ -62,11 +61,7 @@ export class CV2612Provider extends React.Component {
         const resolution = Math.pow(2,bits)
         const step = 128/resolution
         const v = Math.floor(val/step)
-        const parts = k.split('_')
-        const ch = parseInt(parts[0])
-        const op = parseInt(parts[1])
-        const param = parts[2]
-        this.updateParam(ch,op,param,k,v)
+        this.updateParam(k,v)
       }
     }
 
@@ -77,19 +72,26 @@ export class CV2612Provider extends React.Component {
   }
 
   sendParameter = (code, value) => {
-    const parts = code.split('_')
-    const ch = parseInt(parts[0])
-    const op = parseInt(parts[1])
-    const param = parts[2]
-    const pId = ctrlmap.indexOf(param)
-    if(pId===-1){
-      console.error(`Unexpected param ${param} in code ${code}`)
+    if(globalParams.includes(code)){
+      const pId = globalParams.indexOf(code)
+      // 0x05 is a globalParam
+      this.state.midi.sendSysexSet([0x05,pId,value])
     }else{
-       //todo: implement omni channel on chip side
-       // and avoid resending parameters triggered by omni channel
-      this.state.midi.sendSysexSet([ch,op,pId,value])
-      this.state.emulator.update(ch,op,param,value)
+      const parts = code.split('_')
+      const ch = parseInt(parts[0])
+      const op = parseInt(parts[1])
+      const param = parts[2]
+      const pId = ctrlMap.indexOf(param)
+      if(pId===-1){
+        console.error(`Unexpected param ${param} in code ${code}`)
+      }else{
+         //todo: implement omni channel on chip side
+         // and avoid resending parameters triggered by omni channel
+        this.state.midi.sendSysexSet([ch,op,pId,value])
+        this.state.emulator.update(ch,op,param,value)
+      }
     }
+
   }
 
   sendVoice = (v) => {
@@ -111,23 +113,16 @@ export class CV2612Provider extends React.Component {
   sendPatch = () => {
     console.log('sendPatch')
     this.state.emulator.loadCurrentPatch()
-    this.sendVoice(0)
+    //this.sendVoice(0)
   }
 
   setActiveParameter = (param) => {
     this.setState({activeParameter: param})
   }
 
-  updateParam = (ch, op, param, code, value) => {
+  updateParam = (code, value) => {
     let params = {...this.state.params}
     params[code] = value
-
-    //update for all channels?
-    if(!['lfo','en'].includes(param) && (ch===6)){
-      for (let c=0; c<6; c++)
-        params[`${c}_${op}_${param}`] = value
-    }
-
     this.setState({params: params})
   }
 
@@ -192,6 +187,8 @@ export class CV2612Provider extends React.Component {
       this.setState({envelopes: envelopes})
     }
   }
+
+
 
   calculateEnvelopePoints(env){
     const x1 = Math.round((31-env.ar)/31*100)

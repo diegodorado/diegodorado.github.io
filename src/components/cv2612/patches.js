@@ -25,7 +25,7 @@ class Patches extends React.Component {
   }
 
   componentDidMount(){
-    const patches = reactLocalStorage.getObject('patches',[])
+    const patches = [] // reactLocalStorage.getObject('patches',[])
     if(patches.length===0 || Object.keys(patches).length===0){
       this.loadDefaultPatches()
     }else{

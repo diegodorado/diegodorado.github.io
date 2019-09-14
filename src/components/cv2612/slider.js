@@ -19,7 +19,7 @@ const Slider = (props) =>{
 
   const onChange = (ev) =>{
     ev.preventDefault()
-    context.updateParam(ch, op, props.name, code,parseInt(ev.target.value))
+    context.updateParam(code,parseInt(ev.target.value))
     context.setActiveParameter(code)
   }
 

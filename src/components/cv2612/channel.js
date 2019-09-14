@@ -11,20 +11,27 @@ const Channel = (props) =>{
       <table>
         <tbody>
           <tr>
-            <td><Slider name="lfo"/></td>
-            <td><Slider name="en" /></td>
-            <td><Slider name="st" /></td>
+            <td colSpan={3}>
+              <table>
+                <tbody>
+                  <tr>
+                    <td><Slider name="fb" /></td>
+                    <td><Slider name="st" /></td>
+                    <td><Slider name="al" /></td>
+                  </tr>
+                  <tr>
+                    <td><Slider name="ams" /></td>
+                    <td><Slider name="fms" /></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
             <td>
               <pre className="algorithm">
                 {algorithmAscii(context.params[`${context.filters.ch}_4_al`])}
               </pre>
             </td>
-          </tr>
-          <tr>
-            <td><Slider name="fb" /></td>
-            <td><Slider name="ams"/></td>
-            <td><Slider name="fms"/></td>
-            <td><Slider name="al" /></td>
           </tr>
           <tr>
             <td><Operator op={0} /></td>
