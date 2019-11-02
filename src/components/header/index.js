@@ -4,6 +4,7 @@ import Helmet from "react-helmet"
 import Brand from "./brand"
 import LanguagesLinks from "./languages-links"
 import ThemeToggle from "./theme-toggle"
+import SocialLinks from "./social-links"
 import { useTranslation } from 'react-i18next'
 
 const meta = [
@@ -30,23 +31,20 @@ const partiallyActive = className => ({ isPartiallyCurrent }) => ({
   className: `${className?className:''} ${isPartiallyCurrent ? 'active': ''}`,
 })
 
-
-
+const PLink = ({ className, ...rest }) => (
+  <Link getProps={partiallyActive(className)} {...rest} />
+)
 
 
 const Header = ({location}) => {
-
   const [t, ] = useTranslation();
-
-  const PLink = ({ className, ...rest }) => (
-    <Link getProps={partiallyActive(className)} {...rest} />
-  )
 
   return (
     <header>
       <Helmet meta={meta} />
       <Brand title="diego dorado" />
       <nav>
+        <SocialLinks />
         <LanguagesLinks location={location}/>
         <ThemeToggle />
         <br/>

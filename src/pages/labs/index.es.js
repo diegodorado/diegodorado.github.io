@@ -7,7 +7,7 @@ const LabsIndex = ({location})  =>
   <Layout location={location} >
     <SEO title="labs" />
     <p className="spacey">
-      Bienvenido! Acá puedes encontrar algunos experimentos web experiments para probar.
+      Bienvenido! Acá puedes encontrar algunos experimentos web.
     </p>
     <ul>
       <li>

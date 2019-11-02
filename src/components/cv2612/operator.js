@@ -5,7 +5,6 @@ import Slider from "./slider"
 const Operator = (props) =>{
   return (
     <div className="operator">
-      <h5>Op {props.op+1}</h5>
       <Slider name="ar" op={props.op} />
       <Slider name="d1" op={props.op} />
       <Slider name="sl" op={props.op} />

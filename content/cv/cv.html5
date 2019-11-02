@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="$lang$" xml:lang="$lang$"$if(dir)$ dir="$dir$"$endif$>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="diegodorado" />
+  <title>CV diego dorado</title>
+  <link   href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&display=swap" rel="stylesheet" />
+  <style>
+    html {
+      height: auto;
+      font-family: 'Inconsolata', monospace;
+      background-color: #222;
+      padding: 0; margin: 0;
+      color: #ddd;
+    }
+    body {
+      height: auto;
+      padding: 0; margin: 0;
+      font-size: 18px;
+      line-height: 1.6em;
+    }
+    .cv{
+      margin: 0% 5% 0 5%;
+    }
+    h1{ margin: 60px 0 40px 0;}
+    blockquote{ margin: 0; font-size: 1.1em;}
+    h2{text-decoration: underline; margin: 60px 0 0;}
+    h3{text-shadow: #509eec 3px 3px 3px;font-weight: bold;}
+    h4{text-shadow: #509eeca0 1px 1px 4px; margin: 24px 0 0;font-weight: bold;}
+    a, a:visited{color: #509eec;}
+    p {margin:0;}
+    hr {page-break-after: always; visibility: hidden;}
+  </style>
+</head>
+<body class"dark">
+  <div class="cv">
+    <h1>diego dorado</h1>
+    $body$
+  </div>
+</body>
+</html>

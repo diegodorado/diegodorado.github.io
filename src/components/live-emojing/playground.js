@@ -29,6 +29,7 @@ import parser from "./tidal"
 import Pattern from "./pattern"
 import Tone from "tone"
 import LiveEmojingContext from './context.js'
+import {useTranslation } from 'react-i18next'
 
 //todo: split this file in smaller modules! please!!
 const emojis = Object.values(emojiIndex.emojis).map((e)=>e.native)
@@ -53,6 +54,7 @@ let parsedGrammar = null
 
 
 const Playground = ({pattern}) =>{
+  const [t, ] = useTranslation();
 
 
   let canvasRef = React.createRef()
@@ -657,19 +659,19 @@ const Playground = ({pattern}) =>{
             <div className="welcome">
               <img alt="" src={context.avatarUrl} width={90} />
               <p>
-                Hi {context.nick}.<br/>
-                You joined {context.channel}.<br/>
-                <em>(<a href="/" onClick={context.toggleConfiguring}>change</a>)</em>
+                {t('Hi')} {context.nick}.<br/>
+                {t('You joined')} {context.channel}.<br/>
+                <em>(<a href="/" onClick={context.toggleConfiguring}>{t('change')}</a>)</em>
               </p>
             </div>}
-          <h4>Instructions:</h4>
+          <h4>{t('Instructions')}:</h4>
           <ul>
-            <li>Throw a <a className="dice-btn" href="/" onClick={onRandomClick}><span role="img" aria-label="dice">🎲</span></a> {isDesktop && (<>[TAB] </>)}.</li>
-            <li>Play <a className="play-btn" href="/" onClick={onCommitClick}><FaPlay /></a> {isDesktop && (<>[ENTER] </>)}.</li>
-            <li>Go full screen <FaExpand className="fullscreen-btn" onClick={onExpandClick}/></li>
+            <li>{t('Role a')} <a className="dice-btn" href="/" onClick={onRandomClick}><span role="img" aria-label="dice">🎲</span></a> {isDesktop && (<>[TAB] </>)}.</li>
+            <li>{t('Play')} <a className="play-btn" href="/" onClick={onCommitClick}><FaPlay /></a> {isDesktop && (<>[ENTER] </>)}.</li>
+            <li>{t('Go full screen')} <FaExpand className="fullscreen-btn" onClick={onExpandClick}/></li>
             {(false && context.playingAlone) ? <li>Tap screen to set tempo</li>: null}
-            {isDesktop && (<li>Magical keyboard! ( A={alphaEmoji[0]}, B={alphaEmoji[1]}, so on)</li>)}
-            <li>Got it? Then <a href="/" onClick={onHideInstructionsClick}>hide this</a></li>
+            {isDesktop && (<li>{t('Magical keyboard!')} ( A={alphaEmoji[0]}, B={alphaEmoji[1]}, {t('so on')})</li>)}
+            <li>{t('Got it? Then')} <a href="/" onClick={onHideInstructionsClick}>{t('hide this')}</a></li>
           </ul>
         </div>}
       <a className="expand" href="/" onClick={onExpandClick}>

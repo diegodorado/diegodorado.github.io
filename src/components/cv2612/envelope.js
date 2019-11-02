@@ -6,7 +6,7 @@ const Envelope = (props) =>{
   return (
     <div className="envelope">
       <svg height="100" width="400" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
-        <polyline points={context.envelopes[`${context.filters.ch}_${props.op}`]} />
+        <polyline points={context.envelopes[`${props.op}`]} />
       </svg>
     </div>
   )

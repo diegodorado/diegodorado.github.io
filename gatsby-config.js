@@ -25,6 +25,13 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/content/cv`,
+        name: `cv`,
+      },
+    },
+    {
       resolve: `gatsby-source-instagram`,
       options: {
         username: 'diegdorado',
@@ -57,6 +64,13 @@ module.exports = {
               ratio: 1.77,
               related: false,
               noIframeBorder: true
+            }
+          },
+          {
+            resolve: "gatsby-remark-external-links",
+            options: {
+              target: "_blank",
+              rel: "nofollow"
             }
           },
           {

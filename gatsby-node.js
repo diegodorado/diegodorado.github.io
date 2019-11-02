@@ -4,10 +4,12 @@ const { createFilePath } = require(`gatsby-source-filesystem`)
 const locales = ['en','es']
 const defaultLocale = 'en'
 
+// I create pages for works, but not for cv
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions
 
   const workPost = path.resolve(`./src/templates/work-post.js`)
+  const cvTemplate = path.resolve(`./src/templates/cv.js`)
 
 
   // I just use this array to create pagination, which  works with unlocalized
@@ -120,13 +122,13 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
     //check if article is localized or not
     const localized = name.indexOf(`.`) !== -1
+
     // Files are defined with "name-with-dashes.lang.md"
     // name returns "name-with-dashes.lang"
     // So grab the lang from that string
     // If not localized, pass empty string for that
     const lang = localized ? name.split(`.`)[1] : ''
-    let slug = '/works'+createFilePath({ node, getNode })
-
+    let slug = createFilePath({ node, getNode })
     if(localized){
       //remove .lang and index.lang from slug
       slug = slug.replace(`.${lang}`,'')
@@ -134,17 +136,21 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     }
 
 
+    //what kind of file is it? .. or which folder was it in
+    // this may throw an error if regex doesnt match
+    const [_, folder] = node.fileAbsolutePath.match(/\/content\/(\w+)\//)
+
+    //generic nodes
     createNodeField({ node, name: `locale`, value: lang })
-    createNodeField({ node, name: `slug`,value: slug})
-    //hardcoded article type
-    createNodeField({ node, name: `type`,value: `works`})
     createNodeField({ node, name: `index`,value: name.startsWith('index')})
+    createNodeField({ node, name: `slug`,value: `/${folder}${slug}`})
+    createNodeField({ node, name: `type`,value: folder})
 
   }
 }
 
 
-
+// this is to localize pages
 exports.onCreatePage = ({ page, actions }) => {
   const { createPage, deletePage } = actions
 

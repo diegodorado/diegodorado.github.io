@@ -1,6 +1,6 @@
 import React from 'react'
 import {CV2612Context} from "./context"
-import {emptyParams} from "./utils/patches-utils"
+import {emptyVoice} from "./utils/patches-utils"
 import AudioKeys from 'audiokeys'
 import { FaVolumeOff as FaVolume,
          FaVolumeMute as FaVolumeSlash
@@ -20,15 +20,17 @@ class Emulator extends React.Component {
     super(props)
     this.state = {soundOn: false}
     this.fftSize = 1024
-    this.params = emptyParams()
+    this.cache = []
+    for (let i = 0; i < 6; i++)
+      this.cache.push(emptyVoice())
+
   }
 
   componentDidMount(){
-
+    //todo: initialize audio context properly
     this.audioCtx = new AudioContext()
     if(this.audioCtx.state==='running')
        this.initialize()
-
 
     this.notes = []
     this.context.emulator = this
@@ -148,23 +150,13 @@ class Emulator extends React.Component {
       this.write(0x27,0x00) //chan3 normal mode
       this.write(0x28,0x00)
       // load all patch params
-      this.loadCurrentPatch()
+      //this.loadCurrentPatch()
     })
 
      this.setState({soundOn: true})
 
   }
 
-  loadCurrentPatch = () => {
-
-    for (let [code, value] of Object.entries(this.context.params)) {
-      const parts = code.split('_')
-      const ch = parseInt(parts[0])
-      const op = parseInt(parts[1])
-      const param = parts[2]
-      this.update(ch,op,param,value)
-    }
-  }
 
 
   noteOn = (note) => {
@@ -252,38 +244,28 @@ class Emulator extends React.Component {
   }
 
 
-  update = (ch,op,param,value) =>{
-    const globals = ['lfo','en']
-    const channels = ['fb','ams','fms','st','al']
-    const operators = ['ar','d1','sl','d2','rr','tl','mul','det','rs','am']
+  update = (voice,code,value) =>{
 
+    const parts = code.split('_')
+    const param = parts[0]
+    const op = parts[1]
 
-    // register filters... somehow messy
-    if((ch===6 || op===4) && operators.includes(param))
-      return
-
-    if((ch===6) && channels.includes(param))
-      return
-
-    if((op!==4) && channels.includes(param))
-      return
-
-    if((op!==4 || ch!==6) && globals.includes(param))
-      return
-
-    //cached values since we have to write the whole register every time
-    this.params[`${ch}_${op}_${param}`] = value
-
-    const ch_off = (Math.floor(ch/3) * 0x100 + ch%3 )
-    const mask = (key,size,shift) =>{
-      return (this.params[`${ch}_${op}_${key}`] & (Math.pow(2,size)-1))<<shift
-    }
-
-    if(param==='lfo' || param==='en' ){
-      const v = mask('en',1,3)|mask('lfo',3,0)
+    if(code==='lfo'){
+      const v = (((value>0) & 0x01)<<3) | (value & 0x07)
       this.write(0x22, v)
+      return
     }
-    else if(param==='det' || param==='mul' ){
+
+    //cache values since we have to write the whole register every time
+    this.cache[voice][code] = value
+
+    const ch_off = Math.floor(voice/3) * 0x100 + voice%3
+    const mask = (key,size,shift) =>{
+      const v = (op===undefined)? this.cache[voice][key] : this.cache[voice][`${key}_${op}`]
+      return (v & (Math.pow(2,size)-1))<<shift
+    }
+
+    if(param==='det' || param==='mul' ){
       const v = mask('det',3,4)|mask('mul',4,0)
       this.write(0x30+4*op+ch_off, v)
     }

@@ -8,39 +8,30 @@ const Channel = (props) =>{
   const context = useContext(CV2612Context)
   return (
     <div className="channel">
-      <table>
-        <tbody>
-          <tr>
-            <td colSpan={3}>
-              <table>
-                <tbody>
-                  <tr>
-                    <td><Slider name="fb" /></td>
-                    <td><Slider name="st" /></td>
-                    <td><Slider name="al" /></td>
-                  </tr>
-                  <tr>
-                    <td><Slider name="ams" /></td>
-                    <td><Slider name="fms" /></td>
-                    <td></td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-            <td>
-              <pre className="algorithm">
-                {algorithmAscii(context.params[`${context.filters.ch}_4_al`])}
-              </pre>
-            </td>
-          </tr>
-          <tr>
-            <td><Operator op={0} /></td>
-            <td><Operator op={2} /></td>
-            <td><Operator op={1} /></td>
-            <td><Operator op={3} /></td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="four-cols">
+        <div className="col">
+          <Slider name="fb" />
+          <Slider name="ams" />
+        </div>
+        <div className="col">
+          <Slider name="st" />
+          <Slider name="fms" />
+        </div>
+        <div className="col">
+          <Slider name="al" />
+        </div>
+        <div className="col">
+          <pre className="algorithm">
+            {algorithmAscii(context.params['al'])}
+          </pre>
+        </div>
+      </div>
+      <div className="four-cols">
+        <div className="col"><Operator op={0} /></div>
+        <div className="col"><Operator op={2} /></div>
+        <div className="col"><Operator op={1} /></div>
+        <div className="col"><Operator op={3} /></div>
+      </div>
     </div>
   )
 }

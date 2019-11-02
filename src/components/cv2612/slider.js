@@ -6,15 +6,11 @@ const Slider = (props) =>{
   const context = useContext(CV2612Context)
   const bits = bitness(props.name)
   const max = Math.pow(2,bits)-1
-  const ch = [`lfo`,`en`].includes(props.name) ? 6 : context.filters.ch
-  const op = (props.op !== undefined) ? props.op : 4
-  const code = `${ch}_${op}_${props.name}`
-  const m = context.mapping[code]
-  const mapped = ( (m.ch && m.cc)!==null)
+  const code = (props.op === undefined) ? props.name : `${props.name}_${props.op}`
   const className = 'slider'
     .concat(context.learning ? ' learn' : '')
     .concat(context.activeParameter === code ? ' active' : '')
-    .concat(mapped ? ' mapped' : '')
+    .concat(context.mapping[code]!==null ? ' mapped' : '')
 
 
   const onChange = (ev) =>{
@@ -33,7 +29,7 @@ const Slider = (props) =>{
       <label>{props.name}</label>
       <input type="range" step={1} min={0} max={max} value={context.params[code]} onChange={onChange} />
       <span>
-        {context.params[code] + (context.learning ? (mapped ? ` - ${m.ch}:${m.cc}` : ' - n/a'): '') }
+        {context.params[code] + (context.learning ? ` - CC ${context.mapping[code]}`: '') }
       </span>
     </div>
   )
