@@ -14,7 +14,7 @@ const Home = ({location}) => {
   //return empty layout instead of null to avoid FOUC
   return (
     <Layout location={location} >
-        <p className="spacey">
+        <p style={{textAlign: 'center'}} className="spacey">
           Hoy hacemos live coding con emojis en el CCK!
         </p>
         <p style={{textAlign: 'center'}}>
