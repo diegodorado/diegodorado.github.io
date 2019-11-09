@@ -46,10 +46,7 @@ const Avatar = () =>{
 
 
   return (
-    <>
-      <img alt="" width={150} height={150} src={context.avatarUrl} onClick={onChangeAvatar} className={`${ loadingAvatar ? 'loading' : '' }  avatar`}/>
-      {(!understandsAvatarClick)?<p>{'<--- '}{t('Click the avatar to change it')}</p>:null}
-    </>
+    <p><img alt="" width={150} height={150} src={context.avatarUrl} onClick={onChangeAvatar} className={`${ loadingAvatar ? 'loading' : '' } ${(!understandsAvatarClick)?'pulse':''}  avatar`}/></p>
   )
 
 }

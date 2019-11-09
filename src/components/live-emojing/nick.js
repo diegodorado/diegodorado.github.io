@@ -54,12 +54,12 @@ const Nick = () =>{
   }
 
   return (
-    <>
+    <p>
       {confirmed?
-        (<p><em>{t('Hey')}</em> <a href="/" onClick={onChangeClick}>{context.nick}</a> ! {(!understandsNameClick)?<span> {'<--- '} {t('Click the name to change it')}</span>:null}</p>):
+        (<><em>{t('Hey')}</em> <a href="/" className={(!understandsNameClick)?'pulse':''} onClick={onChangeClick}>{context.nick}</a></>):
         (<input type="text" value={context.nick} onChange={onChange} onBlur={confirm} autoFocus required pattern="^[A-Za-z0-9_-]{3,15}$" onKeyPress={onKeyPress} onFocus={handleFocus} size={15} maxLength={15}/>)
       }
-    </>
+    </p>
   )
 
 }

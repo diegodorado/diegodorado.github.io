@@ -28,22 +28,27 @@
     border:  0
     box-sizing: border-box
     outline: 0
+    text-align: center
   input:required:valid
-    border: 3px solid cyan
+    border: 3px solid $blue
   input:required:invalid
-    border: 3px solid magenta
+    border: 3px solid #ccc
   button
-
     &:hover
       background: #999
   .connection
+    text-align: center
+    .pulse
+      color: $blue
+      display: inline-block
+      animation: expand 1s infinite alternate
     .channel
       h3
         text-align: center
         margin-bottom: 0
         font-size: 1.5em
       .btn
-        background: cyan
+        background: $blue
     .btn
       border:  0
       outline: 0
@@ -68,8 +73,6 @@
       border-radius: 50%
       cursor: pointer
       transition: transform 0.2s linear
-      float: left
-      margin: 0 20px 20px 0
       &.loading
         transform: scale(0.97)
         filter: blur(2px) grayscale(1)
