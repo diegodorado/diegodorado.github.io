@@ -15,10 +15,10 @@ const Home = ({location}) => {
   return (
     <Layout location={location} >
         <p style={{textAlign: 'center'}} className="spacey">
-          Hoy hacemos live coding con emojis en el CCK!
+          Subí una webapp para tocar junto a una maquina.
         </p>
         <p style={{textAlign: 'center'}}>
-          <button onClick={()=> navigate(`/${i18n.languages[0]}/labs/live-emojing`)} className="big-btn">comenzar</button>
+          <a style={{color: '#222'}}  href={`/human-aided-music/`} className="big-btn">a ver...</a>
         </p>
     </Layout>
   )
