@@ -6,22 +6,35 @@
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="A Human-machine duet"/>
     <link rel="shortcut icon" href="favicon.ico" />
-    <title>Musica Asistida por Humano</title>
+    <title>mapH</title>
+    <style>
+      html, body, #app{
+        background: #010305;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+            height: 100%;
+      }
+      #start{
+        font-size: 4em;
+        cursor: pointer;
+        display: none;
+      }
+      body.loading #app, body.loading .dg{
+        display: none;
+      }
+      body.loading #start{
+        display: block;
+      }
+    </style>
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet" />
   </head>
-  <body>
+  <body class="loading">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="App">
-      <section>
-        <div class="visualizer-container">
-          <canvas id="pianoRoll"></canvas>
-          <div class="transport">
-            <div id="generating"></div>
-            <div id="seed"></div>
-            <div id="progress"></div>
-          </div>
-          <canvas id="pianoRoll2"></canvas>
-        </div>
-      </section>
+    <button id="start" disabled>LOADING...</button>
+    <div id="app">
+      <div id="orca"></div>
     </div>
     <script src="app.js"></script>
   </body>
