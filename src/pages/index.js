@@ -15,10 +15,10 @@ const Home = ({location}) => {
   return (
     <Layout location={location} >
         <p style={{textAlign: 'center'}} className="spacey">
-          Subí una webapp para tocar junto a una maquina.
+          map-H en una webapp para tocar con un bot baterista que intentará acompañarte.
         </p>
         <p style={{textAlign: 'center'}}>
-          <a style={{color: '#222'}}  href={`/human-aided-music/`} className="big-btn">a ver...</a>
+          <a style={{color: '#222'}}  href={`/map-h/`} className="big-btn">map-H</a>
         </p>
     </Layout>
   )
