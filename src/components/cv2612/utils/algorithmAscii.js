@@ -1,5 +1,5 @@
-export default function algorithmAscii(algorithm){
-  switch(algorithm) {
+export default function algorithmAscii(algorithm) {
+  switch (algorithm) {
     case 0:
       return `
 
@@ -13,7 +13,7 @@ export default function algorithmAscii(algorithm){
 
 `
     case 1:
-    return `
+      return `
 
 ╔═╗
 ║1╠═╗
@@ -25,7 +25,7 @@ export default function algorithmAscii(algorithm){
 
 `
     case 2:
-    return `
+      return `
 
      ╔═╗
      ║1╠═╗
@@ -37,7 +37,7 @@ export default function algorithmAscii(algorithm){
 
 `
     case 3:
-    return `
+      return `
 
 ╔═╗  ╔═╗
 ║1╠══╣2╠═╗
@@ -49,7 +49,7 @@ export default function algorithmAscii(algorithm){
 
 `
     case 4:
-    return `
+      return `
 
 ╔═╗  ╔═╗
 ║1╠══╣2╠═╗
@@ -61,7 +61,7 @@ export default function algorithmAscii(algorithm){
 
 `
     case 5:
-    return `
+      return `
       ╔═╗
     ╔═╣2╠══╗
     ║ ╚═╝  ║
@@ -73,7 +73,7 @@ export default function algorithmAscii(algorithm){
       ╚═╝
 `
     case 6:
-    return `
+      return `
  ╔═╗  ╔═╗
  ║1╠══╣2╠══╗
  ╚═╝  ╚═╝  ║
@@ -85,7 +85,7 @@ export default function algorithmAscii(algorithm){
       ╚═╝
 `
     case 7:
-    return `
+      return `
 
 
 ╔═╗ ╔═╗ ╔═╗ ╔═╗
@@ -96,7 +96,7 @@ export default function algorithmAscii(algorithm){
        ╚══
 
 `
-  default:
+    default:
       return 'no algorithm'
   }
 }

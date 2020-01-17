@@ -1,7 +1,7 @@
 ---
 title: CV-2612
 date: "2018-05-01"
-description: Coding for Wearables
+description: An eurorack module based on the classic FM chip used by Sega Genesis
 cover: "./cover.jpg"
 style: dashed
 ---

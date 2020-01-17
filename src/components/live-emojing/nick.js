@@ -1,8 +1,12 @@
 import React, {useState, useEffect, useContext} from "react"
 import {reactLocalStorage} from 'reactjs-localstorage'
-import LiveEmojingContext from './context.js'
+import {adejctives,animals} from './random-nicks'
+import LiveEmojingContext from './context'
+import randomNick from './random-nicks'
+import {useTranslation } from 'react-i18next'
 
 const Nick = () =>{
+  const [t, ] = useTranslation();
 
   const context = useContext(LiveEmojingContext)
   const [valid, setValid] = useState(false)
@@ -10,7 +14,7 @@ const Nick = () =>{
   const [understandsNameClick, setUnderstandsNameClick] = useState(false)
 
   useEffect(()=>{
-    const nick = reactLocalStorage.get('nick', 'funky-duck')
+    const nick = reactLocalStorage.get('nick', randomNick())
     if(nick!==''){
       context.setNick(nick)
       setValid(true)
@@ -50,12 +54,12 @@ const Nick = () =>{
   }
 
   return (
-    <>
+    <p>
       {confirmed?
-        (<p><em>Hey</em> <a href="/" onClick={onChangeClick}>{context.nick}</a> ! {(!understandsNameClick)?<span> {'<--- '} Click the name to change it </span>:null}</p>):
+        (<><em>{t('Hey')}</em> <a href="/" className={(!understandsNameClick)?'pulse':''} onClick={onChangeClick}>{context.nick}</a></>):
         (<input type="text" value={context.nick} onChange={onChange} onBlur={confirm} autoFocus required pattern="^[A-Za-z0-9_-]{3,15}$" onKeyPress={onKeyPress} onFocus={handleFocus} size={15} maxLength={15}/>)
       }
-    </>
+    </p>
   )
 
 }

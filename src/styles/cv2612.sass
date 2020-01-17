@@ -3,9 +3,10 @@
   #app
     margin: 0 auto 100px
     width: 1200px
+    user-select: none
+    *
+      -webkit-user-drag: none
 
-  table
-    width: 100%
   .emulator
     @extend %no-select
     margin: 10px auto
@@ -38,9 +39,6 @@
       width: 220px
       stroke: $blue
       stroke-width: 4px
-  table
-    td
-      padding: 0
   .vert
     transform: rotate(270deg)
 
@@ -51,6 +49,12 @@
     line-height: 0.65em
     font-size: 1em
     color: $blue
+
+  .globals
+    margin: 30px auto
+    width: 100%
+    border: 1px solid white
+    box-sizing: border-box
 
   nav
     position: relative
@@ -109,52 +113,90 @@
       select
         max-width: 15%
         font-size: 0.8em
+      &.connected
+        select.in, select.out
+          background: #81e5ff
 
-.slider
-  position: relative
-  padding: 0
-  border: 2px solid transparent
-  width: 230px
-  &.learn
-    background: rgba(0,255,255,0.12)
-    &.mapped
-      background: rgba(0,255,255,0.35)
-      border-color: transparent
-    &.active
-      border: 2px dashed rgba(0,255,255,0.35)
-    &:hover
-      cursor: pointer
-      border: 2px dashed rgba(0,255,255,0.2)
-  label
-    line-height: 10px
-    width: 32px
-    display: inline-block
-    vertical-align: super
-  span
-    position: absolute
-    top: 3px
-    left: 50%
-    z-index: 10
-    color: #333
-    height: 25px
-    line-height: 25px
-    pointer-events: none
-  input
-    -webkit-appearance: none
-    width: 190px
-    height: 25px
-    background: #d3d3d3
-    outline: none
-    &::-webkit-slider-thumb
+  .four-cols
+    display: flex
+    .col
+      width: 25%
+
+  .globals
+    .slider
+      label
+        text-overflow: clip
+        text-align: right
+        white-space: nowrap
+
+
+
+  .cv-input
+    border: 2px solid transparent
+    width: 100px
+    text-align: center
+    &.learn
+      background: rgba(0,255,255,0.12)
+      &.mapped
+        background: rgba(0,255,255,0.35)
+        border-color: transparent
+      &.active
+        border: 2px dashed rgba(0,255,255,0.35)
+      &:hover
+        cursor: pointer
+        border: 2px dashed rgba(0,255,255,0.2)
+    span
+      margin: 10px
+      display: block
+      height: 30px
+      line-height: 30px
+      pointer-events: none
+
+  .slider
+    position: relative
+    padding: 0
+    border: 2px solid transparent
+    width: 230px
+    &.learn
+      background: rgba(0,255,255,0.12)
+      &.mapped
+        background: rgba(0,255,255,0.35)
+        border-color: transparent
+      &.active
+        border: 2px dashed rgba(0,255,255,0.35)
+      &:hover
+        cursor: pointer
+        border: 2px dashed rgba(0,255,255,0.2)
+    label
+      line-height: 10px
+      width: 32px
+      display: inline-block
+      vertical-align: super
+    span
+      position: absolute
+      top: 3px
+      left: 50%
+      z-index: 10
+      color: #333
+      height: 25px
+      line-height: 25px
+      pointer-events: none
+    input
       -webkit-appearance: none
-      appearance: none
-      width: 25px
+      width: 190px
       height: 25px
-      background: #509eec
-      cursor: pointer
-    &::-moz-range-thumb
-      appearance: none
-      width: 25px
-      height: 25px
-      background: #509eec
-      cursor: pointer
+      background: #d3d3d3
+      outline: none
+      &::-webkit-slider-thumb
+        -webkit-appearance: none
+        appearance: none
+        width: 25px
+        height: 25px
+        background: #509eec
+        cursor: pointer
+      &::-moz-range-thumb
+        appearance: none
+        width: 25px
+        height: 25px
+        background: #509eec
+        cursor: pointer

@@ -1,10 +1,10 @@
 import React, {useState, useEffect, useContext} from "react"
 import {reactLocalStorage} from 'reactjs-localstorage'
 import LiveEmojingContext from './context.js'
-
+import {useTranslation } from 'react-i18next'
 
 const Avatar = () =>{
-
+  const [t, ] = useTranslation();
   const context = useContext(LiveEmojingContext)
   const [loadingAvatar, setLoadingAvatar] = useState(false)
   const [understandsAvatarClick, setUnderstandsAvatarClick] = useState(false)
@@ -19,7 +19,7 @@ const Avatar = () =>{
   const changeAvatarUrl = (url) => {
     // get a random url if none provided
     if(!url){
-      const randomId = Math.floor(Math.random()*100)
+      const randomId = Math.floor(Math.random()*10000)
       url =`https://api.adorable.io/avatars/200/${randomId}`
     }
 
@@ -46,10 +46,7 @@ const Avatar = () =>{
 
 
   return (
-    <>
-      <img alt="" width={150} height={150} src={context.avatarUrl} onClick={onChangeAvatar} className={`${ loadingAvatar ? 'loading' : '' }  avatar`}/>
-      {(!understandsAvatarClick)?<p>{'<--- '}Click the avatar to change it</p>:null}
-    </>
+    <p><img alt="" width={150} height={150} src={context.avatarUrl} onClick={onChangeAvatar} className={`${ loadingAvatar ? 'loading' : '' } ${(!understandsAvatarClick)?'pulse':''}  avatar`}/></p>
   )
 
 }

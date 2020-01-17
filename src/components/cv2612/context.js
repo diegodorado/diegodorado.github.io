@@ -1,18 +1,20 @@
 import React from "react"
-import {emptyParams, emptyMapping, bitness} from "./utils/patches-utils"
+import {ctrlMap, globalParams, emptyPatch, emptyParams, emptyMapping, bitness} from "./utils/patches-utils"
+import {calculateEnvelopePoints} from "./utils/envelopePoints"
 import obj_diff from "./utils/obj_diff"
 import {reactLocalStorage} from 'reactjs-localstorage'
 
 export const CV2612Context = React.createContext()
 export const CV2612Consumer = CV2612Context.Consumer
 
-const ctrlmap = ['ar','d1','sl','d2','rr','tl','mul','det','rs','am','al','fb','ams','fms','st','lfo','en']
-
 // Create the provider using a traditional React.Component class
 export class CV2612Provider extends React.Component {
 
   constructor(props){
     super(props);
+
+    //no render tied, so keep away from state
+    this.patch = emptyPatch()
 
     this.state = {
       midi: null,
@@ -22,21 +24,20 @@ export class CV2612Provider extends React.Component {
       envelopes: {},
       mapping: emptyMapping(),
       params: emptyParams(),
-      filters:{ch: 6},
+      voice: 0,
       soundOn: false,
       setActiveParameter: this.setActiveParameter,
       updateParam: this.updateParam,
-      updateParams: this.updateParams,
-      filterChannel: this.filterChannel,
+      sendVoice: this.sendVoice,
+      loadPatch: this.loadPatch,
+      selectVoice: this.selectVoice,
       toggleLearning: this.toggleLearning,
       handleCC: this.handleCC,
-      sendParameters : this.sendParameters,
     }
   }
 
   componentDidMount(){
-
-    const savedMapping = reactLocalStorage.getObject('mapping',{})
+    const savedMapping = {} // reactLocalStorage.getObject('mapping',{})
     if(Object.keys(savedMapping).length>0){
       let mapping = {...this.state.mapping}
       for (let [code, value] of Object.entries(savedMapping)) {
@@ -50,16 +51,15 @@ export class CV2612Provider extends React.Component {
     const k = this.state.activeParameter
     if(this.state.mapping[k] && this.state.learning){
       let mapping = {...this.state.mapping}
-      if(mapping[k].ch !== ch && mapping[k].cc !== cc){
-        mapping[k].ch = ch
-        mapping[k].cc = cc
+      if(mapping[k] !== cc){
+        mapping[k] = cc
         this.setState({mapping: mapping})
         reactLocalStorage.setObject('mapping',mapping)
       }
     }
 
     for (let [k, m] of Object.entries(this.state.mapping)) {
-      if(m.cc === cc && m.ch === ch){
+      if(m === cc){
         const bits = bitness(k)
         const resolution = Math.pow(2,bits)
         const step = 128/resolution
@@ -75,121 +75,160 @@ export class CV2612Provider extends React.Component {
   }
 
   sendParameter = (code, value) => {
-    const parts = code.split('_')
-    const ch = parseInt(parts[0])
-    const op = parseInt(parts[1])
-    const param = parts[2]
-    const pId = ctrlmap.indexOf(param)
+    if(globalParams.includes(code)){
+      //const pId = globalParams.indexOf(code)
+      // 0x05 is a globalParam
+      //this.state.midi.sendSysexSet([0x05,pId,value])
+      //updates current patch
+      console.log(code)
+      this.patch[code] = value
 
-    if(pId===-1){
-      console.error(`Unexpected param ${param} in code ${code}`)
-    }else{
-
-       //todo: implement omni channel on chip side
-       // and avoid resending parameters triggered by omni channel
-      if(ch===6){
-        for(let chan=0;chan<5;chan++){
-          const addr = [chan,op,pId]
-          this.state.midi.sendSysexSet(addr,value)
-        }
-      }else{
-        const addr = [ch,op,pId]
-        this.state.midi.sendSysexSet(addr,value)
+      if(code === 'lfo' ){
+        this.state.midi.sendCC(0,1,(value+1)*16-1)
+      }else if(code === 'play-mode' ){
+        this.state.midi.sendCC(0,2,value)
+      }else if(code === 'vel-sensitivity' ){
+        this.state.midi.sendCC(0,3,value)
       }
 
-      this.state.emulator.update(ch,op,param,value,this.state.params)
 
+    }else{
+      const parts = code.split('_')
+      const param = parts[0]
+      const op = parseInt(parts[1])
+      const pId = ctrlMap.indexOf(param)
+      if(pId===-1){
+        console.error(`Unexpected param ${param} in code ${code}`)
+      }else{
+         //todo: implement omni channel on chip side
+         // and avoid resending parameters triggered by omni channel
+        // this.state.midi.sendSysexSet([this.state.voice,op,pId,value])
+
+        const ccMap = ['ar','d1','sl','d2','rr','tl','mul','det','rs','am']
+        const ccOff = ccMap.indexOf(param)
+        if(ccOff!==-1){
+          const bits = bitness(param)
+          const resolution = Math.pow(2,bits)
+          const step = 128/resolution
+          const v = (value+1)*step-1
+          for(let i=0;i<6;i++)
+            this.state.midi.sendCC(i,20+op*10+ccOff,v)
+        }
+
+        const ccMap2 = ['al','fb','ams','fms','st','lfo']
+        const ccOff2 = ccMap2.indexOf(param)
+        if(ccOff2!==-1){
+          const bits = bitness(param)
+          const resolution = Math.pow(2,bits)
+          const step = 128/resolution
+          const v = (value+1)*step-1
+          for(let i=0;i<6;i++)
+            this.state.midi.sendCC(i,10+ccOff2,v)
+        }
+
+
+        this.state.emulator.update(this.state.voice,code,value)
+        //updates current patch
+        this.patch.voices[this.state.voice][code] = value
+      }
     }
 
   }
 
+  sendVoice = (v) => {
+    //filter out omni channel
+    const keys = Object.keys(this.state.params)
+      .filter( k => k.startsWith(`${v}_`))
+      .sort()
+    //[[am,ar,d1,d2,det,mul,rr,rs,sl,tl]*4 ,al,ams,fb,fms,st]
+    //[10*4+5] = 45
+    const data = keys.map( k => this.state.params[k])
+    data.unshift(v)
+    data.unshift(0x04)
+    this.state.midi.sendSysexSet(data)
+  }
 
-  sendParameters = (params) => {
-    //todo: send a bulk sysex message  instead
-    for (let [code, value] of Object.entries(params)) {
-      this.sendParameter(code,value)
+
+
+  sendPatch = () => {
+
+    for (let v=0;v<6;v++) {
+      for (let [code, value] of Object.entries(this.patch.voices[v])) {
+        this.state.emulator.update(v,code,value)
+      }
     }
-
+    //lfo
+    this.state.emulator.update(null,'lfo',this.patch['lfo'])
+    //this.sendVoice(0)
   }
 
   setActiveParameter = (param) => {
     this.setState({activeParameter: param})
   }
 
-  updateParam = (code,value) => {
+  updateParam = (code, value) => {
     let params = {...this.state.params}
     params[code] = value
     this.setState({params: params})
   }
 
-  updateParams = (newParams, loadingPatch) => {
+  loadPatch = (patch) => {
+    this.patch = patch
+    this.updateParamsFromVoice(patch.voices[this.state.voice])
+    this.loadingPatch =  true
+  }
+
+  selectVoice= (v) => {
+    this.updateParamsFromVoice(this.patch.voices[v])
+    this.setState({voice: v})
+    this.loadingVoice =  true
+  }
+
+  updateParamsFromVoice = (voice) => {
     let params = {...this.state.params}
-    for (let [code, value] of Object.entries(newParams)) {
+    //todo: update LFO
+    for (let [code, value] of Object.entries(voice)) {
       params[code] = value
     }
     this.setState({params: params})
-    this.loadingPatch =  loadingPatch
   }
 
-  filterChannel= (ch) => {
-    let filters = {...this.state.filters}
-    filters.ch = ch
-    this.setState({filters})
-  }
-
+  //todo: refactor this shitty code
   componentDidUpdate(prevProps, prevState) {
-    //which params have changed?
 
-    const diff = obj_diff(prevState.params, this.state.params)
-    if(Object.entries(diff).length>0){
-      this.sendParameters(diff)
-      if(this.loadingPatch)
-        this.loadingPatch = false
-      else
-        this.updateOmniIfChanged(diff)
-      this.updateEnvelopesIfChanged(diff)
-    }
-  }
+    if(this.loadingPatch){
+      this.loadingPatch = false
+      //send all params when loading a patch
+      this.sendPatch()
+      this.updateEnvelopesIfChanged(this.state.params)
+    }else if(this.loadingVoice){
+      this.loadingVoice = false
+      this.updateEnvelopesIfChanged(this.state.params)
+    }else{
 
-  // if any omni channel/op parameter has changed
-  updateOmniIfChanged(diff){
-    const params = {}
+      //we only care if params have changed
+      if(prevState.params===this.state.params)
+        return
 
-    //todo: exclude lfo
-    for(let k of Object.keys(diff)){
-      const p = k.split('_')
-      //is omni channel?
-      if(p[0]==='6'){
-        for(let i=0;i<=6;i++){
-          //is omni param?
-          if(p[1]==='4')
-            for(let j=0;j<=4;j++)
-              params[`${i}_${j}_${p[2]}`] = diff[k]
-          else
-            params[`${i}_${p[1]}_${p[2]}`] = diff[k]
+      //send only differences
+      const diff = obj_diff(prevState.params, this.state.params)
+      const entries = Object.entries(diff)
+      if(entries.length>0){
+        for (let [code, value] of entries) {
+          this.sendParameter(code,value)
         }
-      }else{
-        //is omni param?
-        if(p[1]==='4')
-          for(let i=0;i<=4;i++)
-            params[`${p[0]}_${i}_${p[2]}`] = diff[k]
+        this.updateEnvelopesIfChanged(diff)
       }
     }
-
-    if(Object.entries(params).length>0){
-      this.updateParams(params,false)
-    }
-
   }
-
 
   updateEnvelopesIfChanged(diff){
     //check if any envelope should change
     const env_params = ['ar','d1','sl','d2','rr','tl']
     const envs = Object.keys(diff).reduce((acc, key) => {
-      if (env_params.some((a) => key.endsWith(a)))
+      if (env_params.some((a) => key.startsWith(a)))
         //accumulates channel_operator to identify envelope to update
-        acc.push(key.substring(0,3))
+        acc.push(key.split('').reverse()[0])
       return acc
     }, [])
       .filter((x, i, a) => a.indexOf(x) === i) //filter unique
@@ -199,32 +238,13 @@ export class CV2612Provider extends React.Component {
       let envelopes = {...this.state.envelopes}
       envs.forEach( (e) => {
         const env = env_params
-          .reduce((acc,i)=>{acc[`${i}`]=this.state.params[`${e}_${i}`];return acc},{})
-        envelopes[e] = this.calculateEnvelopePoints(env)
+          .reduce((acc,i)=>{acc[`${i}`]=this.state.params[`${i}_${e}`];return acc},{})
+        // re-calculate changed envelope
+        envelopes[e] = calculateEnvelopePoints(env)
       })
       this.setState({envelopes: envelopes})
     }
   }
-
-  calculateEnvelopePoints(env){
-    const x1 = Math.round((31-env.ar)/31*100)
-    const y1 = Math.round(env.tl/127*100)
-    const x2 = Math.round(x1+(31-env.d1)/31*100)
-    const y2 = Math.round(y1+(100-y1)*(env.sl/15))
-    const x3 = Math.round(x2+(31-env.d2)/31*50+50)
-    const y3 = Math.round(y2+(100-y2)*(0.5*(env.d2/31)))
-    const x4 = Math.round(x3+(31-env.rr)/31*100)
-
-    const points = [
-        [0,100],
-        [x1,y1],
-        [x2,y2],
-        [x3,y3],
-        [x4,100]
-      ]
-    return points.map((p)=>p.join(',')).join(' ').replace(/NaN/g,'0')
-  }
-
 
   render () {
     return (

@@ -9,6 +9,10 @@ const LanguagesLinks = ({location}) => {
   const onChangeLanguageClick = e => {
     e.preventDefault()
     const prevlang = i18n.languages[0]
+    //avoid toggle if active lang was clicked
+    if(prevlang===e.target.text)
+      return
+
     i18n.changeLanguage(i18n.languages[0]==='es'?'en':'es')
     const pathname = location.pathname.replace(`/${prevlang}/`,`/${i18n.languages[0]}/`)
     navigate(pathname)

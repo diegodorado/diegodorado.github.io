@@ -1,6 +1,6 @@
 import React from 'react'
 import {CV2612Context} from "./context"
-import {dmp2patch, emptyParams} from "./utils/patches-utils"
+import {dmp2voice,  emptyPatch} from "./utils/patches-utils"
 
 import {reactLocalStorage} from 'reactjs-localstorage'
 import { FaPlus,
@@ -19,13 +19,13 @@ class Patches extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      patches: [{name: 'empty', params: emptyParams()}],
+      patches: [emptyPatch()],
       current: 0,
     }
   }
 
   componentDidMount(){
-    const patches = reactLocalStorage.getObject('patches',[])
+    const patches = [] // reactLocalStorage.getObject('patches',[])
     if(patches.length===0 || Object.keys(patches).length===0){
       this.loadDefaultPatches()
     }else{
@@ -71,33 +71,57 @@ class Patches extends React.Component {
       const i = parseInt(this.state.current)
       const patch = this.state.patches[i]
       if(patch)
-        this.loadPatch(patch)
+        this.context.loadPatch(patch)
     }
 
     if(prevState.patches.length !== this.state.patches.length){
       this.setState({current:0})
       const patch = this.state.patches[0]
       if(patch)
-        this.loadPatch(patch)
+        this.context.loadPatch(patch)
     }
   }
 
-  loadPatch(patch) {
-    this.context.updateParams(patch.params,true)
+
+
+  addDmpPatch = (name, data) => {
+    const voice = dmp2voice(name,data)
+    if(voice !== null){
+      this.addPatch(name.replace('.dmp',''), [voice])
+    }
+
+    // Generate random patches with different voices
+    if(this.state.patches.length > 10){
+      //add random patch
+      const name = `Random ${Math.floor(Math.random()*1000)}`
+      const voices = []
+      for(let i=0;i<6;i++){
+        const n = Math.floor(Math.random()*this.state.patches.length)
+        const voice = this.state.patches[n].voices[0]
+        voices.push( Object.assign( {}, voice))
+      }
+
+      this.addPatch(name, voices)
+
+    }
+
   }
 
-
-  addDmpPatch = (name, d) => {
-    const patch = dmp2patch(name,d)
-    if(patch !== null){
-      //is there any risk here?
-      const patches = this.state.patches
-      patches.push(patch)
-      this.save(patches)
+  addPatch = (name, voices) => {
+    const patch = emptyPatch()
+    patch.name = name
+    for(let i=0;i<6;i++){
+      const voice = voices[i % voices.length]
+      //clone the voice for all channels
+      patch[`voices`][i] = Object.assign( {}, voice)
     }
+    const patches = this.state.patches
+    patches.push(patch)
+    this.save(patches)
   }
 
   onChangeHandler = (ev) => {
+    //todo: refactor to work with new changes
     for(const f of ev.target.files){
       const fr = new FileReader()
       fr.onload = () =>{
@@ -114,6 +138,7 @@ class Patches extends React.Component {
   }
 
   onSave = (e) => {
+    //todo: refactor to work with new changes
     e.preventDefault()
     if(this.state.patches.length===0)
       return
@@ -126,6 +151,7 @@ class Patches extends React.Component {
   }
 
   onCreate = (e) => {
+    //todo: refactor to work with new changes
     e.preventDefault()
     let patch = prompt("Name your patch")
     if (patch !== null && patch !== "") {
