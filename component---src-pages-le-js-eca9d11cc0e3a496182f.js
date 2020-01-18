@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[15],{HKBy:function(e,n,t){"use strict";t.r(n);var a=t("q1tI"),c=t.n(a),u=t("Wbzz"),i=t("9kay"),r=t("YPLI");n.default=function(){var e=Object(i.c)()[1];return Object(a.useEffect)((function(){return Object(u.navigate)("/"+e.languages[0]+"/labs/live-emojing")}),[]),c.a.createElement(r.a,null)}}}]);
+//# sourceMappingURL=component---src-pages-le-js-eca9d11cc0e3a496182f.js.map
