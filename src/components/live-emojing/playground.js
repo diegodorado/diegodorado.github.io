@@ -121,6 +121,7 @@ const Playground = ({pattern}) =>{
       }
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
 
@@ -132,6 +133,7 @@ const Playground = ({pattern}) =>{
     return () => {
       window.removeEventListener("keydown", onKeyPress)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[left, right, error, soundOn])
 
 
@@ -161,6 +163,7 @@ const Playground = ({pattern}) =>{
       setError(true)
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[left, right])
 
 
@@ -654,7 +657,7 @@ const Playground = ({pattern}) =>{
       <Helmet htmlAttributes={{class:(expanded ? 'full-screen':'normal') }} />
       <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight} />
       {showInstructions &&
-        <div className="instructions" onClick={onInstructionsClick}>
+        <div className="instructions" onClick={onInstructionsClick} aria-hidden="true">
           {context.playingAlone ? null :
             <div className="welcome">
               <img alt="" src={context.avatarUrl} width={90} />
@@ -682,10 +685,10 @@ const Playground = ({pattern}) =>{
       <div className={`${ tapping ? 'tapping' : '' }  ${ error ? 'error' : '' } input`}>
         <span className="clipper" role="img" aria-label="doubt">🤔</span>
         <span className="tempo">{(parseInt(tempo)===tempo)? <><i>{tempo}</i> bpm</> : tempo}</span>
-        <pre onClick={onPreviewClick} className={`${ tapped ? 'tapped' : '' } ${highlighted ? 'highlight' : '' } preview`}>
-          {emojiArray(left).map((e,i) => <span key={i} onClick={()=>moveCarret(true,i)}>{e}</span>)}
+        <pre onClick={onPreviewClick} className={`${ tapped ? 'tapped' : '' } ${highlighted ? 'highlight' : '' } preview`} aria-hidden="true">
+          {emojiArray(left).map((e,i) => <span key={i} onClick={()=>moveCarret(true,i)} aria-hidden="true">{e}</span>)}
           <span className="carret"></span>
-          {emojiArray(right).map((e,i) => <span key={i} onClick={()=>moveCarret(false,i)}>{e}</span>)}
+          {emojiArray(right).map((e,i) => <span key={i} onClick={()=>moveCarret(false,i)} aria-hidden="true">{e}</span>)}
         </pre>
         <nav>
           <FaCaretLeft onClick={onLeftClick}/>

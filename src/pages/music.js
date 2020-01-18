@@ -141,6 +141,7 @@ const MusicIndex = ({ data, location }) => {
       audio.removeEventListener('timeupdate',audioTimeUpdate)
       audio = null
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   useEffect(()=>{
@@ -163,6 +164,7 @@ const MusicIndex = ({ data, location }) => {
     if(!first_run)
       play()
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[index])
 
 
@@ -173,6 +175,8 @@ const MusicIndex = ({ data, location }) => {
     return () => {
       window.removeEventListener('keydown', onKeyPress)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[index, playing])
 
 
@@ -207,7 +211,7 @@ const MusicIndex = ({ data, location }) => {
 
       <div className="playlist-player">
         <div className="track-details">
-          <div className="details"  onClick={onProgressClick}>
+          <div className="details"  onClick={onProgressClick} aria-hidden="true">
             <div className="text">
               <h3><span>{tracks[index].title}</span></h3>
               <p>
@@ -243,7 +247,7 @@ const MusicIndex = ({ data, location }) => {
         <ul>
         {tracks.map((t,i) => {
             return (
-              <li key={i} className={i===index?'active':''} onClick={() => setIndex(i)}>
+              <li key={i} className={i===index?'active':''} onClick={() => setIndex(i)} aria-hidden="true" >
                   <span className="title">{t.title}</span>
                   <span className="time">{prettyTime(t.duration / 1000)}</span>
               </li>

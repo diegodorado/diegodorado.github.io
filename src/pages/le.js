@@ -5,6 +5,7 @@ import Layout from "../layouts/main"
 
 const Home = () => {
   const [, i18n] = useTranslation();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => navigate(`/${i18n.languages[0]}/labs/live-emojing`), []);
   //return empty layout instead of null to avoid FOUC
   return (

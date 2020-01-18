@@ -200,7 +200,7 @@ class Patches extends React.Component {
     return (
       <nav>
         <a href="/" title="Previous Patch" onClick={this.onLeftClick}><FaCaretLeft/></a>
-        <select value={this.state.current} onChange={this.onChange}>
+        <select value={this.state.current} onBlur={this.onChange}>
           {this.state.patches.map((p,i) =><option key={i} value={i}>{p.name}</option>)}
         </select>
         <a href="/" title="Next Patch" onClick={this.onRightClick}><FaCaretRight/></a>

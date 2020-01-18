@@ -16,7 +16,7 @@ const BioIndex = props => (
         <br/> <br/>
         Ha participado en obras de arte electrónico programando para microcontroladores, videojuegos, procesamiento de señales, audiovisuales, sonorización de datos y webs interactivas; así como para diferentes formatos: realidad virtual, realidad aumentada, fulldome, mapping, performance audiovisual, instalaciones sonoras y tecno-textiles.
         <br/> <br/>
-        Curriculum Vitae: <Link to={`/bio/cv`}>online</Link> | <a target="_blank" href={`/es/cv-diego-dorado.pdf`}>pdf</a>
+        Curriculum Vitae: <Link to={`/bio/cv`}>online</Link> | <a target="_blank" rel="noopener noreferrer" href={`/es/cv-diego-dorado.pdf`}>pdf</a>
       </p>
     </div>
   </Layout>

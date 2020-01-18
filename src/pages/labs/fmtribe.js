@@ -85,9 +85,9 @@ class FMTribeIndex extends React.Component {
           Developed by <a href="https://github.com/munshkr" target="_blank" rel="noopener noreferrer">munshkr</a> and brought to the browser thanks to <a href="https://js-dos.com/" target="_blank" rel="noopener noreferrer">js-dos</a>.
           Checkout <a href="https://github.com/munshkr/fmtribe" target="_blank" rel="noopener noreferrer">fmtribe sources</a>.</p>
           <nav>
-            <span onClick={()=> this.setState({tab:0})} >Usage</span>
-            <span onClick={()=> this.setState({tab:1})} >Step Sequencer</span>
-            <span onClick={()=> this.setState({tab:2})} >Instrument Editor</span>
+            <span role="link" aria-hidden="true" onClick={()=> this.setState({tab:0})} >Usage</span>
+            <span role="link" aria-hidden="true" onClick={()=> this.setState({tab:1})} >Step Sequencer</span>
+            <span role="link" aria-hidden="true" onClick={()=> this.setState({tab:2})} >Instrument Editor</span>
           </nav>
           {(this.state.tab===0) && <div>
             <ul>

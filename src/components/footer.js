@@ -14,6 +14,7 @@ const Footer = () => {
   useEffect(() => {
     const rand = Math.random()
     setQuote(data[Math.floor(rand*data.length)])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return (

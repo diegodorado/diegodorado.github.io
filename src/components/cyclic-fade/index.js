@@ -22,8 +22,8 @@ class CyclicFade extends Component {
 
   onMouseClick = (e) => {
     e.preventDefault()
-    let { index } = this.state;
-    const { children } = this.props;
+    let { index } = this.state
+    const { children } = this.props
     index++
     index %= children.length
     this.setState({index: index})
@@ -32,7 +32,7 @@ class CyclicFade extends Component {
 
   componentWillMount() {
     let last = null
-    const { children, speed } = this.props;
+    const { children, speed } = this.props
 
     let animate = (timestamp) => {
       if (this.willUnmount) return
@@ -48,8 +48,6 @@ class CyclicFade extends Component {
       raf(animate)
     }
     animate()
-
-
   }
 
   componentDidMount() {
@@ -63,9 +61,9 @@ class CyclicFade extends Component {
     const { children } = this.props;
     const { index } = this.state;
     return (
-        <div className="cyclic-fade-container" onClick={this.onMouseClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <div className="cyclic-fade-container" onClick={this.onMouseClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} aria-hidden="true">
             {children.map((each, key) => (
-              <div key={key} className={`cyclic-fade-child ${key === index ? 'active' : ''}`}>
+              <div key={key} className={`cyclic-fade-child ${key === index ? 'active' : ''}`} aria-hidden="true">
                 {each}
               </div>
             ))}
