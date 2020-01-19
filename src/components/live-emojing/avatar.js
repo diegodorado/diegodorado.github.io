@@ -1,10 +1,8 @@
 import React, {useState, useEffect, useContext} from "react"
 import {reactLocalStorage} from 'reactjs-localstorage'
 import LiveEmojingContext from './context.js'
-import {useTranslation } from 'react-i18next'
 
 const Avatar = () =>{
-  const [t, ] = useTranslation();
   const context = useContext(LiveEmojingContext)
   const [loadingAvatar, setLoadingAvatar] = useState(false)
   const [understandsAvatarClick, setUnderstandsAvatarClick] = useState(false)
@@ -14,6 +12,7 @@ const Avatar = () =>{
     changeAvatarUrl(url)
     const understands = (reactLocalStorage.get('understandsAvatarClick', 'false')==='true')
     setUnderstandsAvatarClick(understands)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   const changeAvatarUrl = (url) => {
@@ -46,7 +45,7 @@ const Avatar = () =>{
 
 
   return (
-    <p><img alt="" width={150} height={150} src={context.avatarUrl} onClick={onChangeAvatar} className={`${ loadingAvatar ? 'loading' : '' } ${(!understandsAvatarClick)?'pulse':''}  avatar`}/></p>
+    <p><img alt="" width={150} height={150} src={context.avatarUrl} onClick={onChangeAvatar} className={`${ loadingAvatar ? 'loading' : '' } ${(!understandsAvatarClick)?'pulse':''}  avatar`} aria-hidden="true" /></p>
   )
 
 }

@@ -25,6 +25,7 @@ const Playground = ({pattern}) =>{
           input.onmidimessage = onMIDIMessage
         }
       },()=>console.log('Could not access your MIDI devices.'))
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   const onMIDIMessage = (msg) => {

@@ -9,7 +9,6 @@ let QrReader = null
 try {
   QrReader = require('react-qr-reader')
 } catch (e) {
-  console.log('Can not require qr reader')
 }
 
 const getIndexFromHash = (url) => {
@@ -56,6 +55,7 @@ const IoIndex = ({location})  =>{
       setMyself(i)
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   const goTop = () =>{

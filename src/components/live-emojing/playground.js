@@ -8,11 +8,10 @@ import { FaBackspace,
          FaCaretLeft,
          FaCaretRight,
          FaPlay,
+         FaStop,
          FaDice,
          FaExpand,
          FaCompress,
-         FaVolumeOff as FaVolume,
-         FaVolumeMute as FaVolumeSlash,
          FaQuestionCircle
         } from 'react-icons/fa'
 
@@ -29,6 +28,9 @@ import parser from "./tidal"
 import Pattern from "./pattern"
 import Tone from "tone"
 import LiveEmojingContext from './context.js'
+import StartAudioContext from 'startaudiocontext'
+
+
 import {useTranslation } from 'react-i18next'
 
 //todo: split this file in smaller modules! please!!
@@ -38,7 +40,7 @@ const emoji_ids = Object.values(emojiIndex.emojis)
 
 //todo: move to env file?
 const git_raw = 'https://raw.githubusercontent.com/diegodorado/emoji-samples/master/'
-const samples = '0123456789abcdefghijklmnopqrstuvwxyzABC'.split('')
+const samples = '0123456789abcdefghijklmnopqrstuvwxyz'.split('')
 
 let players = []
 let schedules = []
@@ -67,9 +69,9 @@ const Playground = ({pattern}) =>{
   const [highlighted, setHighlighted] = useState(false)
   const [error, setError] = useState(false)
   const [samplesLoaded, setSamplesLoaded] = useState(false)
-  const [soundOn, setSoundOn] = useState(false)
   const [tempo, setTempo] = useState('')
   const [left, setLeft] = useState('')
+  const [prevPattern, setPrevPattern] = useState('a b c d')
   const [right, setRight] = useState('')
   const [canvasWidth, setCanvasWidth] = useState(1)
   const [canvasHeight, setCanvasHeight] = useState(1)
@@ -78,8 +80,12 @@ const Playground = ({pattern}) =>{
   useEffect(()=>{
 
     if(context.playingAlone){
-      if(Tone.context.state==='running')
-         initAudio()
+      StartAudioContext(Tone.context).then(function(){
+      	console.log(Tone.context.state)
+        initAudio()
+      })
+
+
 
       //todo: use async/await
       fetch(`${git_raw}listing.json`)
@@ -121,6 +127,7 @@ const Playground = ({pattern}) =>{
       }
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
 
@@ -132,7 +139,8 @@ const Playground = ({pattern}) =>{
     return () => {
       window.removeEventListener("keydown", onKeyPress)
     }
-  },[left, right, error, soundOn])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[left, right, error])
 
 
 
@@ -161,14 +169,14 @@ const Playground = ({pattern}) =>{
       setError(true)
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[left, right])
 
 
 
   const setListingData = (data) =>{
     listingData = data
-    if(soundOn)
-      ensureEmojiSamples()
+    ensureEmojiSamples()
   }
 
 
@@ -250,10 +258,11 @@ const Playground = ({pattern}) =>{
     //chain a compressor
     const comp = new Tone.Compressor(-30, 3).toMaster()
     const urls = samples.reduce((o,n)=> Object.assign(o,{[n]:`/live-emojing/samples/${n}.wav`}),{})
-    players = new Tone.Players (urls, () => setSamplesLoaded(true)).connect(comp)
-    Tone.context.latencyHint = 'playback'
+    players = new Tone.Players (urls, () => {
+      setSamplesLoaded(true)
+    }).connect(comp)
+    //Tone.context.latencyHint = 'playback'
     Tone.Transport.start()
-    setSoundOn(true)
   }
 
 
@@ -396,26 +405,6 @@ const Playground = ({pattern}) =>{
   }
 
 
-  const onSoundToggle = (e) => {
-    e.preventDefault()
-    if(!context.playingAlone)
-      return
-
-    if(Tone.context.state==='running') {
-      clearTransportSchedules()
-      Tone.Transport.stop()
-      Tone.context.suspend().then(() => {
-        setSoundOn(false)
-      })
-    } else if(Tone.context.state === 'suspended') {
-      Tone.context.resume().then(()=> {
-        Tone.Transport.start()
-        setSoundOn(true)
-      })
-    }
-  }
-
-
 
   const clearTransportSchedules = ()=>{
     Tone.Transport.cancel()
@@ -434,20 +423,27 @@ const Playground = ({pattern}) =>{
 
     const p = left+right
     reactLocalStorage.set('pattern', p)
+    setPrevPattern(p)
 
     setHighlighted(true)
     setTimeout(() => setHighlighted(false),300)
 
-    if(soundOn){
+    if(context.playingAlone){
       clearTransportSchedules()
       schedule(parsedGrammar)
-    }
-    if(!context.playingAlone){
+    }else{
       context.sendPattern(p)
     }
-
-
   }
+
+  const onStopClick = (e) => {
+    e.preventDefault()
+    setPrevPattern('')
+    clearTransportSchedules()
+  }
+
+
+  const canStop = () => context.playingAlone && (prevPattern === (left+right))
 
   const ensureEmojiSamples = ()=>{
     const p = left+right
@@ -654,7 +650,7 @@ const Playground = ({pattern}) =>{
       <Helmet htmlAttributes={{class:(expanded ? 'full-screen':'normal') }} />
       <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight} />
       {showInstructions &&
-        <div className="instructions" onClick={onInstructionsClick}>
+        <div className="instructions" onClick={onInstructionsClick} aria-hidden="true">
           {context.playingAlone ? null :
             <div className="welcome">
               <img alt="" src={context.avatarUrl} width={90} />
@@ -682,18 +678,17 @@ const Playground = ({pattern}) =>{
       <div className={`${ tapping ? 'tapping' : '' }  ${ error ? 'error' : '' } input`}>
         <span className="clipper" role="img" aria-label="doubt">🤔</span>
         <span className="tempo">{(parseInt(tempo)===tempo)? <><i>{tempo}</i> bpm</> : tempo}</span>
-        <pre onClick={onPreviewClick} className={`${ tapped ? 'tapped' : '' } ${highlighted ? 'highlight' : '' } preview`}>
-          {emojiArray(left).map((e,i) => <span key={i} onClick={()=>moveCarret(true,i)}>{e}</span>)}
+        <pre onClick={onPreviewClick} className={`${ tapped ? 'tapped' : '' } ${highlighted ? 'highlight' : '' } preview`} aria-hidden="true">
+          {emojiArray(left).map((e,i) => <span key={i} onClick={()=>moveCarret(true,i)} aria-hidden="true">{e}</span>)}
           <span className="carret"></span>
-          {emojiArray(right).map((e,i) => <span key={i} onClick={()=>moveCarret(false,i)}>{e}</span>)}
+          {emojiArray(right).map((e,i) => <span key={i} onClick={()=>moveCarret(false,i)} aria-hidden="true">{e}</span>)}
         </pre>
         <nav>
           <FaCaretLeft onClick={onLeftClick}/>
           <FaCaretRight onClick={onRightClick}/>
           <FaBackspace  onClick={onBackspaceClick} onTouchStart={onBackspaceDown} onTouchEnd={onBackspaceUp} onMouseDown={onBackspaceDown} onMouseUp={onBackspaceUp} />
-          {context.playingAlone ? (soundOn ? <FaVolume onClick={onSoundToggle}/> : <FaVolumeSlash onClick={onSoundToggle}/>): null}
           <FaDice onClick={onRandomClick}/>
-          <FaPlay className="commit-btn" onClick={onCommitClick}/>
+          {canStop()?<FaStop onClick={onStopClick}/>:<FaPlay className="commit-btn" onClick={onCommitClick}/>}
         </nav>
       </div>
       <Picker style={{width:'100%',borderRadius:'0',border:0}} showPreview={false} emojiSize={36} native={true} onClick={addEmoji} i18n={i18nEmojis} recent={recentEmojis} custom={customEmojis} color="#222" include={includeEmojis} emojisToShowFilter={emojisToShowFilter}/>

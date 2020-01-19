@@ -14,7 +14,7 @@ const CvInput = (props) =>{
   }
 
   return (
-    <div className={className} onClick={onClick} >
+    <div className={className} onClick={onClick} aria-hidden="true">
       <span>
         {`${props.code} ${context.params[props.code]}` + (context.learning ? ` - CC: ${context.mapping[props.code]}`: '') }
       </span>

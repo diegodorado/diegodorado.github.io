@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useContext} from "react"
 import {reactLocalStorage} from 'reactjs-localstorage'
-import {adejctives,animals} from './random-nicks'
 import LiveEmojingContext from './context'
 import randomNick from './random-nicks'
 import {useTranslation } from 'react-i18next'
@@ -23,6 +22,7 @@ const Nick = () =>{
 
     const understands = (reactLocalStorage.get('understandsNameClick', 'false')==='true')
     setUnderstandsNameClick(understands)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   const onChange = (e) => {
@@ -57,6 +57,7 @@ const Nick = () =>{
     <p>
       {confirmed?
         (<><em>{t('Hey')}</em> <a href="/" className={(!understandsNameClick)?'pulse':''} onClick={onChangeClick}>{context.nick}</a></>):
+        // eslint-disable-next-line jsx-a11y/no-autofocus
         (<input type="text" value={context.nick} onChange={onChange} onBlur={confirm} autoFocus required pattern="^[A-Za-z0-9_-]{3,15}$" onKeyPress={onKeyPress} onFocus={handleFocus} size={15} maxLength={15}/>)
       }
     </p>

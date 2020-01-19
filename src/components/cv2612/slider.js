@@ -25,7 +25,7 @@ const Slider = (props) =>{
   }
 
   return (
-    <div className={className} onClick={onClick} >
+    <div className={className} onClick={onClick} aria-hidden="true" >
       <label>{props.name}</label>
       <input type="range" step={1} min={0} max={max} value={context.params[code]} onChange={onChange} />
       <span>

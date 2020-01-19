@@ -10,7 +10,7 @@ const CvIndex = props => {
       <SEO title="bio" />
       <div className="cv" dangerouslySetInnerHTML={{ __html: cv.html }} />
       <p className="spacey">
-        Download: <a target="_blank" href={`/es/cv-diego-dorado.pdf`}>pdf</a>
+        Download: <a target="_blank" rel="noopener noreferrer" href={`/es/cv-diego-dorado.pdf`}>pdf</a>
       </p>
     </Layout>
   )

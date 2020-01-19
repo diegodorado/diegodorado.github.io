@@ -3,9 +3,8 @@ import LiveEmojingContext from './context.js'
 import Nick from './nick.js'
 import Avatar from './avatar.js'
 import Emoji from '../emoji.js'
-import {FaEye,FaSignInAlt,FaPlay} from 'react-icons/fa'
+import {FaSignInAlt,FaPlay} from 'react-icons/fa'
 import {useTranslation } from 'react-i18next'
-import Link from "../link"
 
 const Connection = () =>{
 
