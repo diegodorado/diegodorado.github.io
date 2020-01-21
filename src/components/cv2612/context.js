@@ -80,7 +80,6 @@ export class CV2612Provider extends React.Component {
       // 0x05 is a globalParam
       //this.state.midi.sendSysexSet([0x05,pId,value])
       //updates current patch
-      console.log(code)
       this.patch[code] = value
 
       if(code === 'lfo' ){
@@ -127,7 +126,7 @@ export class CV2612Provider extends React.Component {
         }
 
 
-        this.state.emulator.update(this.state.voice,code,value)
+        this.udpateEmulator(this.state.voice,code,value)
         //updates current patch
         this.patch.voices[this.state.voice][code] = value
       }
@@ -149,16 +148,21 @@ export class CV2612Provider extends React.Component {
   }
 
 
+  udpateEmulator = (v,code,value) => {
+    if(this.state.emulator)
+      this.state.emulator.update(v,code,value)
+  }
+
 
   sendPatch = () => {
 
     for (let v=0;v<6;v++) {
       for (let [code, value] of Object.entries(this.patch.voices[v])) {
-        this.state.emulator.update(v,code,value)
+        this.udpateEmulator(v,code,value)
       }
     }
     //lfo
-    this.state.emulator.update(null,'lfo',this.patch['lfo'])
+    this.udpateEmulator(null,'lfo',this.patch['lfo'])
     //this.sendVoice(0)
   }
 

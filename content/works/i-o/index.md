@@ -1,7 +1,7 @@
 ---
-title: I-O
+title: Intrumento Óptico
 date: "2018-08-01"
-description: I-O is an audiovisual and scenographic performance about the recovery of our languages and the relationship with nature through a process of spiritual and material detoxification.
+description: Performance about the recovery of our languages through a process of detoxification.
 cover: "./cover.jpg"
 ---
 

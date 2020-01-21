@@ -44,6 +44,7 @@
     "query-string": "^6.8.1",
     "raf": "^3.4.1",
     "react": "^16.8.3",
+    "react-bandcamp": "^1.1.5",
     "react-dom": "^16.8.3",
     "react-helmet": "^5.2.0",
     "react-hot-loader": "^4.12.18",

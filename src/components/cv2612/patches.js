@@ -19,12 +19,14 @@ class Patches extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      patches: [emptyPatch()],
+      patches: [],
       current: 0,
+      loaded: false
     }
   }
 
   componentDidMount(){
+    //fixme
     const patches = [] // reactLocalStorage.getObject('patches',[])
     if(patches.length===0 || Object.keys(patches).length===0){
       this.loadDefaultPatches()
@@ -36,6 +38,17 @@ class Patches extends React.Component {
   save(patches){
     reactLocalStorage.setObject('patches',patches)
     this.setState({patches:patches})
+
+    if(!this.state.loaded){
+      const patch = this.state.patches[this.state.current]
+      if(patch){
+        console.log('load patch',patch)
+        this.context.loadPatch(patch)
+        this.setState({loaded: true})
+      }
+    }
+
+
   }
 
   loadDefaultPatches(){
@@ -65,24 +78,7 @@ class Patches extends React.Component {
   }
 
   //todo: load to all voices or current voice
-  componentDidUpdate(prevProps, prevState) {
-    //fixme: if i delete a patch, current doesnt change...
-    if(prevState.current !== this.state.current){
-      const i = parseInt(this.state.current)
-      const patch = this.state.patches[i]
-      if(patch)
-        this.context.loadPatch(patch)
-    }
-
-    if(prevState.patches.length !== this.state.patches.length){
-      this.setState({current:0})
-      const patch = this.state.patches[0]
-      if(patch)
-        this.context.loadPatch(patch)
-    }
-  }
-
-
+  //fixme: if i delete a patch, current doesnt change...
 
   addDmpPatch = (name, data) => {
     const voice = dmp2voice(name,data)
@@ -91,6 +87,7 @@ class Patches extends React.Component {
     }
 
     // Generate random patches with different voices
+    //fixme
     if(this.state.patches.length > 10){
       //add random patch
       const name = `Random ${Math.floor(Math.random()*1000)}`
@@ -200,7 +197,8 @@ class Patches extends React.Component {
     return (
       <nav>
         <a href="/" title="Previous Patch" onClick={this.onLeftClick}><FaCaretLeft/></a>
-        <select value={this.state.current} onBlur={this.onChange}>
+        {/*eslint-disable-next-line jsx-a11y/no-onchange*/}
+        <select value={this.state.current} onChange={this.onChange}>
           {this.state.patches.map((p,i) =><option key={i} value={i}>{p.name}</option>)}
         </select>
         <a href="/" title="Next Patch" onClick={this.onRightClick}><FaCaretRight/></a>

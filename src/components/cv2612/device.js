@@ -10,11 +10,16 @@ class Device extends React.Component {
 
   render() {
     return (
-        <CV2612Provider>
-          <Emulator />
-          <Midi />
-          <Patches />
-          <Channels />
+      <CV2612Provider>
+        <div className="cv2612">
+          <h3>CV-2612, a SEGA Genesis sound chip based eurorack module</h3>
+            {/*
+              <Emulator />
+              */}
+            <Midi />
+            <Patches />
+            <Channels />
+          </div>
         </CV2612Provider>
     )
   }

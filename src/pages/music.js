@@ -4,6 +4,8 @@ import Layout from "../layouts/main"
 import SEO from "../components/seo"
 import { Trans } from 'react-i18next'
 import prettyTime from '../components/prettyTime'
+import BandcampPlayer from 'react-bandcamp'
+
 
 import { FaStepBackward,
          FaStepForward,
@@ -145,6 +147,9 @@ const MusicIndex = ({ data, location }) => {
   },[])
 
   useEffect(()=>{
+    if(!audio)
+      return
+
     const first_run = (audio.src==='')
     audio.src = `${tracks[index].stream_url}?client_id=${clientId}`
 
@@ -203,6 +208,18 @@ const MusicIndex = ({ data, location }) => {
   return (
     <Layout location={location} >
       <SEO title="music" />
+{/*
+      <BandcampPlayer album="1868484386" width='350px' height='700px' bgcol='000' />
+      <BandcampPlayer album="1868484386" width='350px' height='700px' bgcol='ff5500' />
+      <BandcampPlayer album="1868484386" width='350px' height='700px' bgcol='ff5500' />
+      <BandcampPlayer album="1868484386" width='350px' height='700px' bgcol='ff5500' />
+      */}
+
+
+
+
+
+
       <p className="spacey">
         <Trans i18nKey="MusicIntro"
           components={[<a href="https://soundcloud.com/diego-dorado/tracks" target="_blank" rel="noopener noreferrer">soundcloud</a>]} />

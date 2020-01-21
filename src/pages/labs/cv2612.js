@@ -1,5 +1,5 @@
 import React from "react"
-import Layout from "../../layouts/cv2612"
+import Layout from "../../layouts/main"
 import SEO from "../../components/seo"
 import Device from "../../components/cv2612/device"
 

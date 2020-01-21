@@ -9,33 +9,30 @@ import { Trans, useTranslation } from 'react-i18next'
 const WorkIndex = ({ data, location }) => {
   const [t, i18n] = useTranslation();
   const siteTitle = data.site.siteMetadata.title
-  const posts = data.allMarkdownRemark.edges
-  const first = posts[0].node.fields.slug
+  const works = data.allMarkdownRemark.edges
 
   return (
     <Layout location={location} title={siteTitle}>
       <SEO title="work" />
       <p className="spacey">{t('Intro')}</p>
-      <p>
-        <Trans i18nKey="Explore" components={[<Link to={first}>Explore</Link>]} />
-      </p>
+      <p>{t('Recent works')}:</p>
       <section className="posts">
-        {posts.filter( ({node}) => (node.fields.locale==='' || node.fields.locale===i18n.languages[0]))
+        {works.filter( ({node}) => (node.fields.locale==='' || node.fields.locale===i18n.languages[0]))
         .map(({ node }) => {
           return (
-            <article className="post" key={node.fields.slug}>
-              <Img fixed={node.frontmatter.cover.childImageSharp.fixed} />
-              <div className="card">
-                <h3>
-                  <Link to={node.fields.slug}>{node.frontmatter.title}</Link>
-                </h3>
-              </div>
+            <article key={node.fields.slug}>
+              <Link to={node.fields.slug}><Img fixed={node.frontmatter.cover.childImageSharp.fixed} /></Link>
               <h3>
                 <Link to={node.fields.slug}>{node.frontmatter.title}</Link>
               </h3>
+              <p>{node.frontmatter.description}</p>
             </article>
             )
           })}
+          {/*empty articles just to line up the grid*/}
+          <article></article>
+          <article></article>
+          <article></article>
       </section>
     </Layout>
   )
@@ -60,6 +57,7 @@ export const pageQuery = graphql`
           }
           frontmatter {
             title
+            description
             cover {
                 childImageSharp{
                   fixed(width: 320, height:320) {

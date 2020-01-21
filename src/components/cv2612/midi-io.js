@@ -108,7 +108,7 @@ class MidiIO {
     if(midiOut){
       midiOut.send(data)
     }else{
-      console.log('no midi out')
+      //console.log('no midi out')
     }
 
   }

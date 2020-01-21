@@ -9,7 +9,6 @@ import { Trans, useTranslation } from 'react-i18next'
 const PicsIndex = ({ data, location }) => {
   const [t, ] = useTranslation();
   const pics = data.allFile.edges
-  const posts = data.allInstaNode.edges
 
   return (
     <Layout location={location} >
@@ -25,23 +24,6 @@ const PicsIndex = ({ data, location }) => {
             )
           })}
       </CyclicFade>
-      <p className="spacey">
-        {t('These are from Instagram.')}<br/>{t('Follow me there!')} <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/diegdorado/" >@diegdorado</a>
-      </p>
-      <section className="posts ig">
-          {posts.map(({ node }) => {
-            return (
-              <article className="post" key={node.id}>
-                <Img fixed={node.localFile.childImageSharp.fixed} />
-                <div className="card">
-                  <h3>
-                    <a target="_blank" rel="noopener noreferrer" href={'http://instagram.com/p/'+node.id} >{node.caption}{node.mediaType}</a>
-                  </h3>
-                </div>
-              </article>
-              )
-            })}
-        </section>
     </Layout>
   )
 }
@@ -63,21 +45,6 @@ export const pageQuery = graphql`
           }
         }
       }
-    allInstaNode(filter: {, mediaType: { in: ["IMAGE", "CAROUSEL_ALBUM"]}},sort:{fields:[likes],order:DESC} limit:12) {
-      edges {
-        node {
-          id
-          caption
-          mediaType
-          localFile {
-            childImageSharp {
-              fixed(width: 320, height: 320) {
-                ...GatsbyImageSharpFixed
-              }
-            }
-          }
-        }
-      }
     }
-  }
+  
 `

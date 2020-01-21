@@ -176,17 +176,20 @@ class Midi extends React.Component {
     return (
       <nav className={`midi ${this.state.connected ? 'connected' :''}`}>
         <span>Ctrl</span>
-        <select className="ctrl" value={this.state.midiCtrlInId} onBlur={this.onChangeMidiCtrlIn}>
+        {/*eslint-disable-next-line jsx-a11y/no-onchange*/}
+        <select className="ctrl" value={this.state.midiCtrlInId} onChange={this.onChangeMidiCtrlIn}>
           <option key="" value="">Not Connected</option>
           {this.state.midiIns.map((i) =><option key={i.id} value={i.id}>{i.name}</option>)}
         </select>
         <span>In</span>
-        <select className="in" value={this.state.midiInId} onBlur={this.onChangeMidiIn}>
+        {/*eslint-disable-next-line jsx-a11y/no-onchange*/}
+        <select className="in" value={this.state.midiInId} onChange={this.onChangeMidiIn}>
           <option key="" value="">Not Connected</option>
           {this.state.midiIns.map((i) =><option key={i.id} value={i.id}>{i.name}</option>)}
         </select>
         <span>Out</span>
-        <select className="out" value={this.state.midiOutId} onBlur={this.onChangeMidiOut}>
+        {/*eslint-disable-next-line jsx-a11y/no-onchange*/}
+        <select className="out" value={this.state.midiOutId} onChange={this.onChangeMidiOut}>
           <option key="" value="">Not Connected</option>
           {this.state.midiOuts.map((o) =><option key={o.id} value={o.id}>{o.name}</option>)}
         </select>

@@ -1,9 +1,12 @@
 ---
-title: Live-Emojing
+title: Live Emojing
 date: "2019-05-28T22:40:32.169Z"
-description: Live-emojing is a Livecoding technique I developed with the intention of including the audience in the performance. Spectators input  patterns in an intuitive manner by sending series of emojis via social networks.
+description: Técnica de live coding para permitir que la audiencia envíe emojis desde de sus teléfonos.
 cover: "./cover.png"
 ---
+
+
+
 
 > *Livecoding is a form of performatic art and a creative technique based upon the use of improvised interactive programming. It is often performed in live presentations in which one or many Livecoders generate a progression of visuals and music displaying the code for the audience to see.*
 

@@ -11,16 +11,6 @@ body.dark
   &, a, a:visited
     color: $white
 
-  article.post
-    border-color: $white
-    .card h3 a
-      background: $black
-
-  section.texts article
-    border-color: $white
-    &:hover
-      background: lighten($black,1.5)
-
   .work-post hr
     background-image: linear-gradient(to right, $black 40%, $white  0%)
 
@@ -40,16 +30,6 @@ body.light
   background-color: #fff
   &, a, a:visited
     color: $black
-
-  article.post
-    border-color: lighten($black,25)
-    .card h3 a
-      background: $white
-
-  section.texts article
-    border-color: $white
-    &:hover
-      background: lighten($black,1.5)
 
   .work-post hr
     background-image: linear-gradient(to right, $white  40%, $black 0%)
@@ -109,13 +89,9 @@ body.light
 //simpler transitions
 body
   transition: opacity 2s
-  article.post
-    .card h3 a
-      transition: opacity 0.5s ease
-
-  section.texts article
-    &:hover
-      transition: opacity 0.5s ease
+  article
+    a
+      transition: opacity 0.3s ease
 
   .work-post hr
     transition: opacity 0.5s ease
@@ -126,11 +102,11 @@ body
         transition: transform 1s
 
 body.dark
-  .gatsby-image-wrapper ,article.post, video, iframe
+  .gatsby-image-wrapper ,article, video, iframe
     animation: fade-in1 4s ease
 
 body.light
-  .gatsby-image-wrapper ,article.post, video, iframe
+  .gatsby-image-wrapper ,article, video, iframe
     animation: fade-in2 4s ease
 
 

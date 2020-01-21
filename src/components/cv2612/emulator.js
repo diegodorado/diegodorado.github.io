@@ -2,14 +2,12 @@ import React from 'react'
 import {CV2612Context} from "./context"
 import {emptyVoice} from "./utils/patches-utils"
 import AudioKeys from 'audiokeys'
-import { FaVolumeOff as FaVolume,
-         FaVolumeMute as FaVolumeSlash
-        } from 'react-icons/fa'
+import StartAudioContext from 'startaudiocontext'
 
 //todo: update for all 6 channels
 //todo: unload properly
 
-const kb = new AudioKeys({polyphony: 1,rows: 1,priority: 'last',octave: 2})
+const kb = new AudioKeys({polyphony: 1,rows: 1,priority: 'last',octave: 0})
 
 
 class Emulator extends React.Component {
@@ -18,7 +16,7 @@ class Emulator extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {soundOn: false}
+    this.state = {}
     this.fftSize = 1024
     this.cache = []
     for (let i = 0; i < 6; i++)
@@ -29,8 +27,10 @@ class Emulator extends React.Component {
   componentDidMount(){
     //todo: initialize audio context properly
     this.audioCtx = new AudioContext()
-    if(this.audioCtx.state==='running')
-       this.initialize()
+
+    StartAudioContext(this.audioCtx).then(()=>{
+      this.initialize()
+    })
 
     this.notes = []
     this.context.emulator = this
@@ -152,9 +152,6 @@ class Emulator extends React.Component {
       // load all patch params
       //this.loadCurrentPatch()
     })
-
-     this.setState({soundOn: true})
-
   }
 
 
@@ -239,7 +236,6 @@ class Emulator extends React.Component {
     if(!this.ym2612Node)
       return
 
-    //console.log(address.toString(16),value.toString(16))
     this.ym2612Node.port.postMessage([address,value])
   }
 
@@ -299,25 +295,10 @@ class Emulator extends React.Component {
     }
   }
 
-  onToggleSoundClick = (e) => {
-    e.preventDefault()
-
-    if(this.audioCtx.state === 'running') {
-      this.audioCtx.suspend().then(() => {
-        this.setState({soundOn: false})
-      });
-    } else if(this.audioCtx.state === 'suspended') {
-      this.audioCtx.resume().then(()=> {
-        this.initialize()
-      });
-    }
-  }
-
   render() {
     return (
       <div className="emulator">
         <nav>
-          <a href="/" title="Toggles Sound" onClick={this.onToggleSoundClick}>{this.state.soundOn ?<FaVolume/>:<FaVolumeSlash/>}</a>
         </nav>
         <canvas ref="scope" width={200} height={60} />
         <canvas ref="spectrum" width={200} height={60} />

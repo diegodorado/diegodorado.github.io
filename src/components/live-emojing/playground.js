@@ -81,7 +81,6 @@ const Playground = ({pattern}) =>{
 
     if(context.playingAlone){
       StartAudioContext(Tone.context).then(function(){
-      	console.log(Tone.context.state)
         initAudio()
       })
 

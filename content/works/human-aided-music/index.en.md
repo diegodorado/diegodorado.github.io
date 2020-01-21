@@ -1,7 +1,7 @@
 ---
 title: Human Aided Music
 date: "2019-03-03"
-description: Human Aided Music is a Human-Machine percussion duo where the machine learns from the human. It proposes a fluid dialogue between both, to the point where no one distinguishes who leads the music.
+description: A human-machine musical dialogue where the leader is not clearly distinguishable.
 cover: "./cover.jpg"
 ---
 

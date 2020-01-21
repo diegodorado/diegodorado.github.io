@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react"
 import Helmet from "react-helmet"
 import {reactLocalStorage} from 'reactjs-localstorage'
+import {FaAdjust} from 'react-icons/fa'
 
 const ThemeToggle = () => {
 
@@ -20,7 +21,7 @@ const ThemeToggle = () => {
   return (
     <>
     <Helmet bodyAttributes={{class:theme }}  />
-    <a title="change theme color" href="/" onClick={onChangeThemeClick}><span>◐</span></a>
+    <a title="change theme color" href="/" onClick={onChangeThemeClick}><FaAdjust/></a>
     </>
   )
 

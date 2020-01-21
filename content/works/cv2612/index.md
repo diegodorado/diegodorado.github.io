@@ -30,81 +30,72 @@ Pitch Bend messages are received on channels 1 to 7
 If received on channel 1, they affects all six voices
 Otherwise, pitch bends on channels 2-7 affects voices 1-6 respectively.
 
-#### Received CC Messages
+#### Received CC/NRPN Messages
 
 CC messages received are on channels 1 to 16
-Every CV2612 voice related parameter is mapped to a CC message by default according to the following table, but can be configured through the [CV2612 Online Tool](/cv2612)
+Every CV2612 voice related parameter is mapped to a CC message by default according to the following table, but can be configured through the [CV2612 Online Tool](/en/labs/cv2612)
+
+MIDI DIN runs at 31250 bits per second. That's roughly 3000 bytes per second, which in a MIDI stream transferring CC data (3 bytes each) as quickly as possible, works out to about 1000 CC changes per second.
 
 
-| CC | Channel | Code      | Parameter                          |
-|----|---------|-----------|------------------------------------|
-|... |         |           |*Global Parameters*                 |
-| 1  | -       | LF0_F     | Low Frequency Oscillator Frequency |
-| 2  | -       | LF0_E     | Low Frequency Oscillator Enable    |
-| 3  | -       | THRU_E    | Enable Software MIDI Thru          |
-| 4  | -       | TX_CC     | Transmit CC                        |
-| 5  | -       | POLY_M    | Poly Mode (Mono/Poly)              |
-|... |         |           |*Channel Parameters*                |
-| 20 | 1-7     | AL        | Operators Algorithm                |
-| 21 | 1-7     | FB        | Feedback of Operator 1             |
-| 22 | 1-7     | FMS       | Frequency Modulation Sensitivity   |
-| 23 | 1-7     | AMS       | Amplitude Modulation Sensitivity   |
-| 24 | 1-7     | ST        | Stereo Configuration               |
-|... |         |           | *Operator 1 Parameters*            |
-| 30 | 1-7     | AR        | Attack Rate                        |
-| 31 | 1-7     | D1        | Decay 1 Rate                       |
-| 32 | 1-7     | SL        | Sustain Level                      |
-| 33 | 1-7     | D2        | Decay 2 Rate                       |
-| 34 | 1-7     | RR        | Release Rate                       |
-| 35 | 1-7     | TL        | Total Level                        |
-| 36 | 1-7     | MUL       | Frequency Multiplier               |
-| 37 | 1-7     | DET       | Detune                             |
-| 38 | 1-7     | RS        | Rate Scaling                       |
-| 39 | 1-7     | AM        | Amplitude Modulation Enable        |
-|... |         |           | *Operator 2 Parameters*            |
-| 40 | 1-7     | AR        | Attack Rate                        |
-| 41 | 1-7     | D1        | Decay 1 Rate                       |
-| 42 | 1-7     | SL        | Sustain Level                      |
-| 43 | 1-7     | D2        | Decay 2 Rate                       |
-| 44 | 1-7     | RR        | Release Rate                       |
-| 45 | 1-7     | TL        | Total Level                        |
-| 46 | 1-7     | MUL       | Frequency Multiplier               |
-| 47 | 1-7     | DET       | Detune                             |
-| 48 | 1-7     | RS        | Rate Scaling                       |
-| 49 | 1-7     | AM        | Amplitude Modulation Enable        |
-|... |         |           | *Operator 3 Parameters*            |
-| 50 | 1-7     | AR        | Attack Rate                        |
-| 51 | 1-7     | D1        | Decay 1 Rate                       |
-| 52 | 1-7     | SL        | Sustain Level                      |
-| 53 | 1-7     | D2        | Decay 2 Rate                       |
-| 54 | 1-7     | RR        | Release Rate                       |
-| 55 | 1-7     | TL        | Total Level                        |
-| 56 | 1-7     | MUL       | Frequency Multiplier               |
-| 57 | 1-7     | DET       | Detune                             |
-| 58 | 1-7     | RS        | Rate Scaling                       |
-| 59 | 1-7     | AM        | Amplitude Modulation Enable        |
-|... |         |           | *Operator 4 Parameters*            |
-| 60 | 1-7     | AR        | Attack Rate                        |
-| 61 | 1-7     | D1        | Decay 1 Rate                       |
-| 62 | 1-7     | SL        | Sustain Level                      |
-| 63 | 1-7     | D2        | Decay 2 Rate                       |
-| 64 | 1-7     | RR        | Release Rate                       |
-| 65 | 1-7     | TL        | Total Level                        |
-| 66 | 1-7     | MUL       | Frequency Multiplier               |
-| 67 | 1-7     | DET       | Detune                             |
-| 68 | 1-7     | RS        | Rate Scaling                       |
-| 69 | 1-7     | AM        | Amplitude Modulation Enable        |
-|... |         |           | *Omni Operator Parameters*         |
-| 70 | 1-7     | AR        | Attack Rate                        |
-| 71 | 1-7     | D1        | Decay 1 Rate                       |
-| 72 | 1-7     | SL        | Sustain Level                      |
-| 73 | 1-7     | D2        | Decay 2 Rate                       |
-| 74 | 1-7     | RR        | Release Rate                       |
-| 75 | 1-7     | TL        | Total Level                        |
-| 76 | 1-7     | MUL       | Frequency Multiplier               |
-| 77 | 1-7     | DET       | Detune                             |
-| 78 | 1-7     | RS        | Rate Scaling                       |
-| 79 | 1-7     | AM        | Amplitude Modulation Enable        |
+| NRPN MSB | NRPN LSB | CC | Channel | Code      | Parameter                          |
+|----------|----------|----|---------|-----------|------------------------------------|
+|          |          |    |         |           |*Global Parameters*                 |
+|    01    |    0     | 1  | -       | LF0_F     | Low Frequency Oscillator Frequency |
+|    02    |    0     | 2  | -       | LF0_E     | Low Frequency Oscillator Enable    |
+|    03    |    0     | 3  | -       | THRU_E    | Enable Software MIDI Thru          |
+|    04    |    0     | 4  | -       | TX_CC     | Transmit CC                        |
+|    05    |    0     | 5  | -       | POLY_M    | Poly Mode (Mono/Poly)              |
+|          |          |    |         |           |*Channel Parameters*                |
+|    20    |    0     | 20 | 1-7     | AL        | Operators Algorithm                |
+|    21    |    0     | 21 | 1-7     | FB        | Feedback of Operator 1             |
+|    22    |    0     | 22 | 1-7     | FMS       | Frequency Modulation Sensitivity   |
+|    23    |    0     | 23 | 1-7     | AMS       | Amplitude Modulation Sensitivity   |
+|    24    |    0     | 24 | 1-7     | ST        | Stereo Configuration               |
+|          |          |    |         |           | *Operator 1 Parameters*            |
+|    30    |   0-3    | 30 | 1-7     | AR        | Attack Rate                        |
+|    31    |   0-3    | 31 | 1-7     | D1        | Decay 1 Rate                       |
+|    32    |   0-3    | 32 | 1-7     | SL        | Sustain Level                      |
+|    33    |   0-3    | 33 | 1-7     | D2        | Decay 2 Rate                       |
+|    34    |   0-3    | 34 | 1-7     | RR        | Release Rate                       |
+|    35    |   0-3    | 35 | 1-7     | TL        | Total Level                        |
+|    36    |   0-3    | 36 | 1-7     | MUL       | Frequency Multiplier               |
+|    37    |   0-3    | 37 | 1-7     | DET       | Detune                             |
+|    38    |   0-3    | 38 | 1-7     | RS        | Rate Scaling                       |
+|    39    |   0-3    | 39 | 1-7     | AM        | Amplitude Modulation Enable        |
+|          |          |    |         |           | *Operator 2 Parameters*            |
+|          |          | 40 | 1-7     | AR        | Attack Rate                        |
+|          |          | 41 | 1-7     | D1        | Decay 1 Rate                       |
+|          |          | 42 | 1-7     | SL        | Sustain Level                      |
+|          |          | 43 | 1-7     | D2        | Decay 2 Rate                       |
+|          |          | 44 | 1-7     | RR        | Release Rate                       |
+|          |          | 45 | 1-7     | TL        | Total Level                        |
+|          |          | 46 | 1-7     | MUL       | Frequency Multiplier               |
+|          |          | 47 | 1-7     | DET       | Detune                             |
+|          |          | 48 | 1-7     | RS        | Rate Scaling                       |
+|          |          | 49 | 1-7     | AM        | Amplitude Modulation Enable        |
+|          |          |    |         |           | *Operator 3 Parameters*            |
+|          |          | 50 | 1-7     | AR        | Attack Rate                        |
+|          |          | 51 | 1-7     | D1        | Decay 1 Rate                       |
+|          |          | 52 | 1-7     | SL        | Sustain Level                      |
+|          |          | 53 | 1-7     | D2        | Decay 2 Rate                       |
+|          |          | 54 | 1-7     | RR        | Release Rate                       |
+|          |          | 55 | 1-7     | TL        | Total Level                        |
+|          |          | 56 | 1-7     | MUL       | Frequency Multiplier               |
+|          |          | 57 | 1-7     | DET       | Detune                             |
+|          |          | 58 | 1-7     | RS        | Rate Scaling                       |
+|          |          | 59 | 1-7     | AM        | Amplitude Modulation Enable        |
+|          |          |    |         |           | *Operator 4 Parameters*            |
+|          |          | 60 | 1-7     | AR        | Attack Rate                        |
+|          |          | 61 | 1-7     | D1        | Decay 1 Rate                       |
+|          |          | 62 | 1-7     | SL        | Sustain Level                      |
+|          |          | 63 | 1-7     | D2        | Decay 2 Rate                       |
+|          |          | 64 | 1-7     | RR        | Release Rate                       |
+|          |          | 65 | 1-7     | TL        | Total Level                        |
+|          |          | 66 | 1-7     | MUL       | Frequency Multiplier               |
+|          |          | 67 | 1-7     | DET       | Detune                             |
+|          |          | 68 | 1-7     | RS        | Rate Scaling                       |
+|          |          | 69 | 1-7     | AM        | Amplitude Modulation Enable        |
 
 
 
@@ -131,7 +122,7 @@ A few CC messages are transmitted on channels 1 if **TX_CC** is **1** .
 
 #### SysEx Messages
 
-Other configuration parameters though, can only be changed with sysEx messages through the [CV2612 Online Tool](/cv2612)
+Other configuration parameters though, can only be changed with sysEx messages through the [CV2612 Online Tool](/en/labs/cv2612)
 
 As a brief description, the following sysex messages are received:
   * ID_REQUEST
