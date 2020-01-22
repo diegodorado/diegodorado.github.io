@@ -32,14 +32,6 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-source-instagram`,
-      options: {
-        username: 'diegdorado',
-        access_token: "EAAAAYG3haF0BAAwnSTuANzi6SnVlupueYmLJR0itWeG1dJv2RGjpWkHIJ13OMuF5ZBTx6BKwlaDNM77sx2GEnWLmACtIEFdQkcN0OiZCzjcZB5oYEQLE7AFjDrQ99Y5HwtXcE9WNTYJKLUqSxjOQgsRhdt5vF4sFVONsnpSQQZDZD",
-        instagram_id: "17841404423342614",
-      },
-    },
-    {
       resolve: `gatsby-source-soundcloud`,
       options: {
         userID: '13960662',

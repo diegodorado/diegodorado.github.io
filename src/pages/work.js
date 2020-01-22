@@ -4,7 +4,7 @@ import Link from "../components/link"
 import Img from 'gatsby-image'
 import Layout from "../layouts/main"
 import SEO from "../components/seo"
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 const WorkIndex = ({ data, location }) => {
   const [t, i18n] = useTranslation();

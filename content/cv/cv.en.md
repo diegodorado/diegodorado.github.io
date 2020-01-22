@@ -1,4 +1,4 @@
-> Diego Dorado is live coder, programmer and electronic artist based in Agentina.
+> Diego Dorado is a live coder, programmer and electronic artist based in Agentina.
 > He is passionate about research projects that combine technological innovation with artistic expressions.
 
 ## Experiencia Laboral

@@ -6041,22 +6041,6 @@ gatsby-source-filesystem@^2.0.23:
     valid-url "^1.0.9"
     xstate "^4.7.2"
 
-gatsby-source-instagram@^0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/gatsby-source-instagram/-/gatsby-source-instagram-0.6.1.tgz#8ed2548411217c8de790c94c188ce29d529c5ae2"
-  integrity sha512-LmdD+t92hEPC3Ow8Mr2SNMqYBVQpkTdfSGZ0g3V7RvKbPbwy51Nx/okI2K8n3wL7u23O3COhKohtnqhW69VPZA==
-  dependencies:
-    axios "^0.19.0"
-    cheerio "^1.0.0-rc.3"
-
-gatsby-source-medium@^2.0.8:
-  version "2.1.18"
-  resolved "https://registry.yarnpkg.com/gatsby-source-medium/-/gatsby-source-medium-2.1.18.tgz#0f13a9c2847b074e6a475d030de6cd0720d96479"
-  integrity sha512-8m8FJa/1lyaSFZkUn8RDoVazokIBziurOLmv0BhagfPUOaLZRaM7cCqFffY8n8+AxsDiM6LlbXXBj8z8K8Gulw==
-  dependencies:
-    "@babel/runtime" "^7.7.6"
-    axios "^0.19.0"
-
 gatsby-source-soundcloud@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/gatsby-source-soundcloud/-/gatsby-source-soundcloud-2.0.6.tgz#857c096509d34c525d47b6e66918a89c2571705a"
