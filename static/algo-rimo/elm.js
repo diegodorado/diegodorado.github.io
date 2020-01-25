@@ -12769,7 +12769,7 @@ var $author$project$Main$renderIntro = function (model) {
 					[
 						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
 					]),
-				$mdgriffith$elm_ui$Element$text('generador algorítimo de')),
+				$mdgriffith$elm_ui$Element$text('generador algorítmico de')),
 				A2(
 				$mdgriffith$elm_ui$Element$el,
 				_List_fromArray(
