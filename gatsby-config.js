@@ -10,6 +10,7 @@ module.exports = {
     },
   },
   plugins: [
+    'gatsby-plugin-workerize-loader',
     {
       resolve: `gatsby-source-filesystem`,
       options: {

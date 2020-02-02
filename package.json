@@ -60,6 +60,7 @@
     "typography": "^0.16.18"
   },
   "devDependencies": {
+    "gatsby-plugin-workerize-loader": "^1.1.0",
     "prettier": "^1.16.4"
   },
   "homepage": "http://diegodorado.com/",

@@ -7,7 +7,6 @@ import { FaSlidersH,
         } from 'react-icons/fa'
 import MidiIO from './midi-io'
 
-
 //warning: this component cannot be unmounted
 class Midi extends React.Component {
   static contextType = CV2612Context
@@ -48,7 +47,6 @@ class Midi extends React.Component {
       refresh('midiOutId',outputs)
     }
 
-
     this.setState(s)
 
   }
@@ -57,7 +55,6 @@ class Midi extends React.Component {
     this.setMidiOut('')
     console.error('Loopback prevented')
   }
-
 
   onNoteOn(pitch, velocity){
     this.context.emulator.noteOn(pitch)
@@ -71,8 +68,6 @@ class Midi extends React.Component {
     this.context.handleCC(ch,cc, val)
   }
 
-
-
   onChangeMidiIn = (ev) => {
     this.setState({midiInId: ev.target.value})
   }
@@ -85,60 +80,15 @@ class Midi extends React.Component {
     this.setState({midiOutId: ev.target.value})
   }
 
-
   //todo: refactor this shitty code
   componentDidUpdate(prevProps, prevState) {
-    let handshake = false;
-
     (['midiCtrlInId','midiInId','midiOutId']).forEach((m)=>{
       if(prevState[m] !== this.state[m]){
         reactLocalStorage.set(m,this.state[m])
         //disconnect inmediatelly
         this.setState({connected:false})
-        handshake = true
       }
     })
-
-    if(handshake){
-
-      (async () => {
-        try {
-          await this.io.sendHandshake()
-          this.setState({connected:true})
-        } catch(err) {
-          console.error(err)
-          this.setState({connected:false})
-        }
-      })();
-
-
-      /*
-
-      (async () => {
-
-        try {
-          let data = await this.io.sendHandshake2()
-          console.log(data)
-          data = await this.io.sendHandshake2()
-          console.log(data)
-          data = await this.io.sendHandshake2()
-          console.log(data)
-          data = await this.io.sendHandshake2()
-          console.log(data)
-          data = await this.io.sendHandshake2()
-          console.log(data)
-        } catch(err) {
-          console.error(err)
-        }
-
-      })();
-
-
-        */
-
-
-
-    }
   }
 
   sendMidi = (data) => {
@@ -147,10 +97,8 @@ class Midi extends React.Component {
 
   sendCC = (ch,n,v) => {
     const data = [0xb0|ch,0x7f&n,0x7f&v]
-    console.log(data)
-    this.io.sendMidi(data)
+    this.sendMidi(data)
   }
-
 
   onLearnClick = (e) => {
     e.preventDefault()
@@ -164,7 +112,7 @@ class Midi extends React.Component {
 
   onClearClick = (e) => {
     e.preventDefault()
-    this.sendSysexSet([0x06,0x04,0x11,0x00])
+    // this.sendSysexSet([0x06,0x04,0x11,0x00])
   }
 
   onToggleSoundClick = (e) => {
@@ -201,4 +149,4 @@ class Midi extends React.Component {
   }
 }
 
-export default Midi;
+export default Midi
