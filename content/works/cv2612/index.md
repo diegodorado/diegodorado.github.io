@@ -37,6 +37,13 @@ Every CV2612 voice related parameter is mapped to a CC message by default accord
 
 MIDI DIN runs at 31250 bits per second. That's roughly 3000 bytes per second, which in a MIDI stream transferring CC data (3 bytes each) as quickly as possible, works out to about 1000 CC changes per second.
 
+play-mode
+vel-sensitivity
+cc-mode
+rgb-intensity
+
+As a general rule, a parameter on MIDI channel 1 apllies to all six voices, and on Midi channel 2 to 7, applies to voices 1 to six respectively.
+Global parameters do not take into account the MIDI channel used.
 
 | NRPN MSB | NRPN LSB | CC | Channel | Code      | Parameter                          |
 |----------|----------|----|---------|-----------|------------------------------------|
@@ -53,49 +60,24 @@ MIDI DIN runs at 31250 bits per second. That's roughly 3000 bytes per second, wh
 |    23    |    0     | 23 | 1-7     | AMS       | Amplitude Modulation Sensitivity   |
 |    24    |    0     | 24 | 1-7     | ST        | Stereo Configuration               |
 |          |          |    |         |           | *Operator 1 Parameters*            |
-|    30    |   0-3    | 30 | 1-7     | AR        | Attack Rate                        |
-|    31    |   0-3    | 31 | 1-7     | D1        | Decay 1 Rate                       |
-|    32    |   0-3    | 32 | 1-7     | SL        | Sustain Level                      |
-|    33    |   0-3    | 33 | 1-7     | D2        | Decay 2 Rate                       |
-|    34    |   0-3    | 34 | 1-7     | RR        | Release Rate                       |
-|    35    |   0-3    | 35 | 1-7     | TL        | Total Level                        |
-|    36    |   0-3    | 36 | 1-7     | MUL       | Frequency Multiplier               |
-|    37    |   0-3    | 37 | 1-7     | DET       | Detune                             |
-|    38    |   0-3    | 38 | 1-7     | RS        | Rate Scaling                       |
-|    39    |   0-3    | 39 | 1-7     | AM        | Amplitude Modulation Enable        |
-|          |          |    |         |           | *Operator 2 Parameters*            |
-|          |          | 40 | 1-7     | AR        | Attack Rate                        |
-|          |          | 41 | 1-7     | D1        | Decay 1 Rate                       |
-|          |          | 42 | 1-7     | SL        | Sustain Level                      |
-|          |          | 43 | 1-7     | D2        | Decay 2 Rate                       |
-|          |          | 44 | 1-7     | RR        | Release Rate                       |
-|          |          | 45 | 1-7     | TL        | Total Level                        |
-|          |          | 46 | 1-7     | MUL       | Frequency Multiplier               |
-|          |          | 47 | 1-7     | DET       | Detune                             |
-|          |          | 48 | 1-7     | RS        | Rate Scaling                       |
-|          |          | 49 | 1-7     | AM        | Amplitude Modulation Enable        |
-|          |          |    |         |           | *Operator 3 Parameters*            |
-|          |          | 50 | 1-7     | AR        | Attack Rate                        |
-|          |          | 51 | 1-7     | D1        | Decay 1 Rate                       |
-|          |          | 52 | 1-7     | SL        | Sustain Level                      |
-|          |          | 53 | 1-7     | D2        | Decay 2 Rate                       |
-|          |          | 54 | 1-7     | RR        | Release Rate                       |
-|          |          | 55 | 1-7     | TL        | Total Level                        |
-|          |          | 56 | 1-7     | MUL       | Frequency Multiplier               |
-|          |          | 57 | 1-7     | DET       | Detune                             |
-|          |          | 58 | 1-7     | RS        | Rate Scaling                       |
-|          |          | 59 | 1-7     | AM        | Amplitude Modulation Enable        |
-|          |          |    |         |           | *Operator 4 Parameters*            |
-|          |          | 60 | 1-7     | AR        | Attack Rate                        |
-|          |          | 61 | 1-7     | D1        | Decay 1 Rate                       |
-|          |          | 62 | 1-7     | SL        | Sustain Level                      |
-|          |          | 63 | 1-7     | D2        | Decay 2 Rate                       |
-|          |          | 64 | 1-7     | RR        | Release Rate                       |
-|          |          | 65 | 1-7     | TL        | Total Level                        |
-|          |          | 66 | 1-7     | MUL       | Frequency Multiplier               |
-|          |          | 67 | 1-7     | DET       | Detune                             |
-|          |          | 68 | 1-7     | RS        | Rate Scaling                       |
-|          |          | 69 | 1-7     | AM        | Amplitude Modulation Enable        |
+|    30    |    0     | 30 | 1-7     | AR        | Attack Rate                        |
+|    31    |    0     | 31 | 1-7     | D1        | Decay 1 Rate                       |
+|    32    |    0     | 32 | 1-7     | SL        | Sustain Level                      |
+|    33    |    0     | 33 | 1-7     | D2        | Decay 2 Rate                       |
+|    34    |    0     | 34 | 1-7     | RR        | Release Rate                       |
+|    35    |    0     | 35 | 1-7     | TL        | Total Level                        |
+|    36    |    0     | 36 | 1-7     | MUL       | Frequency Multiplier               |
+|    37    |    0     | 37 | 1-7     | DET       | Detune                             |
+|    38    |    0     | 38 | 1-7     | RS        | Rate Scaling                       |
+|    39    |    0     | 39 | 1-7     | AM        | Amplitude Modulation Enable        |
+|          |          |    |         |           | *Operator 2 ...*                   |
+|          |    1     | 40 | 1-7     | AR        | Attack Rate                        |
+|          |   ...    |    |         |           | *Operator 3 ...*                   |
+|          |    2     | 50 | 1-7     | AR        | Attack Rate                        |
+|          |   ...    |    |         |           | *Operator 4 ...*                   |
+|          |    3     | 60 | 1-7     | AR        | Attack Rate                        |
+|          |   ...    |    |         |           |                                    |
+
 
 
 
@@ -110,12 +92,12 @@ A few CC messages are transmitted on channels 1 if **TX_CC** is **1** .
 | 2  | 1       | CV_LSB    | Control Voltage LSB                |
 | 3  | 1       | GATE      | Gate                               |
 | -  | -       |           |                                    |
-| 1  | 1       | X_MSB     | X MSB                              |
-| 2  | 1       | X_LSB     | X LSB                              |
-| 1  | 1       | Y_MSB     | Y MSB                              |
-| 2  | 1       | Y_LSB     | Y LSB                              |
-| 1  | 1       | Z_MSB     | Z MSB                              |
-| 2  | 1       | Z_LSB     | Z LSB                              |
+| 10 | 1       | X_MSB     | X MSB                              |
+| 11 | 1       | X_LSB     | X LSB                              |
+| 12 | 1       | Y_MSB     | Y MSB                              |
+| 13 | 1       | Y_LSB     | Y LSB                              |
+| 14 | 1       | Z_MSB     | Z MSB                              |
+| 15 | 1       | Z_LSB     | Z LSB                              |
 
 
 

@@ -5,7 +5,7 @@ import Slider from "./slider"
 import algorithmAscii from "./utils/algorithmAscii"
 
 const Channel = (props) =>{
-  const context = useContext(CV2612Context)
+  const { state } = useContext(CV2612Context)
   return (
     <div className="channel">
       <div className="four-cols">
@@ -22,7 +22,7 @@ const Channel = (props) =>{
         </div>
         <div className="col">
           <pre className="algorithm">
-            {algorithmAscii(context.params['al'])}
+            {algorithmAscii(state.params['al'])}
           </pre>
         </div>
       </div>

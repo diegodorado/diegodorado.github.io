@@ -50,8 +50,6 @@
   .globals
     margin: 30px auto
     width: 100%
-    border: 1px solid white
-    box-sizing: border-box
 
   nav
     position: relative
@@ -104,6 +102,17 @@
       option
         text-align: center
     &.midi
+      span i
+        line-height: 1em
+        background-color: #ccc
+        box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #000000 0 -1px 6px
+        width: 18px
+        height: 18px
+        display: inline-block
+        border-radius: 50%
+        margin-left: 15px
+        &.active
+          animation: blinkLed 0.1s infinite
       .learning
         background: #ddd
         color: black
@@ -126,11 +135,27 @@
         text-align: right
         white-space: nowrap
 
-
+  .scene
+    margin: 15px 0
+    display: flex
+    .slider
+      margin-left: 20px
+      width: 250px
+      input
+        width: 250px
+    nav
+      width: 150px
+      margin: 4px
+      height: 25px
+      border: 0
+      a
+        height: 25px
+        line-height: 25px
+        padding: 0
 
   .cv-input
     border: 2px solid transparent
-    width: 100px
+    width: 150px
     text-align: center
     &.learn
       background: rgba(0,255,255,0.12)
@@ -143,7 +168,6 @@
         cursor: pointer
         border: 2px dashed rgba(0,255,255,0.2)
     span
-      margin: 10px
       display: block
       height: 30px
       line-height: 30px
@@ -197,3 +221,13 @@
         height: 25px
         background: #509eec
         cursor: pointer
+
+
+@keyframes blinkLed
+    from
+      background-color: $blue
+    50%
+      background-color: #24E0FF
+      box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #006 0 -1px 9px, #3F8CFF 0 2px 14px
+    to
+      background-color: $blue

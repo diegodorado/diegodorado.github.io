@@ -3,10 +3,12 @@ import {CV2612Context} from "./context"
 import {emptyVoice} from "./utils/patches-utils"
 import AudioKeys from 'audiokeys'
 import StartAudioContext from 'startaudiocontext'
+import PatchesIO from './patches-io'
 
 //todo: update for all 6 channels
 //todo: unload properly
 
+//todo: move audiokeys to context instead
 const kb = new AudioKeys({polyphony: 1,rows: 1,priority: 'last',octave: 0})
 
 
@@ -16,6 +18,9 @@ class Emulator extends React.Component {
 
   constructor(props) {
     super(props)
+    PatchesIO.init()
+    PatchesIO.sub('patchChanged', this.onPatchChanged)
+
     this.state = {}
     this.fftSize = 1024
     this.cache = []
@@ -23,6 +28,20 @@ class Emulator extends React.Component {
       this.cache.push(emptyVoice())
 
   }
+
+
+  onPatchChanged = (patch)=>{
+    //todo: repeat voice 0 if patch not multi
+    for (let v=0;v<6;v++) {
+      for (let [code, value] of Object.entries(patch.voices[v])) {
+        this.update(v,code,value)
+      }
+    }
+    //lfo
+    this.update(null,'lfo',this.patch['lfo'])
+    console.log('onPatchChanged')
+  }
+
 
   componentDidMount(){
     //todo: initialize audio context properly

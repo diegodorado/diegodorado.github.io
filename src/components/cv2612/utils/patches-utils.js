@@ -1,5 +1,5 @@
 
-export const globalParams = ['lfo','play-mode','cc-mode','x','y','z','vel-sensitivity','rgb-intensity']
+export const globalParams = ['lfo','scene','play-mode','cc-mode','x','y','z','vel-sensitivity','rgb-intensity']
 
 export const ctrlMap = ['ar','d1','sl','d2','rr','tl','mul','det','rs','am','al','fb','ams','fms','st','lfo']
 
@@ -64,7 +64,7 @@ export const emptyMapping = () =>{
 }
 
 
-export const dmp2voice = (name,d) =>{
+export const dmp2voice = (d) =>{
     //version 9 or 11, genesis, FM patch
     if( (d[0]===0x09 && d[1]===0x01 && d[2]===0x00)
         || ( d[0]===0x0B && d[1]===0x02 && d[2]===0x01) ){

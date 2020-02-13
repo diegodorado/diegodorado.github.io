@@ -1,152 +1,147 @@
-import React from 'react'
+import React, {useState, useEffect, useContext} from "react"
 import {CV2612Context} from "./context"
 import {reactLocalStorage} from 'reactjs-localstorage'
-import { FaSlidersH,
-         FaTrash,
-         FaGhost
-        } from 'react-icons/fa'
+import { FaSlidersH} from 'react-icons/fa'
 import MidiIO from './midi-io'
 
-//warning: this component cannot be unmounted
-class Midi extends React.Component {
-  static contextType = CV2612Context
+const activityDuration = 200
 
-  constructor(props) {
-    super(props)
+const Midi = () =>{
+  const { state, dispatch } = useContext(CV2612Context)
 
-    this.state = {
-      midiIns: [],
-      midiOuts: [],
-      connected: false
+  const [midiInId, setMidiInId] = useState('-')
+  const [midiCtrlInId, setMidiCtrlInId] = useState('-')
+  const [midiOutId, setMidiOutId] = useState('-')
+  const [midiIns, setMidiIns] = useState([])
+  const [midiOuts, setMidiOuts] = useState([])
+  const [midiInActivity, setMidiInActivity] = useState(false)
+  const [midiCtrlInActivity, setMidiCtrlInActivity] = useState(false)
+  const [midiOutActivity, setMidiOutActivity] = useState(false)
+
+  useEffect(()=>{
+    MidiIO.sub('midiStateChanged', onStateChange)
+    MidiIO.sub('midiOutProgress', onMidiOutProgress)
+    MidiIO.sub('midiLoopback', onLoopBack)
+    MidiIO.sub('midiCtrlInMsg', onMidiCtrlInMsg)
+    MidiIO.sub('midiInMsg', onMidiInMsg)
+
+    return () => {
+      MidiIO.unsub('midiStateChanged', onStateChange)
+      MidiIO.unsub('midiOutProgress', onMidiOutProgress)
+      MidiIO.unsub('midiLoopback', onLoopBack)
+      MidiIO.unsub('midiCtrlInMsg', onMidiCtrlInMsg)
+      MidiIO.unsub('midiInMsg', onMidiInMsg)
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+
+  useEffect(()=>{
+    if(midiCtrlInId !== '-'){
+      reactLocalStorage.set('midiCtrlInId',midiCtrlInId)
+      MidiIO.setMidiCtrlInId(midiCtrlInId)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[midiCtrlInId])
+
+
+  useEffect(()=>{
+    if(midiInId !== '-'){
+      reactLocalStorage.set('midiInId',midiInId)
+      MidiIO.setMidiInId(midiInId)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[midiInId])
+
+
+  useEffect(()=>{
+    if(midiOutId !== '-'){
+      reactLocalStorage.set('midiOutId',midiOutId)
+      MidiIO.setMidiOutId(midiOutId)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[midiOutId])
+
+  const onMidiCtrlInMsg = ()=>{
+    setMidiCtrlInActivity(true)
+    setTimeout(()=>setMidiCtrlInActivity(false), activityDuration)
   }
 
-  componentDidMount(){
-    this.io = new MidiIO(this)
-    this.context.midi = this
+  const onMidiInMsg = ()=>{
+    setMidiInActivity(true)
+    setTimeout(()=>setMidiInActivity(false), activityDuration)
   }
 
-  onStateChange(inputs,outputs){
-    const s = {midiIns:inputs, midiOuts:outputs, connected: false}
-
-    const refresh = (key,array) =>{
-      let id = reactLocalStorage.get(key,'')
-      // is last id still available??
-      if( id!=='' && !array.map(a=>a.id).includes(id) ){
-        id = inputs[0].id
-      }
-      if(id !== this.state[key])
-        s[key] = id
-    }
-
-    if(inputs.length){
-      refresh('midiInId',inputs)
-      refresh('midiCtrlInId',inputs)
-    }
-    if(outputs.length){
-      refresh('midiOutId',outputs)
-    }
-
-    this.setState(s)
-
+  const onMidiOutProgress = ({done}) =>{
+    setMidiOutActivity(!done)
   }
 
-  onLoopBack(){
-    this.setMidiOut('')
+  const onLoopBack = () =>{
+    setMidiOutId('')
     console.error('Loopback prevented')
   }
 
-  onNoteOn(pitch, velocity){
-    this.context.emulator.noteOn(pitch)
+  const onStateChange = ({inputs,outputs}) =>{
+
+    if (JSON.stringify(midiIns)!==JSON.stringify(inputs)){
+      const m_in = reactLocalStorage.get('midiInId','')
+      const c_in = reactLocalStorage.get('midiCtrlInId','')
+      // is last id still available??
+      setMidiInId(inputs.map(a=>a.id).includes(m_in) ? m_in : '')
+      setMidiCtrlInId(inputs.map(a=>a.id).includes(c_in) ? c_in : '')
+      setMidiIns(inputs)
+    }
+
+    if (JSON.stringify(midiOuts)!==JSON.stringify(outputs)){
+      const m_out = reactLocalStorage.get('midiOutId','')
+      // is last id still available??
+      setMidiOutId(outputs.map(a=>a.id).includes(m_out) ? m_out : '')
+      setMidiOuts(outputs)
+    }
+
   }
 
-  onNoteOff(pitch, velocity){
-    this.context.emulator.noteOff(pitch)
-  }
 
-  onControlChange(ch,cc, val){
-    this.context.handleCC(ch,cc, val)
-  }
-
-  onChangeMidiIn = (ev) => {
-    this.setState({midiInId: ev.target.value})
-  }
-
-  onChangeMidiCtrlIn = (ev) => {
-    this.setState({midiCtrlInId: ev.target.value})
-  }
-
-  onChangeMidiOut = (ev) => {
-    this.setState({midiOutId: ev.target.value})
-  }
-
-  //todo: refactor this shitty code
-  componentDidUpdate(prevProps, prevState) {
-    (['midiCtrlInId','midiInId','midiOutId']).forEach((m)=>{
-      if(prevState[m] !== this.state[m]){
-        reactLocalStorage.set(m,this.state[m])
-        //disconnect inmediatelly
-        this.setState({connected:false})
-      }
-    })
-  }
-
-  sendMidi = (data) => {
-    this.io.sendMidi(data)
-  }
-
-  sendCC = (ch,n,v) => {
-    const data = [0xb0|ch,0x7f&n,0x7f&v]
-    this.sendMidi(data)
-  }
-
-  onLearnClick = (e) => {
+  const onLearnClick = (e) => {
     e.preventDefault()
-    this.context.toggleLearning()
+    dispatch({ type: "toggle-learning"})
   }
 
-  onPanicClick = (e) => {
-    e.preventDefault()
-    this.sendMidi([0xFF])
-  }
+  return (
+    <>
+    <nav className={`midi`}>
+      <span>
+        Ctrl
+        <i className={midiCtrlInActivity ? 'active':''}></i>
+      </span>
+      {/*eslint-disable-next-line jsx-a11y/no-onchange*/}
+      <select className="ctrl" value={midiCtrlInId} onChange={(ev) => setMidiCtrlInId(ev.target.value)}>
+        <option key="" value="">Not Connected</option>
+        {midiIns.map((i) =><option key={i.id} value={i.id}>{i.name}</option>)}
+      </select>
+      <span>
+        In
+        <i className={midiInActivity ? 'active':''}></i>
+      </span>
+      {/*eslint-disable-next-line jsx-a11y/no-onchange*/}
+      <select className="in" value={midiInId} onChange={(ev) => setMidiInId(ev.target.value)}>
+        <option key="" value="">Not Connected</option>
+        {midiIns.map((i) =><option key={i.id} value={i.id}>{i.name}</option>)}
+      </select>
+      <span>
+        Out
+        <i className={midiOutActivity ? 'active':''}></i>
+        </span>
+      {/*eslint-disable-next-line jsx-a11y/no-onchange*/}
+      <select className="out" value={midiOutId} onChange={(ev) => setMidiOutId(ev.target.value)}>
+        <option key="" value="">Not Connected</option>
+        {midiOuts.map((o) =><option key={o.id} value={o.id}>{o.name}</option>)}
+      </select>
+      <a className={state.learning ? 'learning':''} href="/" title="Click to Learn" onClick={onLearnClick}><FaSlidersH/></a>
+    </nav>
+    </>
+  )
 
-  onClearClick = (e) => {
-    e.preventDefault()
-    // this.sendSysexSet([0x06,0x04,0x11,0x00])
-  }
-
-  onToggleSoundClick = (e) => {
-    e.preventDefault()
-    this.context.toggleSound()
-  }
-
-  render() {
-    return (
-      <nav className={`midi ${this.state.connected ? 'connected' :''}`}>
-        <span>Ctrl</span>
-        {/*eslint-disable-next-line jsx-a11y/no-onchange*/}
-        <select className="ctrl" value={this.state.midiCtrlInId} onChange={this.onChangeMidiCtrlIn}>
-          <option key="" value="">Not Connected</option>
-          {this.state.midiIns.map((i) =><option key={i.id} value={i.id}>{i.name}</option>)}
-        </select>
-        <span>In</span>
-        {/*eslint-disable-next-line jsx-a11y/no-onchange*/}
-        <select className="in" value={this.state.midiInId} onChange={this.onChangeMidiIn}>
-          <option key="" value="">Not Connected</option>
-          {this.state.midiIns.map((i) =><option key={i.id} value={i.id}>{i.name}</option>)}
-        </select>
-        <span>Out</span>
-        {/*eslint-disable-next-line jsx-a11y/no-onchange*/}
-        <select className="out" value={this.state.midiOutId} onChange={this.onChangeMidiOut}>
-          <option key="" value="">Not Connected</option>
-          {this.state.midiOuts.map((o) =><option key={o.id} value={o.id}>{o.name}</option>)}
-        </select>
-        <a className={this.context.learning ? 'learning':''} href="/" title="Click to Learn" onClick={this.onLearnClick}><FaSlidersH/></a>
-        <a href="/" title="Click if panic" onClick={this.onPanicClick}><FaGhost/></a>
-        <a href="/" title="Click to clear midi mapping" onClick={this.onClearClick}><FaTrash/></a>
-      </nav>
-    )
-  }
 }
 
 export default Midi

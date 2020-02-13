@@ -136,7 +136,7 @@ const Playground = ({pattern}) =>{
     window.addEventListener('keydown', onKeyPress)
     // Specify how to clean up after this effect:
     return () => {
-      window.removeEventListener("keydown", onKeyPress)
+      window.removeEventListener('keydown', onKeyPress)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[left, right, error])

@@ -4,7 +4,7 @@ import Layout from "../layouts/main"
 import SEO from "../components/seo"
 import { Trans } from 'react-i18next'
 import prettyTime from '../components/prettyTime'
-import BandcampPlayer from 'react-bandcamp'
+//import BandcampPlayer from 'react-bandcamp'
 
 
 import { FaStepBackward,

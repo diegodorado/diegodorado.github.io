@@ -1,124 +1,188 @@
-let interval = 50
-let queuedData = 0
+const state = {
+  ma: null,
+  //used to prevent loopback
+  lastMsg: null,
+  midiInId: null,
+  midiCtrlInId: null,
+  midiOutId: null
+}
+
+const interval = 50
+const nrpn_queue = new Map()
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
+const events = {}
 
-class MidiIO {
-  caller = null
-  ma= null
-  //use to prevent loopback
-  lastMsg = null
+const pub = (event, data) => {
+  if (!events[event]) return
+  events[event].forEach(callback => callback(data))
+}
 
-  constructor(callerObject){
-    this.caller = callerObject
-    navigator.requestMIDIAccess( { sysex: false }).then(
-      (ma)=>{
-        this.ma = ma
-        ma.onstatechange = this.refresh
-        this.refresh()
-      },()=>console.log('Could not access your MIDI devices.'))
-  }
+const sub = (event, callback) => {
+  if (!events[event]) events[event] = []
+  events[event].push(callback)
+}
 
-  refresh = (e) => {
-    const inputs = Array.from(this.ma.inputs.values())
-    const outputs = Array.from(this.ma.outputs.values())
-    for(let i of inputs)
-      i.onmidimessage = this.onMIDIMessage
-    this.caller.onStateChange(inputs,outputs)
-  }
+const unsub = (event, callback) => {
+  if (events[event])
+    events[event] = events[event].filter(e => e!==callback)
+}
 
 
-  //todo: turn into a promise
-  sendMidi = (data) => {
-    if(this.ma===null){
-      return
-    }
-    const midiOut = this.ma.outputs.get(this.caller.state.midiOutId)
-    if(midiOut){
-      this.delayedSendMidi(data).then(
-        ({index,queuedData,data, elapsed, pending}) => {
-          midiOut.send(data)
-          console.log(index,queuedData, pending)
-        }
-      )
+const setMidiInId = id => state.midiInId = id
+const setMidiCtrlInId = id => state.midiCtrlInId = id
+const setMidiOutId = id => state.midiOutId = id
 
-    }else{
-      //console.log('no midi out')
-    }
-
-  }
+const init = () => {
+  navigator.requestMIDIAccess({
+    sysex: false
+  }).then(
+    (ma) => {
+      state.ma = ma
+      ma.onstatechange = refresh
+      refresh()
+    }, () => console.log('Could not access your MIDI devices.'))
+}
 
 
-  delayedSendMidi = async data => {
-    let index = queuedData
-    let start = performance.now()
-    queuedData++
-    await sleep(interval*index)
+const refresh = (e) => {
+  const inputs = Array.from(state.ma.inputs.values())
+  const outputs = Array.from(state.ma.outputs.values())
+  for (let i of inputs)
+    i.onmidimessage = midiInHandler
+
+  pub('midiStateChanged', {
+    inputs,
+    outputs
+  })
+
+}
+
+// maybe sould implement SendNote, SendCC and SendNPRN separately
+const sendMidi = async data => {
+  if (state.ma === null)
+    throw new Error("No midiAcces object.")
+
+  const midiOut = state.ma.outputs.get(state.midiOutId)
+
+  if (midiOut === null)
+    throw new Error("No midi Out.")
+
+  midiOut.send(data)
+
+}
+
+
+const clearNRPN = () => {
+  nrpn_queue.clear()
+}
+
+
+const sendNRPN = async (channel, nrpn_msb, nrpn_lsb, data_msb, data_lsb) => {
+  if (!state.ma)
+    return
+    //throw new Error("No midiAcces object.")
+
+  const midiOut = state.ma.outputs.get(state.midiOutId)
+  if (!midiOut)
+    return
+    //throw new Error("No midi Out.")
+
+  let key = `${channel}-${nrpn_msb}-${nrpn_lsb}`
+  nrpn_queue.set(key, {
+    data_msb,
+    data_lsb
+  })
+
+  let index = nrpn_queue.size
+  let start = performance.now()
+  await sleep(interval * index)
+
+  if (nrpn_queue.has(key)) {
+    let {
+      data_msb,
+      data_lsb
+    } = nrpn_queue.get(key)
+
+    midiOut.send([0xB0 + channel, 0x63, nrpn_msb]) //NRPN MSB: CC99
+    midiOut.send([0xB0 + channel, 0x62, nrpn_lsb]) //NRPN LSB: CC98
+    midiOut.send([0xB0 + channel, 0x06, data_msb]) //Data Entry MSB: CC6
+    midiOut.send([0xB0 + channel, 0x26, data_lsb]) //Data Entry LSB: CC38
+
+    nrpn_queue.delete(key)
+
     let elapsed = performance.now() - start
-    queuedData--
-    let pending = interval*queuedData
-    return {index,queuedData,data, elapsed, pending}
-  }
+    let done = (nrpn_queue.size === 0)
 
-
-  onCtrlMIDIMessage = (msg) => {
-
-    if(msg.target.id !== this.caller.state.midiCtrlInId)
-      return
-
-    const data = Array.from(msg.data)
-
-
-    //warning: filter loopback messages somehow
-    if(JSON.stringify(this.lastMsg) === JSON.stringify(data)){
-      this.caller.onLoopBack()
-      return
-    }
-
-
-    const type = data[0] & 0xf0
-
-    if(type === 0xB0){
-      const ch = data[0] & 0x0f
-      const cc = data[1] & 0x7f
-      const val = data[2] & 0x7f
-      this.caller.onControlChange(ch,cc, val)
-    }
-
-    // resend noteon/off events
-    if(type === 0x80 || type === 0x90){
-      this.sendMidi(data)
-
-      if(type === 0x90){
-        this.caller.onNoteOn(data[1], data[2])
-      }else{
-        this.caller.onNoteOff(data[1], data[2])
-      }
-    }
-
-  }
-
-
-  // only nprn messages are expected here
-  // but not in this version yet
-  onMIDIMessage = (msg) => {
-
-    if(msg.target.id !== this.caller.state.midiInId)
-      return
-
-    const data = Array.from(msg.data)
-
-    //warning: filter loopback messages somehow
-    if(JSON.stringify(this.lastMsg) === JSON.stringify(data)){
-      this.caller.onLoopBack()
-      return
-    }
-
-    // todo: handle nprn messages
+    pub('midiOutProgress', {elapsed,done})
 
   }
 
 }
 
-export default MidiIO
+const sendCC = (ch, n, v) => {
+  const data = [0xb0 | ch, 0x7f & n, 0x7f & v]
+  sendMidi(data)
+}
+
+
+const midiCtrlInMsg = (data) => {
+  const type = data[0] & 0xf0
+
+
+
+  if (type === 0xB0) {
+    pub('onControlChange',data)
+  }
+
+  // resend noteon/off events
+  if (type === 0x80 || type === 0x90) {
+    sendMidi(data)
+    if (type === 0x90) {
+      pub('onNoteOn',data)
+    } else {
+      pub('onNoteOff',data)
+    }
+  }
+
+}
+
+
+const midiInHandler = (msg) => {
+    const data = Array.from(msg.data)
+    //warning: filter loopback messages somehow
+    if (JSON.stringify(state.lastMsg) === JSON.stringify(data)) {
+      pub('midiLoopback')
+      return
+    }
+    if (msg.target.id === state.midiCtrlInId){
+      pub('midiCtrlInMsg')
+      midiCtrlInMsg(data)
+    }
+    if (msg.target.id === state.midiInId){
+      pub('midiInMsg')
+      midiInMsg(data)
+    }
+
+}
+
+// only nprn messages are expected here
+// but not in this version yet
+const midiInMsg = (data) => {
+  // todo: handle nprn messages
+}
+
+
+export default {
+  pub,
+  sub,
+  unsub,
+  setMidiInId,
+  setMidiCtrlInId,
+  setMidiOutId,
+  sendNRPN,
+  clearNRPN,
+  sendCC,
+  init
+}
