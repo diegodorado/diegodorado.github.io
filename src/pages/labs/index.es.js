@@ -11,11 +11,22 @@ const LabsIndex = ({location})  =>
     </p>
     <ul>
       <li>
+        <h4><a href="/map-h/" target="new" >map-H</a></h4>
+        <p>
+        map-H (música asistida por Humano) es una webapp que genera ritmos de percusión intentando inferir el ritmo propuesto por el humano.
+        </p>
+      </li>
+      <li>
+        <h4><a href="/algo-rimo/" target="new" >Algo Rimo</a></h4>
+        <p>
+        Webapp que genera sonetos de forma aleatoria a partir de permutaciones de versos de un corpus compuesto por sonetos en español que se encuentran en el dominio público.
+        </p>
+      </li>
+      <li>
         <h4><Link to={`/labs/io`} >IO HEKA</Link></h4>
         <p>
         Juego de las Sombras Parejas (por Instrumento Óptico). Una interacción lúdica basada en categorías de arquetipos y correspondencias zodiacales extraídos de la mitología clásica.
         </p>
-
       </li>
       <li>
         <h4><Link to={`/labs/live-emojing`} >Live Emojing Playground</Link></h4>

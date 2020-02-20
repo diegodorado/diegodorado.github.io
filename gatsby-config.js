@@ -33,13 +33,6 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-source-soundcloud`,
-      options: {
-        userID: '13960662',
-        clientID: '802921cdc630a9a0d66f25c665703b8c'
-      },
-    },
-    {
       resolve: `gatsby-transformer-remark`,
       options: {
         plugins: [

@@ -11,6 +11,18 @@ const LabsIndex = ({location})  =>
     </p>
     <ul>
       <li>
+        <h4><a href="/map-h/" target="new" >map-H</a></h4>
+        <p>
+        map-H (música asistida por Humano) es una webapp que genera ritmos de percusión intentando inferir el ritmo propuesto por el humano.
+        </p>
+      </li>
+      <li>
+        <h4><a href="/algo-rimo/" target="new" >Algo Rimo</a></h4>
+        <p>
+        Webapp that generates random sonnets from permutations of verses of a corpus composed of sonnets in Spanish that are in the public domain.
+        </p>
+      </li>
+      <li>
         <h4><Link to={`/labs/io`} >IO HEKA</Link></h4>
          <p>
           Matching Shadow Game (by Instrumento Óptico). A playful interaction based on categories of archetypes and zodiacal correspondences drawn from classical mythology.
