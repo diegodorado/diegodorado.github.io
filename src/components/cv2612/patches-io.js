@@ -1,10 +1,12 @@
 import {  reactLocalStorage} from 'reactjs-localstorage'
-import {  dmp2voice,  emptyPatch} from "./utils/patches-utils"
+import {  dmp2voice,  emptyPatch} from './utils/patches-utils'
 
 const init = async () => {
-  let patches = []
-  // let patches = reactLocalStorage.getObject('patches',[])
-  if (patches.length === 0) { //} || Object.keys(state.patches).length===0){
+  //hack
+  return await defaultPatches()
+
+  let patches = reactLocalStorage.getObject('patches',[])
+  if (patches.length === 0) {
     patches = await defaultPatches()
     reactLocalStorage.setObject('patches', patches)
   }
@@ -29,6 +31,18 @@ const defaultPatches = async () => {
       p.push(patch)
     }
   }
+
+
+  //adds a complex patch
+  const patch = emptyPatch()
+  patch['single-voice'] = false
+  patch['lfo'] = 6
+  patch.name = 'Complex patch sample'
+  for(let i=0;i<6;i++)
+    patch.voices[i] = Object.assign({}, p[i].voices[0])
+  p.push(patch)
+
+
   return p
 }
 

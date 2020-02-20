@@ -25,8 +25,11 @@ body.dark
         transform: rotateY(180deg)
 
 
+  .music article .bandcamp iframe
+    background-color: black
+
+
 body.light
-  background-color: $white
   background-color: #fff
   &, a, a:visited
     color: $black
@@ -44,46 +47,8 @@ body.light
       &:hover span
         transform: rotateY(540deg)
 
-
-
-//disable transitions
-.dont-run-this
-  body
-    transition: background-color 2s
-    &, a, a:visited
-      transition: color 2s
-      color: $white
-
-    article.post
-      transition: border-color 3s
-      .card h3 a
-        transition: background-color 2s,opacity 0.5s ease
-
-    section.texts article
-      transition: border-color 2s
-      &:hover
-        transition: background-color 2s
-
-    .work-post hr
-      transition: background-image 2s
-
-    header
-      a.active
-        transition: color 2s, text-shadow 2s
-      nav a:first-child
-        span
-          transition: transform 1s
-          display: inline-block
-
-
-  body.dark
-    .gatsby-image-wrapper ,article.post, video, iframe
-      animation: fade-in1 4s ease
-
-  body.light
-    .gatsby-image-wrapper ,article.post, video, iframe
-      animation: fade-in2 4s ease
-
+  .music article .bandcamp iframe
+    background-color: darken($white,1.2)
 
 
 //simpler transitions

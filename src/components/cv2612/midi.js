@@ -4,17 +4,15 @@ import {reactLocalStorage} from 'reactjs-localstorage'
 import { FaSlidersH} from 'react-icons/fa'
 import MidiIO from './midi-io'
 
-const activityDuration = 200
+const activityDuration = 80
 
 const Midi = () =>{
   const { state, dispatch } = useContext(CV2612Context)
 
-  const [midiInId, setMidiInId] = useState('-')
   const [midiCtrlInId, setMidiCtrlInId] = useState('-')
   const [midiOutId, setMidiOutId] = useState('-')
   const [midiIns, setMidiIns] = useState([])
   const [midiOuts, setMidiOuts] = useState([])
-  const [midiInActivity, setMidiInActivity] = useState(false)
   const [midiCtrlInActivity, setMidiCtrlInActivity] = useState(false)
   const [midiOutActivity, setMidiOutActivity] = useState(false)
 
@@ -23,14 +21,12 @@ const Midi = () =>{
     MidiIO.sub('midiOutProgress', onMidiOutProgress)
     MidiIO.sub('midiLoopback', onLoopBack)
     MidiIO.sub('midiCtrlInMsg', onMidiCtrlInMsg)
-    MidiIO.sub('midiInMsg', onMidiInMsg)
 
     return () => {
       MidiIO.unsub('midiStateChanged', onStateChange)
       MidiIO.unsub('midiOutProgress', onMidiOutProgress)
       MidiIO.unsub('midiLoopback', onLoopBack)
       MidiIO.unsub('midiCtrlInMsg', onMidiCtrlInMsg)
-      MidiIO.unsub('midiInMsg', onMidiInMsg)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -46,15 +42,6 @@ const Midi = () =>{
 
 
   useEffect(()=>{
-    if(midiInId !== '-'){
-      reactLocalStorage.set('midiInId',midiInId)
-      MidiIO.setMidiInId(midiInId)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[midiInId])
-
-
-  useEffect(()=>{
     if(midiOutId !== '-'){
       reactLocalStorage.set('midiOutId',midiOutId)
       MidiIO.setMidiOutId(midiOutId)
@@ -67,13 +54,11 @@ const Midi = () =>{
     setTimeout(()=>setMidiCtrlInActivity(false), activityDuration)
   }
 
-  const onMidiInMsg = ()=>{
-    setMidiInActivity(true)
-    setTimeout(()=>setMidiInActivity(false), activityDuration)
-  }
-
   const onMidiOutProgress = ({done}) =>{
-    setMidiOutActivity(!done)
+    setMidiOutActivity(true)
+    if(done)
+      setTimeout(()=>setMidiOutActivity(false), activityDuration)
+
   }
 
   const onLoopBack = () =>{
@@ -84,10 +69,8 @@ const Midi = () =>{
   const onStateChange = ({inputs,outputs}) =>{
 
     if (JSON.stringify(midiIns)!==JSON.stringify(inputs)){
-      const m_in = reactLocalStorage.get('midiInId','')
       const c_in = reactLocalStorage.get('midiCtrlInId','')
       // is last id still available??
-      setMidiInId(inputs.map(a=>a.id).includes(m_in) ? m_in : '')
       setMidiCtrlInId(inputs.map(a=>a.id).includes(c_in) ? c_in : '')
       setMidiIns(inputs)
     }
@@ -116,15 +99,6 @@ const Midi = () =>{
       </span>
       {/*eslint-disable-next-line jsx-a11y/no-onchange*/}
       <select className="ctrl" value={midiCtrlInId} onChange={(ev) => setMidiCtrlInId(ev.target.value)}>
-        <option key="" value="">Not Connected</option>
-        {midiIns.map((i) =><option key={i.id} value={i.id}>{i.name}</option>)}
-      </select>
-      <span>
-        In
-        <i className={midiInActivity ? 'active':''}></i>
-      </span>
-      {/*eslint-disable-next-line jsx-a11y/no-onchange*/}
-      <select className="in" value={midiInId} onChange={(ev) => setMidiInId(ev.target.value)}>
         <option key="" value="">Not Connected</option>
         {midiIns.map((i) =><option key={i.id} value={i.id}>{i.name}</option>)}
       </select>

@@ -14,6 +14,7 @@ const Channels = (props) =>{
     dispatch({ type: "change-voice", voiceIndex: v})
   }
 
+  const single = state.params['single-voice']
   return (
       <>
         <div className="globals">
@@ -37,7 +38,8 @@ const Channels = (props) =>{
           </div>
         </div>
         <nav>
-          {[0,1,2,3,4,5].map(i => <a href="/" className={state.voiceIndex === i ? 'active':'' } key={i} voice={i} onClick={onSelectVoice} title={`Show voice ${i+1}` }>{`${i+1}` }</a>)}
+          <span>{single ? 'Single':'Multi' }</span>
+          {single ? null : [0,1,2,3,4,5].map(i => <a href="/" className={state.voiceIndex === i ? 'active':'' } key={i} voice={i} onClick={onSelectVoice} title={`Show voice ${i+1}` }>{`${i+1}` }</a>)}
         </nav>
         <Channel />
       </>

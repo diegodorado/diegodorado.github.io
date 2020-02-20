@@ -57,7 +57,6 @@ const Header = ({location}) => {
           <i>s</i>
           </PLink>
         |<PLink to={`/bio`}>{t('Bio')}</PLink>
-        {/* | <PLink to={`/log`}>Log</PLink>*/}
       </nav>
     </header>
   )

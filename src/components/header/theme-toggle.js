@@ -1,29 +1,16 @@
-import React, {useState, useEffect} from "react"
-import Helmet from "react-helmet"
-import {reactLocalStorage} from 'reactjs-localstorage'
+import React, {useContext} from "react"
 import {FaAdjust} from 'react-icons/fa'
+import {GlobalContext} from "../context"
 
 const ThemeToggle = () => {
-
-  const [theme, setTheme] = useState('dark')
-
-  useEffect(() => setTheme(reactLocalStorage.get('theme', 'dark')), [])
-
-  useEffect(() => {
-    reactLocalStorage.set('theme', theme);
-  }, [theme])
+  const { dispatch } = useContext(GlobalContext)
 
   const onChangeThemeClick = e => {
     e.preventDefault()
-    setTheme((theme==='dark') ? 'light' : 'dark')
+    dispatch({ type: "toggle-theme"})
   }
 
-  return (
-    <>
-    <Helmet bodyAttributes={{class:theme }}  />
-    <a title="change theme color" href="/" onClick={onChangeThemeClick}><FaAdjust/></a>
-    </>
-  )
+  return <a title="change theme color" href="/" onClick={onChangeThemeClick}><FaAdjust/></a>
 
 }
 

@@ -2,12 +2,12 @@ const state = {
   ma: null,
   //used to prevent loopback
   lastMsg: null,
-  midiInId: null,
   midiCtrlInId: null,
   midiOutId: null
 }
 
-const interval = 50
+// 1000 cc per seconds -> 250 nrpn per seconds -> interval 4
+const interval = 10
 const nrpn_queue = new Map()
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
@@ -30,7 +30,6 @@ const unsub = (event, callback) => {
 }
 
 
-const setMidiInId = id => state.midiInId = id
 const setMidiCtrlInId = id => state.midiCtrlInId = id
 const setMidiOutId = id => state.midiOutId = id
 
@@ -70,12 +69,8 @@ const sendMidi = async data => {
     throw new Error("No midi Out.")
 
   midiOut.send(data)
+  pub('midiOutProgress', {done:true})
 
-}
-
-
-const clearNRPN = () => {
-  nrpn_queue.clear()
 }
 
 
@@ -121,16 +116,9 @@ const sendNRPN = async (channel, nrpn_msb, nrpn_lsb, data_msb, data_lsb) => {
 
 }
 
-const sendCC = (ch, n, v) => {
-  const data = [0xb0 | ch, 0x7f & n, 0x7f & v]
-  sendMidi(data)
-}
-
 
 const midiCtrlInMsg = (data) => {
   const type = data[0] & 0xf0
-
-
 
   if (type === 0xB0) {
     pub('onControlChange',data)
@@ -160,29 +148,15 @@ const midiInHandler = (msg) => {
       pub('midiCtrlInMsg')
       midiCtrlInMsg(data)
     }
-    if (msg.target.id === state.midiInId){
-      pub('midiInMsg')
-      midiInMsg(data)
-    }
 
 }
-
-// only nprn messages are expected here
-// but not in this version yet
-const midiInMsg = (data) => {
-  // todo: handle nprn messages
-}
-
 
 export default {
   pub,
   sub,
   unsub,
-  setMidiInId,
   setMidiCtrlInId,
   setMidiOutId,
   sendNRPN,
-  clearNRPN,
-  sendCC,
   init
 }

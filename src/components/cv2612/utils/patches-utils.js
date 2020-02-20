@@ -1,5 +1,5 @@
 
-export const globalParams = ['lfo','scene','play-mode','cc-mode','x','y','z','vel-sensitivity','rgb-intensity']
+export const globalParams = ['lfo','scene','play-mode','cc-mode','x','y','z','vel-sensitivity','rgb-intensity','single-voice']
 
 export const ctrlMap = ['ar','d1','sl','d2','rr','tl','mul','det','rs','am','al','fb','ams','fms','st','lfo']
 
@@ -11,11 +11,14 @@ export const emptyPatch = () =>{
     patch[g] = 0
   }
 
-  patch[`voices`] = []
+  patch['voices'] = []
   for(let i=0;i<6;i++){
-    patch[`voices`][i] = emptyVoice()
+    patch['voices'][i] = emptyVoice()
   }
-  patch[`name`] = 'empty'
+  patch['name'] = 'empty'
+  patch['single-voice'] = true
+  patch['lfo'] = 0
+  patch['play-mode'] = 0
   return patch
 }
 

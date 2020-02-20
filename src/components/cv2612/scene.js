@@ -27,16 +27,27 @@ const Scene = (props) =>{
   const onSelectScene = (ev) =>{
     ev.preventDefault()
     const s = parseInt(ev.target.attributes.scene.value, 10)*256+127
-    console.log(s)
     dispatch({ type: "update-param", code: code, value: s })
     dispatch({ type: "active-param", code: code })
   }
 
+  const storeScene = (ev) =>{
+    ev.preventDefault()
+    const s = parseInt(ev.target.attributes.scene.value, 10)
+    dispatch({ type: "update-param", code: code, value: s*256+127 })
+    dispatch({ type: "set-patch", index: s })
+  }
+
+  const recallScene = (ev) =>{
+    ev.preventDefault()
+    const s = parseInt(ev.target.attributes.scene.value, 10)
+    dispatch({ type: "select-patch", index: s })
+  }
+
+
   return (
+    <>
     <div className="scene">
-      <nav>
-        {[0,1,2,3].map(i => <a href="/" className={Math.floor(state.params[code]/(1024/4)) === i ? 'active':'' } key={i} scene={i} onClick={onSelectScene}>{'ABCD'[i]}</a>)}
-      </nav>
       <div className={className} onClick={onClick} aria-hidden="true" >
         <input type="range" step={1} min={0} max={max} value={state.params[code]} onChange={onChange} />
         <span>
@@ -47,6 +58,17 @@ const Scene = (props) =>{
       <CvInput code="y"/>
       <CvInput code="z"/>
     </div>
+    <div className="store-recall">
+      <nav>
+        <span> Store to:</span>
+        {[0,1,2,3].map(i => <a href="/" className={Math.floor(state.params[code]/(1024/4)) === i ? 'active':'' } key={i} scene={i} onClick={storeScene}>{'ABCD'[i]}</a>)}
+      </nav>
+      <nav>
+        <span> Recall from:</span>
+        {[0,1,2,3].map(i => <a href="/" key={i} scene={i} onClick={recallScene}>{'ABCD'[i]}</a>)}
+      </nav>
+    </div>
+    </>
   )
 }
 
