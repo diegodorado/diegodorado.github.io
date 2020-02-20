@@ -147,20 +147,13 @@ const updateControlChange = (state,action)=>{
 }
 
 
-const init = (state) => {
-  const savedMapping = reactLocalStorage.getObject('mapping',{})
-  for (let [code, value] of Object.entries(savedMapping))
-    state.mapping[code] = value
-
-  return state
-}
 
 
 const reducer = (state, action) => {
 
   switch (action.type) {
-    case "reset":
-      return initialState
+    case "set-mapping":
+      return { ...state, mapping: action.mapping}
     case "prev-patch":
       const index = (state.patchIndex+state.patches.length-1) % state.patches.length
       return updateParams({ ...state, patchIndex: index, voiceIndex: 0})
@@ -195,7 +188,7 @@ const reducer = (state, action) => {
 
 const CV2612Provider = ({children}) =>{
 
-  const [state, dispatch] = useReducer(reducer, initialState, init)
+  const [state, dispatch] = useReducer(reducer, initialState)
   const value = { state, dispatch }
 
   useEffect(()=>{
@@ -212,6 +205,7 @@ const CV2612Provider = ({children}) =>{
       MidiIO.unsub('onControlChange', onControlChange)
     }
 
+    dispatch({ type: "set-mapping", mapping: reactLocalStorage.getObject('mapping',{})})
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 

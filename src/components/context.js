@@ -1,4 +1,4 @@
-import React, { useReducer} from "react"
+import React, { useReducer, useEffect} from "react"
 import {reactLocalStorage} from 'reactjs-localstorage'
 import Helmet from "react-helmet"
 
@@ -8,13 +8,11 @@ const initialState = {
   theme: 'dark',
 }
 
-const init = (state) => {
-  return {...state, theme: reactLocalStorage.get('theme','dark')}
-}
-
 const reducer = (state, action) => {
 
   switch (action.type) {
+    case "set-theme":
+      return {...state, theme: action.theme}
     case "toggle-theme":
       const value = (state.theme==='dark') ? 'light' : 'dark'
       reactLocalStorage.set('theme',value)
@@ -26,9 +24,14 @@ const reducer = (state, action) => {
 
 const GlobalProvider = ({children}) =>{
 
-  const [state, dispatch] = useReducer(reducer, initialState, init)
+  const [state, dispatch] = useReducer(reducer, initialState)
   const value = { state, dispatch }
 
+  useEffect(() => {
+    dispatch({ type: "set-theme", theme: reactLocalStorage.get('theme','dark')})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+  
   return (
     <GlobalContext.Provider value={value}>
       <Helmet bodyAttributes={{class: state.theme }}  />
