@@ -1,4 +1,18 @@
+var proxy = require("http-proxy-middleware")
+require('dotenv').config()
+
 module.exports = {
+  developMiddleware: app => {
+    app.use(
+      "/.netlify/functions/",
+      proxy({
+        target: "http://localhost:9000",
+        pathRewrite: {
+          "/.netlify/functions/": "",
+        },
+      })
+    )
+  },
   siteMetadata: {
     langs: ['en','es'],
     title: `diego dorado`,
@@ -85,7 +99,6 @@ module.exports = {
         trackingId: `UA-135987530-1`,
       },
     },
-    `gatsby-plugin-feed`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {

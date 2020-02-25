@@ -52,9 +52,6 @@ let stopAnimation = false
 let backspaceOn = null
 let parsedGrammar = null
 
-
-
-
 const Playground = ({pattern}) =>{
   const [t, ] = useTranslation();
 
