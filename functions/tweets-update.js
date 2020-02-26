@@ -50,7 +50,7 @@ exports.handler = async (event, context) => {
     for (let r of ret) {
       const t = r.data
       const status = `@${t.user} said ${t.text}`
-      await tclient.post('statuses/update', {status})
+      //await tclient.post('statuses/update', {status})
     }
 
     return {
