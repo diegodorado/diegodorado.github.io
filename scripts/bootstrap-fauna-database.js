@@ -18,23 +18,23 @@ createFaunaDB(process.env.FAUNADB_SERVER_SECRET).then(() => {
 })
 
 /* idempotent operation */
-function createFaunaDB(key) {
+const createFaunaDB = async (key) => {
   console.log('Create the database!')
-  const client = new faunadb.Client({ secret: key });
+  const fclient = new faunadb.Client({ secret: key });
 
-  /* Based on your requirements, change the schema here */
-  return client.query(q.Create(q.Ref("classes"), { name: "tweets" }))
-    .then(()=>{
-      return client.query(
-        q.Create(q.Ref("indexes"), {
-          name: "all_tweets",
-          source: q.Ref("classes/tweets")
-        }))
-    }).catch((e) => {
-      // Database already exists
-      if (e.requestResult.statusCode === 400 && e.message === 'instance not unique') {
-        console.log('DB already exists')
-        throw e
+  await fclient.query(q.Create(q.Ref("classes"), { name: "tweets" }))
+  await fclient.query(q.Create(q.Ref("indexes"), { name: "all_tweets",source: q.Ref("classes/tweets")}))
+  await fclient.query(q.Create(q.Ref("indexes"), {
+    name: "tweet_ids",
+    unique: true,
+    serialized: true,
+    source: q.Ref("classes/tweets"),
+    terms: [],
+    values: [
+      {
+        field: ["data", "tweetId"]
       }
-    })
+    ]
+  }))
+
 }

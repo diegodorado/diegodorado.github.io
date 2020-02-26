@@ -59,6 +59,7 @@
     "startaudiocontext": "^1.2.1",
     "susy": "^3.0.5",
     "tone": "^13.4.9",
+    "twitter": "^1.7.1",
     "typography": "^0.16.18"
   },
   "devDependencies": {
