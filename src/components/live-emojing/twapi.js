@@ -1,45 +1,16 @@
 
-const create = (data) => {
-  return fetch('/.netlify/functions/todos-create', {
-    body: JSON.stringify(data),
-    method: 'POST'
-  }).then(response => {
-    return response.json()
-  })
-}
+const faunadb = require('faunadb')
+const FAUNADB_SERVER_SECRET = 'fnADlltZ2tACE44l04ZbDuyG_pEISSFtsdx4HiFV'
+const q = faunadb.query
+const client = new faunadb.Client({secret: FAUNADB_SERVER_SECRET})
 
-const readAll = () => {
-  return fetch('/.netlify/functions/tweets-read-all').then((response) => {
-    return response.json()
-  })
-}
+const readAll = async () => {
 
-const update = (todoId, data) => {
-  return fetch(`/.netlify/functions/todos-update/${todoId}`, {
-    body: JSON.stringify(data),
-    method: 'POST'
-  }).then(response => {
-    return response.json()
-  })
-}
+  const result = await client.query(q.Paginate(q.Match(q.Index('tweet_array'))))
+  return result.data
 
-const deleteTodo = (todoId) => {
-  return fetch(`/.netlify/functions/todos-delete/${todoId}`, {
-    method: 'POST',
-  }).then(response => {
-    return response.json()
-  })
-}
-
-const batchDeleteTodo = (todoIds) => {
-  return fetch(`/.netlify/functions/todos-delete-batch`, {
-    body: JSON.stringify({
-      ids: todoIds
-    }),
-    method: 'POST'
-  }).then(response => {
-    return response.json()
-  })
+  // const response = await fetch('/.netlify/functions/tweets-read-all')
+  // return response.json()
 }
 
 export default {

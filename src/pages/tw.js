@@ -2,18 +2,23 @@ import React, {useState, useEffect} from "react"
 import Layout from "../layouts/main"
 import api from '../components/live-emojing/twapi'
 
+
 const TwIndex = ({ data, location }) => {
 
   const [tweets, setTweets] = useState([])
 
+  console.log(process.env.GATSBY_FAUNADB_SECRET)
+
   useEffect(()=>{
-    api.readAll().then((todos) => {
-      if (todos.message === 'unauthorized') {
-        alert('FaunaDB key is not unauthorized. Make sure you set it in terminal session where you ran `npm start`. Visit http://bit.ly/set-fauna-key for more info')
-        return false
+    (async () => {
+      try {
+        const t = await api.readAll()
+        setTweets(t)
+      } catch (e) {
+        console.log(e)
+        alert('Error fetching tweets')
       }
-      setTweets(todos)
-    })
+    })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
@@ -21,7 +26,7 @@ const TwIndex = ({ data, location }) => {
   return (
     <Layout location={location} >
       <ul className="tweets">
-        {tweets.map((t,i) => <li key={i}>{t.text}</li>)}
+        {tweets.map(t => <li key={t[0]}>@{t[1]}: {t[2]} <br/>{t[3]}</li>)}
       </ul>
     </Layout>
   )

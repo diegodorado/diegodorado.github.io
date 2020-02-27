@@ -13,9 +13,6 @@ if (!process.env.FAUNADB_SERVER_SECRET) {
   process.exit(1)
 }
 
-createFaunaDB(process.env.FAUNADB_SERVER_SECRET).then(() => {
-  console.log('Database created')
-})
 
 /* idempotent operation */
 const createFaunaDB = async (key) => {
@@ -29,12 +26,24 @@ const createFaunaDB = async (key) => {
     unique: true,
     serialized: true,
     source: q.Ref("classes/tweets"),
-    terms: [],
     values: [
-      {
-        field: ["data", "tweetId"]
-      }
+      {field: ["data", "tweetId"]}
+    ]
+  }))
+
+  await fclient.query(q.Create(q.Ref("indexes"), {
+    name: "tweet_array",
+    source: q.Ref("classes/tweets"),
+    values: [
+      {field: ["data", "tweetId"]},
+      {field: ["data", "user"]},
+      {field: ["data", "emojis"]},
+      {field: ["data", "text"]}
     ]
   }))
 
 }
+
+createFaunaDB(process.env.FAUNADB_SERVER_SECRET).then(() => {
+  console.log('Database created')
+})

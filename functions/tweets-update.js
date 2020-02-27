@@ -1,13 +1,15 @@
 require('dotenv').config()
 const faunadb = require('faunadb')
 const Twitter = require('twitter')
+import GraphemeSplitter from 'grapheme-splitter'
 
+const emojiRgx = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/
+const splitter = new GraphemeSplitter()
 
 const q = faunadb.query
 const fclient = new faunadb.Client({
   secret: process.env.FAUNADB_SERVER_SECRET
 })
-
 
 var tclient = new Twitter({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -18,7 +20,7 @@ var tclient = new Twitter({
 
 exports.handler = async (event, context) => {
 
-  const query = {q: '#emojis', include_entities:false, count:100}
+  const query = {q: '#emojis', include_entities:false, count:10}
 
   try {
     const tid = await fclient.query(
@@ -26,18 +28,24 @@ exports.handler = async (event, context) => {
     )
     query.since_id = tid
   }catch(e) {
-    console.log(e);
+    // console.log(e);
   }
 
   const data = await tclient.get('search/tweets', query)
 
   const tweets = data.statuses.map(t =>{
-    return {
-      tweetId: t.id_str,
-      text: t.text,
-      user: t.user.screen_name
-    }
-  })
+    const emojis  = splitter
+      .splitGraphemes(t.text)
+      .filter(g=> g!=='…' && emojiRgx.test(g))
+
+    if(emojis.length>1)
+      return {
+        emojis: emojis.join(''),
+        tweetId: t.id_str,
+        text: t.text,
+        user: t.user.screen_name
+      }
+  }).filter(t => t && t.user!==process.env.TWITTER_SCREEN_NAME)
 
   if(tweets.length>0){
     const ret = await fclient.query(
@@ -49,8 +57,11 @@ exports.handler = async (event, context) => {
     //post some tweets
     for (let r of ret) {
       const t = r.data
-      const status = `@${t.user} said ${t.text}`
-      //await tclient.post('statuses/update', {status})
+      const status = `Así suenan los emojis de este tweet:`+
+        `${t.emojis} ` +
+        `https://diegodorado.com/es/tw/#${t.tweetId} ` +
+        `https://twitter.com/${t.user}/status/${t.tweetId} `
+      await tclient.post('statuses/update', {status})
     }
 
     return {

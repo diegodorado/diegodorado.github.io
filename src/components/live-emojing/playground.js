@@ -27,7 +27,7 @@ import {alphaEmoji,
 import parser from "./tidal"
 import Pattern from "./pattern"
 import Tone from "tone"
-import LiveEmojingContext from './context.js'
+import LiveEmojingContext from './context'
 import StartAudioContext from 'startaudiocontext'
 
 
