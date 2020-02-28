@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useContext} from "react"
 import Helmet from "react-helmet"
-import Fraction from 'fraction.js'
 import {reactLocalStorage} from 'reactjs-localstorage'
 import { Picker,emojiIndex } from 'mr-emoji'
 import '../../../node_modules/mr-emoji/css/emoji-mart.css'
@@ -15,6 +14,8 @@ import { FaBackspace,
          FaQuestionCircle
         } from 'react-icons/fa'
 
+import scheduler from './scheduler'
+import Canvas from './canvas'
 import {alphaEmoji,
         randomPattern,
         emojiArray,
@@ -26,76 +27,33 @@ import {alphaEmoji,
 
 import parser from "./tidal"
 import Pattern from "./pattern"
-import Tone from "tone"
 import LiveEmojingContext from './context'
-import StartAudioContext from 'startaudiocontext'
-
-
 import {useTranslation } from 'react-i18next'
 
 //todo: split this file in smaller modules! please!!
-const emojis = Object.values(emojiIndex.emojis).map((e)=>e.native)
 const emoji_ids = Object.values(emojiIndex.emojis)
   .reduce((o,e)=>Object.assign(o,{[e.native]:sanitizeEmojiId(e.id)}),{})
 
-//todo: move to env file?
-const git_raw = 'https://raw.githubusercontent.com/diegodorado/emoji-samples/master/'
-const samples = '0123456789abcdefghijklmnopqrstuvwxyz'.split('')
-
-let players = []
-let schedules = []
-let glyphs = []
-let tapCount = 0
-let listingData = null
-let canvasCtx = null
-let stopAnimation = false
 let backspaceOn = null
 let parsedGrammar = null
 
 const Playground = ({pattern}) =>{
   const [t, ] = useTranslation();
 
-
-  let canvasRef = React.createRef()
   const context = useContext(LiveEmojingContext)
   const [expanded, setExpanded] = useState(false)
-  const [tapped, setTapped] = useState(false)
-  const [tapping, setTapping] = useState(false)
   const [showInstructions, setShowInstructions] = useState(true)
   const [isDesktop, setIsDesktop] = useState(false)
   const [highlighted, setHighlighted] = useState(false)
   const [error, setError] = useState(false)
-  const [samplesLoaded, setSamplesLoaded] = useState(false)
-  const [tempo, setTempo] = useState('')
   const [left, setLeft] = useState('')
   const [prevPattern, setPrevPattern] = useState('a b c d')
   const [right, setRight] = useState('')
-  const [canvasWidth, setCanvasWidth] = useState(1)
-  const [canvasHeight, setCanvasHeight] = useState(1)
-
 
   useEffect(()=>{
 
-    if(context.playingAlone){
-      StartAudioContext(Tone.context).then(function(){
-        initAudio()
-      })
-
-
-
-      //todo: use async/await
-      fetch(`${git_raw}listing.json`)
-        .then( r => r.json())
-        .then((data) => setListingData(data))
-        .catch((err) => {console.log(err)})
-
-      canvasCtx = canvasRef.current.getContext("2d")
-      canvasCtx.lineWidth = 2
-      canvasCtx.fillStyle = 'blue'
-      canvasCtx.font = 'bold 100px Arial'
-
-      requestAnimationFrame(tick)
-    }
+    if(context.playingAlone)
+      scheduler.init()
 
     setIsDesktop(typeof window.orientation === "undefined")
 
@@ -107,20 +65,12 @@ const Playground = ({pattern}) =>{
     setShowInstructions(reactLocalStorage.get('showInstructions', 'true')=== 'true')
 
     document.addEventListener('fullscreenchange', onFullScreenChange)
-    window.addEventListener('resize', onWindowResize)
-
-    onWindowResize()
-
 
     // Specify how to clean up after this effect:
     return () => {
-      document.removeEventListener("fullscreenchange", onFullScreenChange)
-      window.removeEventListener('resize', onWindowResize)
-
-      if(context.playingAlone){
-        Tone.context.suspend()
-        stopAnimation = true
-      }
+      document.removeEventListener('fullscreenchange', onFullScreenChange)
+      if(context.playingAlone)
+        scheduler.kill()
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -143,11 +93,12 @@ const Playground = ({pattern}) =>{
   useEffect(()=>{
 
     if(context.playingAlone)
-      ensureEmojiSamples()
+      scheduler.ensureSamples( emojiArray(left+right))
 
     try {
 
       if(context.playingAlone){
+        //todo: use s single parser
         parsedGrammar = parser.parse(left+right)
 
       }else{
@@ -167,13 +118,6 @@ const Playground = ({pattern}) =>{
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[left, right])
-
-
-
-  const setListingData = (data) =>{
-    listingData = data
-    ensureEmojiSamples()
-  }
 
 
   const onFullScreenChange = () =>{
@@ -206,61 +150,6 @@ const Playground = ({pattern}) =>{
     else
       rfs.call(el)
   }
-
-
-  const onWindowResize = () =>{
-
-    setCanvasWidth(window.innerWidth)
-    setCanvasHeight(window.innerHeight/2)
-  }
-
-  const tick = () => {
-    if (stopAnimation)
-       return
-    drawEmojis()
-    requestAnimationFrame(tick)
-  }
-
-  const drawEmojis = () =>{
-
-    //const off = (Tone.Transport.seconds- Math.floor(Tone.Transport.seconds))
-    const width = canvasCtx.canvas.width
-    const height = canvasCtx.canvas.height
-    canvasCtx.clearRect(0, 0, width, height)
-    canvasCtx.font = `${width/10}px Arial`
-
-
-    if(tapped>0){
-      //warning!
-      setTapped( t => t - 0.3)
-      canvasCtx.fillStyle = 'green'
-      canvasCtx.fillRect(20, 10, 150, 100)
-    }
-
-
-    for(let i = glyphs.length-1; i >= 0 ; i--){
-      const g = glyphs[i]
-      g.life = g.life*1.2
-      canvasCtx.fillText(g.emoji, width*g.offset, (height / 2)-g.life)
-      if(g.life>10){
-        glyphs.splice(i, 1)
-      }
-    }
-
-
-  }
-
-  const initAudio = () =>{
-    //chain a compressor
-    const comp = new Tone.Compressor(-30, 3).toMaster()
-    const urls = samples.reduce((o,n)=> Object.assign(o,{[n]:`/live-emojing/samples/${n}.wav`}),{})
-    players = new Tone.Players (urls, () => {
-      setSamplesLoaded(true)
-    }).connect(comp)
-    //Tone.context.latencyHint = 'playback'
-    Tone.Transport.start()
-  }
-
 
   const addEmoji= (e) => {
     setLeft( l => l + (!e.custom ? e.native : e.name))
@@ -400,33 +289,20 @@ const Playground = ({pattern}) =>{
     setShowInstructions(!showInstructions)
   }
 
-
-
-  const clearTransportSchedules = ()=>{
-    Tone.Transport.cancel()
-    for(let eventId of schedules)
-      // this is not working properoly
-      Tone.Transport.clear(eventId)
-
-    schedules = []
-  }
-
-
-
   const commit = () => {
     if(error)
       return
 
     const p = left+right
     reactLocalStorage.set('pattern', p)
+    //fixme: what is this for???
     setPrevPattern(p)
 
     setHighlighted(true)
     setTimeout(() => setHighlighted(false),300)
 
     if(context.playingAlone){
-      clearTransportSchedules()
-      schedule(parsedGrammar)
+      scheduler.play(parsedGrammar)
     }else{
       context.sendPattern(p)
     }
@@ -435,161 +311,11 @@ const Playground = ({pattern}) =>{
   const onStopClick = (e) => {
     e.preventDefault()
     setPrevPattern('')
-    clearTransportSchedules()
+    scheduler.stop()
   }
 
 
   const canStop = () => context.playingAlone && (prevPattern === (left+right))
-
-  const ensureEmojiSamples = ()=>{
-    const p = left+right
-    const emojis = Object.values(emojiIndex.emojis)
-
-    //todo: decide if this is going to be used or not
-    /*
-    let f ='['
-    for (let c of emojiArray(p)){
-      const e = emojis.filter((e)=>e.native===c)
-      if(e.length===0)
-        f += c
-      else{
-        f += ' '+e[0].id
-        this.ensureEmojiSample(e[0])
-      }
-    }
-    f+=']'
-    */
-
-    for (let c of emojiArray(p)){
-      const e = emojis.filter((e)=>e.native===c)
-      if(e.length>0)
-        ensureEmojiSample(e[0])
-    }
-
-
-  }
-
-  // this function ensures each emoji has a unique sound
-  // it tries to get a short asset for listing.json
-  const ensureEmojiSample = (e) =>{
-    const id = sanitizeEmojiId(e.id)
-    if(listingData!==null){
-      const path = listingData[id]
-      if(path && !players.has(id))
-        players.add(id,encodeURI(`${git_raw}${path}`),()=> console.log(`loaded ${id}!`))
-    }
-  }
-
-  const schedule = (root)=>{
-
-    const process_emoji = (params) =>{
-      if(!samplesLoaded)
-        return
-
-      const eid = emoji_ids[params.node.value]
-      const index = emojis.indexOf(params.node.value) % samples.length
-      //choose a remote or local sample
-      const sample = players.has(eid) ? eid : samples[index]
-
-      const id = Tone.Transport.scheduleRepeat( (time)=>{
-        if(sample===undefined || Math.random()>params.chance)
-          return
-        const p = players.get(sample)
-        p.start(time)
-        Tone.Draw.schedule(() =>{
-          glyphs.push({life: 1,offset:(params.offset.valueOf()%1), emoji: params.node.value})
-	      }, time)
-      }, params.cycle.valueOf(),params.offset.valueOf())
-      schedules.push(id)
-    }
-
-    const process_group = (params) =>{
-      const steps = Object.keys(params.node).filter((k)=> k!=='type')
-      const stepDur = params.duration.div(steps.length)
-      let ss = params.offset
-      for (let s of steps){
-         transverse({
-           node: params.node[s],
-           offset: ss.clone(),
-           duration: stepDur.clone(),
-           cycle: params.cycle.clone(),
-           chance: params.chance})
-        ss = ss.add(stepDur)
-      }
-    }
-
-    const process_onestep = (params) =>{
-       const steps = Object.keys(params.node).filter((k)=> k!=='type')
-       const stepDur = new Fraction( 1, 1)
-       let ss = params.offset
-       for (let s of steps){
-         transverse({
-           node: params.node[s],
-           offset: ss.clone(),
-           duration: params.duration.clone(),
-           cycle: params.cycle.mul(steps.length),
-           chance: params.chance})
-          ss = ss.add(stepDur)
-       }
-    }
-
-    const process_repeat = (params) =>{
-      let ss = params.offset
-
-      if( params.node.operator === '*' ){
-        const dur = params.duration.div(params.node.repeatValue.value)
-        for (let i = 0; i<params.node.repeatValue.value; i++){
-         transverse({
-           node: params.node.value,
-           offset: ss.clone(),
-           duration: dur,
-           cycle: params.cycle.clone(),
-           chance: params.chance})
-          ss = ss.add(dur)
-        }
-      }
-      else if( params.node.operator === '/' ){
-        for (let i = 0; i<params.node.repeatValue.value; i++){
-         transverse({
-           node: params.node.value,
-           offset: ss.clone(),
-           duration: params.duration.clone(),
-           cycle: params.cycle.mul(params.node.repeatValue.value),
-           chance: params.chance})
-        }
-      }
-
-    }
-
-    const process_degrade = (params) =>{
-       transverse({
-         node: params.node.value,
-         offset: params.offset,
-         duration: params.duration,
-         cycle: params.cycle,
-         chance: params.chance*0.5})
-    }
-
-    const transverse = (params) =>{
-      if (params.node.type === 'group')
-        process_group(params)
-      else if (params.node.type === 'onestep')
-        process_onestep(params)
-      else if (params.node.type === 'repeat')
-        process_repeat(params)
-      else if( params.node.type === 'degrade' )
-        process_degrade(params)
-      else if( params.node.type === 'emoji' )
-        process_emoji(params)
-    }
-
-    transverse({
-      node: root,
-      offset: new Fraction(0),
-      duration: new Fraction(1),
-      cycle: new Fraction(1),
-      chance: 1})
-  }
 
   //todo: decide which emojis to show
   const emojisToShowFilter = (e)=>{
@@ -597,56 +323,12 @@ const Playground = ({pattern}) =>{
     return (emoji && alphaEmoji.includes(emoji.native))
   }
 
-  //mimick behaviour
-  const onInstructionsClick = (e)=>{
-    onPreviewClick(e)
-  }
-
-
-  const onPreviewClick = (e)=>{
-    //todo: review this tap behaviour
-    return
-
-    // eslint-disable-next-line
-    if(!context.playingAlone)
-      return
-
-    setTapped(true)
-    setTapping(true)
-    setTimeout(()=> setTapped(false),40)
-
-    setTimeout(()=> {
-      if((Tone.Transport.seconds)>3.5){
-        tapCount = 0
-        setTapping(false)
-      }
-    },4000)
-
-
-    // eslint-disable-next-line
-    const bpm = Math.round(60/Tone.Transport.seconds)
-    Tone.Transport.stop().start()
-
-    //is bpm in a razonable range?
-    if(bpm < 20)
-      setTempo((tapCount===0) ? 'tap again' :  'too slow!')
-    else if(bpm > 240)
-      setTempo((tapCount===0) ? 'tap again' :  'too fast!')
-    else{
-      setTempo((tapCount===0) ? 'tap again' :  bpm)
-      Tone.Transport.bpm.value = bpm
-    }
-
-    tapCount++
-
-  }
-
   return (
     <div className="play">
       <Helmet htmlAttributes={{class:(expanded ? 'full-screen':'normal') }} />
-      <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight} />
+      {context.playingAlone && <Canvas/>}
       {showInstructions &&
-        <div className="instructions" onClick={onInstructionsClick} aria-hidden="true">
+        <div className="instructions" aria-hidden="true">
           {context.playingAlone ? null :
             <div className="welcome">
               <img alt="" src={context.avatarUrl} width={90} />
@@ -671,10 +353,9 @@ const Playground = ({pattern}) =>{
         <FaCompress/>
       </a>
       <FaQuestionCircle className="help" onClick={onToggleHelpClick}/>
-      <div className={`${ tapping ? 'tapping' : '' }  ${ error ? 'error' : '' } input`}>
+      <div className={`${ error ? 'error' : '' } input`}>
         <span className="clipper" role="img" aria-label="doubt">🤔</span>
-        <span className="tempo">{(parseInt(tempo)===tempo)? <><i>{tempo}</i> bpm</> : tempo}</span>
-        <pre onClick={onPreviewClick} className={`${ tapped ? 'tapped' : '' } ${highlighted ? 'highlight' : '' } preview`} aria-hidden="true">
+        <pre className={`${highlighted ? 'highlight' : '' } preview`} aria-hidden="true">
           {emojiArray(left).map((e,i) => <span key={i} onClick={()=>moveCarret(true,i)} aria-hidden="true">{e}</span>)}
           <span className="carret"></span>
           {emojiArray(right).map((e,i) => <span key={i} onClick={()=>moveCarret(false,i)} aria-hidden="true">{e}</span>)}

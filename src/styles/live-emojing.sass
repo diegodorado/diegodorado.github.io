@@ -1,3 +1,43 @@
+.twitter
+  canvas
+    position: fixed
+    top: 0
+    left: 0
+    -webkit-filter: drop-shadow(5px 5px 10px white)
+    filter: drop-shadow(5px 5px 10px white)
+    pointer-events: none
+    z-index: -1
+
+  .selected
+    bottom: 0
+    left: 0
+    right: 0
+    text-align: center
+    position: fixed
+    background: rgba($black,0.5)
+    padding: 50px
+    font-size: 2em
+    cursor: pointer
+    pointer-events: none
+
+  .tweets
+  .tweet
+    padding: 20px
+    cursor: pointer
+    border: 2px solid transparent
+    &.current
+      border: 2px dashed rgba($blue,0.5)
+      svg
+        opacity: 0.8
+    svg
+      float: right
+      font-size: 1.5em
+      opacity: 0.05
+    &:hover
+      background: lighten($black,1.8)
+      svg
+        opacity: 1
+
 .live-emojing
   .expand, .help
     @extend %no-select

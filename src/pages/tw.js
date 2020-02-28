@@ -1,33 +1,14 @@
-import React, {useState, useEffect} from "react"
+import React from "react"
 import Layout from "../layouts/main"
-import api from '../components/live-emojing/twapi'
-
+import Twitter from '../components/live-emojing/twitter'
 
 const TwIndex = ({ data, location }) => {
-
-  const [tweets, setTweets] = useState([])
-
-  console.log(process.env.GATSBY_FAUNADB_SECRET)
-
-  useEffect(()=>{
-    (async () => {
-      try {
-        const t = await api.readAll()
-        setTweets(t)
-      } catch (e) {
-        console.log(e)
-        alert('Error fetching tweets')
-      }
-    })()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
-
+  const parts = location.hash.split('#')
+  const id = (parts.length >1) ? decodeURIComponent(parts[1]) : ''
 
   return (
     <Layout location={location} >
-      <ul className="tweets">
-        {tweets.map(t => <li key={t[0]}>@{t[1]}: {t[2]} <br/>{t[3]}</li>)}
-      </ul>
+      <Twitter id={id}/>
     </Layout>
   )
 }
