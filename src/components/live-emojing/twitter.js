@@ -57,12 +57,16 @@ const Twitter = ({id}) =>{
   return (
     <div className="twitter">
       <Canvas/>
-
-        {selected &&
-          <div className="selected">
-              @{selected[1]}: {selected[3]}
-          </div>
-        }
+      <p>
+        Twiteá algunos 😛😍🔥😹 con el hastag #emojis y serán transformados por un bot.
+        <br/>
+        Mira como suenan estos tweets!
+      </p>
+      {selected &&
+        <div className="selected">
+            @{selected[1]}: {selected[3]}
+        </div>
+      }
       <div className="tweets">
         {tweets.map((t,i) => (
           <div key={t[0]}

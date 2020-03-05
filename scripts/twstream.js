@@ -47,19 +47,14 @@ stream.on('error', function(error) {
   throw error;
 })
 
-
 const processDoc = async (doc)=>{
-  console.log(doc)
-
   const ret = await fclient.query(
     q.Create(q.Collection('tweets'),{ data: doc})
   )
-  console.log(ret)
 
   const status = `Así suenan los emojis de este tweet:`+
     `${doc.emojis} ` +
     `https://diegodorado.com/es/tw/#${doc.tweetId} ` +
     `https://twitter.com/${doc.user}/status/${doc.tweetId} `
   await tclient.post('statuses/update', {status})
-
 }
