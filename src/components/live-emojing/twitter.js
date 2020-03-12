@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react"
 import scheduler from './scheduler'
 import Canvas from './canvas'
+import Link from "../link"
 import api from './twapi'
 import { FaPlay,
          FaStop
@@ -72,6 +73,8 @@ const Twitter = ({id}) =>{
         Twiteá algunos 😛😍🔥😹 con el hastag #emojis y serán transformados por un bot.
         <br/>
         Mira como suenan estos tweets!
+        <br/>
+        O <Link to={`/labs/live-emojing/`}>prueba tu mismo tus emojis</Link>
       </p>
       {selected &&
         <div className="selected" >

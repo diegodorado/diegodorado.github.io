@@ -26,6 +26,9 @@ stream.on('data', (t)=> {
   if(t.user.screen_name===process.env.TWITTER_SCREEN_NAME)
     return
 
+  if(t.text.indexOf('http')>0)
+    return
+
   const emojis  = splitter
     .splitGraphemes(t.text)
     .filter(g=> g!=='…' && emojiRgx.test(g))
