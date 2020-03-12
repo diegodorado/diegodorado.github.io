@@ -32,12 +32,11 @@ const createFaunaDB = async (key) => {
   }))
 
   await fclient.query(q.Create(q.Ref("indexes"), {
-    name: "tweet_array",
+    name: "tweet_descending",
     source: q.Ref("classes/tweets"),
     values: [
-      {field: ["data", "tweetId"]},
+      {field: ["data", "tweetId",reverse: true]},
       {field: ["data", "user"]},
-      {field: ["data", "emojis"]},
       {field: ["data", "text"]}
     ]
   }))

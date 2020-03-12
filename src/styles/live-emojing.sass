@@ -1,3 +1,6 @@
+img.emoji
+  width: 1em
+
 .twitter
   canvas
     position: fixed
@@ -15,14 +18,21 @@
     right: 0
     text-align: center
     position: fixed
-    background: rgba($black,0.5)
-    padding: 50px
-    font-size: 2em
+    background: rgba($black,0.85)
+    z-index: 100
+    padding: 20px
+    font-size: 1.5em
     cursor: pointer
     pointer-events: none
 
+  .nick
+    color: $blue
+  .emos
+    margin-left: 10px
   .tweets
   .tweet
+    text-align: center
+    position: relative
     padding: 20px
     cursor: pointer
     border: 2px solid transparent
@@ -30,12 +40,18 @@
       border: 2px dashed rgba($blue,0.5)
       svg
         opacity: 0.8
+    .nick
+      line-height: 1.5em
+    .emos
+      font-size: 1.5em
     svg
-      float: right
+      position: absolute
+      top: 20px
+      right: 20px
       font-size: 1.5em
       opacity: 0.05
     &:hover
-      background: lighten($black,1.8)
+      background: rgba($blue,0.1)
       svg
         opacity: 1
 

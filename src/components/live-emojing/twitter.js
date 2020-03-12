@@ -1,12 +1,20 @@
 import React, {useState, useEffect} from "react"
 import scheduler from './scheduler'
 import Canvas from './canvas'
-import {emojiArray} from './utils'
-import parser from "./tidal"
 import api from './twapi'
 import { FaPlay,
          FaStop
         } from 'react-icons/fa'
+import twemoji from 'twemoji'
+import { parse } from 'twemoji-parser'
+
+const parseEmojis = (t) => twemoji.parse(t, {
+  folder: 'svg',
+  ext: '.svg'
+})
+
+const filterEmojis = (t) => parse(t).map(i => i.text).join('') 
+
 
 const Twitter = ({id}) =>{
 
@@ -38,14 +46,17 @@ const Twitter = ({id}) =>{
       setPlaying(false)
     }else{
       const t = tweets[i]
-      const text =  t[2]
       setPlaying(true)
       setCurrent(i)
       window.history.replaceState(null, null, `#${t[0]}`)
       try {
-        scheduler.ensureSamples(emojiArray(text))
-        let parsed = parser.parse(text)
-        scheduler.play(parsed)
+	const entities = parse(t[2])
+	const emojis = entities.map(i => i.text)
+        scheduler.ensureSamples(emojis)
+	// shitty parser
+	const p = {type: 'group'}
+	emojis.forEach((e,i)=> p[`${i}/${emojis.length}`] = {type:'emoji', value: e})
+        scheduler.play(p)
       }
       catch(e) {
         console.log(e)
@@ -63,8 +74,9 @@ const Twitter = ({id}) =>{
         Mira como suenan estos tweets!
       </p>
       {selected &&
-        <div className="selected">
-            @{selected[1]}: {selected[3]}
+        <div className="selected" >
+          <span className="nick" >@{selected[1]}</span>
+      	  <span className="emos" dangerouslySetInnerHTML={{__html:parseEmojis(selected[2])}}></span>
         </div>
       }
       <div className="tweets">
@@ -75,7 +87,8 @@ const Twitter = ({id}) =>{
                 e.preventDefault()
                 play(i)
               }}>
-              @{t[1]}: {t[2]}
+		<span className="nick" >@{t[1]}</span>
+		<span className="emos" dangerouslySetInnerHTML={{__html:parseEmojis(filterEmojis(t[2]))}}></span>
               {(current===i && playing) ?<FaStop/>:<FaPlay/>}
 
           </div>

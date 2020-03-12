@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from "react"
 import scheduler from './scheduler'
+import { parse } from 'twemoji-parser'
 
 let canvasCtx = null
 let stopAnimation = false
+let imgBuf = {}
 
 const Canvas = () =>{
   let canvasRef = React.createRef()
@@ -30,6 +32,20 @@ const Canvas = () =>{
     setWidth(window.innerWidth)
     setHeight(window.innerHeight/2)
   }
+  
+  const getImg = (g) => {
+
+    if(imgBuf[g])
+      return imgBuf[g] 
+    else{
+			const e = parse(g)
+	    var img = new Image()
+	    img.onload = ()=> {
+	      imgBuf[g] = img
+		  }
+	    img.src = e[0].url 
+    }
+  }
 
   const tick = () => {
     if (stopAnimation)
@@ -43,11 +59,20 @@ const Canvas = () =>{
     const h = canvasCtx.canvas.height
     canvasCtx.clearRect(0, 0, w, h)
     canvasCtx.font = `${w/10}px Arial`
+    canvasCtx.textAlign = `center`
+		canvasCtx.textBaseline = "middle"
+
 
     for(let i = scheduler.glyphs.length-1; i >= 0 ; i--){
       const g = scheduler.glyphs[i]
+			const img = getImg(g.emoji)
+			if(img){
+        canvasCtx.drawImage(img, w*g.offset, -w/20+(h / 2)-g.life,w/10,w/10)
+      }
+      else{
+        canvasCtx.fillText(g.emoji, w/20+w*(g.offset), (h / 2)-g.life)
+			}
       g.life = g.life*1.2
-      canvasCtx.fillText(g.emoji, w*g.offset, (h / 2)-g.life)
       if(g.life>10){
         scheduler.glyphs.splice(i, 1)
       }

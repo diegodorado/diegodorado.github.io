@@ -6,7 +6,7 @@ const client = new faunadb.Client({secret: FAUNADB_SERVER_SECRET})
 
 const readAll = async () => {
 
-  const result = await client.query(q.Paginate(q.Match(q.Index('tweet_array'))))
+  const result = await client.query(q.Paginate(q.Match(q.Index('tweets_descending'))))
   return result.data
 
   // const response = await fetch('/.netlify/functions/tweets-read-all')
