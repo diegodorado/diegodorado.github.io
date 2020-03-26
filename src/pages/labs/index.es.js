@@ -11,6 +11,10 @@ const LabsIndex = ({location})  =>
     </p>
     <ul>
       <li>
+        <h4><Link to={`/labs/morse`} >código MORSE</Link></h4>
+        <p>Generador de código MORSE</p>
+      </li>
+      <li>
         <h4><a href="/map-h/" target="new" >map-H</a></h4>
         <p>
         map-H (música asistida por Humano) es una webapp que genera ritmos de percusión intentando inferir el ritmo propuesto por el humano.

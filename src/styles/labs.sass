@@ -1,9 +1,39 @@
 .morse
+  .clipboard
+    position: fixed
+    top: 0
+    left: 0
+    box-sizing: border-box
+    width: 100%
+    border: 2px dashed $white
+    background: $black
+    text-align: center
+    padding: 1em 
+    transition: opacity 0.3s linear
+    opacity: 0
+    pointer-events: none
+    &.visible
+      opacity: 1
   h3
     text-align: center
+  nav
+    width: 100%
+    display: flex
+    justify-content: space-between
+    span
+      background: $black
+      display: inline-block
+      background: $black
+      width: 3em
+      white-space: pre
+      height: 1.5em
+      &.fake
+        height: 0 !important
+      &.current
+        filter: invert(1)
   .input
     input
-      width: 90%
+      width: 100%
       padding: 0.5em
       font-size: 1.5em
       height: 2em
@@ -11,31 +41,16 @@
       font-family: Inconsolata
       vertical-align: bottom
       border: 0
-    button
-      width: 10%
-      border: 0
-      padding: 0.5em
-      height: 2em
-      font-size: 1.5em
-      cursor: pointer
 
   .output
     margin: 1em 0
     font-size: 1.8em
 
     nav
-      width: 100%
       flex-flow: row wrap
-      display: flex
-      justify-content: space-between
       span
-        display: inline-block
         text-align: center
-        width: 15%
         height: 1.5em
-        &.current
-          background: $white
-          color: $black
 
     .letter
       text-align: center
@@ -43,17 +58,41 @@
       height: 1.5em
       line-height: 1.5em
       width: 3em
-      margin: 0 auto
+      margin: 20px auto
       border: 2px dashed $white
+      cursor: pointer
+      background: $black
+      svg
+        margin-top: 0.25em
+      &:hover
+        filter: invert(1)
 
+    .actions
+      text-align: center
+      button
+        background: $black
+        border: none
+        font-size: 1em
+        border: 2px dashed $white
+        margin: calc(0.5em - 8px)
+        height: 1.5em
+        line-height: 1.5em
+        width: 2em
+        color: $white
+        cursor: pointer
+        &:hover
+          filter: invert(1)
+        svg
+          margin-top: 0.25em
   .hint
     font-size: 1em
     margin: 20px 0
-    span
-      width: 16.6%
-      height: 1.3em
-      line-height: 1.3em
-      display: inline-block
+    nav
+      flex-flow: row wrap
+      span
+        width: 4em
+        padding: 0.3em 1em
+
 
 body.io
   #app
