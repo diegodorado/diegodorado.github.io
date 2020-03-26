@@ -12,7 +12,6 @@ const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(c => [c, morsify.enc
 const timeouts = []
 
 const getMessage = (location) => {
-  
   const parts = location.hash.split('#')
   let t = null
   try{
@@ -20,12 +19,11 @@ const getMessage = (location) => {
     t = u
   }
   catch(e){}
-
   return t 
 }
 
 const MorseIndex = ({location}) => {
-  const baseurl = location.href.replace(location.hash,"")
+  const baseurl = () => location.href.replace(location.hash,"")
   const t = getMessage(location)
   const showInput = (t===null)
 
@@ -92,7 +90,7 @@ const MorseIndex = ({location}) => {
   }
 
   const create = (e) => {
-    window.location.href = baseurl
+    window.location.href = baseurl()
   }
 
   const share = (e) => {
@@ -100,7 +98,7 @@ const MorseIndex = ({location}) => {
     const b64 = btoa(JSON.stringify(text))
 
     const dummy = document.createElement('input')
-    const url = `${baseurl}#${b64}`
+    const url = `${baseurl()}#${b64}`
     document.body.appendChild(dummy)
     dummy.value = url
     dummy.select()
