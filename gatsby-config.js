@@ -2,7 +2,7 @@ var proxy = require("http-proxy-middleware")
 require('dotenv').config()
 
 module.exports = {
-  developMiddleware: app => {
+/*  developMiddleware: app => {
     app.use(
       "/.netlify/functions/",
       proxy({
@@ -13,6 +13,7 @@ module.exports = {
       })
     )
   },
+  */
   siteMetadata: {
     langs: ['en','es'],
     title: `diego dorado`,

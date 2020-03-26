@@ -90,8 +90,8 @@ const Twitter = ({id}) =>{
                 e.preventDefault()
                 play(i)
               }}>
-		<span className="nick" >@{t[1]}</span>
-		<span className="emos" dangerouslySetInnerHTML={{__html:parseEmojis(filterEmojis(t[2]))}}></span>
+              <span className="nick" >@{t[1]}</span>
+              <span className="emos" dangerouslySetInnerHTML={{__html:parseEmojis(filterEmojis(t[2]))}}></span>
               {(current===i && playing) ?<FaStop/>:<FaPlay/>}
 
           </div>

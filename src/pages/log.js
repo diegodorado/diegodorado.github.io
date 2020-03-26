@@ -3,8 +3,8 @@ import { Link } from "gatsby"
 import Img from 'gatsby-image'
 import Layout from "../layouts/main"
 import SEO from "../components/seo"
-
-
+//holaaa
+//nada
 const LogIndex = ({ data, location }) => {
 
   const posts = [] //data.allMarkdownRemark.edges
