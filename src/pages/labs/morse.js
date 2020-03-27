@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react"
+import React, {useState} from "react"
 import Layout from "../../layouts/main"
 import SEO from "../../components/seo"
 import morsify from "morsify"
@@ -114,7 +114,7 @@ const MorseIndex = ({location}) => {
   }
 
 
-  const title = showInput ? 'Generador de código MORSE' : 'Mensaje cifrado en MORSE'
+  const title = showInput ? 'Generador de código MORSE' : 'Mensaje Cifrado'
   const text_arr = text.split('')
   const curr = (pos>=0) ? text_arr[pos] : null
 
@@ -127,19 +127,19 @@ const MorseIndex = ({location}) => {
         </div>
         <h3>{title}</h3>
         <div className="input">
-          { showInput && <input type="text" value={text} onChange={onChange}  onKeyPress={onKeyPress} autoFocus />}
+          { showInput && <input type="text" value={text} onChange={onChange}  onKeyPress={onKeyPress} />}
         </div>
         <div className="output">
           <nav>
             {text_arr.map((c,i) => <span className={(i===pos)? 'current':''} key={i}>{(c===' ') ? ' ': `${morsify.encode(c)}` } </span>)}
-            {'12345'.split('').map((c,i) => <span key={i} className="fake"></span>)}
+            {'12345678'.split('').map((c,i) => <span key={i} className="fake"></span>)}
           </nav>
           <div className="letter" onClick={toggleAudio} >
             { !audio && <FaPlay/>}
             { curr && (curr===' ') ? '🤫' : curr}
           </div>
           <div className="actions"  >
-            { !showInput && <button onClick={create}><FaPen/></button>}
+            <button onClick={create}><FaPen/></button>
             <button onClick={share}><FaShareAlt/></button>
           </div>
         </div>
@@ -147,7 +147,7 @@ const MorseIndex = ({location}) => {
           <h4>Tabla de códigos</h4>
           <nav>
             {alphabet.map(c => <span key={c[0]} className={((curr!==null) && curr.toUpperCase()===c[0])? 'current':''} >{c[0]}: {c[1]}   </span>)}
-            {'12345'.split('').map((c,i) => <span key={i} className="fake"></span>)}
+            {'12345678'.split('').map((c,i) => <span key={i} className="fake"></span>)}
           </nav>
         </div>
       </div>
