@@ -1,3 +1,173 @@
+$bingo-cell: 15vmin
+.bingo
+  text-align: center
+  user-select: none
+  button
+    outline: 0
+    cursor: pointer
+  .twocols
+    display: flex
+    .play
+      flex: 6 0 0px
+      position: relative
+      font-size: 0rem
+      button
+        border: 3px solid #666
+        font-size: 1.5rem
+        padding: 0.5em
+        width: 5em
+        background: none
+        color: $white
+        position: absolute
+        bottom: 0
+        right: 0
+        &:hover
+          color: $blue
+          border-color: $blue
+          
+
+    .setup,.results
+      padding-left: 20px
+      flex: 4 0 0px
+      font-size: 0.8em
+      h4
+        margin: 10px
+      
+  .balls
+    text-align: left
+    margin-bottom: 10px
+    span
+      display: inline-block
+      width: 35px
+      height: 35px
+      line-height: 35px
+      text-align: center
+      text-decoration: underline
+      background: $black
+      border: 1px solid $white
+      font-size: 1.2em
+      color: $white
+      border-radius: 50%
+      margin: 5px
+      transition: all linear 0.4s
+      &.rolling
+        transition: all linear 0.2s
+        border-color: $blue
+        color: $blue
+        transform: scale(1.3)
+
+  .card, h3
+    margin: 20px auto
+    display: flex
+    width: 5*$bingo-cell
+    span
+      width: $bingo-cell
+      height: $bingo-cell
+      line-height: $bingo-cell
+      text-align: center
+      font-size: 1.5em
+      font-weight: bold
+      display: inline-block
+      border: 1px solid $white
+      box-sizing: border-box
+  h3
+    text-align: center
+    height: $bingo-cell - 6vmin
+    span
+      border-radius: 50%
+      border: 3px solid $white
+      width: $bingo-cell - 6vmin
+      height: $bingo-cell - 6vmin
+      line-height: $bingo-cell - 6vmin
+      margin: 0 3vmin
+      font-family: serif
+      background: $white
+      color: $black
+
+  .setup
+    ul
+      text-align: left
+      list-style: none
+    .add-player
+      border: 1px dashed rgba($white,0.5)
+      padding: 5px 10px
+      display: flex
+      margin-bottom: 10px
+
+    input
+      border: 0
+      margin: 4px
+      padding: 0.25em
+    input[type="number"]
+      flex: 1 0 0px
+      text-align: right
+    input[type="text"]
+      flex: 20 0 0px
+      
+  table
+    width: 100%
+    border: 1px solid rgba($white,0.5)
+    border-spacing: 0
+    tr
+      border: 1px solid rgba($white,0.5)
+      text-align: center
+      td,th
+        &:first-child
+          width: 60%
+          text-align: left
+    td,th
+      padding: 10px
+    .action
+      cursor: pointer
+      position: relative
+      padding: 0
+      svg
+        padding: 10px
+      &:hover, &:hover a
+        color: $blue
+
+      &.copied::after
+        user-select: none
+        pointer-events: none
+        content: "copied!"
+        position: absolute
+        border: 1px solid $white
+        width: 4em
+        height: 1em
+        padding: 0.5em
+        bottom: -2em
+        left: -50%
+        background: $black
+        color: $white
+        
+
+  h5
+    text-align: center
+    font-size: 1.5em
+
+  .card
+    height: 5*$bingo-cell
+    flex-wrap: wrap
+    flex-direction: column
+    span
+      cursor: pointer
+      &.free
+        background: $white
+      &.marked
+        color: $blue
+        position: relative
+        //text-decoration: line-through
+        &::after
+          border-radius: 50%
+          top: 10%
+          left: 10%
+          width: 80%
+          height: 80%
+          background: rgba($blue, 0.25)
+          position: absolute
+          content: ""
+        
+
 .morse
   .clipboard
     position: fixed
