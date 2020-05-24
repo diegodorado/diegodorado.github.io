@@ -1,4 +1,5 @@
 import React, {useState, useEffect,useRef} from "react"
+import {  reactLocalStorage} from 'reactjs-localstorage'
 import Layout from "../../layouts/main"
 import SEO from "../../components/seo"
 import Bingo from "../../components/bingo"
@@ -43,12 +44,24 @@ const BingoMaster = ({location}) => {
   const [rollingBall, setRollingBall] = useState(null)
   const [mayCall, setMayCall] = useState(true)
   const [playing, setPlaying] = useState(false)
+  const [lastBingo, setLastBingo] = useState(false)
   const [playerName, setPlayerName] = useState('')
   const [numCards, setNumCards] = useState(1)
   const [players, setPlayers] = useState([])
   const canvasRef = useRef(null)
   const rafRef = useRef(null)
   const bingoRef = useRef(null)
+
+  useEffect(()=>{
+    // false means not set, while null means no previous data
+    if(lastBingo===false)
+      setLastBingo(reactLocalStorage.getObject('last-bingo',null))
+    else
+      reactLocalStorage.setObject('last-bingo', {players,balls})
+
+    return () => {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[players,balls])
 
   useEffect(() => {
     const draw = time => {
@@ -66,7 +79,6 @@ const BingoMaster = ({location}) => {
 
   const onBingoStatusChanged = (status,number) => {
     setRollingBall(number)
-    console.log("bing status",status,number)
     if(status===4)
       completeBingoCall(number)
   }
@@ -74,11 +86,10 @@ const BingoMaster = ({location}) => {
   const completeBingoCall = (number) => {
     if(!number)
       number = rollingBall
-    console.log('completed',number)
     bingoRef.current.complete()
     setBalls(b => [number, ...b])
     setMayCall(true)
-    setTimeout( ()=> setRollingBall(false),2000)
+    setTimeout( ()=> setRollingBall(null),2000)
   }
 
   const onKeyPlayerName = (e) => {
@@ -105,9 +116,8 @@ const BingoMaster = ({location}) => {
       cards.push(randomCard())
     const player = {name:playerName,cards}
     const b64 = btoa(JSON.stringify(player))
-    const baseurl = location.href.replace(location.hash,"")
+    const baseurl = location.href.replace(location.hash,"").replace('#','')
     player.url = `${baseurl}#${b64}`
-    player.showCard = false
     setPlayers([player, ...players])
     setPlayerName('')
   }
@@ -127,8 +137,14 @@ const BingoMaster = ({location}) => {
 
   const onStartClick = (e) => {
     setPlaying(true)
-    bingoRef.current.started = true
-    bingoRef.current.spinning = true
+    bingoRef.current.start()
+  }
+
+  const onRecoverGame = (e) => {
+    setBalls(lastBingo.balls)
+    setPlayers(lastBingo.players)
+    bingoRef.current.start(lastBingo.balls)
+    setPlaying(true)
   }
 
   const copyLink = (url,el) => {
@@ -139,8 +155,18 @@ const BingoMaster = ({location}) => {
     },1000)
   }
 
+  const recoverGameMsg = (
+    <div className="setup">
+      <h4>Recuperar Partida</h4>
+      <p>Encontramos una partida anterior, ¿deseas recuperarla?</p>
+      <button onClick={onRecoverGame}>Si, por favor</button>
+      <button onClick={()=> setLastBingo(null)}>No, gracias</button>
+    </div>
+  )
+
   const cardsCount = players.reduce( (a,c) => a+c.cards.length, 0)
   const setupBingo = (
+    lastBingo ? recoverGameMsg : 
     <div className="setup">
       <h4>Instrucciones</h4>
       <p>Ingresá el nombre del participante y presiona ENTER para sumarlo a la partida. Podés asignarle más de un cartón. </p>
@@ -186,43 +212,43 @@ const BingoMaster = ({location}) => {
   )
 
   const queryStr = '?'+balls.join('-')
+  const ranking = players.reduce( (arr, p) => {
+    return [...arr, ...p.cards.map((c,i) => {
+      const countHits =  (a,x) => (balls.includes(x)?1:0)+a
+      const hits = c.map(r => r.reduce(countHits,0) ).reduce( (a,x) => x+a, 0)
+      return {
+        name: p.name,
+        card: `#${i+1}`,
+        url: p.url+queryStr,
+        hits 
+      }
+    })]
+  },[]).sort( (a,b) => b.hits-a.hits)
+        
   const playBingo = (
     <div className="results">
-      {balls.length>0 &&
-      <div className="balls">
-        {balls.map((b,i) => <span key={i} className={b===rollingBall? 'rolling' : ''}>{b}</span>)}
-      </div>
-      }
       <table>
         <thead>
           <tr>
+            <th>Participante</th>
             <th>Cartón</th>
-            <th>Aciertos</th>
-            <th>Columnas</th>
+            <th>Puntos</th>
             <th></th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          {players.map( p => {
-            return p.cards.map((c,i) => {
-              const achievements = c.map(r =>{
-                return r.reduce( (a,x) => (balls.includes(x)?1:0)+a, 0)
-              })
-              const aciertos = achievements.reduce( (a,x) => x+a, 0)
-              const rows = achievements.filter(r => r===5).length
-              const url = p.url+queryStr
-              return (
+          {ranking.map( (r,i) => 
+              (
                 <tr key={i}>
-                  <td>{p.name} #{i+1}</td>
-                  <td>{aciertos}</td>
-                  <td>{rows}</td>
-                  {i>0? <td/> : <td className="action" onClick={(ev)=>copyLink(url,ev.currentTarget)} ><FaShareAlt /></td>}
-                  {i>0? <td/> : <td className="action"><a href={url} target="_blank" rel="noopener noreferrer"><FaEye/></a></td>}
+                  <td>{r.name}</td>
+                  <td>{r.card}</td>
+                  <td>{r.hits}</td>
+                  <td className="action" onClick={(ev)=>copyLink(r.url,ev.currentTarget)} ><FaShareAlt /></td>
+                  <td className="action"><a href={r.url} target="_blank" rel="noopener noreferrer"><FaEye/></a></td>
                 </tr>
               )
-            })
-          })}
+          )}
         </tbody>
       </table>
     </div>
@@ -231,9 +257,16 @@ const BingoMaster = ({location}) => {
   return (
     <div className="twocols">
       <div className="play">
-        <canvas ref={canvasRef} width={600} height={600} />
-        {playing && <button onClick={onCallClick}>{mayCall ? 'BOLA' : (rollingBall ? ' >> ' : '...')}</button>}
-        {!playing && (players.length>0) && <button onClick={onStartClick}>START</button>}
+        <div className="canvas">
+          <canvas ref={canvasRef} width={600} height={600} />
+          {playing && <button onClick={onCallClick}>{mayCall ? 'BOLA' : (rollingBall ? ' >> ' : '...')}</button>}
+          {!playing && (players.length>0) && <button onClick={onStartClick}>START</button>}
+        </div>
+        {balls.length>0 &&
+        <div className="balls">
+          {balls.map((b,i) => <span key={i} className={b===rollingBall? 'rolling' : ''}>{b}</span>)}
+        </div>
+        }
       </div>
       { !playing &&  setupBingo }
       { playing && playBingo }
@@ -242,7 +275,7 @@ const BingoMaster = ({location}) => {
 
 }
 
-const Card = ({card,interactive,initialBalls}) => {
+const Card = ({card,initialBalls}) => {
   const [balls, setBalls] = useState([])
   
   useEffect(() => {
@@ -251,7 +284,6 @@ const Card = ({card,interactive,initialBalls}) => {
   }, []) // Make sure the effect runs only once
 
   const onCellClick = (c) => {
-    console.log(balls)
     if(c>0){
       if(balls.includes(c))
         setBalls(balls.filter(x => x!==c))
@@ -269,7 +301,7 @@ const Card = ({card,interactive,initialBalls}) => {
                <span 
                  key={`c-${c}`} 
                  className={`${balls.includes(c)? 'marked' : ''} ${(c===0)? 'free' : ''}`}
-                 onClick={ interactive ? ()=> onCellClick(c) : null}
+                 onClick={()=> onCellClick(c)}
                  >
                  {c}
                </span>
@@ -286,7 +318,7 @@ const BingoClient = ({player}) => {
   return (
     <>
       <h5>{player.name} <i>(cartones: {player.cards.length})</i></h5>
-      {player.cards.map((c,i)=> <Card key={i} card={c} interactive={true} initialBalls={player.balls} />)}
+      {player.cards.map((c,i)=> <Card key={i} card={c} initialBalls={player.balls} />)}
     </>
   )
 }
@@ -307,8 +339,15 @@ const getPlayer = (location) => {
 }
 
 const BingoIndex = ({location}) => {
-  const player = getPlayer(location)
-  const isMaster = (player===null)
+  const [ready, setReady] = useState(false)
+  const [player, setPlayer] = useState(null)
+
+  useEffect(() => {
+    const p = getPlayer(location)
+    setPlayer(p)
+    setReady(true)
+    return () => {}
+  }, []) // Make sure the effect runs only once
 
   const heading = 'BINGO'.split('')
   return (
@@ -318,7 +357,7 @@ const BingoIndex = ({location}) => {
         <h3>
           {heading.map(h=> <span key={h}>{h}</span>)}
         </h3>
-        { isMaster ? <BingoMaster location={location} /> : <BingoClient player={player} /> }
+        { ready && ( player ? <BingoClient player={player} /> : <BingoMaster location={location} /> ) }
       </div>
     </Layout>
   )

@@ -180,6 +180,16 @@ class Bingo {
 
   }
 
+  start(balls){
+    this.spinning = true
+    this.started = true
+    if(balls){
+      this.balls.bodies.filter(b=> balls.includes(b.number)).forEach(b => {
+        Composite.remove(this.balls,b)
+      })
+    }
+  }
+
   call(){
     //ignore calls if already called
     if(this.status===0){

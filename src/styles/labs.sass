@@ -9,22 +9,23 @@ $bingo-cell: 15vmin
     display: flex
     .play
       flex: 6 0 0px
-      position: relative
-      font-size: 0rem
-      button
-        border: 3px solid #666
-        font-size: 1.5rem
-        padding: 0.5em
-        width: 5em
-        background: none
-        color: $white
-        position: absolute
-        bottom: 0
-        right: 0
-        &:hover
-          color: $blue
-          border-color: $blue
-          
+      .canvas
+        position: relative
+        font-size: 0rem
+        button
+          border: 3px solid #666
+          font-size: 1.5rem
+          padding: 0.5em
+          width: 5em
+          background: none
+          color: $white
+          position: absolute
+          bottom: 0
+          right: 0
+          &:hover
+            color: $blue
+            border-color: $blue
+            
 
     .setup,.results
       padding-left: 20px
@@ -35,7 +36,7 @@ $bingo-cell: 15vmin
       
   .balls
     text-align: left
-    margin-bottom: 10px
+    margin: 10px 0
     span
       display: inline-block
       width: 35px
