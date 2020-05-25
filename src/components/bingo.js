@@ -10,7 +10,8 @@ import {Engine,
 
 class Bingo {
 
-  constructor(canvas,callback) {
+  constructor(canvas,callback,audioCallback) {
+    this.audioCallback = audioCallback
     this.statusCallback = callback
     this.canvas = canvas
     this.init()
@@ -62,7 +63,6 @@ class Bingo {
     }
     
     const d = width*0.033
-    const e = width*0.02
     const cage = Composite.create()
     Composite.add(cage,Bodies.rectangle(0, 0, d/2, d/2, {isStatic : true}))
     Composite.add(cage,Bodies.polygon(d*1.25-radius, 0, 3, d*1.5, {angle:Math.PI,isStatic : true}))
@@ -116,8 +116,10 @@ class Bingo {
             this.status=4
             this.statusCallback(this.status,this.ball.number)
           } else {
-            other.hueLeft = 100;
+            other.hueLeft = 100
             other.hue = this.hue
+            const v = Math.min(1,this.ball.speed/15)
+            this.audioCallback(v)
           }
         }
       })
@@ -152,7 +154,8 @@ class Bingo {
         const y = Math.abs( b.position.y - pivot.y)
         const r = radius + 60 // expand radius to gate2
         if(x>r || y >r){
-          console.log("ball out",b.label,this.ball,this.gate1.isSensor)
+          console.log("ball out",b.label)
+          Body.setPosition(b, {x:pivot.x,y:pivot.y+30})
         }
       })
 
