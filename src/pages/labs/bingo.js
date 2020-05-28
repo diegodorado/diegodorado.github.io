@@ -135,6 +135,8 @@ const scale = [2,3,4,5].reduce((arr,el) => [...arr, ...'CDEGA'.split('').map(x =
 const BingoMaster = ({location}) => {
   const [balls, setBalls] = useState([])
   const [rollingBall, setRollingBall] = useState(null)
+  const [onlyMusic, setOnlyMusic] = useState(false)
+  const [onlyMusicAck, setOnlyMusicAck] = useState(false)
   const [mayCall, setMayCall] = useState(true)
   const [playing, setPlaying] = useState(false)
   const [lastBingo, setLastBingo] = useState(false)
@@ -303,6 +305,13 @@ const BingoMaster = ({location}) => {
     bingoRef.current.start()
   }
 
+  const onHereForMusic = (e) => {
+    setOnlyMusicAck(true)
+    setOnlyMusic(true)
+    setPlaying(true)
+    bingoRef.current.start()
+  }
+
   const onRecoverGame = (e) => {
     setBalls(lastBingo.balls)
     setPlayers(lastBingo.players)
@@ -331,6 +340,11 @@ const BingoMaster = ({location}) => {
     lastBingo ? recoverGameMsg : 
     <div className="setup">
       <h4>Instrucciones</h4>
+      <p>Sos el GameMaster, así que debes configurar la partida agregando participantes y compartiendoles el enlace en donde vean sus cartones.</p>
+      { !onlyMusicAck && (<>
+        <button onClick={()=> setOnlyMusicAck(true)}>Ok</button>
+        <button onClick={onHereForMusic}>¡Solo vine por la música!</button>
+        </>)}
       {channelID.length>0 ?
         <div className="iframe-preview">
           <iframe width="400" height="225" src={youtubeUrl(channelID)}></iframe>
@@ -338,14 +352,14 @@ const BingoMaster = ({location}) => {
         </div>
         :
         <>
-          <p>Si querés mostrar el stream de tu canal de youtube, pegá tu channelID, que encontrás <a href="https://www.youtube.com/account_advanced" target="_blank" rel="noopener noreferrer">acá</a> </p>
+          <p>Para que vean tu live de youtube, pegá acá tu channelID, que encontrás en <a href="https://www.youtube.com/account_advanced" target="_blank" rel="noopener noreferrer">youtube.com/account_advanced</a> </p>
           <div className="add-player">
             <input type="text" placeholder="YOUR_CHANNEL_ID" onPaste={onPasteChannelID} />
           </div>
         </>
       }
       <p>Ingresá el nombre del participante y presiona ENTER para sumarlo a la partida. Podés asignarle más de un cartón. </p>
-      {players.length ? <p>Para comenzar la partida, hacé click en 'START'. Ya no podrás modificar los cartones.</p> : <p>Primero que nada, agregá participantes.</p>}
+      {players.length > 0 && <p>Para comenzar la partida, hacé click en 'START'. Ya no podrás modificar los cartones.</p> }
       <div className="add-player">
         <input type="text" placeholder="Nombre" value={playerName} onChange={onChangePlayerName} onKeyPress={onKeyPlayerName} />
         <input type="number" min={1} max={100} value={numCards} onChange={onChangeNumCards} />
@@ -443,6 +457,14 @@ const BingoMaster = ({location}) => {
       <h3>
         {heading.map( (h,i)=> (headingIdx===i) ?<span className="rolling" key={i}>{rollingBall}</span>: <span key={i}>{h}</span>)}
       </h3>
+      { !onlyMusic && (
+        <div className="warning">
+          <p>
+            Tu pantalla es muy angosta para ser GameMaster.
+            <button onClick={onHereForMusic}>¡Solo vine por la música!</button>
+          </p>
+        </div>
+      )}
       <div className="twocols">
         <div className="play">
           <div className="canvas">
@@ -519,7 +541,6 @@ const BingoClient = ({data}) => {
             <th>Participante</th>
             <th>Cartones</th>
             <th></th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -528,7 +549,6 @@ const BingoClient = ({data}) => {
                 <tr key={i}>
                   <td>{p.name}</td>
                   <td>{p.cards}</td>
-                  <td className="action" onClick={(ev)=>copyLink(p.url,ev.currentTarget)} ><FaShareAlt /></td>
                   <td className="action"><a href={p.url} target="_blank" rel="noopener noreferrer"><FaEye/></a></td>
                 </tr>
               )
