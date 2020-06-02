@@ -9,6 +9,7 @@ import { FaShareAlt,
          FaEye,
          FaTrashAlt,
          FaVideo,
+         FaPlay,
          FaVideoSlash,
          FaStop,
         } from 'react-icons/fa'
@@ -575,9 +576,15 @@ const BingoClient = () => {
       <h3>
         {heading.map(h=> <span key={h}>{h}</span>)}
       </h3>
-      <h5>{player.name} <i>(cartones: {player.cards.length})</i></h5>
       <div className={`twocols`}>
         <div className="play">
+          {!state.playing &&
+          <p>
+            {`¡Hola ${player.name}! Estamos calentando motores. En breve comienza la partida. 
+               Aquí veras las bolillas a medida que vayan saliendo.`} 
+            { state.stream && ' A la derecha podrás ver la cámara del anfitrión'}
+          </p>
+          }
           <div className="balls">
             {state.balls.length===0 ? 
               <span>?</span> : 
@@ -836,6 +843,7 @@ const VideoMaster = () => {
 
 const VideoClient = ({}) => {
   const { state,dispatch} = useContext(BingoContext)
+  const [started, setStarted] = useState(false)
   const videoRef = useRef(null)
 
   useEffect(()=>{
@@ -852,10 +860,16 @@ const VideoClient = ({}) => {
       videoRef.current.srcObject = state.stream
   },[state.stream])
 
+  const startVideo = () => {
+    videoRef.current.play()
+    setStarted(true)
+  }
+
   return (
-    <div className={`video ${state.stream ? 'has-stream' : ''}`}>
-      <video ref={videoRef} playsInline autoPlay > </video>
+    <div className={`video ${(started && state.stream) ? 'has-stream' : ''}`}>
+      <video ref={videoRef} playsInline> </video>
       {!state.stream && <FaVideoSlash />}
+      {!started && state.stream && <FaPlay onClick={startVideo} />}
     </div>
   )
 }
