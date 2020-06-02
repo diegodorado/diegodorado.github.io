@@ -24,12 +24,14 @@ const Scene = (props) =>{
     dispatch({ type: "active-param", code: code })
   }
 
+  /*
   const onSelectScene = (ev) =>{
     ev.preventDefault()
     const s = parseInt(ev.target.attributes.scene.value, 10)*256+127
     dispatch({ type: "update-param", code: code, value: s })
     dispatch({ type: "active-param", code: code })
   }
+  */
 
   const storeScene = (ev) =>{
     ev.preventDefault()

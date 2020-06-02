@@ -58,6 +58,7 @@ class TicTacToe extends Component {
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         blocks.push(
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
           <div
             data-position={[i, j]}
             onClick={this.handleChoosePosition}

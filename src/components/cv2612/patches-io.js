@@ -1,16 +1,18 @@
-import {  reactLocalStorage} from 'reactjs-localstorage'
+//import {  reactLocalStorage} from 'reactjs-localstorage'
 import {  dmp2voice,  emptyPatch} from './utils/patches-utils'
 
 const init = async () => {
   //hack
   return await defaultPatches()
 
+  /*
   let patches = reactLocalStorage.getObject('patches',[])
   if (patches.length === 0) {
     patches = await defaultPatches()
     reactLocalStorage.setObject('patches', patches)
   }
   return patches
+  */
 }
 
 const defaultPatches = async () => {

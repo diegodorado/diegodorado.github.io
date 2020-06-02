@@ -70,7 +70,13 @@ const Twitter = ({id}) =>{
     <div className="twitter">
       <Canvas/>
       <p>
-        Twiteá algunos 😛😍🔥😹 con el hastag #emojis y serán transformados por un bot.
+        Twiteá algunos 
+        <span role="img" aria-label="doubt">😛</span>
+        <span role="img" aria-label="doubt">😍</span>
+        <span role="img" aria-label="doubt">🔥</span>
+        <span role="img" aria-label="doubt">😹</span>
+        con el hastag #emojis y serán transformados por un bot.
+        con el hastag #emojis y serán transformados por un bot.
         <br/>
         Mira como suenan estos tweets!
         <br/>
@@ -84,6 +90,7 @@ const Twitter = ({id}) =>{
       }
       <div className="tweets">
         {tweets.map((t,i) => (
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events , jsx-a11y/no-static-element-interactions
           <div key={t[0]}
               className={`tweet ${(current===i) ? 'current':''}`}
               onClick={(e) => {

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { navigate } from "gatsby"
-import Link from "../components/link"
+//import Link from "../components/link"
 import { useTranslation } from 'react-i18next'
 import Layout from "../layouts/main"
 import SEO from "../components/seo"

@@ -205,7 +205,7 @@ const CV2612Provider = ({children}) =>{
       MidiIO.unsub('onControlChange', onControlChange)
     }
 
-    dispatch({ type: "set-mapping", mapping: reactLocalStorage.getObject('mapping',{})})
+    //dispatch({ type: "set-mapping", mapping: reactLocalStorage.getObject('mapping',{})})
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 

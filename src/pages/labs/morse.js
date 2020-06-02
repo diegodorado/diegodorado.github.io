@@ -134,6 +134,7 @@ const MorseIndex = ({location}) => {
             {text_arr.map((c,i) => <span className={(i===pos)? 'current':''} key={i}>{(c===' ') ? ' ': `${morsify.encode(c)}` } </span>)}
             {'12345678'.split('').map((c,i) => <span key={i} className="fake"></span>)}
           </nav>
+          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events , jsx-a11y/no-static-element-interactions */}
           <div className="letter" onClick={toggleAudio} >
             { !audio && <FaPlay/>}
             { curr && (curr===' ') ? '🤫' : curr}

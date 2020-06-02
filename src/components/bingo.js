@@ -16,12 +16,28 @@ class Bingo {
     this.canvas = canvas
     this.init()
     this.started = false
+    this.lastCycleBalls = 0
     this.started = true
     this.spinning = true
     this.spinning = false
     this.status = 0
     this.ball = null
     this.trail = []
+    this.remaining = []
+  }
+
+  addBall(number) {
+    const x = this.pivot.x+50
+    const y = this.pivot.y-50
+    const b = Bodies.circle(x, y, this.width*0.02, {
+      density:0.1, 
+      friction:0, 
+      frictionAir:0, 
+      restitution:0.92,
+      label:`${number}`,
+    })
+    b.number = number
+    Composite.add(this.balls,b)
   }
 
   init() {
@@ -31,6 +47,8 @@ class Bingo {
     const width = this.canvas.width
     const height = this.canvas.height
     const radius = this.canvas.width*0.29
+    this.width = width
+    this.radius = radius
 
     const walls = Composite.create()
     const w = width * 0.1
@@ -46,21 +64,6 @@ class Bingo {
     this.pipe = Bodies.polygon(0, height, 3, 50, {angle: Math.PI, isSensor: true,isStatic : true})
 
     const balls = Composite.create()
-    for(let i=0;i<75;i++){
-      const a = Math.random()*Math.PI*2
-      const r = Math.random()*radius*0.7
-      const x = Math.cos(a) * r
-      const y = Math.sin(a) * r
-      const b = Bodies.circle(x, y, width*0.02, {
-        density:0.1, 
-        friction:0, 
-        frictionAir:0, 
-        restitution:0.92,
-        label:`${i+1}`,
-      })
-      b.number = (i+1)
-      Composite.add(balls,b)
-    }
     
     const d = width*0.033
     const cage = Composite.create()
@@ -77,7 +80,6 @@ class Bingo {
       const b = Bodies.rectangle(x, y, d, side, {
         isStatic : true,
         angle:a, 
-        //chamfer: { radius: 2 },
       })
       Composite.add(cage,b)
       if(i===0){
@@ -180,17 +182,13 @@ class Bingo {
     this.cage = cage
     this.balls = balls
     this.walls = walls
-
+    this.pivot = pivot
   }
 
-  start(balls){
+  start(remaining){
     this.spinning = true
     this.started = true
-    if(balls){
-      this.balls.bodies.filter(b=> balls.includes(b.number)).forEach(b => {
-        Composite.remove(this.balls,b)
-      })
-    }
+    this.remaining = remaining
   }
 
   call(){
@@ -206,6 +204,8 @@ class Bingo {
   }
 
   complete(){
+    const n = this.ball.number
+    this.remaining = this.remaining.filter(x => x!==n)
     Composite.remove(this.balls,this.ball)
     this.ball = null
     this.status = 0
@@ -215,6 +215,29 @@ class Bingo {
     if(this.started){
       Engine.update(this.engine, 1000 / 60)
       this.draw()
+      this.cycleBalls()
+    }
+  }
+  
+  cycleBalls(){
+    const t = performance.now()
+    const dt = t - this.lastCycleBalls 
+    if(dt>200){
+      this.lastCycleBalls = t
+      const balls = this.balls.bodies.filter(b=> b!==this.ball)
+      const r = this.remaining.filter(x => !balls.map(b => b.number).includes(x))
+      if(r.length){
+        const idx = Math.floor(Math.random()*r.length)
+        const v = r[idx]
+        const c = balls.length
+        if(c < 20 && r.length>c)
+          this.addBall(v)
+        else{
+          const idx2 = Math.floor(Math.random()*c)
+          balls[idx2].label = `${v}`
+          balls[idx2].number = v
+        }
+      }
     }
   }
 
@@ -289,15 +312,14 @@ class Bingo {
     ctx.fillStyle = '#ccc'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    for (var i = 0; i < this.balls.bodies.length; i += 1) {
+    this.balls.bodies.forEach( b => {
       ctx.save()
-      const b = this.balls.bodies[i]
       ctx.translate(b.position.x ,b.position.y )
       ctx.rotate(b.angle)
       ctx.fillText(b.label,0,0)
       ctx.fillRect(-5, 8, 10,1)
       ctx.restore()
-    }
+    })
 
   }
 

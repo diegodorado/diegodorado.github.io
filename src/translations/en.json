@@ -1,5 +1,10 @@
 {
   "translation": {
+    "Work": "Work",
+    "Music": "Music",
+    "Bio": "Bio",
+    "and": "y",
+    "or": "o",
     "Intro": "Diego Dorado is a live coder, programmer and electronic artist based in Agentina. He is passionate about research projects that combine technological innovation with artistic expressions.",
     "Explore": "<0>Explore</0> the projects that I've been working on.",
     "MusicIntro": "Listen to the albums produced by Diego Dorado here or on <1></1>.",

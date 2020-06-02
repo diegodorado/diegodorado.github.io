@@ -1,20 +1,11 @@
-$bingo-cell: 15vmin
-
 .bingo
   h3
-    height: $bingo-cell - 2vmin
+    font-size: 2vw
     span
-      width: $bingo-cell - 2vmin
-      height: $bingo-cell - 2vmin
-      line-height: $bingo-cell - 2vmin
-      margin: 0 1vmin
-    +breakpoint(lg)
-      height: $bingo-cell - 6vmin
-      span
-        width: $bingo-cell - 6vmin
-        height: $bingo-cell - 6vmin
-        line-height: $bingo-cell - 6vmin
-        margin: 0 3vmin
+      width: 2em
+      height: 2em
+      line-height: 2em
+      margin: 0 0.2em
   .warning
     +breakpoint(lg)
       display: none
@@ -26,6 +17,11 @@ $bingo-cell: 15vmin
 
   text-align: center
   user-select: none
+  a:focus
+    border: 0
+    outline: 0
+  video
+    width: 100%
   iframe
     border: 0
   button
@@ -40,10 +36,47 @@ $bingo-cell: 15vmin
     &:hover
       color: $blue
       border-color: $blue
+    &::-moz-focus-inner 
+      border: 0
 
   canvas
     width: 100%
 
+  .video
+    margin: 10px auto
+    position: relative
+    border: 3px solid #666
+    svg
+      position: absolute
+      z-index: 100
+      font-size: 10em
+      left: 50%
+      top: 50%
+      transform: translate(-50%, -50%)
+      cursor: pointer
+      &:hover
+        fill: $blue
+    video
+      animation: none
+      display: none
+      position: absolute
+      top: 0
+      left: 0
+    &::before
+      display: block
+      content: ""
+      width: 100%
+      padding-bottom: 75%
+    &.has-stream
+      svg
+        font-size: 3.5em
+        left: 10px
+        top: auto
+        bottom: 10px
+        transform: none
+      video
+        display: block
+      
   .full
     iframe
       width: 100%
@@ -56,20 +89,27 @@ $bingo-cell: 15vmin
       .canvas
         position: relative
         font-size: 0rem
-        button
-          font-size: 1.5rem
-          width: 5em
+        .buttons
           position: absolute
           bottom: 0
           right: 0
+          button
+            font-size: 1.5rem
+            margin-left: 0
+            width: 5em
             
 
-    .setup,.results
+    .setup,.results,.streaming
       padding-left: 20px
       flex: 4 0 0px
       font-size: 0.8em
       h4
         margin: 10px
+    &.only-music
+      max-width: 800px
+      margin: auto
+      .results
+        display: none
       
   .iframe-preview
     position: relative
@@ -113,21 +153,26 @@ $bingo-cell: 15vmin
         transform: scale(1.3)
 
   .card
-    span
-      width: $bingo-cell
-      height: $bingo-cell
-      line-height: $bingo-cell
+    .row
+      display: flex
+      .cell
+        border: 1px solid $white
+        box-sizing: border-box
+        text-align: center
+        font-weight: bold
+        width: calc(1/9 * 100%)
+        font-size: 0rem
+        svg
+          font-size: 1rem
+        text
+          text-anchor: middle
+          font-size: 0.333em
+          fill: $white
   .card, h3
     margin: 20px auto
-    display: flex
-    width: 5*$bingo-cell
     span
-      text-align: center
       font-size: 1.5em
-      font-weight: bold
       display: inline-block
-      border: 1px solid $white
-      box-sizing: border-box
   h3
     text-align: center
     span
@@ -206,17 +251,15 @@ $bingo-cell: 15vmin
     font-size: 1.5em
 
   .card
-    height: 5*$bingo-cell
-    flex-wrap: wrap
-    flex-direction: column
-    span
+    .cell
       cursor: pointer
       &.free
-        background: $white
+        background: #aaa
+        svg text
+          fill: #aaa
       &.marked
         color: $blue
         position: relative
-        //text-decoration: line-through
         &::after
           border-radius: 50%
           top: 10%

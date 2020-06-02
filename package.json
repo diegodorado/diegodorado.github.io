@@ -67,7 +67,10 @@
     "tone": "^13.4.9",
     "twemoji": "^12.1.5",
     "twitter": "^1.7.1",
-    "typography": "^0.16.18"
+    "typography": "^0.16.18",
+    "uuid": "^8.1.0",
+    "y-webrtc": "^10.1.5",
+    "yjs": "^13.0.8"
   },
   "devDependencies": {
     "gatsby-plugin-workerize-loader": "^1.1.0",
