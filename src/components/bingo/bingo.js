@@ -41,7 +41,6 @@ class Bingo {
   }
 
   init() {
-
     const engine = Engine.create()
     const world = engine.world
     const width = this.canvas.width
@@ -102,14 +101,7 @@ class Bingo {
         const g = this.gate2
         if(this.status===1 && (p.bodyA === g || p.bodyB === g)){
           const b = p.bodyA === g ? p.bodyB : p.bodyA
-          this.ball = b
-          this.status = 2
-          //ball catched
-          this.statusCallback(this.status,this.ball.number)
-          Body.setVelocity(b, {x:0,y:0})
-          this.gate1.isSensor = false
-          this.ball.isStatic = true
-          this.gate2.isSensor = true
+          this.catch(b)
         }
         if(this.status===3 && (p.bodyA === this.ball || p.bodyB === this.ball)){
           const other = p.bodyA === this.ball ? p.bodyB : p.bodyA
@@ -139,14 +131,9 @@ class Bingo {
         Body.rotate(this.ball, 0.1)
         const a = this.cage.bodies[0].angle%(Math.PI*2)
         if(a>(Math.PI*7/4)){
-          this.ball.isStatic = false
-          this.gate3.isSensor = true
-          this.gate4.isSensor = true
           const force = { x: 2*Math.random(), y: -2*Math.random()}
-          Body.applyForce( this.ball, Vector.clone(this.ball.position), force)
-          this.status = 3
-          //ball dropped
-          this.statusCallback(this.status,this.ball.number)
+          const pos =Vector.clone(this.ball.position)
+          this.throw(this.ball,pos,force)
         }
       }
 
@@ -183,6 +170,38 @@ class Bingo {
     this.balls = balls
     this.walls = walls
     this.pivot = pivot
+  }
+
+  catch(b){
+    this.status = 2
+    //ball catched
+    Body.setVelocity(b, {x:0,y:0})
+    this.gate1.isSensor = false
+    this.gate2.isSensor = true
+    b.isStatic = true
+    this.ball = b
+    this.statusCallback(this.status,b.number)
+  }
+
+  throwByNumber(n,p,f){
+    const balls = this.balls.bodies.filter(b=> b.number===n)
+    const b = (balls.length===1) ? balls[0] : this.balls.bodies[0]
+    b.label = `${n}`
+    b.number = n
+    this.ball = b
+    this.throw(b,p,f)
+
+  }
+
+  throw(b,p,f){
+    b.isStatic = false
+    this.gate3.isSensor = true
+    this.gate4.isSensor = true
+    Body.setPosition(b, p)
+    Body.applyForce(b,p,f)
+    this.status = 3
+    //ball dropped
+    this.statusCallback(this.status,b.number,p,f)
   }
 
   start(remaining){

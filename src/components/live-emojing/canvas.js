@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {useState, useEffect} from "react"
 import scheduler from './scheduler'
 import { parse } from 'twemoji-parser'

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, {useContext} from "react"
 import { FaCaretLeft,FaCaretRight} from 'react-icons/fa'
 import {CV2612Context} from "./context"

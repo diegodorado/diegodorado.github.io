@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from "react"
 import {FaYoutube,FaSpotify, FaGithub, FaInstagram, FaFacebook} from 'react-icons/fa'
 

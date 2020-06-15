@@ -1,22 +1,27 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */ 
+/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/no-static-element-interactions  */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+
 import React, {useState, useEffect,useRef,useContext,useReducer} from "react"
-import {  reactLocalStorage} from 'reactjs-localstorage'
+import {reactLocalStorage} from 'reactjs-localstorage'
 import Layout from "../../layouts/main"
 import SEO from "../../components/seo"
-import Bingo from "../../components/bingo"
-import Tone from "tone"
-import StartAudioContext from 'startaudiocontext'
+import Bingo from "../../components/bingo/bingo"
+import {startPiano} from "../../components/bingo/piano"
 import { FaShareAlt,
          FaEye,
          FaTrashAlt,
-         FaVideo,
-         FaPlay,
-         FaVideoSlash,
-         FaStop,
+         FaVolumeMute,
+         FaVolumeDown as FaVolume,
         } from 'react-icons/fa'
 
-import * as Y from 'yjs'
-import { WebrtcProvider } from 'y-webrtc'
+import Peer from 'simple-peer'
 import { v4 as uuidv4 } from 'uuid'
+import WebSocket from 'isomorphic-ws'
+
+const wsUrl = 'wss://flok-hub.herokuapp.com/signal'
 
 const BingoContext = React.createContext()
 
@@ -35,26 +40,6 @@ const copyLink = (url,el) => {
   setTimeout(()=>{
     el.classList.remove('copied')
   },1000)
-}
-
-
-const noiseGen = () => {
-  let scale = 1
-  const lerp = (a, b, t ) => a * ( 1 - t ) + b * t
-  const r = []
-  for ( let i = 0; i<256; ++i ) 
-    r.push(Math.random());
-  const l = r.length - 1
-  return {
-    scale: x => {scale = x},
-    sample: x => {
-      const s = x * scale
-      const f = Math.floor(s)
-      const t = s - f
-      const ss = t * t * ( 3 - 2 * t )
-      return lerp( r[f%l], r[(f+1)%l], ss )
-    }
-  }
 }
 
 const shuffle = (b) => {
@@ -88,80 +73,78 @@ const randomCard = ()=>{
   return c
 }
 
-const startPiano = async () =>{
-  try {
-    await StartAudioContext(Tone.context)
-    Tone.context.latencyHint = 'fastest'
-
-    const piano =  new Tone.Sampler({
-        "A0" : "A0.[mp3|ogg]",
-        "C1" : "C1.[mp3|ogg]",
-        "D#1" : "Ds1.[mp3|ogg]",
-        "F#1" : "Fs1.[mp3|ogg]",
-        "A1" : "A1.[mp3|ogg]",
-        "C2" : "C2.[mp3|ogg]",
-        "D#2" : "Ds2.[mp3|ogg]",
-        "F#2" : "Fs2.[mp3|ogg]",
-        "A2" : "A2.[mp3|ogg]",
-        "C3" : "C3.[mp3|ogg]",
-        "D#3" : "Ds3.[mp3|ogg]",
-        "F#3" : "Fs3.[mp3|ogg]",
-        "A3" : "A3.[mp3|ogg]",
-        "C4" : "C4.[mp3|ogg]",
-        "D#4" : "Ds4.[mp3|ogg]",
-        "F#4" : "Fs4.[mp3|ogg]",
-        "A4" : "A4.[mp3|ogg]",
-        "C5" : "C5.[mp3|ogg]",
-        "D#5" : "Ds5.[mp3|ogg]",
-        "F#5" : "Fs5.[mp3|ogg]",
-        "A5" : "A5.[mp3|ogg]",
-        "C6" : "C6.[mp3|ogg]",
-        "D#6" : "Ds6.[mp3|ogg]",
-        "F#6" : "Fs6.[mp3|ogg]",
-        "A6" : "A6.[mp3|ogg]",
-        "C7" : "C7.[mp3|ogg]",
-        "D#7" : "Ds7.[mp3|ogg]",
-        "F#7" : "Fs7.[mp3|ogg]",
-        "A7" : "A7.[mp3|ogg]",
-        "C8" : "C8.[mp3|ogg]"
-      }, {
-        release : 1,
-        baseUrl : "https://tonejs.github.io/examples/audio/salamander/",
-        onload: () => {
-          //console.log('loaded sampler')
-        }
-    }).toMaster()
-
-    const ng = noiseGen()
-    ng.scale(0.3)
-    let step = 0
-    piano.step = () => ng.sample(step++)
-    piano.last = 0
-    piano.notes = []
-
-    return piano
-
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-const scale = [2,3,4,5].reduce((arr,el) => [...arr, ...'CDEGA'.split('').map(x => x+el)],[])
-
-const BingoMaster = ({location}) => {
+const BingoRanking = () => {
   const { state } = useContext(BingoContext)
 
-  // 0: welcome, 1: onlyMusic, 2: video, 3: addPlayers
-  const [step, setStep] = useState(0)
+  const ranking = state.players.reduce( (arr, p) => {
+    return [...arr, ...p.cards.map((c,i) => {
+      const countHits =  (a,x) => (state.balls.includes(x)?1:0)+a
+      const hits = c.map(r => r.reduce(countHits,0) ).reduce( (a,x) => x+a, 0)
+      return {
+        name: p.name,
+        card: `#${i+1}`,
+        url: p.url,
+        hits 
+      }
+    })]
+  },[]).sort( (a,b) => b.hits-a.hits)
+        
+  return state.players.length>0 && (
+      <table>
+        <thead>
+          <tr>
+            <th>Participante</th>
+            <th>Cartón</th>
+            <th>Puntos</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {ranking.map( (r,i) => 
+              (
+                <tr key={i}>
+                  <td>{r.name}</td>
+                  <td>{r.card}</td>
+                  <td>{r.hits}</td>
+                  <td className="action" onClick={(ev)=>copyLink(r.url,ev.currentTarget)} ><FaShareAlt /></td>
+                  <td className="action"><a href={r.url} target="_blank" rel="noopener noreferrer"><FaEye/></a></td>
+                </tr>
+              )
+          )}
+          <tr>
+            <td>Link General</td>
+            <td></td>
+            <td></td>
+            <td className="action" onClick={(ev)=>copyLink(state.baseUrl,ev.currentTarget)} ><FaShareAlt /></td>
+            <td className="action"><a href={state.baseUrl} target="_blank" rel="noopener noreferrer"><FaEye/></a></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+  )
 
-  const [onlyMusic, setOnlyMusic] = useState(false)
-  const [automatic, setAutomatic] = useState(false)
-  const [playerName, setPlayerName] = useState('')
-  const [numCards, setNumCards] = useState(1)
+}
+
+const BingoBalls = () => {
+  const { state } = useContext(BingoContext)
+  return (
+          <div className="balls">
+            {state.balls.length===0 ? 
+              <span>?</span> : 
+              state.balls.map((b,i) => <span key={i} className={b===state.rollingBall? 'rolling' : ''}>{b}</span>)}
+          </div>
+          )
+}
+
+const BingoCanvas = () => {
+  const { state,dispatch } = useContext(BingoContext)
+
   const canvasRef = useRef(null)
   const rafRef = useRef(null)
   const bingoRef = useRef(null)
   const pianoRef = useRef(null)
+  const [automatic, setAutomatic] = useState(false)
 
   useEffect(() => {
 
@@ -175,7 +158,7 @@ const BingoMaster = ({location}) => {
       bingo.update()
     }
 
-    bingoRef.current = new Bingo(canvasRef.current,onBingoStatusChanged, playRandomNote)
+    bingoRef.current = new Bingo(canvasRef.current,onBingoStatusChanged, onCollisionBall)
     //draw first frame
     bingoRef.current.draw()
     rafRef.current = requestAnimationFrame(draw)
@@ -187,120 +170,45 @@ const BingoMaster = ({location}) => {
     if(state.playing){
       const remaining = [...Array(90).keys()].map(x => x+1).filter(x=> !state.balls.includes(x))
       bingoRef.current.start(remaining)
-      // just in case the browser was reloaded while rolling a ball
-      state.provider.doc.getMap('props').set('mayCall',true)
     }
     return () => {}
   }, [state.playing]) 
 
+  useEffect(() => {
+    if(state.throwingBall){
+      const {number,force,position} = state.throwingBall
+      bingoRef.current.throwByNumber(number,position, force)
 
-  const playRandomNote = (velocity) =>{
-    const piano = pianoRef.current
-    const t = performance.now()
-    const dt = t - piano.last
-    //prevent double triggers
-    if(!piano.loaded || dt<100)
-      return
-
-    piano.last = t
-    const index = Math.floor(piano.step()*scale.length)
-    const note = scale[index]
-
-    piano.notes.unshift(note)
-    if (piano.notes.length > 4) {
-      const n = piano.notes.pop()
-      piano.triggerRelease(n,'+0.5')
     }
-    piano.triggerAttack(note,undefined,velocity)
-  }
-
-  const playStart = () =>{
-    const piano = pianoRef.current
-    if(!piano.loaded)
-      return
-    piano.releaseAll()
-    const idxs = []
-    while(idxs.length<3){
-      //skip some steps
-      piano.step()
-      piano.step()
-      const idx =  Math.floor((0.5 + 0.5*piano.step())*scale.length)
-      if(!idxs.includes(idx))
-        idxs.push(idx)
-    }
-    idxs.forEach( (n,i) => piano.triggerAttackRelease(scale[n],(1+i),`+${i*(0.1+Math.random()*0.2)}`, 0.55+Math.random()*0.3) ) 
-  }
+    return () => {}
+  }, [state.throwingBall]) 
 
 
+  const onCollisionBall = () => pianoRef.current.playRandomNote()
 
-  const playEnd = () =>{
-    const piano = pianoRef.current
-    if(!piano.loaded)
-      return
-    piano.releaseAll()
-    const f = Math.floor(0.2*Math.random()*scale.length)
-    const s = 3 + Math.floor(Math.random()*3)
-    const notes = [0,1,2,3].map( i => {
-      const index = (f+s*i) % scale.length
-      return scale[index]
-    })
-    notes.forEach( (n,i) => piano.triggerAttackRelease(n,3,`+0.${i}1`, 0.55+Math.random()*0.3) ) 
-  }
-
-
-  const onBingoStatusChanged = (status,number) => {
+  const onBingoStatusChanged = (status,number, position, force) => {
     if(status===2)
-      playStart()
+      pianoRef.current.playStart()
+    if(status===3){
+      state.signalling.broadcast({throwingBall: {number,position, force}})
+    }
     if(status===4){
-      state.provider.doc.getMap('props').set('rollingBall',number)
-      playEnd()
+      dispatch({type:'set-props', state:{rollingBall: number}})
+      pianoRef.current.playEnd()
       bingoRef.current.complete()
 
-      state.provider.doc.getArray('balls').insert(0,[number])
+      dispatch({type:'set-balls', balls: [...state.balls, number]})
 
       setTimeout( ()=> {
-        state.provider.doc.getMap('props').set('rollingBall',null)
-        state.provider.doc.getMap('props').set('mayCall',true)
+        dispatch({type:'set-props', state:{rollingBall: null, mayCall: true}})
         if(bingoRef.current.automatic)
           bingoRef.current.call()
       },2000)
     }
   }
 
-  const onKeyPlayerName = (e) => {
-    if(e.key === 'Enter'){
-      addPlayer()
-    }
-  }
-
-  const onChangePlayerName = (e) => {
-    setPlayerName(e.target.value)
-  }
-  
-  const onChangeNumCards = (e) => {
-    setNumCards(e.target.value)
-  }
-
-  const addPlayer = () => {
-    const doc = state.provider.doc
-    const players = doc.getArray('players')
-    const cards = []
-    for(let i = 0; i< numCards; i++)
-      cards.push(randomCard())
-    const player = {name:playerName,cards}
-    player.url = `${state.baseUrl}/${playerName}`
-    players.push([player])
-    setPlayerName('')
-  }
-
-  const removePlayer = (i) => {
-    const doc = state.provider.doc
-    const players = doc.getArray('players')
-    players.delete(i,1)
-  }
-
   const onCallClick = (e) => {
-    state.provider.doc.getMap('props').set('mayCall',false)
+    dispatch({type:'set-props', state:{mayCall: false}})
     bingoRef.current.call()
   }
 
@@ -316,34 +224,117 @@ const BingoMaster = ({location}) => {
   }
 
 
+  return (
+          <div className="canvas">
+            <canvas ref={canvasRef} width={600} height={600} />
+            {!state.isClient && (
+            <div className="buttons">
+              {automatic && state.playing && <button onClick={toggleAutoClick}>MANUAL</button>}
+              {!automatic && state.playing && state.mayCall && <button onClick={toggleAutoClick}>AUTO</button>}
+              {!automatic && state.playing && state.mayCall && <button onClick={onCallClick}>LANZAR</button>}
+            </div>)}
+          </div>
+          )
+
+}
+
+const BingoWizard = () => {
+  const { state,dispatch } = useContext(BingoContext)
+
+  const [step, setStep] = useState(0)
+  const [playerName, setPlayerName] = useState('')
+  const [numCards, setNumCards] = useState(1)
+
+  const onKeyPlayerName = (e) => {
+    if(e.key === 'Enter'){
+      addPlayer()
+    }
+  }
+
+  const onChangePlayerName = (e) => {
+    setPlayerName(e.target.value)
+  }
+  
+  const onPasteChannelID = (e) => {
+    const paste = (e.clipboardData || window.clipboardData).getData('text')
+    e.preventDefault()
+    dispatch({type: 'set-channel-id', channelID:paste})
+  }
+  
+  const onChangeNumCards = (e) => {
+    setNumCards(e.target.value)
+  }
+
+  const addPlayer = () => {
+    const cards = []
+    for(let i = 0; i< numCards; i++)
+      cards.push(randomCard())
+    const player = {name:playerName,cards}
+    player.url = `${state.baseUrl}/${playerName}`
+    dispatch({type: 'set-players', players: [...state.players, player]})
+    setPlayerName('')
+  }
+
+  const removePlayer = (i) => {
+    dispatch({type: 'set-players', players: state.players.filter( (p,j) => i!==j)})
+  }
+
   const onStartClick = (e) => {
-    state.provider.doc.getMap('props').set('playing',true)
+    dispatch({type:'set-props', state:{playing: true}})
   }
 
   const onHereForMusic = (e) => {
-    setOnlyMusic(true)
-    state.provider.doc.getMap('props').set('playing',true)
+    dispatch({type:'set-props', state:{onlyMusic: true,playing: true}})
   }
 
-  const onRecoverGame = (e) => {
-    const doc = state.provider.doc
-    const players = doc.getArray('players')
-    const balls = doc.getArray('balls')
-    balls.push(state.lastBingo.balls)
-    players.push(state.lastBingo.players)
-    //bingoRef.current.start(state.lastBingo.balls)
-    state.provider.doc.getMap('props').set('playing',true)
+  const sessionReady = () => {
+    setStep(5)
+    state.signalling.sessionReady(state.stream)
   }
 
-  const recoverGameMsg = (
-    <div className="setup">
-      <h4>Recuperar Partida</h4>
-      <p>Encontramos una partida anterior, ¿deseas recuperarla?</p>
-      <button onClick={onRecoverGame}>Si, por favor</button>
-    {//<button onClick={()=> setLastBingo(null)}>No, gracias</button>
-}
-    </div>
-  )
+  const cancelYoutube = () => {
+    setStep(2)
+    dispatch({type: 'set-channel-id', channelID:null})
+  }
+
+  const setupWebcam = () => {
+    getCamera()
+    setStep(3)
+  }
+
+  const setupYoutube = () => {
+    setStep(4)
+  }
+
+  const getCamera = async () => {
+    // todo: handle video not accesible
+    const constraints = {
+      video: {width: {exact: 320}, height: {exact: 240}},
+      audio: true,
+    }
+    try{
+      // create the master stream
+      const stream = await navigator.mediaDevices.getUserMedia(constraints)
+      dispatch({type: 'set-stream', stream})
+      reactLocalStorage.set('bingo-camera-on', '1')
+    }catch (e){
+      console.log(e)
+    }
+  }
+
+  const stopCamera = () => {
+    if(state.stream)
+      state.stream.getTracks().forEach( t => t.stop() )
+    reactLocalStorage.set('bingo-camera-on', '0')
+    dispatch({type: 'set-stream', stream:null})
+    setStep(2)
+  }
+
+  useEffect(()=>{
+    const on = '0' // reactLocalStorage.get('bingo-camera-on', '0')
+    if(!state.stream && on==='1')
+        getCamera()
+  },[state.stream])
 
   const renderStep = () => {
     switch(step) {
@@ -361,20 +352,46 @@ const BingoMaster = ({location}) => {
       case 2:
         return (
           <div className="setup">
-            <h4>Cámara Web</h4>
-            <p>Sos el GameMaster, el anfitrión de la partida. Comparte tu cámara para que los participantes puedan seguirte.</p>
-            <VideoMaster />
-            <button onClick={()=> setStep(3)}>{state.stream ? 'Siguiente.' : 'No, gracias.'}</button>
+            <h4>Comparte Video</h4>
+            <p>Sos el GameMaster, el anfitrión de la partida. ¿Cómo prefieres compartir tu video?</p>
+            <p>Para una configuración sencilla, compartí la webcam. Para conectar muchas personas, es preferible compartir desde youtube.</p>
+            <button onClick={setupWebcam}>Compartir Webcam</button>
+            <button onClick={setupYoutube}>Compartir desde youtube</button>
+            <button onClick={sessionReady}>No compartir video</button>
           </div>
         )
       case 3:
         return (
           <div className="setup">
-            <VideoMaster />
+            <h4>Cámara Web</h4>
+            <p>Los demás participantes verán tu cámara.</p>
+            { state.stream && <button onClick={sessionReady}>Siguiente</button>}
+            <button onClick={stopCamera}>Cancelar</button>
+          </div>
+        )
+      case 4:
+        return (
+          <div className="setup">
+            <h4>Youtube</h4>
+            {!state.channelID &&
+              <>
+                <p>Para que vean tu live de youtube, pegá acá tu channelID, que encontrás en <a href="https://www.youtube.com/account_advanced" target="_blank" rel="noopener noreferrer">youtube.com/account_advanced</a> </p>
+                <div className="input-box">
+                  <input type="text" placeholder="YOUR_CHANNEL_ID" onPaste={onPasteChannelID} />
+                </div>
+              </>
+            }
+            { state.channelID && <button onClick={sessionReady}>Siguiente</button>}
+            <button onClick={cancelYoutube}>Cancelar</button>
+          </div>
+        )
+      case 5:
+        return (
+          <div className="setup">
             <p>Ingresa el nombre del participante y presiona ENTER para sumarlo a la partida.</p>
             <p>Podés asignarle más de un cartón. </p>
             {state.players.length > 0 && <button onClick={onStartClick}>EMPEZAR</button>}
-            <div className="add-player">
+            <div className="input-box">
               <input type="text" placeholder="Nombre" value={playerName} onChange={onChangePlayerName} onKeyPress={onKeyPlayerName} />
               <input type="number" min={1} max={5} value={numCards} onChange={onChangeNumCards} />
             </div>
@@ -396,10 +413,8 @@ const BingoMaster = ({location}) => {
                         <tr key={i}>
                           <td>{p.name}</td>
                           <td>{p.cards.length}</td>
-                          {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions,jsx-a11y/click-events-have-key-events */}
                           <td className="action" onClick={(ev)=>copyLink(p.url,ev.currentTarget)} ><FaShareAlt /></td>
                           <td className="action"><a href={p.url} target="_blank" rel="noopener noreferrer"><FaEye/></a></td>
-                          {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions,jsx-a11y/click-events-have-key-events */}
                           <td className="action" onClick={(ev)=>removePlayer(i)} ><FaTrashAlt/></td>
                         </tr>
                       )
@@ -407,7 +422,6 @@ const BingoMaster = ({location}) => {
                     <tr>
                       <td>Link General</td>
                       <td></td>
-                      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions,jsx-a11y/click-events-have-key-events */}
                       <td className="action" onClick={(ev)=>copyLink(state.baseUrl,ev.currentTarget)} ><FaShareAlt /></td>
                       <td className="action"><a href={state.baseUrl} target="_blank" rel="noopener noreferrer"><FaEye/></a></td>
                       <td></td>
@@ -428,94 +442,7 @@ const BingoMaster = ({location}) => {
     }
   }
 
-  const ranking = state.players.reduce( (arr, p) => {
-    return [...arr, ...p.cards.map((c,i) => {
-      const countHits =  (a,x) => (state.balls.includes(x)?1:0)+a
-      const hits = c.map(r => r.reduce(countHits,0) ).reduce( (a,x) => x+a, 0)
-      return {
-        name: p.name,
-        card: `#${i+1}`,
-        url: p.url,
-        hits 
-      }
-    })]
-  },[]).sort( (a,b) => b.hits-a.hits)
-        
-  const playBingo = (
-    <div className="results">
-      <VideoMaster />
-      <table>
-        <thead>
-          <tr>
-            <th>Participante</th>
-            <th>Cartón</th>
-            <th>Puntos</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {ranking.map( (r,i) => 
-              (
-                <tr key={i}>
-                  <td>{r.name}</td>
-                  <td>{r.card}</td>
-                  <td>{r.hits}</td>
-                  {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events , jsx-a11y/no-noninteractive-element-interactions,jsx-a11y/no-static-element-interactions */}
-                  <td className="action" onClick={(ev)=>copyLink(r.url,ev.currentTarget)} ><FaShareAlt /></td>
-                  <td className="action"><a href={r.url} target="_blank" rel="noopener noreferrer"><FaEye/></a></td>
-                </tr>
-              )
-          )}
-          <tr>
-            <td>Link General</td>
-            <td></td>
-            <td></td>
-            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions,jsx-a11y/click-events-have-key-events */}
-            <td className="action" onClick={(ev)=>copyLink(state.baseUrl,ev.currentTarget)} ><FaShareAlt /></td>
-            <td className="action"><a href={state.baseUrl} target="_blank" rel="noopener noreferrer"><FaEye/></a></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  )
-
-  const headingIdx = state.rollingBall ? Math.floor(state.rollingBall/15) : null
-  
-
-  return (
-    <>
-      <h3>
-        {heading.map( (h,i)=> (headingIdx===i) ?<span className="rolling" key={i}>{state.rollingBall}</span>: <span key={i}>{h}</span>)}
-      </h3>
-      { !onlyMusic && (
-        <div className="warning">
-          <p>Tu pantalla es muy angosta para ser GameMaster.</p>
-          <p><button onClick={onHereForMusic}>¡Solo vine por la música!</button></p>
-        </div>
-      )}
-      <div className={`twocols ${onlyMusic? 'only-music' : ''}`}>
-        <div className="play">
-          <div className="canvas">
-            <canvas ref={canvasRef} width={600} height={600} />
-            <div className="buttons">
-              {automatic && state.playing && <button onClick={toggleAutoClick}>MANUAL</button>}
-              {!automatic && state.playing && state.mayCall && <button onClick={toggleAutoClick}>AUTO</button>}
-              {!automatic && state.playing && state.mayCall && <button onClick={onCallClick}>LANZAR</button>}
-            </div>
-          </div>
-          {state.balls.length>0 &&
-          <div className="balls">
-            {state.balls.map((b,i) => <span key={i} className={b===state.rollingBall? 'rolling' : ''}>{b}</span>)}
-          </div>
-          }
-        </div>
-        { !state.playing &&  renderStep() }
-        { state.playing && playBingo }
-      </div>
-    </>
-  )
+  return renderStep()
 
 }
 
@@ -526,7 +453,7 @@ const Card = ({card,initialBalls}) => {
   useEffect(() => {
     setMarks(initialBalls)
     return () => {}
-  }, []) // Make sure the effect runs only once
+  }, [initialBalls]) // Make sure the effect runs only once
 
   const onCellClick = (c) => {
     if(c>0){
@@ -544,7 +471,6 @@ const Card = ({card,initialBalls}) => {
           <div key={i} className="row">
           {row.map((c,j) => {
              return (
-               /* eslint-disable-next-line jsx-a11y/no-static-element-interactions,jsx-a11y/click-events-have-key-events */
                <div 
                  key={j}
                  className={` cell ${marks.includes(c)? 'marked' : ''} ${(c===0)? 'free' : ''}`}
@@ -564,67 +490,30 @@ const Card = ({card,initialBalls}) => {
   )
 }
 
-const BingoClient = () => {
-
+const BingoPlayerList = () => {
   const { state} = useContext(BingoContext)
-
-  // grab player
-  const player = state.players.filter(p => p.name ===state.username)[0]
-
-  return player ?
-    <>
-      <h3>
-        {heading.map(h=> <span key={h}>{h}</span>)}
-      </h3>
-      <div className={`twocols`}>
-        <div className="play">
-          {!state.playing &&
-          <p>
-            {`¡Hola ${player.name}! Estamos calentando motores. En breve comienza la partida. 
-               Aquí veras las bolillas a medida que vayan saliendo.`} 
-            { state.stream && ' A la derecha podrás ver la cámara del anfitrión'}
-          </p>
-          }
-          <div className="balls">
-            {state.balls.length===0 ? 
-              <span>?</span> : 
-              state.balls.map((b,i) => <span key={i} className={b===state.rollingBall? 'rolling' : ''}>{b}</span>)}
-          </div>
-        </div>
-        <div className="streaming">
-          <VideoClient />
-        </div>
-      </div>
-      {player.cards.map((c,i)=> <Card key={i} card={c} initialBalls={state.balls} />)
-      }
-    </>
-    :
-    <div className="full">
-      <h3>
-        {heading.map(h=> <span key={h}>{h}</span>)}
-      </h3>
-      <VideoClient/>
-      <table>
-        <thead>
-          <tr>
-            <th>Participante</th>
-            <th>Cartones</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {state.players.map( (p,i) => 
-              (
-                <tr key={i}>
-                  <td>{p.name}</td>
-                  <td>{p.cards.length}</td>
-                  <td className="action"><a href={p.url} target="_blank" rel="noopener noreferrer"><FaEye/></a></td>
-                </tr>
-              )
-          )}
-        </tbody>
-      </table>
-    </div>
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Participante</th>
+          <th>Cartones</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {state.players.map( (p,i) => 
+            (
+              <tr key={i}>
+                <td>{p.name}</td>
+                <td>{p.cards.length}</td>
+                <td className="action"><a href={p.url} target="_blank" rel="noopener noreferrer"><FaEye/></a></td>
+              </tr>
+            )
+        )}
+      </tbody>
+    </table>
+  )
 }
 
 const getData = (location) => {
@@ -640,19 +529,20 @@ const getData = (location) => {
 const initialState = {
   isClient: false,
   loading: true,
+  onlyMusic : false,
   mayCall: true,
   playing: false,
   session: null,
   username: null,
-  provider: null,
   baseUrl: null,
-  streamPeerId : '',
   stream: null,
+  channelID: null,
   players: [],
   peers: [],
-  consumers: new Set(),
   balls: [],
   rollingBall: null,
+  throwingBall: null,
+  signalling:null,
   lastBingo: false,
 }
 
@@ -671,32 +561,155 @@ const reducer = (state, action) => {
     case "set-peers":
       const peers = action.peers
       return {...state, peers}
-    case "set-consumers":
-      const consumers = action.consumers
-      return {...state, consumers}
     case "set-stream":
       const stream = action.stream
       return {...state, stream}
+    case "set-channel-id":
+      const channelID = action.channelID
+      return {...state, channelID}
+    case "send-state": {
+      const peer = action.peer
+      const {players, balls, playing, rollingBall} = state
+      const s =  {players, balls, playing, rollingBall}
+      console.log(s)
+      const msg = JSON.stringify(s)
+      peer.send(msg)
+      return state
+    }
     default:
+      console.log(action)
       throw new Error()
   }
+}
+
+
+class Signalling {
+  constructor(state,dispatch){
+    this.master = null
+    this.peers =  new Map()
+    this.stream = null
+
+    const {isClient, session} = state
+    this.channelName= `bingo-${session}`
+    this.peerId = uuidv4()
+
+    const createMasterPeer = () => {
+      const peer = new Peer( {
+        initiator: true,
+      })
+      peer.on('signal', data => {
+        this.publish('client-signal', {signalData:data})
+      })
+      peer.on('data', data => {
+        const state = JSON.parse(data)
+        console.log(state)
+        dispatch({type: 'set-props', state})
+      })
+      peer.on('stream', stream => {
+        dispatch({type: 'set-stream', stream})
+      })
+      peer.on('connect', () => {
+        console.log('connected')
+      })
+      this.master = peer
+    }
+
+    const addClientPeer = (peerId,signalData) => {
+      const peer = new Peer( {
+        initiator: false,
+        stream: this.stream
+      })
+      peer.on('signal', data => {
+        this.publish('master-signal', {signalData:data,peerId})
+      })
+      peer.on('connect', () => {
+        console.log('connected')
+        dispatch({type: 'send-state', peer})
+      })
+      peer.signal(signalData)
+      this.peers.set(peerId,peer)
+    }
+
+    const ws = new WebSocket(wsUrl)
+    ws.onopen = () => {
+      if(isClient){
+        this.subscribe(['master-signal','master-joined'])
+        // the client kicks the connection
+        createMasterPeer()
+      }
+    }
+    ws.onclose = () => {
+      console.log('disconnected')
+    }
+    ws.onmessage = ({data}) => {
+      const msg = JSON.parse(data)
+      switch(msg.type){
+        case 'publish':
+          const {peerId,data} = msg
+          const topic = msg.topic.split('/')[1]
+          switch (topic) {
+            case 'client-signal':
+              const p = this.peers.get(peerId)
+              if(p && !p.destroyed){
+                p.signal(data.signalData)
+              }else{
+                addClientPeer(peerId,data.signalData)
+              }
+              break
+            case 'master-joined':
+              //master just joined ... recreate
+              createMasterPeer()
+              break
+            case 'master-signal':
+              // got master signal data
+              if(this.master && !this.master.destroyed && data.peerId===this.peerId)
+                this.master.signal(data.signalData)
+              break
+
+            default:
+              console.error('unexpected topic', topic)
+          }
+          break
+
+        default:
+          console.error('unexpected message' ,msg)
+          break
+      }
+    }
+    this.ws = ws
+  }
+
+  publish(topic, data){
+    const msg = JSON.stringify({data, type: "publish", peerId: this.peerId, topic:`${this.channelName}/${topic}`})
+    this.ws.send(msg)
+  }
+
+  subscribe(topics) {
+    const msg = JSON.stringify({type: "subscribe", topics: topics.map(t => `${this.channelName}/${t}`)})
+    this.ws.send(msg)
+  }
+
+  sessionReady(stream){
+    this.stream = stream
+    this.subscribe(['client-signal'])
+    this.publish('master-joined')
+  }
+
+  broadcast(data) {
+    this.peers.forEach(p =>{
+      if(p && !p.destroyed && p.connected){
+        const msg = JSON.stringify(data)
+        p.send(msg)
+      }
+    })
+  }
+
 }
 
 const BingoProvider = ({children,location}) =>{
 
   const [state, dispatch] = useReducer(reducer, initialState)
   const value = { state, dispatch }
-
-  useEffect(()=>{
-    //todo: localstorage recall whole session
-    // false means not set, while null means no previous data
-    //if(state.lastBingo===false)
-    //  setLastBingo(reactLocalStorage.getObject('last-bingo',null))
-    //else
-    //  reactLocalStorage.setObject('last-bingo', {players: state.players,balls: state.balls,channelID: state.channelID})
-    return () => {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[state.players,state.balls])
 
   useEffect(()=>{
 
@@ -707,8 +720,10 @@ const BingoProvider = ({children,location}) =>{
     if(d){
       s.isClient = true
       s.session = d[0]
-      if(d[1])
+
+      if(d[1]){
         s.username = d[1]
+      }
     }else{
       const last = reactLocalStorage.get('last-bingo-session')
       if(last)
@@ -720,59 +735,13 @@ const BingoProvider = ({children,location}) =>{
     }
 
     s.baseUrl = `${baseurl}#${s.session}`
-
-    const doc = new Y.Doc()
-    const options = {
-      signaling: ['ws://localhost:4444'],
-      // Specify signaling servers. The client will connect to every signaling server concurrently to find other peers as fast as possible.
-      //signaling: ['wss://signaling.yjs.dev', 'wss://y-webrtc-signaling-eu.herokuapp.com', 'wss://y-webrtc-signaling-us.herokuapp.com'],
-      // If password is a string, it will be used to encrypt all communication over the signaling servers.
-      // No sensitive information (WebRTC connection info, shared data) will be shared over the signaling servers.
-      // The main objective is to prevent man-in-the-middle attacks and to allow you to securely use public / untrusted signaling instances.
-      password: null,
-      // Specify an existing Awareness instance - see https://github.com/yjs/y-protocols
-      //awareness: new awarenessProtocol.Awareness(doc),
-      // Maximal number of WebRTC connections.
-      // A random factor is recommended, because it reduces the chance that n clients form a cluster.
-      maxConns: Number.POSITIVE_INFINITY,
-      // Whether to disable WebRTC connections to other tabs in the same browser.
-      // Tabs within the same browser share document updates using BroadcastChannels.
-      // WebRTC connections within the same browser are therefore only necessary if you want to share video information too.
-      filterBcConns: true,
-      // simple-peer options. See https://github.com/feross/simple-peer#peer--new-peeropts for available options.
-      // y-webrtc uses simple-peer internally as a library to create WebRTC connections.
-      //peerOpts: {}
-    }
-
-    console.log(options)
-    const provider = new WebrtcProvider(`bingo-${s.session}`, doc, options)
-    const awareness = provider.awareness
-    awareness.setLocalStateField("user", s.username ? s.username : 'MASTER')
-    //provider.on('synced', synced => console.log('synced!', synced) )
-
-    doc.getArray('players').observeDeep(ev => dispatch({ type: "set-players", players: ev[0].target.toArray() }) )
-    doc.getArray('balls').observeDeep(ev => dispatch({ type: "set-balls", balls: ev[0].target.toArray() }) )
-    doc.getMap('props').observe(ev => dispatch({ type: "set-props", state: ev.target.toJSON()}) )
-
-    s.provider = provider
+    s.signalling = new Signalling(s,dispatch)
     s.loading = false
     dispatch({ type: "initialize", state: s})
 
-    //provider.doc.getMap('props').set('streamPeerId','')
-    provider.on('peers', onPeers)
+    return () => {}
 
-    return () => {
-      provider.off('peers', onPeers)
-      provider.destroy()
-      if(state.stream)
-        state.stream.getTracks().forEach( t => t.stop() )
-      state.provider.doc.getMap('props').set('streamPeerId','')
-      state.consumers.clear()
-    }
-
-  },[])
-
-  const onPeers = (ev) => dispatch({ type: "set-peers", peers: ev.webrtcPeers })
+  },[location])
 
   return (
     <BingoContext.Provider value={value}>
@@ -781,8 +750,38 @@ const BingoProvider = ({children,location}) =>{
   )
 }
 
-const LoadingSpinner = () => <h4>Loading...</h4>
-const heading = 'BINGO'.split('')
+const Video = () => {
+  const { state} = useContext(BingoContext)
+  const [muted, setMuted] = useState(true)
+  const videoRef = useRef(null)
+  const youtubeUrl = (channelID) => channelID.length ? `https://www.youtube.com/embed/live_stream?channel=${channelID}` : null
+
+  useEffect(()=>{
+    if(state.stream)
+      videoRef.current.srcObject = state.stream
+  },[state.stream])
+
+  const toggleMuted = () => {
+    videoRef.current.muted = !videoRef.current.muted
+    setMuted(videoRef.current.muted)
+  }
+
+  const hasVideo = state.channelID || state.stream
+
+  return hasVideo && (
+    <div className={'video'}>
+      {state.channelID ?
+        <iframe title="youtube channel" width="400" height="300" src={youtubeUrl(state.channelID)}></iframe>
+        :
+        <>
+          <video ref={videoRef} onClick={toggleMuted} playsInline muted autoPlay> </video>
+          {muted ? <FaVolumeMute /> : <FaVolume /> }
+        </>
+      }
+    </div>
+  )
+}
+
 const BingoIndex = ({location}) => {
   return (
     <Layout location={location} >
@@ -794,120 +793,61 @@ const BingoIndex = ({location}) => {
   )
 }
 
-const VideoMaster = () => {
-  const { state, dispatch} = useContext(BingoContext)
-  const videoRef = useRef(null)
-
-  const getMedia = async () => {
-    // todo: handle video not accesible
-    const constraints = {
-      video: {width: {exact: 320}, height: {exact: 240}},
-      audio: true,
-    }
-    try{
-      // create the master stream
-      const stream = await navigator.mediaDevices.getUserMedia(constraints)
-      dispatch({type: 'set-stream', stream})
-      reactLocalStorage.set('bingo-camera-on', '1')
-    }catch (e){
-      console.log(e)
-    }
-  }
-
-  const stopCamera = () => {
-    if(state.stream)
-      state.stream.getTracks().forEach( t => t.stop() )
-    state.provider.doc.getMap('props').set('streamPeerId','')
-    state.consumers.clear()
-    reactLocalStorage.set('bingo-camera-on', '0')
-    dispatch({type: 'set-stream', stream:null})
-  }
-
-  useEffect(()=>{
-    updateConsumers()
-  },[state.peers])
-
-  useEffect(()=>{
-    if(state.stream){
-      videoRef.current.srcObject = state.stream
-      updateConsumers()
-      const pId = state.provider.room.peerId
-      state.provider.doc.getMap('props').set('streamPeerId',pId)
-    }else{
-      const on = reactLocalStorage.get('bingo-camera-on', '0')
-      if(on==='1')
-        getMedia()
-    }
-  },[state.stream])
-
-  const updateConsumers = () => {
-    //todo: remove old peers from set
-    if(!state.stream)
-      return
-
-    setTimeout( () => {
-    state.provider.room.webrtcConns.forEach( c => {
-      if(!state.consumers.has(c.remotePeerId)){
-        state.stream.getTracks().forEach( t => c.peer.addTrack(t, state.stream) )
-        state.consumers.add(c.remotePeerId)
-      }
-    })
-    },1000)
-
-  }
-
-  return (
-    <div className={`video ${state.stream ? 'has-stream' : ''}`}>
-      {state.stream ? <FaStop onClick={stopCamera}/> : <FaVideo onClick={getMedia}/>}
-      <video ref={videoRef}  playsInline autoPlay muted></video>
-    </div>
-  )
-}
-
-const VideoClient = ({}) => {
-  const { state,dispatch} = useContext(BingoContext)
-  const [started, setStarted] = useState(false)
-  const videoRef = useRef(null)
-
-  useEffect(()=>{
-    state.provider.room.webrtcConns.forEach(conn => {
-      conn.peer.on("stream", handleOnStream)
-    })
-    return () => {}
-  },[state.streamPeerId, state.peers])
-
-  const handleOnStream = stream => dispatch({type: 'set-stream', stream})
-
-  useEffect(()=>{
-    if(state.stream)
-      videoRef.current.srcObject = state.stream
-  },[state.stream])
-
-  const startVideo = () => {
-    videoRef.current.play()
-    setStarted(true)
-  }
-
-  return (
-    <div className={`video ${(started && state.stream) ? 'has-stream' : ''}`}>
-      <video ref={videoRef} playsInline> </video>
-      {!state.stream && <FaVideoSlash />}
-      {!started && state.stream && <FaPlay onClick={startVideo} />}
-    </div>
-  )
-}
-
+const heading = 'BINGO'.split('')
 const BingoInner = () => {
   const { state} = useContext(BingoContext)
 
+  const headingIdx = state.rollingBall ? Math.floor(state.rollingBall/15) : null
+  const player = state.players.filter(p => p.name ===state.username)[0]
+
+  useEffect(()=>{
+    if(!state.signalling)
+      return
+    state.signalling.broadcast({
+      players: state.players,
+      balls: state.balls,
+      playing: state.playing,
+    })
+    return () => {}
+  },[state.players,state.balls,state.playing,state.signalling])
+
+  // single layout for master and clients
+
   return (
-    <>
-      <div className="bingo">
-        { state.loading ? <LoadingSpinner /> : ( 
-          state.isClient ? <BingoClient/> : <BingoMaster /> 
-        ) }
-      </div>
-    </>
+    <div className={`bingo ${state.onlyMusic ? 'only-music' :  ''}`}>
+      <h3>
+        {heading.map( (h,i)=> (headingIdx===i) ?<span className="rolling" key={i}>{state.rollingBall}</span>: <span key={i}>{h}</span>)}
+      </h3>
+      { !state.loading && ( 
+        <>
+          <div className="game">
+            <div className="main">
+              <BingoCanvas />
+              <BingoBalls />
+            </div>
+            <div className="aside">
+              <Video />
+              {state.isClient ?
+                (player ?
+                  (!state.playing &&
+                    <p>
+                      {`¡Hola ${player.name}! Estamos calentando motores. En breve comienza la partida. 
+                         Aquí veras las bolillas a medida que vayan saliendo.`} 
+                      { state.stream && ' A la derecha podrás ver la cámara del anfitrión'}
+                    </p>
+                  )
+                  :
+                  <BingoPlayerList/>
+                )
+                :
+                ( state.playing ? <BingoRanking/> : <BingoWizard/> )
+              }
+            </div>
+          </div>
+          {player && player.cards.map((c,i)=> <Card key={i} card={c} initialBalls={state.balls} />) }
+        </>
+      ) }
+    </div>
   )
 }
 
