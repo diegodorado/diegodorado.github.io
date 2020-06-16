@@ -21,7 +21,14 @@
   user-select: none
   h3
     text-align: center
-    font-size: 2vw
+    font-size: 5vw
+    +breakpoint(sm)
+      font-size: 4vw
+    +breakpoint(md)
+      font-size: 3vw
+    +breakpoint(lg)
+      font-size: 2vw
+
     span
       display: inline-block
       width: 2em
@@ -45,6 +52,8 @@
   a:focus
     border: 0
     outline: 0
+  input:focus
+    outline: 0
   button
     outline: 0
     cursor: pointer
@@ -63,6 +72,7 @@
   .canvas
     position: relative
     font-size: 0rem
+    margin-bottom: 20px
     canvas
       width: 100%
     .buttons
@@ -160,6 +170,38 @@
             position: absolute
             content: ""
 
+  .chat
+    text-align: left
+    border: 1px solid $white
+    h5
+      margin: 0
+      background: $white
+      color: $black
+      padding: 5px 20px
+      padding: 5px 20px
+    .messages
+      min-height: 100px
+      max-height: 350px
+      padding: 10px
+      overflow-y: scroll
+    .message
+      margin: 10px auto
+      b
+        margin-right: 10px
+    .send-box
+      display: flex
+      input
+        flex: 9 0 0px
+        margin: 0
+        padding: 5px 10px
+        border: 0
+      button
+        flex: 1 0 0px
+        margin: 0
+        font-size: 0.8em
+        border: 0
+        border-top: 1px solid $white
+       
   ul
     text-align: left
     list-style: none
@@ -182,6 +224,7 @@
     width: 100%
     border: 1px solid rgba($white,0.5)
     border-spacing: 0
+    margin-bottom: 20px
     tr
       border: 1px solid rgba($white,0.5)
       text-align: center
@@ -191,6 +234,19 @@
           text-align: left
     td,th
       padding: 10px
+    .player
+      &.connected::before
+        color: $blue
+      &::before
+        color: #ccc
+        width: 0.5em
+        line-height: 0.5em
+        margin-right: 0.25em
+        vertical-align: middle
+        font-size: 2em
+        content: "\2022"
+        font-weight: bold
+        display: inline-block
     .action
       cursor: pointer
       position: relative
