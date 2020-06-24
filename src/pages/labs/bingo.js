@@ -295,9 +295,15 @@ const BingoWizard = () => {
 
   const sessionReady = () => {
     setStep(5)
-    state.signalling.sessionReady(state.stream)
     dispatch({type: 'session-ready'})
   }
+
+  const setupNoVideo = () => {
+    setStep(5)
+    dispatch({type: 'set-stream', stream:null})
+    dispatch({type: 'session-ready'})
+  }
+
 
   const cancelYoutube = () => {
     setStep(2)
@@ -310,6 +316,7 @@ const BingoWizard = () => {
   }
 
   const setupYoutube = () => {
+    dispatch({type: 'set-stream', stream:null})
     setStep(4)
   }
 
@@ -320,8 +327,6 @@ const BingoWizard = () => {
   }
 
   const stopCamera = () => {
-    if(state.stream)
-      state.stream.getTracks().forEach( t => t.stop() )
     reactLocalStorage.set('bingo-camera-on', '0')
     dispatch({type: 'set-stream', stream:null})
     setStep(2)
@@ -348,7 +353,7 @@ const BingoWizard = () => {
             <p>Para una configuración sencilla, compartí la webcam. Para conectar muchas personas, es preferible compartir desde youtube.</p>
             <button onClick={setupWebcam}>Compartir Webcam</button>
             <button onClick={setupYoutube}>Compartir desde youtube</button>
-            <button onClick={sessionReady}>No compartir video</button>
+            <button onClick={setupNoVideo}>No compartir video</button>
           </div>
         )
       case 3:
@@ -548,11 +553,14 @@ const reducer = (state, action) => {
       return {...state, players}
     case "set-stream":
       const stream = action.stream
+      if(stream===null && state.stream)
+        state.stream.getTracks().forEach( t => t.stop() )
       return {...state, stream}
     case "set-channel-id":
       const channelID = action.channelID
       return {...state, channelID}
     case "session-ready":
+      state.signalling.sessionReady(state.stream)
       return {...state, sessionReady:true}
     case "send-text":
       const {text,peerId,fromMaster} = action
@@ -667,6 +675,8 @@ const BingoSession = ({location}) =>{
   const recoverSession = () => {
     const s = reactLocalStorage.getObject('last-bingo-session')
     const {isClient, session, peerId,sessionReady} = s
+    const baseurl = location.href.replace(location.hash,"").replace('#','')
+    s.baseUrl = `${baseurl}#${session}`
     s.signalling = new Signalling (isClient, session,peerId,dispatch)
     if(sessionReady){
       s.signalling.onOpen = () => {
@@ -812,7 +822,6 @@ class Signalling {
   subscribe(topics) {
     const msg = JSON.stringify({type: "subscribe", topics: topics.map(t => `${this.channelName}/${t}`)})
     this.ws.send(msg)
-    console.log(topics)
   }
 
   sessionReady(stream){

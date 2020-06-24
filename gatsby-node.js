@@ -149,6 +149,13 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
   }
 }
 
+// Implement the Gatsby API “onCreatePage”. This is
+// called after every page is created.
+exports.onCreatePage = async ({ page, actions }) => {
+  const { createPage } = actions
+
+}
+
 
 // this is to localize pages
 exports.onCreatePage = ({ page, actions }) => {
@@ -170,6 +177,17 @@ exports.onCreatePage = ({ page, actions }) => {
   if (['/','/dev-404-page/','/404/','/404.html'].includes(page.path)) {
     return
   }
+
+  // page.matchPath is a special key that's used for matching pages
+  // only on the client.
+  if (page.path.match(/^\/app/)) {
+    page.matchPath = "/app/*"
+    // Update the page.
+    createPage(page)
+    console.log(page.path, page.matchPath)
+    return
+  }
+
 
 
   deletePage(page)
