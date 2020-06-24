@@ -160,7 +160,11 @@ const BingoCanvas = () => {
       if(status===2)
         pianoRef.current.playStart()
       if(status===3){
-        state.signalling.broadcast({throwingBall: {number,position, force}})
+        const s = {
+          throwingBall: {number,position, force}
+        }
+        if(!state.isClient && state.signalling.connected)
+          state.signalling.publish('state', {state:s})
       }
       if(status===4){
         dispatch({type:'set-props', state:{rollingBall: number}})
@@ -194,8 +198,10 @@ const BingoCanvas = () => {
 
   useEffect(() => {
     if(state.throwingBall){
+      console.log(state.throwingBall)
       const {number,force,position} = state.throwingBall
       bingoRef.current.throwByNumber(number,position, force)
+      dispatch({type:'set-props', state:{throwingBall: null}})
     }
     return () => {}
   }, [state.throwingBall]) 
@@ -295,41 +301,19 @@ const BingoWizard = () => {
 
   const sessionReady = () => {
     setStep(5)
-    dispatch({type: 'session-ready'})
   }
 
   const setupNoVideo = () => {
     setStep(5)
-    dispatch({type: 'set-stream', stream:null})
-    dispatch({type: 'session-ready'})
   }
-
 
   const cancelYoutube = () => {
     setStep(2)
     dispatch({type: 'set-channel-id', channelID:null})
   }
 
-  const setupWebcam = () => {
-    getCamera()
-    setStep(3)
-  }
-
   const setupYoutube = () => {
-    dispatch({type: 'set-stream', stream:null})
     setStep(4)
-  }
-
-  const getCamera = async () => {
-    const stream = await getCameraStream()
-    dispatch({type: 'set-stream', stream})
-    reactLocalStorage.set('bingo-camera-on', '1')
-  }
-
-  const stopCamera = () => {
-    reactLocalStorage.set('bingo-camera-on', '0')
-    dispatch({type: 'set-stream', stream:null})
-    setStep(2)
   }
 
   const renderStep = () => {
@@ -349,20 +333,9 @@ const BingoWizard = () => {
         return (
           <div className="setup">
             <h4>Comparte Video</h4>
-            <p>Sos el GameMaster, el anfitrión de la partida. ¿Cómo prefieres compartir tu video?</p>
-            <p>Para una configuración sencilla, compartí la webcam. Para conectar muchas personas, es preferible compartir desde youtube.</p>
-            <button onClick={setupWebcam}>Compartir Webcam</button>
+            <p>Como anfitrión de la partida, puedes incluir un vivo de youtube para los demás participantes.</p>
             <button onClick={setupYoutube}>Compartir desde youtube</button>
             <button onClick={setupNoVideo}>No compartir video</button>
-          </div>
-        )
-      case 3:
-        return (
-          <div className="setup">
-            <h4>Cámara Web</h4>
-            <p>Los demás participantes verán tu cámara.</p>
-            { state.stream && <button onClick={sessionReady}>Siguiente</button>}
-            <button onClick={stopCamera}>Cancelar</button>
           </div>
         )
       case 4:
@@ -525,7 +498,6 @@ const initialState = {
   session: null,
   peerId: uuidv4(),
   baseUrl: null,
-  stream: null,
   channelID: null,
   players: [],
   messages: [],
@@ -551,36 +523,27 @@ const reducer = (state, action) => {
     case "set-players":
       const players = action.players
       return {...state, players}
-    case "set-stream":
-      const stream = action.stream
-      if(stream===null && state.stream)
-        state.stream.getTracks().forEach( t => t.stop() )
-      return {...state, stream}
     case "set-channel-id":
       const channelID = action.channelID
       return {...state, channelID}
-    case "session-ready":
-      state.signalling.sessionReady(state.stream)
-      return {...state, sessionReady:true}
-    case "send-text":
+    case "add-message":
       const {text,peerId,fromMaster} = action
       const player = state.players.filter(p => p.peerId===peerId)[0]
       const user = player ? player.name : (fromMaster? 'Anfitrión': 'Anonimus')
       return {...state, messages:[...state.messages,{text,user}]}
-    case 'peer-connected': {
-      const peer = action.peer
+    case 'client-connected': {
       const peerId = action.peerId
-      const {messages,players, balls, playing, rollingBall,channelID} = state
+      const {players,balls,loading,playing,channelID} = state
+      const s = {players,balls,loading,playing,channelID}
+      if(state.signalling.connected)
+        state.signalling.publish('state', {state:s, toPeerId:peerId})
       players.forEach(p =>{
         if(p.peerId === peerId)
           p.connected = true
       })
-      const s =  {messages,players, balls, playing, rollingBall,channelID}
-      const msg = JSON.stringify(s)
-      peer.send(msg)
       return {...state, players}
     }
-    case 'peer-closed': {
+    case 'client-closed': {
       const peerId = action.peerId
       const {players} = state
       players.forEach(p =>{
@@ -608,7 +571,6 @@ const BingoProvider = ({children}) =>{
 
 const BingoSession = ({location}) =>{
   //todo: make signalling a session ref rather than global state
-
   const { state,dispatch} = useContext(BingoContext)
   const [initilized, setInitialized] = useState(false)
 
@@ -639,22 +601,28 @@ const BingoSession = ({location}) =>{
         balls: state.balls,
         loading: state.loading,
         playing: state.playing,
-        sessionReady: state.sessionReady,
       }
       reactLocalStorage.setObject('last-bingo-session',s)
     }
     return () => {}
-  },[state.sessionReady,state.playing,state.loading,state.balls,state.channelID,state.messages,state.session,state.isClient,state.peerId,state.players])
+  },[state.playing,state.loading,state.balls,state.channelID,state.messages,state.session,state.isClient,state.peerId,state.players])
 
-  //get Camera early
+  // save session on local storage
   useEffect(()=>{
-    const on = reactLocalStorage.get('bingo-camera-on', '0')
-    if(!state.stream && on==='1'){
-      getCameraStream().then(stream => {
-        dispatch({type: 'set-stream', stream})
-      })
+    if(initilized && !state.isClient){
+      // only care for master sessions
+      const s = {
+        channelID: state.channelID,
+        players: state.players,
+        balls: state.balls,
+        loading: state.loading,
+        playing: state.playing,
+      }
+      if(state.signalling.connected)
+        state.signalling.publish('state', {state:s})
     }
-  },[state.stream])
+    return () => {}
+  },[state.playing,state.loading,state.balls,state.channelID,state.players])
 
 
   const init = (isClient, session, peerId) => {
@@ -678,11 +646,6 @@ const BingoSession = ({location}) =>{
     const baseurl = location.href.replace(location.hash,"").replace('#','')
     s.baseUrl = `${baseurl}#${session}`
     s.signalling = new Signalling (isClient, session,peerId,dispatch)
-    if(sessionReady){
-      s.signalling.onOpen = () => {
-        s.signalling.sessionReady(state.stream)
-      }
-    }
     if(s.players)
       s.players.forEach(p=> p.connected=false)
     dispatch({ type: "initialize", state: s})
@@ -709,64 +672,17 @@ class Signalling {
     this.channelName= `bingo-${session}`
     this.peerId =  peerId
     this.isClient = isClient
-
-    this.master = null
-    this.peers =  new Map()
-    this.stream = null
-    this.onOpen = () => {}
-
-    const createMasterPeer = () => {
-      const peer = new Peer( {
-        initiator: true,
-      })
-      peer.on('signal', data => {
-        this.publish('client-signal', {signalData:data})
-      })
-      peer.on('data', data => {
-        const state = JSON.parse(data)
-        dispatch({type: 'set-props', state})
-      })
-      peer.on('stream', stream => {
-        dispatch({type: 'set-stream', stream})
-      })
-      peer.on('connect', () => {
-        console.log('connected')
-      })
-      this.master = peer
-    }
-
-    const addClientPeer = (peerId,signalData) => {
-      const peer = new Peer( {
-        initiator: false,
-        stream: this.stream
-      })
-      peer.on('signal', data => {
-        this.publish('master-signal', {signalData:data,peerId})
-      })
-      peer.on('connect', () => {
-        console.log('connected',peerId)
-        dispatch({type: 'peer-connected',peerId, peer})
-      })
-      peer.on('close', () => {
-        console.log('closed',peerId)
-        this.peers.delete(peerId)
-        dispatch({type: 'peer-closed',peerId})
-      })
-      peer.on('error', () => {
-        console.log('error',peerId)
-      })
-      peer.signal(signalData)
-      this.peers.set(peerId,peer)
-    }
+    this.connected = false
 
     const ws = new WebSocket(wsUrl)
     ws.onopen = () => {
-      this.onOpen()
-      this.subscribe(['chat'])
+      this.connected = true
       if(isClient){
-        this.subscribe(['master-signal','master-joined'])
-        // the client kicks the connection
-        createMasterPeer()
+        this.subscribe(['chat','state','master-joined'])
+        this.publish('client-joined')
+      }else{
+        this.subscribe(['chat','client-joined'])
+        this.publish('master-joined')
       }
     }
     ws.onclose = () => {
@@ -776,36 +692,30 @@ class Signalling {
       const msg = JSON.parse(data)
       switch(msg.type){
         case 'publish':
-          const {peerId,data,fromMaster} = msg
+          const {toPeerId,peerId,data,fromMaster} = msg
+
+          if(toPeerId && toPeerId!==this.peerId)
+            return
+
           const topic = msg.topic.split('/')[1]
           switch (topic) {
-            case 'client-signal':
-              const p = this.peers.get(peerId)
-              if(p && !p.destroyed){
-                p.signal(data.signalData)
-              }else{
-                addClientPeer(peerId,data.signalData)
-              }
+            case 'client-joined':
+              dispatch({type: 'client-connected', peerId})
               break
             case 'master-joined':
-              //master just joined ... recreate
-              createMasterPeer()
               break
-            case 'master-signal':
-              // got master signal data
-              if(this.master && !this.master.destroyed && data.peerId===this.peerId)
-                this.master.signal(data.signalData)
+            case 'state':
+              const {state} = data
+              dispatch({type: 'set-props', state})
               break
             case 'chat':
               const {text} = data
-              dispatch({type: 'send-text', text,peerId,fromMaster})
+              dispatch({type: 'add-message', text,peerId,fromMaster})
               break
-
             default:
               console.error('unexpected topic', topic)
           }
           break
-
         default:
           console.error('unexpected message' ,msg)
           break
@@ -824,56 +734,21 @@ class Signalling {
     this.ws.send(msg)
   }
 
-  sessionReady(stream){
-    this.stream = stream
-    this.subscribe(['client-signal'])
-    this.publish('master-joined')
-  }
-
   sendMessage(text){
     this.publish('chat', {text})
   }
 
 
-  broadcast(data) {
-    this.peers.forEach(p =>{
-      if(p && !p.destroyed && p.connected){
-        const msg = JSON.stringify(data)
-        p.send(msg)
-      }
-    })
-  }
+
 
 }
 
 const Video = () => {
   const { state} = useContext(BingoContext)
-  const [muted, setMuted] = useState(true)
-  const videoRef = useRef(null)
   const youtubeUrl = (channelID) => channelID.length ? `https://www.youtube.com/embed/live_stream?channel=${channelID}` : null
-
-  useEffect(()=>{
-    if(state.stream)
-      videoRef.current.srcObject = state.stream
-  },[state.stream])
-
-  const toggleMuted = () => {
-    videoRef.current.muted = !videoRef.current.muted
-    setMuted(videoRef.current.muted)
-  }
-
-  const hasVideo = state.channelID || state.stream
-
-  return hasVideo && (
+  return state.channelID && (
     <div className={'video'}>
-      {state.channelID ?
-        <iframe title="youtube channel" width="400" height="300" src={youtubeUrl(state.channelID)}></iframe>
-        :
-        <>
-          <video ref={videoRef} onClick={toggleMuted} playsInline muted autoPlay> </video>
-          {muted ? <FaVolumeMute /> : <FaVolume /> }
-        </>
-      }
+      <iframe title="youtube channel" width="400" height="300" src={youtubeUrl(state.channelID)}></iframe>
     </div>
   )
 }
@@ -940,22 +815,6 @@ const BingoInner = () => {
 
   const headingIdx = state.rollingBall ? Math.floor(state.rollingBall/15) : null
   const player = state.players.filter(p => p.peerId ===state.peerId)[0]
-
-  useEffect(()=>{
-    if(state.signalling)
-      state.signalling.broadcast({players: state.players })
-  },[state.signalling,state.players])
-
-  useEffect(()=>{
-    if(state.signalling)
-      state.signalling.broadcast({balls: state.balls })
-  },[state.signalling,state.balls])
-
-
-  useEffect(()=>{
-    if(state.signalling)
-      state.signalling.broadcast({playing: state.playing })
-  },[state.signalling,state.playing])
 
   // single layout for master and clients
 
