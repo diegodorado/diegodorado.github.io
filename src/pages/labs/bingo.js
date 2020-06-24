@@ -13,11 +13,8 @@ import {startPiano} from "../../components/bingo/piano"
 import { FaShareAlt,
          FaEye,
          FaTrashAlt,
-         FaVolumeMute,
-         FaVolumeDown as FaVolume,
         } from 'react-icons/fa'
 
-import Peer from 'simple-peer'
 import { v4 as uuidv4 } from 'uuid'
 import WebSocket from 'isomorphic-ws'
 
@@ -234,20 +231,6 @@ const BingoCanvas = () => {
           </div>
           )
 
-}
-
-const getCameraStream = async () => {
-  const constraints = {
-    video: {width: {exact: 320}, height: {exact: 240}},
-    audio: true,
-  }
-  try{
-    // create the master stream
-    const stream = await navigator.mediaDevices.getUserMedia(constraints)
-    return stream
-  }catch (e){
-    console.log(e)
-  }
 }
 
 const BingoWizard = () => {
