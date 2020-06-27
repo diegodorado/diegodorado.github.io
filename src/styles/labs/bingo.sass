@@ -52,7 +52,7 @@
   a:focus
     border: 0
     outline: 0
-  input:focus
+  select:focus, input:focus
     outline: 0
   button
     outline: 0
@@ -107,10 +107,13 @@
       display: block
       content: ""
       width: 100%
-      padding-bottom: 75%
+      padding-bottom: 66%
     cursor: pointer
     &:hover svg
       fill: $blue
+    &.hidden
+      display: none
+      
 
   .balls
     text-align: left
@@ -170,56 +173,31 @@
             position: absolute
             content: ""
 
-  .chat
-    text-align: left
-    border: 1px solid $white
-    h5
-      margin: 0
-      background: $white
-      color: $black
-      padding: 5px 20px
-      padding: 5px 20px
-    .messages
-      min-height: 100px
-      max-height: 350px
-      padding: 10px
-      overflow-y: scroll
-    .message
-      margin: 10px auto
-      b
-        margin-right: 10px
-    .send-box
-      display: flex
-      input
-        flex: 9 0 0px
-        margin: 0
-        padding: 5px 10px
-        border: 0
-      button
-        flex: 1 0 0px
-        margin: 0
-        font-size: 0.8em
-        border: 0
-        border-top: 1px solid $white
-       
   ul
     text-align: left
     list-style: none
   .input-box
-    border: 1px dashed rgba($white,0.5)
-    padding: 5px 10px
+    border: 3px solid $white
     display: flex
     margin-bottom: 10px
-  input
-    border: 0
-    margin: 4px
-    padding: 0.25em
-  input[type="number"]
-    flex: 1 0 0px
-    text-align: right
-  input[type="text"]
-    flex: 20 0 0px
-    
+    input
+      background: white
+      border: 0
+      padding: 0.5em
+      flex: 20 0 0px
+      font-size: 1em
+    select
+      cursor: pointer
+      background: white
+      font-size: 0.8em
+      flex: 1 0 0px
+      margin: 0
+      border: 0
+    button
+      font-size: 1em
+      margin: 0
+      border: 0
+      
   table
     width: 100%
     border: 1px solid rgba($white,0.5)
