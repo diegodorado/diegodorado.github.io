@@ -16,6 +16,33 @@
         padding-left: 20px
         font-size: 0.8em
       
+  .input-box
+    display: flex
+    flex-wrap: wrap
+    input
+      flex: 7 0 0px
+    select
+      flex: 1 0 0px
+      color: $white
+      background: $black
+      padding: 0.5em
+    button
+      flex: 1 0 0px
+      border: 0
+
+    position: relative
+    .notice
+      user-select: none
+      pointer-events: none
+      position: absolute
+      border: 1px solid $white
+      width: 80%
+      padding: 0.5em
+      left: 10%
+      top: 120%
+      background: $black
+      color: $white
+      z-index: 100
 
   text-align: center
   user-select: none
@@ -52,6 +79,8 @@
   a:focus
     border: 0
     outline: 0
+  select, input
+    font-family: inherit
   select:focus, input:focus
     outline: 0
   button
@@ -178,25 +207,29 @@
     list-style: none
   .input-box
     border: 3px solid $white
-    display: flex
     margin-bottom: 10px
     input
       background: white
       border: 0
       padding: 0.5em
-      flex: 20 0 0px
       font-size: 1em
+      transition: background ease 0.5s
+      caret-color: $blue
+      &::placeholder 
+        transition: color  ease 3s
+      &:focus
+        &::placeholder 
+          color: white
     select
       cursor: pointer
-      background: white
       font-size: 0.8em
-      flex: 1 0 0px
       margin: 0
       border: 0
     button
       font-size: 1em
       margin: 0
       border: 0
+      font-weight: bold
       
   table
     width: 100%
@@ -227,24 +260,25 @@
         display: inline-block
     .action
       cursor: pointer
-      position: relative
       padding: 0
       svg
         padding: 10px
       &:hover, &:hover a
         color: $blue
 
-      &.copied::after
-        user-select: none
-        pointer-events: none
-        content: "copied!"
-        position: absolute
-        border: 1px solid $white
-        width: 4em
-        height: 1em
-        padding: 0.5em
-        bottom: -2em
-        left: -50%
-        background: $black
-        color: $white
-        z-index: 100
+  .copied
+    position: relative
+    &::after
+      user-select: none
+      pointer-events: none
+      content: "copied!"
+      position: absolute
+      border: 1px solid $white
+      width: 4em
+      height: 1em
+      padding: 0.5em
+      bottom: -2em
+      left: -50%
+      background: $black
+      color: $white
+      z-index: 100

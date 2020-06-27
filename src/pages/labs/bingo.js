@@ -230,9 +230,11 @@ const BingoWizard = () => {
 
   const [playerName, setPlayerName] = useState('')
   const [numCards, setNumCards] = useState(1)
+  const [notice, setNotice] = useState('')
+  const playerNameRef = useRef(null)
 
   const onKeyPlayerName = (e) => {
-    if(e.key === 'Enter'){
+    if(playerName.length>0 && e.key === 'Enter'){
       addPlayer()
     }
   }
@@ -245,10 +247,15 @@ const BingoWizard = () => {
     setNumCards(e.target.value)
   }
 
-  const addPlayer = () => {
-    if(playerName.length===0)
-      return
+  const onAddPlayerClick = (e) => {
+    if(playerName.length===0){
+      playerNameRef.current.focus()
+    }else{
+      addPlayer()
+    }
+  }
 
+  const addPlayer = () => {
     const peerId = uuidv4()
     const cards = []
     for(let i = 0; i< numCards; i++)
@@ -256,6 +263,14 @@ const BingoWizard = () => {
     const player = {connected:false,url:`${state.baseUrl}/${peerId}`,peerId,name:playerName,cards}
     dispatch({type: 'set-players', players: [...state.players, player]})
     setPlayerName('')
+    copy2clip(player.url)
+    setNotice(`Enlace copiado al portapapeles. Compartelo con ${player.name}.`)
+    setTimeout(()=>{
+      playerNameRef.current.focus()
+    },100)
+    setTimeout(()=>{
+      setNotice('')
+    },2000)
   }
 
   const removePlayer = (i) => {
@@ -274,26 +289,45 @@ const BingoWizard = () => {
     dispatch({type:'set-props', state:{sessionReady: true}})
   }
 
+  useEffect(()=>{
+    if(state.sessionReady){
+      setTimeout( ()=>{  
+        playerNameRef.current.focus()
+        playerNameRef.current.scrollIntoView()
+      }, 1000)
+    }
+    return () => {}
+  },[state.sessionReady])
+
+
   return state.sessionReady ?
     (
       <div className="setup">
-        {state.players.length > 0 && <button onClick={onStartClick}>EMPEZAR</button>}
-        <p>Agrega participantes a la partida.</p>
+        <h4>Participantes</h4>
+        {state.players.length === 0 ?
+          <p>Aún no hay participantes en la partida.</p>
+          : <p>Hay {state.players.length} participantes en la partida. </p>
+        }
         <div className="input-box">
-          <input type="text" placeholder="Participante" value={playerName} onChange={onChangePlayerName} onKeyPress={onKeyPlayerName} />
+          <input ref={playerNameRef} type="text" placeholder="Participante" value={playerName} onChange={onChangePlayerName} onKeyPress={onKeyPlayerName} />
           <select value={numCards} onChange={onChangeNumCards} >
             {[1,2,3,4,5].map(n => {
               return <option key={n} value={n}>{(n===1) ? '1 cartón' : `${n} cartones`}</option>
             })}
           </select>
-          <button onClick={addPlayer}>Agregar</button>
+          <button onClick={onAddPlayerClick}>Agregar</button>
+          { notice.length>0 && <div className="notice">{notice}</div>}
         </div>
+        {state.players.length === 0 ?
+          <p>Una vez que inicies la partida, ya no podrás agregar participantes.</p>
+          :  <button onClick={onStartClick}>EMPEZAR</button>
+        }
         {(state.players.length>0) &&
           <>
             <table>
               <thead>
                 <tr>
-                  <th>Nombre</th>
+                  <th>Participante</th>
                   <th>Cartones</th>
                   <th></th>
                   <th></th>
@@ -326,9 +360,9 @@ const BingoWizard = () => {
     :(
       <div className="setup">
         <h4>Bienvenido/a</h4>
-        <p>Esto es un BINGO, pero tambien es un juego musical!</p>
+        <p>Esto es un BINGO con videoconferencia, aunque también ¡es un juego musical!</p>
         <div>
-          <button onClick={createSession}>Crear Partida de BINGO</button>
+          <button onClick={createSession}>Crear una partida de BINGO</button>
           <button onClick={onHereForMusic}>¡Solo vine por la música!</button>
         </div>
       </div>
@@ -713,7 +747,7 @@ const VideoConference = () => {
 
     const player = state.players.filter(p => p.peerId ===state.peerId)[0]
 
-    if(state.session && ((!state.isClient && state.sessionReady && state.players.length>0) || player)){
+    if(state.session && ((!state.isClient && state.sessionReady) || player)){
       initialiseJitsi(player);
       setInitialized(true)
     }
