@@ -29,6 +29,7 @@ class Piano {
     this.last = 0
     this.notes = []
     this.sampler = sampler()
+    this.muted = false
   }
 
   step() {
@@ -39,7 +40,7 @@ class Piano {
     const t = performance.now()
     const dt = t - this.last
     //prevent double triggers
-    if(!this.sampler.loaded || dt<100)
+    if(this.muted || !this.sampler.loaded || dt<100)
       return
 
     this.last = t
@@ -55,7 +56,7 @@ class Piano {
   }
 
   playStart(){
-    if(!this.sampler.loaded)
+    if(this.muted || !this.sampler.loaded)
       return
     this.sampler.releaseAll()
     const idxs = []
@@ -71,7 +72,7 @@ class Piano {
   }
 
   playEnd(){
-    if(!this.sampler.loaded)
+    if(this.muted || !this.sampler.loaded)
       return
     this.sampler.releaseAll()
     const f = Math.floor(0.2*Math.random()*scale.length)

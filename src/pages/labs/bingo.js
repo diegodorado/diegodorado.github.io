@@ -13,6 +13,8 @@ import {startPiano} from "../../components/bingo/piano"
 import { FaShareAlt,
          FaEye,
          FaTrashAlt,
+         FaVolumeMute,
+         FaVolumeDown as FaVolume,
         } from 'react-icons/fa'
 
 import { v4 as uuidv4 } from 'uuid'
@@ -132,6 +134,7 @@ const BingoCanvas = () => {
   const bingoRef = useRef(null)
   const pianoRef = useRef(null)
   const [automatic, setAutomatic] = useState(false)
+  const [muted, setMuted] = useState(false)
 
   useEffect(() => {
 
@@ -187,7 +190,6 @@ const BingoCanvas = () => {
 
   useEffect(() => {
     if(state.throwingBall){
-      console.log(state.throwingBall)
       const {number,force,position} = state.throwingBall
       bingoRef.current.throwByNumber(number,position, force)
       dispatch({type:'set-props', state:{throwingBall: null}})
@@ -198,6 +200,12 @@ const BingoCanvas = () => {
   const onCallClick = (e) => {
     dispatch({type:'set-props', state:{mayCall: false}})
     bingoRef.current.call()
+  }
+
+  const toggleMuted = (e) => {
+    const m = !muted
+    setMuted(m)
+    pianoRef.current.muted=m
   }
 
   const toggleAutoClick = (e) => {
@@ -214,12 +222,12 @@ const BingoCanvas = () => {
   return (
           <div className="canvas">
             <canvas ref={canvasRef} width={600} height={600} />
-            {!state.isClient && (
             <div className="buttons">
-              {automatic && state.playing && <button onClick={toggleAutoClick}>MANUAL</button>}
-              {!automatic && state.playing && state.mayCall && <button onClick={toggleAutoClick}>AUTO</button>}
-              {!automatic && state.playing && state.mayCall && <button onClick={onCallClick}>LANZAR</button>}
-            </div>)}
+              <button onClick={toggleMuted}>{muted? <FaVolumeMute/> : <FaVolume/>}</button>
+              {!state.isClient && automatic && state.playing && <button onClick={toggleAutoClick}>MANUAL</button>}
+              {!state.isClient && !automatic && state.playing && state.mayCall && <button onClick={toggleAutoClick}>AUTO</button>}
+              {!state.isClient && !automatic && state.playing && state.mayCall && <button onClick={onCallClick}>LANZAR</button>}
+            </div>
           </div>
           )
 
