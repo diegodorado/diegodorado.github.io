@@ -132,7 +132,7 @@ const sampler = () =>  new Tone.Sampler({
     "C8" : "C8.[mp3|ogg]"
   }, {
     release : 1,
-    baseUrl : "https://tonejs.github.io/examples/audio/salamander/",
+    baseUrl : "https://tonejs.github.io/audio/salamander/",
     onload: () => {
       //console.log('loaded sampler')
     }
