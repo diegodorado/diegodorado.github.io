@@ -155,7 +155,7 @@ const BingoCanvas = () => {
         const s = {
           throwingBall: {number,position, force}
         }
-        if(!state.isClient && state.signalling.connected)
+        if(!state.isClient)
           state.signalling.publish('state', {state:s})
       }
       if(status===4){
@@ -297,6 +297,52 @@ const BingoWizard = () => {
     dispatch({type:'set-props', state:{sessionReady: true}})
   }
 
+
+  const handleFileChange = (ev) => {
+    const file = ev.target.files[0]
+    console.log(file)
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+      console.log(reader)
+      const image = new Image()
+      image.src = reader.result
+      image.onload = () =>{
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext("2d")
+        const w = 1000
+        const h = 300
+        const r = h/w
+        canvas.width = w
+        canvas.height = h
+        const iw = image.width
+        const ih = image.height
+        const ir = ih/iw
+        const hh = ir*w
+        const ww = ir*h
+        if(ir>r)
+          ctx.drawImage(image, 0, (h-hh)*0.5, w,hh)
+        else
+          ctx.drawImage(image, (w-ww)*0.5, 0, ww,h)
+
+        const dataURL = canvas.toDataURL("image/jpeg")
+
+        dispatch({type:'set-props', state:{customHeader: dataURL }})
+        console.log(image.width,image.height)
+      }
+    }
+
+  }
+  
+  const onToggleChat = () => {
+    dispatch({type:'set-props', state:{showChat: !state.showChat }})
+  }
+
+  const onToggleJitsi = () => {
+    dispatch({type:'set-props', state:{showJitsi: !state.showJitsi }})
+  }
+
+
   useEffect(()=>{
     if(state.sessionReady){
       setTimeout( ()=>{  
@@ -311,6 +357,13 @@ const BingoWizard = () => {
   return state.sessionReady ?
     (
       <div className="setup">
+        <button className="filepicker">
+          CAMBIAR ENCABEZADO
+          <input type="file" onChange={handleFileChange} multiple={false} accept={"image/png, image/jpeg"} />
+        </button>
+        <button onClick={onToggleChat}>{state.showChat ? 'OCULTAR CHAT' : 'MOSTRAR CHAT'}</button>
+        <button onClick={onToggleJitsi}>{state.showJitsi ? 'OCULTAR JITSI' : 'MOSTRAR JITSI'}</button>
+
         <h4>Participantes</h4>
         {state.players.length === 0 ?
           <p>Aún no hay participantes en la partida.</p>
@@ -440,15 +493,19 @@ const initialState = {
   baseUrl: null,
   players: [],
   balls: [],
+  messages: [],
   rollingBall: null,
   throwingBall: null,
   signalling:null,
+  customHeader: '',
+  showCanvas: true,
+  showChat: true,
+  showJitsi: true,
+
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "initialize":
-      return { ...state, ...action.state }
     case "set-props":
       return { ...state, ...action.state }
     case "add-ball":
@@ -463,10 +520,9 @@ const reducer = (state, action) => {
       return {...state, players}
     case 'client-connected': {
       const peerId = action.peerId
-      const {players,balls,loading,playing} = state
+      const {players,balls, messages,loading,playing} = state
       const s = {players,balls,loading,playing}
-      if(state.signalling.connected)
-        state.signalling.publish('state', {state:s, toPeerId:peerId})
+      state.signalling.publish('state', {state:s, toPeerId:peerId})
       players.forEach(p =>{
         if(p.peerId === peerId)
           p.connected = true
@@ -481,6 +537,12 @@ const reducer = (state, action) => {
           p.connected = false
       })
       return {...state, players}
+    }
+    case "send-text":{
+      const {text,peerId,fromMaster} = action
+      const player = state.players.filter(p => p.peerId===peerId)[0]
+      const user = player ? player.name : (fromMaster? 'Anfitrión': 'Anonimus')
+      return {...state, messages:[...state.messages,{text,user}]}
     }
     default:
       console.log(action)
@@ -508,7 +570,7 @@ const BingoSession = ({location}) =>{
     const d = getData(location)
     if(d){
       // got data from hash
-      init(true,d[0],d[1])
+      init({isClient:false,session: d[0], peerId:d[1]})
     }else{
       const last = reactLocalStorage.getObject('last-bingo-session',null)
       if(!last)
@@ -522,62 +584,52 @@ const BingoSession = ({location}) =>{
     if(initilized && !state.isClient){
       // only care for master sessions
       const s = {
-        isClient: state.isClient,
         session: state.session,
         sessionReady: state.sessionReady,
         peerId: state.peerId,
         players: state.players,
         balls: state.balls,
-        loading: state.loading,
+        messages: state.messages,
         playing: state.playing,
       }
       reactLocalStorage.setObject('last-bingo-session',s)
     }
     return () => {}
-  },[state.playing,state.sessionReady,state.loading,state.balls,state.session,state.isClient,state.peerId,state.players])
+  },[state.playing,state.sessionReady,state.balls,state.messages,state.session,state.peerId,state.players])
 
-  // save session on local storage
   useEffect(()=>{
     if(initilized && !state.isClient){
       // only care for master sessions
       const s = {
         players: state.players,
         balls: state.balls,
-        loading: state.loading,
         playing: state.playing,
         sessionReady: state.sessionReady,
       }
-      if(state.signalling.connected)
-        state.signalling.publish('state', {state:s})
+      state.signalling.publish('state', {state:s})
     }
     return () => {}
-  },[state.playing,state.sessionReady,state.loading,state.balls,state.players])
-
-
-  const init = (isClient, session, peerId) => {
-    const baseurl = location.href.replace(location.hash,"").replace('#','')
-    const baseUrl = `${baseurl}#${session}`
-    const loading = false
-    const signalling = new Signalling (isClient, session,peerId,dispatch)
-    const s = {isClient,session,peerId,baseUrl,loading,signalling}
-    dispatch({ type: "initialize", state: s})
-    setInitialized(true)
-  }
+  },[state.playing,state.sessionReady,state.balls,state.players])
 
   const newSession = () => {
     reactLocalStorage.setObject('last-bingo-session',null)
-    init(false,uuidv4(),uuidv4())
+    init({isClient:false,session: uuidv4(), peerId:uuidv4()})
   }
 
   const recoverSession = () => {
     const s = reactLocalStorage.getObject('last-bingo-session')
-    const {isClient, session, peerId,sessionReady} = s
+    s.isClient = false
+    init(s)
+  }
+
+  const init = (s) => {
     const baseurl = location.href.replace(location.hash,"").replace('#','')
-    s.baseUrl = `${baseurl}#${session}`
-    s.signalling = new Signalling (isClient, session,peerId,dispatch)
+    s.loading = false
+    s.baseUrl = `${baseurl}#${s.session}`
+    s.signalling = new Signalling (s.isClient, s.session,s.peerId,dispatch)
     if(s.players)
       s.players.forEach(p=> p.connected=false)
-    dispatch({ type: "initialize", state: s})
+    dispatch({ type: "set-props", state: s})
     setInitialized(true)
   }
 
@@ -589,10 +641,6 @@ const BingoSession = ({location}) =>{
     </>
   )
 }
-
-
-
-
 
 class Signalling {
   // use dispatch if you need an updated state version
@@ -633,6 +681,10 @@ class Signalling {
               break
             case 'master-joined':
               break
+            case 'chat':
+              const {text} = data
+              dispatch({type: 'send-text', text,peerId,fromMaster})
+              break
             case 'state':
               const {state} = data
               dispatch({type: 'set-props', state})
@@ -650,6 +702,9 @@ class Signalling {
   }
 
   publish(topic, data){
+    if(!this.connected)
+      return
+
     const msg = JSON.stringify({data, type: "publish", fromMaster: !this.isClient, peerId: this.peerId, topic:`${this.channelName}/${topic}`})
     this.ws.send(msg)
   }
@@ -711,6 +766,7 @@ const VideoConference = () => {
       configOverwrite: { 
         startWithAudioMuted: true,
         disableInviteFunctions: true,
+        disableDeepLinking: true,
         disableRemoteMute: true,
         defaultLanguage: 'es',
         //displayJids: true,
@@ -727,13 +783,12 @@ const VideoConference = () => {
         HIDE_INVITE_MORE_HEADER: true,
         DEFAULT_BACKGROUND: '#222222',
         SHOW_CHROME_EXTENSION_BANNER: false,
-        SHOW_JITSI_WATERMARK: false,
+        //SHOW_JITSI_WATERMARK: false,
         MOBILE_APP_PROMO: false,
         SETTINGS_SECTIONS: [ 'devices'],
-        SHOW_BRAND_WATERMARK: false,
+        //SHOW_BRAND_WATERMARK: false,
         TOOLBAR_BUTTONS: [
             'microphone', 'camera', 
-            'chat', 
             'settings',
             'videoquality', 'filmstrip', 
             'tileview', 
@@ -767,40 +822,93 @@ const VideoConference = () => {
 };
 
 
-const heading = 'BINGO'.split('')
-const BingoInner = ({location}) => {
-  const { state} = useContext(BingoContext)
+const BingoChat = () => {
+  const { state,dispatch} = useContext(BingoContext)
 
-  const headingIdx = state.rollingBall ? Math.floor(state.rollingBall/15) : null
-  const player = state.players.filter(p => p.peerId ===state.peerId)[0]
+  const [text, setText] = useState('')
+  const messagesRef = useRef(null)
 
-  // single layout for master and clients
+  useEffect(()=>{
+    if(messagesRef.current)
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight
+  },[state.messages])
+
+  const onKeyText = (e) => {
+    if(e.key === 'Enter'){
+      sendText()
+    }
+  }
+
+  const onChangeText = (e) => {
+    setText(e.target.value)
+  }
+
+  const sendText = () => {
+    state.signalling.sendMessage(text)
+    setText('')
+  }
 
   return (
-    <div className={`bingo ${state.onlyMusic ? 'only-music' :  ''}`}>
+    <div className="chat">
+      <h5>CHAT</h5>
+      <div ref={messagesRef} className="messages">
+        {state.messages.map((m,i) => (
+          <div key={i} className="message">
+            <b>{m.user}:</b>{m.text}
+          </div>
+        ))}
+      </div>
+      <div className="send-box">
+        <input type="text" placeholder="Escribir aquí" value={text} onChange={onChangeText} onKeyPress={onKeyText} />
+        <button onClick={sendText}>ENVIAR</button>
+      </div>
+    </div>
+  )
+}
+
+const BingoHeader = () => {
+  const heading = 'BINGO'.split('')
+  const { state} = useContext(BingoContext)
+  const headingIdx = state.rollingBall ? Math.floor(state.rollingBall/15) : null
+  return (
+    <div className={`header`} style={{backgroundImage:`url(${state.customHeader})`}}>
       <h3>
         {heading.map( (h,i)=> (headingIdx===i) ?<span className="rolling" key={i}>{state.rollingBall}</span>: <span key={i}>{h}</span>)}
       </h3>
+    </div>
+  )
+}
+
+const BingoInner = ({location}) => {
+  const { state} = useContext(BingoContext)
+
+  const player = state.players.filter(p => p.peerId ===state.peerId)[0]
+
+  // single layout for master and clients
+  return (
+    <div className={`bingo ${state.onlyMusic ? 'only-music' :  ''}`}>
+      <BingoHeader />
       <BingoSession location={location}/>
       { !state.loading && ( 
         <>
           <div className="game">
             <div className="main">
-              <BingoCanvas />
-              <BingoBalls />
+              {(!state.isClient || state.showCanvas) && <BingoCanvas />}
+              {!state.isClient && <BingoBalls />}
             </div>
             <div className="aside">
-              <VideoConference />
               {state.isClient ?
                 (player && !state.playing &&
-                    <p>
-                      {`¡Hola ${player.name}! Estamos calentando motores. En breve comienza la partida. 
-                         Aquí veras las bolillas a medida que vayan saliendo.`} 
-                    </p>
+                  <p>
+                    {`¡Hola ${player.name}! Estamos calentando motores. En breve comienza la partida.`} 
+                  </p>
                 )
                 :
                 ( state.playing ? <BingoRanking/> : <BingoWizard/> )
               }
+              {state.showChat && <BingoChat />}
+              {state.showJitsi && <VideoConference />}
+              {state.isClient && <BingoBalls />}
             </div>
           </div>
           {player && player.cards.map((c,i)=> <Card key={i} card={c} />) }

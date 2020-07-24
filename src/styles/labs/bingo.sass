@@ -46,33 +46,38 @@
 
   text-align: center
   user-select: none
-  h3
-    text-align: center
-    font-size: 5vw
-    +breakpoint(sm)
-      font-size: 4vw
-    +breakpoint(md)
-      font-size: 3vw
-    +breakpoint(lg)
-      font-size: 2vw
+  .header
+    img
+      width: 100%
 
-    span
-      display: inline-block
-      width: 2em
-      height: 2em
-      line-height: 2em
-      margin: 0 0.2em
-      border-radius: 50%
-      border: 3px solid $white
-      background: $white
-      color: $black
-      transition: all 3s
-      &.rolling
-        transition: all 0.2s
-        color: $blue
-        border: 3px solid $blue
-        background: $black
-        transform: scale(1.3)
+    h3
+      text-align: center
+      font-size: 5vw
+      margin: 0 0 20px 0
+      padding: 2em
+      +breakpoint(sm)
+        font-size: 4vw
+      +breakpoint(md)
+        font-size: 3vw
+      +breakpoint(lg)
+        font-size: 2vw
+      span
+        display: inline-block
+        width: 2em
+        height: 2em
+        line-height: 2em
+        margin: 0 0.2em
+        border-radius: 50%
+        border: 3px solid $white
+        background: $white
+        color: $black
+        transition: all 3s
+        &.rolling
+          transition: all 0.2s
+          color: $blue
+          border: 3px solid $blue
+          background: $black
+          transform: scale(1.3)
 
   h4
     margin: 10px
@@ -200,6 +205,51 @@
             background: rgba($blue, 0.25)
             position: absolute
             content: ""
+
+  .filepicker
+    position: relative
+    input
+      font-size: 0
+      width: 100%
+      height: 100%
+      position: absolute
+      top: 0
+      left: 0
+      opacity: 0
+      cursor: pointer
+
+  .chat
+    margin-bottom: 20px
+    text-align: left
+    border: 1px solid $white
+    h5
+      margin: 0
+      background: $white
+      color: $black
+      padding: 5px 20px
+      padding: 5px 20px
+    .messages
+      min-height: 100px
+      max-height: 350px
+      padding: 10px
+      overflow-y: scroll
+    .message
+      margin: 10px auto
+      b
+        margin-right: 10px
+    .send-box
+      display: flex
+      input
+        flex: 9 0 0px
+        margin: 0
+        padding: 5px 10px
+        border: 0
+      button
+        flex: 1 0 0px
+        margin: 0
+        font-size: 0.8em
+        border: 0
+        border-top: 1px solid $white
 
   ul
     text-align: left
