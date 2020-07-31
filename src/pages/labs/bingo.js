@@ -118,11 +118,11 @@ const BingoRanking = () => {
 
 }
 
-const BingoBalls = () => {
+const BingoBalls = ({reversed}) => {
   const { state } = useContext(BingoContext)
-  return state.balls.length>0 &&
+  return  state.balls.length>0 &&
             (<div className="balls">
-              {state.balls.map((b,i) => <span key={i} className={b===state.rollingBall? 'rolling' : ''}>{b}</span>)}
+              {(reversed ? state.balls.reverse() :state.balls).map((b,i) => <span key={i} className={b===state.rollingBall? 'rolling' : ''}>{b}</span>)}
             </div>)
 }
 
@@ -185,7 +185,6 @@ const BingoCanvas = () => {
       const remaining = [...Array(90).keys()].map(x => x+1).filter(x=> !state.balls.includes(x))
       bingoRef.current.start(remaining)
     }
-    return () => {}
   }, [state.playing]) 
 
   useEffect(() => {
@@ -194,8 +193,14 @@ const BingoCanvas = () => {
       bingoRef.current.throwByNumber(number,position, force)
       dispatch({type:'set-props', state:{throwingBall: null}})
     }
-    return () => {}
   }, [state.throwingBall]) 
+
+  useEffect(() => {
+    setMuted(!state.pianoOn)
+    if(pianoRef.current){
+      pianoRef.current.muted=!state.pianoOn
+    }
+  }, [state.pianoOn]) 
 
   const onCallClick = (e) => {
     dispatch({type:'set-props', state:{mayCall: false}})
@@ -301,10 +306,11 @@ const BingoWizard = () => {
   const handleFileChange = (ev) => {
     const file = ev.target.files[0]
     console.log(file)
+    if(!file)
+      return
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = () => {
-      console.log(reader)
       const image = new Image()
       image.src = reader.result
       image.onload = () =>{
@@ -312,23 +318,18 @@ const BingoWizard = () => {
         const ctx = canvas.getContext("2d")
         const w = 1000
         const h = 300
-        const r = h/w
         canvas.width = w
         canvas.height = h
         const iw = image.width
         const ih = image.height
-        const ir = ih/iw
-        const hh = ir*w
-        const ww = ir*h
-        if(ir>r)
-          ctx.drawImage(image, 0, (h-hh)*0.5, w,hh)
-        else
-          ctx.drawImage(image, (w-ww)*0.5, 0, ww,h)
+        const s = Math.max(w/iw, h/ih)
+        // get the top left position of the image
+        const x = (w/2) - (iw/2) * s
+        const y = (h/2) - (ih/2) * s
+        ctx.drawImage(image, x, y, iw*s, ih*s)
 
         const dataURL = canvas.toDataURL("image/jpeg")
-
         dispatch({type:'set-props', state:{customHeader: dataURL }})
-        console.log(image.width,image.height)
       }
     }
 
@@ -342,7 +343,32 @@ const BingoWizard = () => {
     dispatch({type:'set-props', state:{showJitsi: !state.showJitsi }})
   }
 
+  const onToggleTitle = () => {
+    dispatch({type:'set-props', state:{showTitle: !state.showTitle }})
+  }
 
+
+  const onRemoveCustomHeader = () => {
+    dispatch({type:'set-props', state:{showTitle: true, customHeader: '' }})
+  }
+
+  const onToggleCanvas = () => {
+    dispatch({type:'set-props', state:{showCanvas: !state.showCanvas }})
+  }
+
+  const onToggleVfx = () => {
+    dispatch({type:'set-props', state:{lowVfx: !state.lowVfx }})
+  }
+
+  const onTogglePiano = () => {
+    dispatch({type:'set-props', state:{pianoOn: !state.pianoOn }})
+  }
+
+
+
+
+
+  /*
   useEffect(()=>{
     if(state.sessionReady){
       setTimeout( ()=>{  
@@ -352,17 +378,39 @@ const BingoWizard = () => {
     }
     return () => {}
   },[state.sessionReady])
+  */
 
 
   return state.sessionReady ?
     (
       <div className="setup">
+
+        <h4>Encabezado</h4>
+        <span>Imagen de fondo:</span>
         <button className="filepicker">
-          CAMBIAR ENCABEZADO
+          { state.customHeader.length>0 ? 'CAMBIAR': 'SELECCIONAR'}
           <input type="file" onChange={handleFileChange} multiple={false} accept={"image/png, image/jpeg"} />
         </button>
-        <button onClick={onToggleChat}>{state.showChat ? 'OCULTAR CHAT' : 'MOSTRAR CHAT'}</button>
-        <button onClick={onToggleJitsi}>{state.showJitsi ? 'OCULTAR JITSI' : 'MOSTRAR JITSI'}</button>
+        { state.customHeader.length>0 && (<>
+          <button onClick={onRemoveCustomHeader}>QUITAR</button>
+          <br/>
+          <span>Mostrar título:</span>
+          <button className={state.showTitle ? 'on':''} onClick={onToggleTitle}>{state.showTitle ? 'SI':'NO'}</button>
+          </>)}
+
+        <h4>Bolillero</h4>
+        <span>Visible para:</span>
+        <button onClick={onToggleCanvas}>{state.showCanvas ? 'ANFITRION' : 'TODOS'}</button>
+        <br/>
+        <span>Musica:</span>
+        <button className={state.showChat ? 'on':''} onClick={onTogglePiano}>{state.pianoOn ? 'SI':'NO'}</button>
+        <br/>
+        <span>Calidad de efectos:</span>
+        <button onClick={onToggleVfx}>{state.lowVfx ? 'BAJA' : 'ALTA'}</button>
+
+        <h4>Comunicación</h4>
+        <button className={state.showChat ? 'on':''} onClick={onToggleChat}>CHAT</button>
+        <button className={state.showJitsi ? 'on':''} onClick={onToggleJitsi}>VIDEO</button>
 
         <h4>Participantes</h4>
         {state.players.length === 0 ?
@@ -499,8 +547,11 @@ const initialState = {
   signalling:null,
   customHeader: '',
   showCanvas: true,
+  pianoOn: true,
+  lowVfx: false,
   showChat: true,
   showJitsi: true,
+  showTitle: true,
 
 }
 
@@ -520,8 +571,8 @@ const reducer = (state, action) => {
       return {...state, players}
     case 'client-connected': {
       const peerId = action.peerId
-      const {players,balls, messages,loading,playing} = state
-      const s = {players,balls,loading,playing}
+      const {customHeader,showTitle,showJitsi,showChat,showCanvas,pianoOn,lowVfx, players,balls, messages,loading,playing} = state
+      const s = {customHeader,showTitle,showJitsi,showChat,showCanvas,pianoOn,lowVfx, players,balls, messages,loading,playing}
       state.signalling.publish('state', {state:s, toPeerId:peerId})
       players.forEach(p =>{
         if(p.peerId === peerId)
@@ -570,7 +621,7 @@ const BingoSession = ({location}) =>{
     const d = getData(location)
     if(d){
       // got data from hash
-      init({isClient:false,session: d[0], peerId:d[1]})
+      init({isClient:true,session: d[0], peerId:d[1]})
     }else{
       const last = reactLocalStorage.getObject('last-bingo-session',null)
       if(!last)
@@ -687,6 +738,7 @@ class Signalling {
               break
             case 'state':
               const {state} = data
+              console.log(state)
               dispatch({type: 'set-props', state})
               break
             default:
@@ -848,7 +900,7 @@ const BingoChat = () => {
     setText('')
   }
 
-  return (
+  return state.sessionReady && (
     <div className="chat">
       <h5>CHAT</h5>
       <div ref={messagesRef} className="messages">
@@ -871,7 +923,7 @@ const BingoHeader = () => {
   const { state} = useContext(BingoContext)
   const headingIdx = state.rollingBall ? Math.floor(state.rollingBall/15) : null
   return (
-    <div className={`header`} style={{backgroundImage:`url(${state.customHeader})`}}>
+    <div className={`header ${state.showTitle ? '' : 'no-title'}`} style={{backgroundImage:`url(${state.customHeader})`}}>
       <h3>
         {heading.map( (h,i)=> (headingIdx===i) ?<span className="rolling" key={i}>{state.rollingBall}</span>: <span key={i}>{h}</span>)}
       </h3>
@@ -908,7 +960,7 @@ const BingoInner = ({location}) => {
               }
               {state.showChat && <BingoChat />}
               {state.showJitsi && <VideoConference />}
-              {state.isClient && <BingoBalls />}
+              {state.isClient && <BingoBalls reversed={true} />}
             </div>
           </div>
           {player && player.cards.map((c,i)=> <Card key={i} card={c} />) }
