@@ -5,7 +5,7 @@ const noiseGen = () => {
   let scale = 1
   const lerp = (a, b, t ) => a * ( 1 - t ) + b * t
   const r = []
-  for ( let i = 0; i<256; ++i ) 
+  for ( let i = 0; i<1024; ++i ) 
     r.push(Math.random());
   const l = r.length - 1
   return {
@@ -30,10 +30,15 @@ class Piano {
     this.notes = []
     this.sampler = sampler()
     this.muted = false
+    this.scaleIndex = 0
   }
 
   step() {
     return this.ng.sample(this._step++)
+  }
+
+  setScale(index){
+    this.scaleIndex = index
   }
 
   playRandomNote(velocity) {
@@ -43,6 +48,7 @@ class Piano {
     if(this.muted || !this.sampler.loaded || dt<100)
       return
 
+    const scale = scales[this.scaleIndex]
     this.last = t
     const index = Math.floor(this.step()*scale.length)
     const note = scale[index]
@@ -60,6 +66,7 @@ class Piano {
       return
     this.sampler.releaseAll()
     const idxs = []
+    const scale = scales[this.scaleIndex]
     while(idxs.length<3){
       //skip some steps
       this.step()
@@ -75,6 +82,7 @@ class Piano {
     if(this.muted || !this.sampler.loaded)
       return
     this.sampler.releaseAll()
+    const scale = scales[this.scaleIndex]
     const f = Math.floor(0.2*Math.random()*scale.length)
     const s = 3 + Math.floor(Math.random()*3)
     const notes = [0,1,2,3].map( i => {
@@ -97,7 +105,13 @@ const startPiano = async () =>{
   }
 }
 
-const scale = [2,3,4,5].reduce((arr,el) => [...arr, ...'CDEGA'.split('').map(x => x+el)],[])
+const scales = [
+ [2,3,4,5].reduce((arr,el) => [...arr, ...'CDEGA'.split('').map(x => x+el)],[])
+ ,[1,2].reduce((a,e) => [...a, ...['C','D','F','A','C','E','G','B'].map((x,i) => x+(e*2+(i>3?1:0)) )],[])
+ ,[2,3,4,5].reduce((arr,el) => [...arr, ...['C','D','E','F#','G#','A#',].map(x => x+el)],[])
+ ,[2,3,4,5].reduce((arr,el) => [...arr, ...['C','D#','E','F','G#','A','B'].map(x => x+el)],[])
+]
+console.log(scales)
 
 const sampler = () =>  new Tone.Sampler({
     "A0" : "A0.[mp3|ogg]",

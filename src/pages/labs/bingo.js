@@ -13,8 +13,7 @@ import {startPiano} from "../../components/bingo/piano"
 import { FaShareAlt,
          FaEye,
          FaTrashAlt,
-         FaVolumeMute,
-         FaVolumeDown as FaVolume,
+         FaCog,
         } from 'react-icons/fa'
 
 import { v4 as uuidv4 } from 'uuid'
@@ -72,49 +71,184 @@ const randomCard = ()=>{
   return c
 }
 
-const BingoRanking = () => {
-  const { state } = useContext(BingoContext)
+const BingoPlayers = () => {
+  const { state, dispatch } = useContext(BingoContext)
 
-  const ranking = state.players.reduce( (arr, p) => {
-    return [...arr, ...p.cards.map((c,i) => {
-      const countHits =  (a,x) => (state.balls.includes(x)?1:0)+a
-      const hits = c.map(r => r.reduce(countHits,0) ).reduce( (a,x) => x+a, 0)
+  const [playerName, setPlayerName] = useState('')
+  const [editable, setEditable] = useState(true)
+  const [numCards, setNumCards] = useState(1)
+  const [notice, setNotice] = useState('')
+  const playerNameRef = useRef(null)
+
+  const addPlayer = () => {
+    const peerId = uuidv4()
+    const cards = []
+    for(let i = 0; i< numCards; i++)
+      cards.push(randomCard())
+    const player = {connected:false,url:`${state.baseUrl}/${peerId}`,peerId,name:playerName,cards}
+    dispatch({type: 'set-players', players: [...state.players, player]})
+    setPlayerName('')
+    copy2clip(player.url)
+    setNotice(`Enlace copiado al portapapeles. Compartelo con ${player.name}.`)
+    setTimeout(()=>{
+      playerNameRef.current.focus()
+    },100)
+    setTimeout(()=>{
+      setNotice('')
+    },2000)
+  }
+
+  const removePlayer = (i) => {
+    dispatch({type: 'set-players', players: state.players.filter( (p,j) => i!==j)})
+  }
+
+  const onKeyPlayerName = (e) => {
+    if(playerName.length>0 && e.key === 'Enter'){
+      addPlayer()
+    }
+  }
+
+  const onChangePlayerName = (e) => {
+    setPlayerName(e.target.value)
+  }
+  
+  const onChangeNumCards = (e) => {
+    setNumCards(e.target.value)
+  }
+
+  const onAddPlayerClick = () => {
+    if(playerName.length===0){
+      playerNameRef.current.focus()
+    }else{
+      addPlayer()
+    }
+  }
+
+  const onToggleEdit = () => {
+    setEditable(!editable)
+  }
+
+  const onStartGame = () => {
+    setEditable(false)
+    dispatch({type: 'restart-game'})
+  }
+
+  const onFinishGame = () => {
+    dispatch({type: 'finish-game'})
+  }
+
+  // get players and cards ranking
+  const rank = state.players.map(p => {
+    const countHits =  (a,x) => (state.balls.includes(x)?1:0)+a
+    const rowsFinished = (a,x) => (x===5?1:0)+a
+    const sumAll = (a,x) => x+a
+    const cards = p.cards.map((c,j) => {
+      const rowHits = c.map(r => r.reduce(countHits,0))
+      const hits = rowHits.reduce(sumAll, 0)
+      const rows = rowHits.reduce(rowsFinished,0)
       return {
-        name: p.name,
-        card: `#${i+1}`,
-        url: p.url,
-        connected: p.connected,
-        hits 
+        card: j+1,
+        hits ,
+        rows
       }
-    })]
-  },[]).sort( (a,b) => b.hits-a.hits)
+    }).sort( (a,b) => b.hits-a.hits)
+    const best = cards[0].hits
+    return {
+      name: p.name, 
+      url: p.url,
+      connected: p.connected,
+      best, 
+      cards}
+  }).sort( (a,b) => b.best-a.best)
         
-  return state.players.length>0 && (
-      <table>
-        <thead>
-          <tr>
-            <th>Participante</th>
-            <th>Cartón</th>
-            <th>Puntos</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {ranking.map( (r,i) => 
-              (
-                <tr key={i}>
-                  <td className={`player ${r.connected ? 'connected' :''}`}>{r.name}</td>
-                  <td>{r.card}</td>
-                  <td>{r.hits}</td>
-                  <td className="action" onClick={(ev)=>copyLink(r.url,ev.currentTarget)} ><FaShareAlt /></td>
-                  <td className="action"><a href={r.url} target="_blank" rel="noopener noreferrer"><FaEye/></a></td>
-                </tr>
-              )
-          )}
-        </tbody>
-      </table>
-  )
+  return state.sessionReady && (
+    <>
+     {editable && 
+       (
+         <>
+          <div className="input-box">
+            <input ref={playerNameRef} type="text" placeholder="Participante" value={playerName} onChange={onChangePlayerName} onKeyPress={onKeyPlayerName} />
+            <select value={numCards} onChange={onChangeNumCards} >
+              {[1,2,3,4,5].map(n => {
+                return <option key={n} value={n}>{(n===1) ? '1 cartón' : `${n} cartones`}</option>
+              })}
+            </select>
+            <button onClick={onAddPlayerClick}>Agregar</button>
+            { notice.length>0 && <div className="notice">{notice}</div>}
+          </div>
+         </>
+       )
+     }
+     {state.players.length>0 &&
+       (<>
+          <table>
+            <thead>
+              <tr>
+                <th>Participante</th>
+                <th></th>
+                <th>Aciertos</th>
+                <th>Líneas</th>
+                {editable && 
+                  <>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              {rank.map( (p,i) => 
+                  (
+                    <React.Fragment key={i}>
+                      {p.cards.map( (c,j) => 
+                          (
+                            <tr key={`${i}-${j}`}>
+                              {j===0 ? 
+                                <td className={`player ${p.connected ? 'connected' :''}`}>{p.name}</td>
+                                :
+                                <td></td>
+                              }
+                              <td>#{c.card}</td>
+                              <td>{c.hits}</td>
+                              <td>{c.rows}</td>
+                              {editable && (j===0 ? 
+                                <>
+                                  <td className="action" onClick={(ev)=>copyLink(p.url,ev.currentTarget)} ><FaShareAlt /></td>
+                                  <td className="action"><a href={p.url} target="_blank" rel="noopener noreferrer"><FaEye/></a></td>
+                                  <td className="action" onClick={()=>removePlayer(i)} ><FaTrashAlt/></td>
+                                </>
+                                :
+                                <>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                </>
+                              )}
+                            </tr>
+                          )
+                      )}
+                    </React.Fragment>
+                  )
+              )}
+
+            </tbody>
+          </table>
+          {editable && 
+            <ul>
+              <li><FaShareAlt/> copia el enlace para compartir</li>
+              <li><FaEye/> previsualiza el enlace</li>
+              <li><FaTrashAlt/> quita un participante</li>
+            </ul>
+          }
+        </>)
+     }
+      <button className={editable?'on':''} onClick={onToggleEdit}>EDITAR</button>
+      {editable && state.playing && <button onClick={onFinishGame}>FINALIZAR PARTIDA</button>}
+      {editable && !state.playing && <button onClick={onStartGame}>COMENZAR PARTIDA</button>}
+      <br/>
+      <br/>
+    </>)
 
 }
 
@@ -133,11 +267,11 @@ const BingoCanvas = () => {
   const rafRef = useRef(null)
   const bingoRef = useRef(null)
   const pianoRef = useRef(null)
-  const [automatic, setAutomatic] = useState(false)
-  const [muted, setMuted] = useState(false)
+  const [configOpen, setConfigOpen] = useState(false)
 
   useEffect(() => {
 
+    //todo: async wrapper uselles unless i need something after
     (async () => {
       pianoRef.current = await startPiano()
     })()
@@ -181,6 +315,7 @@ const BingoCanvas = () => {
   }, []) // Make sure the effect runs only once
 
   useEffect(() => {
+    console.log(`state.playing changed to ${state.playing}`)
     if(state.playing){
       const remaining = [...Array(90).keys()].map(x => x+1).filter(x=> !state.balls.includes(x))
       bingoRef.current.start(remaining)
@@ -190,108 +325,197 @@ const BingoCanvas = () => {
   useEffect(() => {
     if(state.throwingBall){
       const {number,force,position} = state.throwingBall
-      bingoRef.current.throwByNumber(number,position, force)
+      bingoRef.current.throw(number,position, force)
       dispatch({type:'set-props', state:{throwingBall: null}})
     }
   }, [state.throwingBall]) 
 
   useEffect(() => {
-    setMuted(!state.pianoOn)
     if(pianoRef.current){
-      pianoRef.current.muted=!state.pianoOn
-    }
-  }, [state.pianoOn]) 
+      pianoRef.current.muted=!state.config.pianoOn
+      pianoRef.current.setScale(state.config.pianoScale)
 
-  const onCallClick = (e) => {
+    }
+    if(bingoRef.current){
+      bingoRef.current.automatic=state.config.autoCall
+      bingoRef.current.setVfxLevel(state.config.vfx)
+      if(state.config.autoCall)
+        onCallClick()
+    }
+  }, [state.config]) 
+
+  const onCallClick = () => {
     dispatch({type:'set-props', state:{mayCall: false}})
     bingoRef.current.call()
   }
 
-  const toggleMuted = (e) => {
-    const m = !muted
-    setMuted(m)
-    pianoRef.current.muted=m
-  }
-
-  const toggleAutoClick = (e) => {
-    if(automatic){
-      setAutomatic(false)
-      bingoRef.current.automatic=false
-    }else{
-      setAutomatic(true)
-      bingoRef.current.automatic=true
-      onCallClick()
-    }
+  const toggleConfig = () => {
+    setConfigOpen(!configOpen)
   }
 
   return (
           <div className="canvas">
             <canvas ref={canvasRef} width={600} height={600} />
             <div className="buttons">
-              <button onClick={toggleMuted}>{muted? <FaVolumeMute/> : <FaVolume/>}</button>
-              {!state.isClient && automatic && state.playing && <button onClick={toggleAutoClick}>MANUAL</button>}
-              {!state.isClient && !automatic && state.playing && state.mayCall && <button onClick={toggleAutoClick}>AUTO</button>}
-              {!state.isClient && !automatic && state.playing && state.mayCall && <button onClick={onCallClick}>LANZAR</button>}
+              {configOpen && <BingoConfig />}
+              {!state.isClient && !state.config.autoCall && state.playing && state.mayCall && <button onClick={onCallClick}>LANZAR</button>}
+              <button className={configOpen?'on':''} onClick={toggleConfig}>{configOpen? <FaCog/> : <FaCog/>}</button>
             </div>
           </div>
           )
 
 }
 
+const BingoConfig = () => {
+  const { state,dispatch } = useContext(BingoContext)
+  const config = state.config
+
+  const changeConfig = (cfg) => {
+    dispatch({type:'set-config', config:cfg})
+  }
+
+  const onToggleChat = () => {
+    changeConfig({showChat: !config.showChat })
+  }
+
+  const onToggleJitsi = () => {
+    changeConfig({showJitsi: !config.showJitsi })
+  }
+
+  const onTogglePiano = () => {
+    changeConfig({pianoOn: !config.pianoOn })
+  }
+
+  const onClickPianoScale = () => {
+    const nextScale = (config.pianoScale+1)%4
+    changeConfig({pianoScale: nextScale })
+  }
+
+  const onToggleAutomatic = () => {
+    changeConfig({autoCall: !config.autoCall })
+  }
+
+  const onClickVfx = () => {
+    const nextVfx = (config.vfx+1)%4
+    changeConfig({vfx:nextVfx})
+  }
+
+
+  return (
+          <div className="config">
+            {!state.isClient && state.playing && (
+              <button onClick={onToggleAutomatic}>{config.autoCall ? 'AUTOMATIC' : 'MANUAL'}</button>
+            )}
+            <button className={config.pianoOn ? 'on':''} onClick={onTogglePiano}>{config.pianoOn ? 'MUSIC ON':'MUSIC OFF'}</button>
+            {config.pianoOn && 
+              <button onClick={onClickPianoScale}>{` ${['PENTATONIC','DORIAN','ONIRIC','ARABIC'][config.pianoScale]}`}</button>
+            }
+            <button className={config.vfx!==0 ? 'on':''} onClick={onClickVfx}>{`VFX ${['OFF','LOW','MID','HIGH'][config.vfx]}`}</button>
+            {!state.onlyMusic && (
+              <>
+                <button className={config.showChat ? 'on':''} onClick={onToggleChat}>{`CHAT ${config.showChat ? 'ON':'OFF'}`}</button>
+                <button className={config.showJitsi ? 'on':''} onClick={onToggleJitsi}>{`VIDEO ${config.showJitsi ? 'ON':'OFF'}`}</button>
+              </>
+            )}
+          </div>
+  )
+
+}
+
+const FaqItem = ({startOpen=false,question,children}) => {
+  const [open, setOpen] = useState(startOpen)
+
+  const onToggle = () => {
+    setOpen(!open)
+  }
+
+  return (
+            <li onClick={onToggle}>
+              <strong>{question}</strong>
+              {open && children}
+            </li>)
+
+}
+
+const BingoFaq = () => {
+  const { state } = useContext(BingoContext)
+
+  return !state.isClient && !state.playing && !state.sessionReady &&
+    (
+        <div className="faq">
+          <h4>¿Cómo funciona?</h4>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/5xx1J1WPK-0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <br/>
+          <br/>
+          <br/>
+          <h4>Preguntas Frecuentes</h4>
+          <br/>
+          <ul>
+            <FaqItem startOpen={true} question="¿Puedo usar el BINGO con la gente de mi escuela / club / organización / familia ?">
+              <p>¡Por supuesto!, cualquiera puede usar este BINGO.</p>
+            </FaqItem>
+            <FaqItem question="¿Cómo funciona?">
+              <p>Una persona es el ANFITRIÓN, y suma a la partida a tantos jugadores como desee.
+              <br/>
+              El ANFITRIÓN es quien crea la partida, asigna cartones a los participantes, y lleva adelante la partida.</p>
+            </FaqItem>
+            <FaqItem question="¿Tiene costo?">
+              <p>No, no tiene costo.</p>
+            </FaqItem>
+            <FaqItem question="¿Cómo creo una partida?">
+              <p>
+                1) Hacer click en el botón "CREAR UNA PARTIDA".
+                <br/>
+                2) Indicar los nombres de los participantes y cantidad de  cartones.
+                <br/>
+                3) Enviar a cada participante su enlace.
+                <br/>
+                4) Dar comienzo a la partida.
+                <br/>
+                <br/>
+                Los participantes reciben los números que salen a medida que saques bolillas.
+              </p>
+            </FaqItem>
+            <FaqItem question="¿Cómo reparto los cartones?">
+              <p>
+                Deberás enviar el enlace de cada participante por el medio que te parezca:  email / whatsapp / red-social.
+                <br/>
+                Tip: luego de agregar un participante el enlace queda en tu portapapeles.
+              </p>
+            </FaqItem>
+            <FaqItem question="¿Puedo vender los cartones para recaudar fondos?">
+              <p>Puedes hacerlo, pero deberás gestionar los cobros por tu cuenta. Este BINGO no administra cobros.</p>
+            </FaqItem>
+            <FaqItem question="¿Cómo sé cuando alguien gana?">
+              <p>Es tarea del ANFITRIÓN ir mirando el ranking de aciertos de la partida.</p>
+            </FaqItem>
+            <FaqItem question="¿Cuantos participantes admite?">
+              <p>No hay un límite definido y sé que se ha jugado de hasta 100 participantes. Se recomienda desactivar la opción de videoconferencia si van a ser mas de 20.</p>
+            </FaqItem>
+            <FaqItem question="¿Se puede jugar desde el teléfono?">
+              <p>Si. Pero en el caso del ANFITRIÓN es preferible que utilice una computadora.</p>
+            </FaqItem>
+            <FaqItem question="¿Qué pasa si se cierra el navegador en medio de la partida?">
+              <p>Si hubo una sesión anterior el BINGO propondrá recuperarla.</p>
+            </FaqItem>
+            <FaqItem question="¿Por qué hiciste el BINGO?">
+              <p>Como un regalo a mi madre en tiempos del COVID-19.</p>
+            </FaqItem>
+          </ul>
+          <br/>
+          <br/>
+        </div>
+    )
+}
+
+
 const BingoWizard = () => {
   const { state,dispatch } = useContext(BingoContext)
 
-  const [playerName, setPlayerName] = useState('')
-  const [numCards, setNumCards] = useState(1)
-  const [notice, setNotice] = useState('')
-  const playerNameRef = useRef(null)
+  const config = state.config
 
-  const onKeyPlayerName = (e) => {
-    if(playerName.length>0 && e.key === 'Enter'){
-      addPlayer()
-    }
-  }
-
-  const onChangePlayerName = (e) => {
-    setPlayerName(e.target.value)
-  }
-  
-  const onChangeNumCards = (e) => {
-    setNumCards(e.target.value)
-  }
-
-  const onAddPlayerClick = (e) => {
-    if(playerName.length===0){
-      playerNameRef.current.focus()
-    }else{
-      addPlayer()
-    }
-  }
-
-  const addPlayer = () => {
-    const peerId = uuidv4()
-    const cards = []
-    for(let i = 0; i< numCards; i++)
-      cards.push(randomCard())
-    const player = {connected:false,url:`${state.baseUrl}/${peerId}`,peerId,name:playerName,cards}
-    dispatch({type: 'set-players', players: [...state.players, player]})
-    setPlayerName('')
-    copy2clip(player.url)
-    setNotice(`Enlace copiado al portapapeles. Compartelo con ${player.name}.`)
-    setTimeout(()=>{
-      playerNameRef.current.focus()
-    },100)
-    setTimeout(()=>{
-      setNotice('')
-    },2000)
-  }
-
-  const removePlayer = (i) => {
-    dispatch({type: 'set-players', players: state.players.filter( (p,j) => i!==j)})
-  }
-
-  const onStartClick = (e) => {
-    dispatch({type:'set-props', state:{playing: true}})
+  const dispatchConfig = (config) => {
+    dispatch({type:'set-config', config:config})
   }
 
   const onHereForMusic = (e) => {
@@ -301,7 +525,6 @@ const BingoWizard = () => {
   const createSession = () => {
     dispatch({type:'set-props', state:{sessionReady: true}})
   }
-
 
   const handleFileChange = (ev) => {
     const file = ev.target.files[0]
@@ -329,151 +552,72 @@ const BingoWizard = () => {
         ctx.drawImage(image, x, y, iw*s, ih*s)
 
         const dataURL = canvas.toDataURL("image/jpeg")
-        dispatch({type:'set-props', state:{customHeader: dataURL }})
+        dispatchConfig({customHeader: dataURL })
       }
     }
 
   }
   
-  const onToggleChat = () => {
-    dispatch({type:'set-props', state:{showChat: !state.showChat }})
-  }
-
-  const onToggleJitsi = () => {
-    dispatch({type:'set-props', state:{showJitsi: !state.showJitsi }})
-  }
-
   const onToggleTitle = () => {
-    dispatch({type:'set-props', state:{showTitle: !state.showTitle }})
+    dispatchConfig({showTitle: !config.showTitle })
   }
-
 
   const onRemoveCustomHeader = () => {
-    dispatch({type:'set-props', state:{showTitle: true, customHeader: '' }})
+    dispatchConfig({showTitle: true, customHeader: '' })
   }
 
   const onToggleCanvas = () => {
-    dispatch({type:'set-props', state:{showCanvas: !state.showCanvas }})
+    dispatchConfig({showCanvas: !config.showCanvas })
   }
-
-  const onToggleVfx = () => {
-    dispatch({type:'set-props', state:{lowVfx: !state.lowVfx }})
-  }
-
-  const onTogglePiano = () => {
-    dispatch({type:'set-props', state:{pianoOn: !state.pianoOn }})
-  }
-
-
-
-
-
-  /*
-  useEffect(()=>{
-    if(state.sessionReady){
-      setTimeout( ()=>{  
-        playerNameRef.current.focus()
-        playerNameRef.current.scrollIntoView()
-      }, 1000)
-    }
-    return () => {}
-  },[state.sessionReady])
-  */
-
 
   return state.sessionReady ?
     (
       <div className="setup">
 
-        <h4>Encabezado</h4>
-        <span>Imagen de fondo:</span>
+        <h4>Opciones de Partida</h4>
+        <span>Imagen de fondo</span>
+        <br/>
         <button className="filepicker">
-          { state.customHeader.length>0 ? 'CAMBIAR': 'SELECCIONAR'}
+          { config.customHeader.length>0 ? 'CAMBIAR': 'SELECCIONAR'}
           <input type="file" onChange={handleFileChange} multiple={false} accept={"image/png, image/jpeg"} />
         </button>
-        { state.customHeader.length>0 && (<>
+        { config.customHeader.length>0 && (<>
           <button onClick={onRemoveCustomHeader}>QUITAR</button>
           <br/>
           <span>Mostrar título:</span>
-          <button className={state.showTitle ? 'on':''} onClick={onToggleTitle}>{state.showTitle ? 'SI':'NO'}</button>
+          <button className={config.showTitle ? 'on':''} onClick={onToggleTitle}>{config.showTitle ? 'SI':'NO'}</button>
           </>)}
 
-        <h4>Bolillero</h4>
-        <span>Visible para:</span>
-        <button onClick={onToggleCanvas}>{state.showCanvas ? 'ANFITRION' : 'TODOS'}</button>
         <br/>
-        <span>Musica:</span>
-        <button className={state.showChat ? 'on':''} onClick={onTogglePiano}>{state.pianoOn ? 'SI':'NO'}</button>
         <br/>
-        <span>Calidad de efectos:</span>
-        <button onClick={onToggleVfx}>{state.lowVfx ? 'BAJA' : 'ALTA'}</button>
-
-        <h4>Comunicación</h4>
-        <button className={state.showChat ? 'on':''} onClick={onToggleChat}>CHAT</button>
-        <button className={state.showJitsi ? 'on':''} onClick={onToggleJitsi}>VIDEO</button>
+        <span>¿Quién ve el bolillero?</span>
+        <br/>
+        <button onClick={onToggleCanvas}>{config.showCanvas ? 'TODOS' : 'SOLO EL ANFITRION'}</button>
+        <br/>
+        <br/>
+        <h4>Opciones Predeterminadas</h4>
+        <BingoConfig/>
+        <br/>
 
         <h4>Participantes</h4>
         {state.players.length === 0 ?
           <p>Aún no hay participantes en la partida.</p>
-          : <p>Hay {state.players.length} participantes en la partida. </p>
-        }
-        <div className="input-box">
-          <input ref={playerNameRef} type="text" placeholder="Participante" value={playerName} onChange={onChangePlayerName} onKeyPress={onKeyPlayerName} />
-          <select value={numCards} onChange={onChangeNumCards} >
-            {[1,2,3,4,5].map(n => {
-              return <option key={n} value={n}>{(n===1) ? '1 cartón' : `${n} cartones`}</option>
-            })}
-          </select>
-          <button onClick={onAddPlayerClick}>Agregar</button>
-          { notice.length>0 && <div className="notice">{notice}</div>}
-        </div>
-        {state.players.length === 0 ?
-          <p>Una vez que inicies la partida, ya no podrás agregar participantes.</p>
-          :  <button onClick={onStartClick}>EMPEZAR</button>
-        }
-        {(state.players.length>0) &&
+          : 
           <>
-            <table>
-              <thead>
-                <tr>
-                  <th>Participante</th>
-                  <th>Cartones</th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {state.players.map( (p,i) => {
-                  return (
-                    <tr key={i}>
-                      <td className={`player ${p.connected ? 'connected' :''}`}>{p.name}</td>
-                      <td>{p.cards.length}</td>
-                      <td className="action" onClick={(ev)=>copyLink(p.url,ev.currentTarget)} ><FaShareAlt /></td>
-                      <td className="action"><a href={p.url} target="_blank" rel="noopener noreferrer"><FaEye/></a></td>
-                      <td className="action" onClick={(ev)=>removePlayer(i)} ><FaTrashAlt/></td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-            <ul>
-              <li><FaShareAlt/> copia el enlace para compartir</li>
-              <li><FaEye/> previsualiza el enlace</li>
-              <li><FaTrashAlt/> quita un participante</li>
-            </ul>
+            <p>Hay <strong>{state.players.length}</strong> participantes en la partida. </p>
+            <br/>
           </>
         }
       </div>
     )
     :(
       <div className="setup">
-        <h4>Bienvenido/a</h4>
-        <p>Esto es un BINGO con videoconferencia, aunque también ¡es un juego musical!</p>
+        <h4>¿Qué quieres hacer?</h4>
         <div>
-          <button onClick={createSession}>Crear una partida de BINGO</button>
+          <button onClick={createSession}>Crear una partida</button>
           <button onClick={onHereForMusic}>¡Solo vine por la música!</button>
         </div>
+        
       </div>
     )
 
@@ -545,18 +689,24 @@ const initialState = {
   rollingBall: null,
   throwingBall: null,
   signalling:null,
-  customHeader: '',
-  showCanvas: true,
-  pianoOn: true,
-  lowVfx: false,
-  showChat: true,
-  showJitsi: true,
-  showTitle: true,
+  config:{
+    customHeader: '',
+    showCanvas: true,
+    pianoOn: true,
+    pianoScale: 0,
+    autoCall: false,
+    vfx: 2,
+    showChat: true,
+    showJitsi: true,
+    showTitle: true,
+  }
 
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case "set-config":
+      return { ...state, config:{...state.config,...action.config }}
     case "set-props":
       return { ...state, ...action.state }
     case "add-ball":
@@ -566,13 +716,17 @@ const reducer = (state, action) => {
         return state
       else
         return {...state, balls:[ball, ...state.balls]}
+    case "finish-game":
+      return {...state, balls:[],playing: false}
+    case "restart-game":
+      return {...state, balls:[],playing: true}
     case "set-players":
       const players = action.players
       return {...state, players}
     case 'client-connected': {
       const peerId = action.peerId
-      const {customHeader,showTitle,showJitsi,showChat,showCanvas,pianoOn,lowVfx, players,balls, messages,loading,playing} = state
-      const s = {customHeader,showTitle,showJitsi,showChat,showCanvas,pianoOn,lowVfx, players,balls, messages,loading,playing}
+      const {config, players,balls, messages,loading,playing} = state
+      const s = {config, players,balls, messages,loading,playing}
       state.signalling.publish('state', {state:s, toPeerId:peerId})
       players.forEach(p =>{
         if(p.peerId === peerId)
@@ -642,11 +796,13 @@ const BingoSession = ({location}) =>{
         balls: state.balls,
         messages: state.messages,
         playing: state.playing,
+        config: state.config,
+        onlyMusic: state.onlyMusic,
       }
       reactLocalStorage.setObject('last-bingo-session',s)
     }
     return () => {}
-  },[state.playing,state.sessionReady,state.balls,state.messages,state.session,state.peerId,state.players])
+  },[state.config, state.onlyMusic,state.playing,state.sessionReady,state.balls,state.messages,state.session,state.peerId,state.players])
 
   useEffect(()=>{
     if(initilized && !state.isClient){
@@ -862,7 +1018,7 @@ const VideoConference = () => {
 
     const player = state.players.filter(p => p.peerId ===state.peerId)[0]
 
-    if(state.session && ((!state.isClient && state.sessionReady) || player)){
+    if((!state.isClient && state.sessionReady) || player){
       initialiseJitsi(player);
       setInitialized(true)
     }
@@ -900,7 +1056,7 @@ const BingoChat = () => {
     setText('')
   }
 
-  return state.sessionReady && (
+  return (state.isClient || state.sessionReady) && (
     <div className="chat">
       <h5>CHAT</h5>
       <div ref={messagesRef} className="messages">
@@ -923,7 +1079,7 @@ const BingoHeader = () => {
   const { state} = useContext(BingoContext)
   const headingIdx = state.rollingBall ? Math.floor(state.rollingBall/15) : null
   return (
-    <div className={`header ${state.showTitle ? '' : 'no-title'}`} style={{backgroundImage:`url(${state.customHeader})`}}>
+    <div className={`header ${state.config.showTitle ? '' : 'no-title'}`} style={{backgroundImage:`url(${state.config.customHeader})`}}>
       <h3>
         {heading.map( (h,i)=> (headingIdx===i) ?<span className="rolling" key={i}>{state.rollingBall}</span>: <span key={i}>{h}</span>)}
       </h3>
@@ -943,11 +1099,14 @@ const BingoInner = ({location}) => {
       <BingoSession location={location}/>
       { !state.loading && ( 
         <>
+          <BingoFaq/>
           <div className="game">
-            <div className="main">
-              {(!state.isClient || state.showCanvas) && <BingoCanvas />}
-              {!state.isClient && <BingoBalls />}
-            </div>
+            {(!state.isClient || state.config.showCanvas) && 
+              <div className="main">
+                <BingoCanvas />
+                {!state.isClient && <BingoBalls />}
+              </div>
+            }
             <div className="aside">
               {state.isClient ?
                 (player && !state.playing &&
@@ -956,10 +1115,13 @@ const BingoInner = ({location}) => {
                   </p>
                 )
                 :
-                ( state.playing ? <BingoRanking/> : <BingoWizard/> )
+                (<>
+                  { !state.playing && <BingoWizard/> }
+                  <BingoPlayers/>
+                </>)
               }
-              {state.showChat && <BingoChat />}
-              {state.showJitsi && <VideoConference />}
+              {state.config.showChat && <BingoChat />}
+              {state.config.showJitsi && <VideoConference />}
               {state.isClient && <BingoBalls reversed={true} />}
             </div>
           </div>

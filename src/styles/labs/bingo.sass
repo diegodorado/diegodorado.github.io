@@ -1,4 +1,9 @@
 .bingo
+  .faq
+    h4
+    li
+      cursor: pointer
+      padding-bottom: 2em
   &.only-music
     max-width: 800px
     margin: auto
@@ -117,10 +122,16 @@
     margin-bottom: 20px
     canvas
       width: 100%
+    .config
+      button
+        float: right
+        display: block
+        clear: both
     .buttons
       position: absolute
       bottom: 0
       right: 0
+      text-align: right
       button
         font-size: 1.5rem
         margin-left: 0
@@ -202,7 +213,6 @@
           svg text
             fill: #aaa
         &.marked
-          color: $blue
           position: relative
           &::after
             border-radius: 50%
@@ -210,7 +220,8 @@
             left: 10%
             width: 80%
             height: 80%
-            background: rgba($blue, 0.25)
+            background: darken($blue,20%)
+            mix-blend-mode: screen
             position: absolute
             content: ""
 
