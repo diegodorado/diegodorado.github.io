@@ -444,7 +444,7 @@ const BingoFaq = () => {
     (
         <div className="faq">
           <h4>¿Cómo funciona?</h4>
-          <iframe width="560" height="315" src="https://www.youtube.com/embed/5xx1J1WPK-0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe style={{width:'100%',height:'54vw',maxWidth:'560px',maxHeight:'315px'}}  src="https://www.youtube.com/embed/5xx1J1WPK-0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           <br/>
           <br/>
           <br/>
