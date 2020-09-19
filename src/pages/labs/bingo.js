@@ -49,7 +49,23 @@ const shuffle = (b) => {
   return a;
 }
 
-const randomCard = ()=>{
+const random75Card = ()=>{
+  const c = []
+  const first15 = [...Array(15).keys()]
+  for(let i=0;i<5;i++){
+    let col  = first15.map(a => (15*i)+a+1)
+    col = shuffle(col)
+    col = col.slice(0,5)
+    col = col.sort( (a,b) => a-b )
+    if(i===2)
+      col[2]=0
+    c.push(col)
+  }
+  //transpose
+  return c[0].map((_, i) => c.map(r => r[i]))
+}
+
+const random90Card = ()=>{
   const c = []
   // select which cells have data
   for(let i=0;i<3;i++)
@@ -83,8 +99,9 @@ const BingoPlayers = () => {
   const addPlayer = () => {
     const peerId = uuidv4()
     const cards = []
-    for(let i = 0; i< numCards; i++)
-      cards.push(randomCard())
+    for(let i = 0; i< numCards; i++){
+      cards.push( state.config.style === 'bingo90' ? random90Card() : random75Card())
+    }
     const player = {connected:false,url:`${state.baseUrl}/${peerId}`,peerId,name:playerName,cards}
     dispatch({type: 'set-players', players: [...state.players, player]})
     setPlayerName('')
@@ -272,6 +289,7 @@ const BingoCanvas = () => {
   useEffect(() => {
 
     //todo: async wrapper uselles unless i need something after
+    //fixme: pianoRef may be null on some callbacks
     (async () => {
       pianoRef.current = await startPiano()
     })()
@@ -305,7 +323,10 @@ const BingoCanvas = () => {
       }
     }
 
-    const onCollisionBall = () => pianoRef.current.playRandomNote()
+    const onCollisionBall = () => {
+      if(pianoRef.current)
+        pianoRef.current.playRandomNote()
+    }
     bingoRef.current = new Bingo(canvasRef.current,onBingoStatusChanged, onCollisionBall)
     //draw first frame
     bingoRef.current.draw()
@@ -566,6 +587,10 @@ const BingoWizard = () => {
     dispatchConfig({showTitle: true, customHeader: '' })
   }
 
+  const onToggleStyle = () => {
+    dispatchConfig({style: config.style === 'bingo90' ? 'bingo75' : 'bingo90'})
+  }
+
   const onToggleCanvas = () => {
     dispatchConfig({showCanvas: !config.showCanvas })
   }
@@ -593,6 +618,11 @@ const BingoWizard = () => {
         <span>¿Quién ve el bolillero?</span>
         <br/>
         <button onClick={onToggleCanvas}>{config.showCanvas ? 'TODOS' : 'SOLO EL ANFITRION'}</button>
+        <br/>
+        <br/>
+        <span>¿Qué estilo de bingo quieres?</span>
+        <br/>
+        <button onClick={onToggleStyle}>{config.style === 'bingo90' ? 'BINGO 90' : 'BINGO 75'}</button>
         <br/>
         <br/>
         <h4>Opciones Predeterminadas</h4>
@@ -693,6 +723,7 @@ const initialState = {
     customHeader: '',
     showCanvas: true,
     pianoOn: true,
+    style: 'bingo90',
     pianoScale: 0,
     autoCall: false,
     vfx: 2,
