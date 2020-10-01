@@ -1118,8 +1118,8 @@ const BingoHeader = () => {
         {heading.map( (h,i)=> (headingIdx===i) ?<span className="rolling" key={i}>{state.rollingBall}</span>: <span key={i}>{h}</span>)}
       </h3>
     </div>
-    {wannaTry && (<>
-      <p>Hay una nueva versión, ¿quieres probarla?</p>
+    {!state.isClient && wannaTry && (<>
+      <p>Hay una versión beta, ¿quieres probarla?</p>
       <button onClick={()=>navigate('/bingo')}>SI</button>
       <button onClick={()=>setWannaTry(false)}>NO</button>
       <br/>
