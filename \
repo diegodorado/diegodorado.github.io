@@ -15,12 +15,12 @@ import { FaShareAlt,
          FaTrashAlt,
          FaCog,
         } from 'react-icons/fa'
-import {navigate } from "gatsby"
 
 import { v4 as uuidv4 } from 'uuid'
-import WebSocket from 'isomorphic-ws'
+//import WebSocket from 'isomorphic-ws'
 
-const wsUrl = 'wss://flok-hub.herokuapp.com/signal'
+//const wsUrl = 'wss://flok-hub.herokuapp.com/signal'
+const wsUrl = 'wss://0.0.0.0:3000/signal'
 
 const BingoContext = React.createContext()
 
@@ -466,7 +466,7 @@ const BingoFaq = () => {
     (
         <div className="faq">
           <h4>¿Cómo funciona?</h4>
-          <iframe style={{width:'100%',height:'54vw',maxWidth:'560px',maxHeight:'315px'}}  src="https://www.youtube.com/embed/5xx1J1WPK-0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe style={{width:'100%',height:'54vw',maxWidth:'560px',maxHeight:'315px'}}  src="https://www.youtube.com/embed/5xx1J1WPK-0" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullscreen></iframe>
           <br/>
           <br/>
           <br/>
@@ -1109,24 +1109,13 @@ const BingoChat = () => {
 const BingoHeader = () => {
   const heading = 'BINGO'.split('')
   const { state} = useContext(BingoContext)
-  const [wannaTry,setWannaTry] = useState(true)
   const headingIdx = state.rollingBall ? Math.floor(state.rollingBall/15) : null
   return (
-    <>
     <div className={`header ${state.config.showTitle ? '' : 'no-title'}`} style={{backgroundImage:`url(${state.config.customHeader})`}}>
       <h3>
         {heading.map( (h,i)=> (headingIdx===i) ?<span className="rolling" key={i}>{state.rollingBall}</span>: <span key={i}>{h}</span>)}
       </h3>
     </div>
-    {wannaTry && (<>
-      <p>Hay una nueva versión, ¿quieres probarla?</p>
-      <button onClick={()=>navigate('/bingo')}>SI</button>
-      <button onClick={()=>setWannaTry(false)}>NO</button>
-      <br/>
-      <br/>
-      <br/>
-      </>)}
-    </>
   )
 }
 

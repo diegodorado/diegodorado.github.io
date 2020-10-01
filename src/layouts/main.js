@@ -3,15 +3,15 @@ import "../components/i18n"
 import React from "react"
 import Footer from "../components/footer"
 import Header from "../components/header"
-import {GlobalProvider} from "../components/context"
+import Provider from "../components/provider"
 
 const Layout = ({ children , location})  =>
-  <GlobalProvider>
+  <Provider>
     <div id="app">
       <Header location={location} />
       <main>{children}</main>
       <Footer />
     </div>
-  </GlobalProvider>
+  </Provider>
 
 export default Layout

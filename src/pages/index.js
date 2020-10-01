@@ -22,6 +22,4 @@ const Home = ({location}) => {
 
 }
 
-
-
 export default Home

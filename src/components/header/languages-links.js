@@ -14,8 +14,11 @@ const LanguagesLinks = ({location}) => {
       return
 
     i18n.changeLanguage(i18n.languages[0]==='es'?'en':'es')
-    const pathname = location.pathname.replace(`/${prevlang}/`,`/${i18n.languages[0]}/`)
-    navigate(pathname)
+    // should we change the url? Some pages are not localized
+    if(location.pathname.indexOf(`/${prevlang}/`) !== -1){
+      const pathname = location.pathname.replace(`/${prevlang}/`,`/${i18n.languages[0]}/`)
+      navigate(pathname)
+    }
   }
 
   return (

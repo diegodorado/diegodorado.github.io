@@ -188,6 +188,18 @@ exports.onCreatePage = ({ page, actions }) => {
     return
   }
 
+  // page.matchPath is a special key that's used for matching pages
+  // only on the client.
+  if (page.path.match(/^\/bingo/)) {
+    page.matchPath = "/bingo/*"
+    // Update the page.
+    createPage(page)
+    console.log(page.path, page.matchPath)
+    return
+  }
+
+
+
 
 
   deletePage(page)

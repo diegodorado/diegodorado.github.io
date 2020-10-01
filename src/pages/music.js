@@ -2,7 +2,7 @@ import React, {useContext} from "react"
 import Layout from "../layouts/main"
 import SEO from "../components/seo"
 import { Trans, useTranslation } from 'react-i18next'
-import {GlobalContext} from "../components/context"
+import Context from "../components/context"
 
 const urls = {
   bandcamp: 'https://diegodorado.bandcamp.com/',
@@ -43,7 +43,7 @@ const MusicIndex = ({location }) => {
 
 
 const MusicPosts = () => {
-  const { state } = useContext(GlobalContext)
+  const { state } = useContext(Context)
 
   const colors = state.theme==='dark' ? 'bgcol=333333/linkcol=ffffff' : 'bgcol=ffffff/linkcol=333333'
 

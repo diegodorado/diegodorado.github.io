@@ -4,6 +4,9 @@
   "version": "0.1.0",
   "author": "Diego Dorado <diegodorado@gmail.com>",
   "dependencies": {
+    "@feathersjs/authentication-client": "^4.5.8",
+    "@feathersjs/feathers": "^4.5.8",
+    "@feathersjs/socketio-client": "^4.5.8",
     "@reach/router": "^1.2.1",
     "audiokeys": "^0.1.1",
     "chalk": "^3.0.0",
@@ -68,6 +71,7 @@
     "twemoji": "^12.1.5",
     "twitter": "^1.7.1",
     "typography": "^0.16.18",
+    "use-reducer-async": "^2.0.1",
     "uuid": "^8.1.0"
   },
   "devDependencies": {
