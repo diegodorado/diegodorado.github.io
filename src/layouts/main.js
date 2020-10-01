@@ -5,7 +5,7 @@ import Footer from "../components/footer"
 import Header from "../components/header"
 import Provider from "../components/provider"
 
-const Layout = ({ children , location})  =>
+const Layout = ({ children, location }) => (
   <Provider>
     <div id="app">
       <Header location={location} />
@@ -13,5 +13,6 @@ const Layout = ({ children , location})  =>
       <Footer />
     </div>
   </Provider>
+)
 
 export default Layout

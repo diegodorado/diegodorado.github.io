@@ -66,12 +66,9 @@
     "simpleddp": "^2.0.0",
     "soundcloud-audio": "^1.4.0",
     "startaudiocontext": "^1.2.1",
-    "susy": "^3.0.5",
     "tone": "^13.4.9",
     "twemoji": "^12.1.5",
     "twitter": "^1.7.1",
-    "typography": "^0.16.18",
-    "use-reducer-async": "^2.0.1",
     "uuid": "^8.1.0"
   },
   "devDependencies": {

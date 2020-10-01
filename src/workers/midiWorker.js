@@ -1,5 +1,5 @@
-import MidiWorker from './midi.worker.js'
+import MidiWorker from "./midi.worker.js"
 
-const midiWorker = typeof window === 'object' && new MidiWorker()
+const midiWorker = typeof window === "object" && new MidiWorker()
 
 export default midiWorker

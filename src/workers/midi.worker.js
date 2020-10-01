@@ -1,4 +1,4 @@
-"use strict";
+"use strict"
 
 let timerID
 let interval = 50
@@ -6,20 +6,19 @@ let queue = []
 let queuedData = 0
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 export async function enqueue(data) {
   let index = queuedData
-  let start = performance.now();
+  let start = performance.now()
   queuedData++
-  await sleep(interval*index)
+  await sleep(interval * index)
   let elapsed = performance.now() - start
   queuedData--
-  let pending = interval*queuedData
-  return {index,data, elapsed, pending}
+  let pending = interval * queuedData
+  return { index, data, elapsed, pending }
 }
-
 
 //timerID=setInterval(function(){postMessage("tick");},interval)
 
