@@ -22,7 +22,7 @@ const reducer = (state, action) => {
       // match and error can be null
       const {match,error} = action
       if(error)
-        console.log(error)
+        console.log(error,match)
       return { ...state, loading: false, match, error}
     }
     default:

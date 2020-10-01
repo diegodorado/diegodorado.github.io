@@ -31,7 +31,7 @@ const Home = () => {
           setMatchId(match._id)
         }
       }catch(error){
-        dispatch({ type: 'END_FETCH',error })
+        console.log(error)
       }
     }
 

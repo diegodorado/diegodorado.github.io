@@ -58,7 +58,7 @@ const Join = () => {
 
   const match = state.match
 
-  if(match===null)
+  if(!match)
     return (
         <div className="setup">
           {state.error ? 
