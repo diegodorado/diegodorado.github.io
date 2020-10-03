@@ -339,7 +339,8 @@ const BingoCanvas = () => {
   useEffect(() => {
     console.log(`state.playing changed to ${state.playing}`)
     if(state.playing){
-      const remaining = [...Array(90).keys()].map(x => x+1).filter(x=> !state.balls.includes(x))
+      const allNums = [...Array((state.match.style === 'bingo90' ? 90 : 75)).keys()]
+      const remaining = allNums.map(x => x+1).filter(x=> !state.match.balls.includes(x))
       bingoRef.current.start(remaining)
     }
   }, [state.playing]) 
@@ -655,7 +656,7 @@ const BingoWizard = () => {
 }
 
 
-const Card = ({card}) => {
+const Card = ({card, style}) => {
   //const { state } = useContext(BingoContext)
   const [marks, setMarks] = useState([])
   
@@ -669,7 +670,7 @@ const Card = ({card}) => {
   }
 
   return (
-    <div className="card">
+    <div className={ `card ${style}` }>
       {card.map((row,i)=>{
         return (
           <div key={i} className="row">
@@ -1119,7 +1120,7 @@ const BingoHeader = () => {
       </h3>
     </div>
     {!state.isClient && wannaTry && (<>
-      <p>Hay una versión beta, ¿quieres probarla?</p>
+      <p>Hay una versión beta, muuuuy beta, casi alpha... ¿quieres probarla?</p>
       <button onClick={()=>navigate('/bingo')}>SI</button>
       <button onClick={()=>setWannaTry(false)}>NO</button>
       <br/>
@@ -1168,7 +1169,7 @@ const BingoInner = ({location}) => {
               {state.isClient && <BingoBalls reversed={true} />}
             </div>
           </div>
-          {player && player.cards.map((c,i)=> <Card key={i} card={c} />) }
+          {player && player.cards.map((c,i)=> <Card key={i} card={c} style={state.config.style} />) }
         </>
       ) }
     </div>
