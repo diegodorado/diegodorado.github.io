@@ -1,30 +1,20 @@
-import React, {useState, useEffect,useRef,useContext} from "react"
-import {BingoContext} from "./context"
+import React, {useState, useEffect,useRef} from "react"
 import Context from "../../components/context"
+import useBingo from "./useBingo"
 
 const Chat = ({name,room}) => {
-  const { state,dispatch} = useContext(BingoContext)
-  const { state: globalState } = useContext(Context)
-
   const [text, setText] = useState('')
-  const [messages, setMessages] = useState([])
   const messagesRef = useRef(null)
-
+  const {messages, sendText} = useBingo(room)
 
   useEffect(()=>{
-    const service = globalState.api.service('bingo-chat')
-    service.on('msg', data => {
-      if(data.room ===room){
-        setMessages(m => [...m,data])
-        if(messagesRef.current)
-          messagesRef.current.scrollTop = messagesRef.current.scrollHeight
-      }
-    })
-  },[])
+    if(messagesRef.current)
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight
+  },[messages])
 
   const onKeyText = async  (e) => {
     if(e.key === 'Enter'){
-      await sendText()
+      await submit()
     }
   }
 
@@ -32,9 +22,9 @@ const Chat = ({name,room}) => {
     setText(e.target.value)
   }
 
-  const sendText = async () => {
-    const service = globalState.api.service('bingo-chat')
-    await service.patch(room,{name,text,room})
+  const submit = async () => {
+    //send
+    sendText({name,text})
     setText('')
   }
 
@@ -50,7 +40,7 @@ const Chat = ({name,room}) => {
       </div>
       <div className="send-box">
         <input type="text" placeholder="Escribir aquí" value={text} onChange={onChangeText} onKeyPress={onKeyText} />
-        <button onClick={sendText}>ENVIAR</button>
+        <button onClick={submit}>ENVIAR</button>
       </div>
     </div>
   )

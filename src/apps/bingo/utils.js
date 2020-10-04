@@ -1,4 +1,6 @@
 
+const fullUrl = (uri) => (!window) ? '' : `${window.location.origin}${uri}`
+
 const copy2clip = (text) => {
   const dummy = document.createElement('input')
   document.body.appendChild(dummy)
@@ -64,4 +66,4 @@ const random90Card = ()=>{
   return c
 }
 
-export {random90Card,random75Card,copy2clip, copyLink }
+export {fullUrl, random90Card,random75Card,copy2clip, copyLink }

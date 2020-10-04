@@ -1,5 +1,4 @@
-import React, {useState, useRef,useContext} from "react"
-import {BingoContext} from "./context"
+import React from "react"
 
 const matchRank = (match) => {
   // get players and cards ranking
@@ -27,17 +26,15 @@ const matchRank = (match) => {
         
 }
 
-const Ranking = () => {
-  const { state, dispatch } = useContext(BingoContext)
+const Ranking = ({match}) => {
 
-  const rank = matchRank(state.match)
+  const rank = matchRank(match)
 
   return (
           <table>
             <thead>
               <tr>
-                <th>Participante</th>
-                <th></th>
+                <th colSpan="2">Participante</th>
                 <th>Aciertos</th>
                 <th>Líneas</th>
               </tr>

@@ -4,14 +4,14 @@ import {navigate } from "gatsby"
 
 const Music = () => {
   return (
-      <div className="game only-music">
-        <div className="main">
-          <Canvas onlyMusic={true} />
-        </div>
-        <br/>
-        <br/>
-        <button onClick={() => navigate('/bingo')}>VOLVER</button>
+    <div className="game only-music">
+      <div className="main">
+        <Canvas onlyMusic={true} />
       </div>
+      <br/>
+      <br/>
+      <button onClick={() => navigate('/bingo')}>VOLVER</button>
+    </div>
   ) 
 }
 

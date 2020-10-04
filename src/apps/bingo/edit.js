@@ -1,64 +1,27 @@
-import React, {useState, useRef,useContext,useEffect} from "react"
-import Context from "../../components/context"
+/* eslint-disable jsx-a11y/no-onchange */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import React, {useState, useRef} from "react"
+import useBingo from "./useBingo"
 import {useParams} from "@reach/router"
-import {BingoContext} from "./context"
-import {random90Card,random75Card,copy2clip, copyLink } from  "../../apps/bingo/utils"
+import {random90Card,random75Card, copyLink , fullUrl } from  "../../apps/bingo/utils"
 import { FaShareAlt,
          FaEye,
          FaTrashAlt,
         } from 'react-icons/fa'
 import {navigate } from "gatsby"
-import {reactLocalStorage} from 'reactjs-localstorage'
-
-const fullUrl = (uri) => (!window) ? '' : `${window.location.origin}${uri}`
+import Loading from "./loading"
 
 const Edit = () => {
-  const { state,dispatch } = useContext(BingoContext)
-  const { state: globalState } = useContext(Context)
+  const { matchId } = useParams()
+  const { match, ownsMatch,  updateMatch } = useBingo(matchId)
+
   const [playerName, setPlayerName] = useState('')
   const [name, setName] = useState('')
   const [numCards, setNumCards] = useState(1)
-  const [notice, setNotice] = useState('')
   const [optionsOpen, setOptionsOpen] = useState(false)
   const playerNameRef = useRef(null)
-  const { matchId } = useParams()
-
-  useEffect( () => {
-    // try to get saved match
-    const service = globalState.api.service('bingo-match')
-    service.on('balls', data => console.log(data))
-
-    const fetchData = async () => {
-      dispatch({ type: 'START_FETCH' })
-      try{
-        const match = await service.get(matchId)
-        dispatch({ type: 'END_FETCH',match })
-      }catch(error){
-        dispatch({ type: 'END_FETCH',error })
-      }
-    }
-
-    const id = reactLocalStorage.get('bingo-match-id',null)
-    if(id===matchId)
-      fetchData()
-    else
-      dispatch({ type: 'END_FETCH',error:'Invalid match id' })
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
-
-  const updateMatch = async (_match) => {
-    const service = globalState.api.service('bingo-match')
-    dispatch({ type: 'START_FETCH' })
-    try{
-      const match = await service.patch(matchId,_match)
-      dispatch({ type: 'END_FETCH',match })
-    }catch(error){
-      dispatch({ type: 'END_FETCH',error })
-    }
-  }
-
-  const match = state.match
 
   const link = fullUrl(`/bingo/${matchId}/join`)
 
@@ -71,7 +34,8 @@ const Edit = () => {
     dispatchPlayers([...match.players, player])
     setPlayerName('')
     setTimeout(()=>{
-      playerNameRef.current.focus()
+      if(playerNameRef.current)
+        playerNameRef.current.focus()
     },100)
   }
 
@@ -175,13 +139,16 @@ const Edit = () => {
 
   const onStartClick = () => {
     updateMatch({playing: true })
-    navigate(`/bingo/${matchId}/join`)
+    navigate(`/bingo/${matchId}/play`)
   }
 
   const onToggleOptions = () => setOptionsOpen(!optionsOpen)
 
+  if(!ownsMatch())
+    return (<h4>Invalid match...</h4>)
+
   if(match===null)
-    return (<h4>Cargando...</h4>)
+    return <Loading />
 
   return (
     <>
@@ -211,7 +178,6 @@ const Edit = () => {
               })}
             </select>
             <button onClick={onAddPlayerClick}>Agregar</button>
-            { notice.length>0 && <div className="notice">{notice}</div>}
           </div>
          {match.players.length>0 &&
            (<>
@@ -220,9 +186,6 @@ const Edit = () => {
                   <tr>
                     <th>Participante</th>
                     <th>Cartones</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -297,4 +260,3 @@ const Edit = () => {
 }
 
 export default Edit
-

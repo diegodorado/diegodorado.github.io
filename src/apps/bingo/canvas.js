@@ -1,13 +1,10 @@
-import React, {useState, useEffect,useRef,useContext} from "react"
-import {BingoContext} from "./context"
-import Context from "../../components/context"
+import React, {useState, useEffect,useRef} from "react"
 import Bingo from "../../components/bingo/bingo"
 import {startPiano} from "../../components/bingo/piano"
 import { FaCog} from 'react-icons/fa'
+import useBingo from "./useBingo"
 
 const Canvas = ({onlyMusic=false}) => {
-  const { state,dispatch } = useContext(BingoContext)
-  const { state: globalState } = useContext(Context)
 
   const canvasRef = useRef(null)
   const rafRef = useRef(null)
@@ -19,21 +16,7 @@ const Canvas = ({onlyMusic=false}) => {
   const [autoCall, setAutoCall] = useState(false)
   const [vfx, setVfx] = useState(2)
   const [mayCall, setMayCall] = useState(true)
-
-  const updateBalls = async (ball) => {
-
-    if(onlyMusic)
-      return
-
-    dispatch({ type: 'START_FETCH' })
-    try{
-      const ballsService = globalState.api.service('bingo-balls')
-      const match = await ballsService.patch(state.match._id,{ball})
-      dispatch({ type: 'END_FETCH',match })
-    }catch(error){
-      dispatch({ type: 'END_FETCH',error })
-    }
-  }
+  const {balls, ballsMax, addBall} = useBingo()
 
   useEffect(() => {
     //todo: async wrapper uselles unless i need something after
@@ -54,13 +37,11 @@ const Canvas = ({onlyMusic=false}) => {
       if(status===3){
       }
       if(status===4){
-        //todo: send this ball
-        updateBalls(number)
-        dispatch({type:'BALL', ball: number})
+        if(!onlyMusic)
+          addBall(number)
         pianoRef.current.playEnd()
         bingoRef.current.complete()
         setTimeout( ()=> {
-          dispatch({type:'BALL', ball: null})
           setMayCall(true)
           if(bingoRef.current.automatic)
             bingoRef.current.call()
@@ -75,15 +56,9 @@ const Canvas = ({onlyMusic=false}) => {
 
     bingoRef.current = new Bingo(canvasRef.current,onBingoStatusChanged, onCollisionBall)
 
-    if(onlyMusic){
-      const remaining = [...Array(90).keys()]
-      bingoRef.current.start(remaining)
-    }
-    else{
-      const allNums = [...Array((state.match.style === 'bingo90' ? 90 : 75)).keys()]
-      const remaining = allNums.map(x => x+1).filter(x=> !state.match.balls.includes(x))
-      bingoRef.current.start(remaining)
-    }
+    const allNums = [...Array(ballsMax()).keys()].map(x => x+1)
+    const remaining = allNums.filter(x=> !balls.includes(x))
+    bingoRef.current.start(remaining)
 
     //draw first frame
     bingoRef.current.draw()

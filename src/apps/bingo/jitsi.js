@@ -1,11 +1,9 @@
-import React, {useState, useEffect,useContext} from "react"
-import {BingoContext} from "./context"
+import React, {useState, useEffect} from "react"
 
 const Jitsi = ({name,room}) => {
   const jitsiContainerId = "jitsi-container-id"
   const [initilized, setInitialized] = useState(false)
   const [jitsi, setJitsi] = useState()
-  const { state} = useContext(BingoContext)
 
   const loadJitsiScript = () => {
     let resolveLoadJitsiScriptPromise = null
@@ -28,8 +26,6 @@ const Jitsi = ({name,room}) => {
       await loadJitsiScript()
     }
 
-    const videoMuted = state.isClient
-
     const _jitsi = new window.JitsiMeetExternalAPI("meet.jit.si", {
       roomName:`bingo-${room}`,
       parentNode: document.getElementById(jitsiContainerId),
@@ -44,7 +40,7 @@ const Jitsi = ({name,room}) => {
         startVideoMuted: 10,
         // Start calls with video muted. Unlike the option above, this one is only
         // applied locally. FIXME: having these 2 options is confusing.
-        startWithVideoMuted: videoMuted,
+        //startWithVideoMuted: videoMuted,
         // Every participant after the Nth will start audio muted.
         startAudioMuted: 10,
         enableTalkWhileMuted: false,

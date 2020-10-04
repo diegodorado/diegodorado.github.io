@@ -1,17 +1,19 @@
-import React, {useContext} from "react"
-import {BingoContext} from "./context"
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import React from "react"
 import {navigate } from "gatsby"
+import useBingo from "./useBingo"
 
 const BingoHeader = () => {
+  const { match } = useBingo()
   const heading = 'BINGO'.split('')
-  const { state} = useContext(BingoContext)
-  const headingIdx = state.rollingBall ? Math.floor(state.rollingBall/15) : null
-  const showTitle = state.match ? state.match.showTitle : true
-  const customHeader = state.match ? state.match.customHeader : ''
+  const headingIdx = rollingBall ? Math.floor(rollingBall/15) : null
+  const showTitle = match ? match.showTitle : true
+  const customHeader = match ? match.customHeader : ''
+  const rollingBall = match ? match.rollingBall : null
   return (
-    <div onClick={()=>navigate('/bingo')} className={`header ${showTitle ? '' : 'no-title'}`} style={{backgroundImage:`url(${customHeader})`}}>
+    <div role="button" tabIndex="0" onClick={()=>navigate('/bingo')} className={`header ${showTitle ? '' : 'no-title'}`} style={{backgroundImage:`url(${customHeader})`}}>
       <h3>
-        {heading.map( (h,i)=> (headingIdx===i) ?<span className="rolling" key={i}>{state.rollingBall}</span>: <span key={i}>{h}</span>)}
+        {heading.map( (h,i)=> (headingIdx===i) ?<span className="rolling" key={i}>{rollingBall}</span>: <span key={i}>{h}</span>)}
       </h3>
     </div>
   )

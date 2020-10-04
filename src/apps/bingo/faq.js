@@ -1,23 +1,29 @@
 import React, {useState} from "react"
 import {navigate } from "gatsby"
+import Header from "./header"
 
 const FaqItem = ({startOpen=false,question,children}) => {
   const [open, setOpen] = useState(startOpen)
 
-  const onToggle = () => {
+  const onToggle = (ev) => {
+    ev.preventDefault()
     setOpen(!open)
   }
 
   return (
-            <li onClick={onToggle}>
-              <strong>{question}</strong>
+            <li>
+              <a href="/" onClick={onToggle}>
+                {question}
+              </a>
               {open && children}
             </li>)
 
 }
 
 const BingoFaq = () => 
-    (
+  (
+    <>
+      <Header/>
         <div className="faq">
           <h4>¿Cómo funciona?</h4>
           <iframe title={"Tutorial"} style={{width:'100%',height:'54vw',maxWidth:'560px',maxHeight:'315px'}}  src="https://www.youtube.com/embed/5xx1J1WPK-0" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
@@ -82,6 +88,7 @@ const BingoFaq = () =>
           <br/>
           <button onClick={() => navigate('/bingo')}>VOLVER</button>
         </div>
+      </>
     )
 
 export default BingoFaq
