@@ -339,8 +339,8 @@ const BingoCanvas = () => {
   useEffect(() => {
     console.log(`state.playing changed to ${state.playing}`)
     if(state.playing){
-      const allNums = [...Array((state.match.style === 'bingo90' ? 90 : 75)).keys()]
-      const remaining = allNums.map(x => x+1).filter(x=> !state.match.balls.includes(x))
+      const allNums = [...Array((state.config.style === 'bingo90' ? 90 : 75)).keys()]
+      const remaining = allNums.map(x => x+1).filter(x=> !state.config.balls.includes(x))
       bingoRef.current.start(remaining)
     }
   }, [state.playing]) 
