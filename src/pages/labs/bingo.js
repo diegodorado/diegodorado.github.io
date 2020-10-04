@@ -303,7 +303,8 @@ const BingoCanvas = () => {
 
     const onBingoStatusChanged = (status,number, position, force) => {
       if(status===2)
-        pianoRef.current.playStart()
+        if(pianoRef.current)
+          pianoRef.current.playStart()
       if(status===3){
         const s = {
           throwingBall: {number,position, force}
@@ -313,7 +314,8 @@ const BingoCanvas = () => {
       }
       if(status===4){
         dispatch({type:'set-props', state:{rollingBall: number}})
-        pianoRef.current.playEnd()
+        if(pianoRef.current)
+          pianoRef.current.playEnd()
         bingoRef.current.complete()
         dispatch({type:'add-ball', ball: number})
         setTimeout( ()=> {
@@ -340,7 +342,7 @@ const BingoCanvas = () => {
     console.log(`state.playing changed to ${state.playing}`)
     if(state.playing){
       const allNums = [...Array((state.config.style === 'bingo90' ? 90 : 75)).keys()]
-      const remaining = allNums.map(x => x+1).filter(x=> !state.config.balls.includes(x))
+      const remaining = allNums.map(x => x+1).filter(x=> !state.balls.includes(x))
       bingoRef.current.start(remaining)
     }
   }, [state.playing]) 
