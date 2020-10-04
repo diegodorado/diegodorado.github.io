@@ -6,10 +6,10 @@ import useBingo from "./useBingo"
 const BingoHeader = () => {
   const { match } = useBingo()
   const heading = 'BINGO'.split('')
-  const headingIdx = rollingBall ? Math.floor(rollingBall/15) : null
   const showTitle = match ? match.showTitle : true
   const customHeader = match ? match.customHeader : ''
   const rollingBall = match ? match.rollingBall : null
+  const headingIdx = rollingBall ? Math.floor(rollingBall/15) : null
   return (
     <div role="button" tabIndex="0" onClick={()=>navigate('/bingo')} className={`header ${showTitle ? '' : 'no-title'}`} style={{backgroundImage:`url(${customHeader})`}}>
       <h3>

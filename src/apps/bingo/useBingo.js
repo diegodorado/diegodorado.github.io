@@ -21,7 +21,7 @@ const useBingo = (matchId) => {
   const service = globalState.api.service('bingo-match')
   const chatService = globalState.api.service('bingo-chat')
   const ballsService = globalState.api.service('bingo-balls')
-  const storedId = reactLocalStorage.get('bingo-match-id',null)
+  const [storedId, setStoreId] = useState(null)
 
   const onMsg = (message) => {
     if(message.room ===matchId){
@@ -39,6 +39,9 @@ const useBingo = (matchId) => {
 
     if(state.initialized || !matchId)
       return
+
+    const id = reactLocalStorage.get('bingo-match-id',null)
+    setStoreId(id)
 
     dispatch({type: "set-initialized"})
 
