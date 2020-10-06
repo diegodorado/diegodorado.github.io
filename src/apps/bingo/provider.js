@@ -6,6 +6,7 @@ const initialState = {
   messages: [],
   balls: [],
   initialized: false,
+  storedId: null,
 }
 
 //todo: add global error
@@ -13,6 +14,9 @@ const reducer = (state, action) => {
   switch (action.type) {
     case "set-initialized":
       return { ...state, initialized: true }
+    case "set-stored-id":
+      const storedId = action.storedId
+      return { ...state, storedId}
     case "set-match":{
       const balls = action.match ? action.match.balls : []
       return { ...state, match: action.match, balls}

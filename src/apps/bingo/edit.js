@@ -254,6 +254,9 @@ const Edit = () => {
           </div>
         </div>
       </div>
+      <br/>
+      <br/>
+      <button onClick={() => navigate('/bingo')}>VOLVER</button>
     </>
   ) 
 

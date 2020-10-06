@@ -1,4 +1,4 @@
-import {useState, useContext,useEffect} from "react"
+import {useContext,useEffect} from "react"
 import GlobalContext from "../../components/context"
 import Context from "./context"
 import {reactLocalStorage} from 'reactjs-localstorage'
@@ -21,7 +21,6 @@ const useBingo = (matchId) => {
   const service = globalState.api.service('bingo-match')
   const chatService = globalState.api.service('bingo-chat')
   const ballsService = globalState.api.service('bingo-balls')
-  const [storedId, setStoreId] = useState(null)
 
   const onMsg = (message) => {
     if(message.room ===matchId){
@@ -40,10 +39,9 @@ const useBingo = (matchId) => {
     if(state.initialized || !matchId)
       return
 
-    const id = reactLocalStorage.get('bingo-match-id',null)
-    setStoreId(id)
-
     dispatch({type: "set-initialized"})
+    const storedId = reactLocalStorage.get('bingo-match-id',null)
+    dispatch({type: "set-stored-id", storedId})
 
     chatService.on('msg', onMsg)
     service.on('ball', onBall)
@@ -69,12 +67,14 @@ const useBingo = (matchId) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[state.initialized])
 
-  const ownsMatch = () => storedId === matchId
+  const ownsMatch = () => state.storedId === matchId
 
   const createMatch =  async () => {
     try{
       const match = await service.create(newMatch)
+      console.log(state.storedId, match)
       reactLocalStorage.set('bingo-match-id',match._id)
+      dispatch({type: "set-stored-id", storedId:match._id})
       return match
     }catch(error){
       console.log('create',error)
@@ -116,7 +116,7 @@ const useBingo = (matchId) => {
     //await service.addBall(room,{name,text,room})
   }
 
-  return { ...state, createMatch, updateMatch, sendText, addBall, ownsMatch, storedId, ballsMax }
+  return { ...state, createMatch, updateMatch, sendText, addBall, ownsMatch, ballsMax }
 
 }
 
