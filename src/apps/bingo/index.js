@@ -2,6 +2,8 @@ import React from "react"
 import { Router} from "@reach/router"
 import SEO from "../../components/seo"
 
+import "./print.sass"
+
 import Header from "./header"
 import Faq from "./faq"
 import Home from "./home"

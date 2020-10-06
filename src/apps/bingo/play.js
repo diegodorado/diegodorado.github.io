@@ -19,13 +19,28 @@ const Play = () => {
   if(!player)
     return <h4>Invalid Link</h4>
 
+  const onPrintClick = () => {
+    window.print()
+  }
+
   return (
-    <div className="setup">
-      <h4>¡Hola {player.name}!</h4>
-      {match.showChat && <Chat name={player.name} room={matchId} />}
-      {match.showJitsi && <Jitsi name={player.name} room={matchId} />}
-      <Balls reversed={true} balls={balls} />
-      {player.cards.map((c,i)=> <Card key={i} card={c}  style={match.style} />) }
-    </div>)
+    <>
+      <div className="preview">
+        <h4>Cartones de {player.name}</h4>
+        {player.cards.map((c,i)=> <Card key={i} card={c}  style={match.style} />) }
+      </div>
+      <div className="play">
+        <h4>¡Hola {player.name}!</h4>
+        {match.showChat && <Chat name={player.name} room={matchId} />}
+        {match.showJitsi && <Jitsi name={player.name} room={matchId} />}
+        <Balls reversed={true} balls={balls} />
+        {player.cards.map((c,i)=> <Card key={i} card={c}  style={match.style} />) }
+        <br/>
+        <br/>
+        <br/>
+        <button onClick={onPrintClick}>IMPRIMIR</button>
+      </div>
+    </>
+  )
 }
 export default Play
