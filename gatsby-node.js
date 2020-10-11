@@ -178,6 +178,20 @@ exports.onCreatePage = ({ page, actions }) => {
     return
   }
 
+  if (page.path.match(/^\/bingo/)) {
+    page.matchPath = "/bingo/*"
+    console.log(page.path, page.matchPath)
+    createPage(page)
+    return
+  }
+
+  if (page.path.match(/^\/cv2612/)) {
+    page.matchPath = "/cv2612/*"
+    console.log(page.path, page.matchPath)
+    createPage(page)
+    return
+  }
+
   // page.matchPath is a special key that's used for matching pages
   // only on the client.
   if (page.path.match(/^\/app/)) {
@@ -187,19 +201,6 @@ exports.onCreatePage = ({ page, actions }) => {
     console.log(page.path, page.matchPath)
     return
   }
-
-  // page.matchPath is a special key that's used for matching pages
-  // only on the client.
-  if (page.path.match(/^\/bingo/)) {
-    page.matchPath = "/bingo/*"
-    // Update the page.
-    createPage(page)
-    console.log(page.path, page.matchPath)
-    return
-  }
-
-
-
 
 
   deletePage(page)
