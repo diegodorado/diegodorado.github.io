@@ -1,5 +1,6 @@
+import "./io.sass"
 import React, { useState, useEffect} from 'react'
-import Layout from "../../layouts/io"
+import Layout from "../../layouts/main"
 import hekaTitle from "../../../content/works/i-o/heka.png"
 import hekaVid from "../../../content/works/i-o/heka.mp4"
 
@@ -191,7 +192,7 @@ const IoIndex = ({location})  =>{
   </>
 
   return (
-  <Layout location={location}>
+  <Layout location={location} bodyClass="io">
     <img className="title" alt="HEKA" src={hekaTitle} />
     <>
       {(phase===1) && phase1Msg()}

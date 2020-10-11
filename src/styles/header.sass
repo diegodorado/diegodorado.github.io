@@ -1,11 +1,3 @@
-//heavier rule to override theming
-.dont-use-this
-  #app header nav a.labs:hover
-    text-shadow: 3px 3px 3px magenta,-3px -3px 3px magenta
-    transition: none
-    i
-      animation: none
-
 header
   @extend %no-select
   display: table
@@ -32,8 +24,6 @@ header
     &.active
       text-decoration: underline
     &.labs
-      //animation: atention 10s
-      //will-change: opacity
       i
         will-change: opacity
         font-style: normal
@@ -49,19 +39,8 @@ header
     a
       text-decoration: none
 
-
 @keyframes typing
   from, to, 20%
     opacity: 1
   10%
     opacity: 0
-
-
-@keyframes atention
-  from
-    opacity: 0
-    //although pretty, this isnt performant at all
-    //text-shadow: 4px 4px 4px magenta,-4px -4px 4px magenta,4px -4px 4px magenta,-4px 4px 4px magenta
-  to
-    opacity: 1
-    //text-shadow: 2px 2px 4px #666,-2px -2px 6px #666

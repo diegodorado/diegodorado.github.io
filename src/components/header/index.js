@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useContext} from "react"
 import Link from "../link"
 import Helmet from "react-helmet"
 import Brand from "./brand"
@@ -6,6 +6,7 @@ import LanguagesLinks from "./languages-links"
 import ThemeToggle from "./theme-toggle"
 import SocialLinks from "./social-links"
 import { useTranslation } from 'react-i18next'
+import Context from "../context"
 
 const meta = [
   {
@@ -36,12 +37,14 @@ const PLink = ({ className, ...rest }) => (
 )
 
 
-const Header = ({location}) => {
+const Header = ({location, bodyClass=""}) => {
   const [t, ] = useTranslation();
+  const { state } = useContext(Context)
 
   return (
     <header>
       <Helmet meta={meta} />
+      <Helmet bodyAttributes={{class: `${state.theme} ${bodyClass}` }}  />
       <Brand title="diego dorado" />
       <nav>
         <SocialLinks />

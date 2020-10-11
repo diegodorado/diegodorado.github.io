@@ -1,5 +1,7 @@
+import "./live-emojing.sass"
+
 import React, {useContext} from "react"
-import Layout from "../../layouts/live-emojing"
+import Layout from "../../layouts/main"
 import SEO from "../../components/seo"
 import Playground from '../../components/live-emojing/playground'
 import Connection from '../../components/live-emojing/connection'
@@ -16,7 +18,7 @@ const LiveEmojingIndex = ({location}) =>{
   const pattern = (parts.length >1) ? decodeURIComponent(parts[1]) : ''
 
   return (
-    <Layout location={location} >
+    <Layout location={location} bodyClass="live-emojing" >
       <SEO title="live emojing" />
       <LiveEmojingStore>
         <LiveEmojingWithContext pattern={pattern} />

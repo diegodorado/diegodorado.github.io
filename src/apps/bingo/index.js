@@ -2,6 +2,7 @@ import React from "react"
 import { Router} from "@reach/router"
 import SEO from "../../components/seo"
 
+import "./styles.sass"
 import "./print.sass"
 
 import Header from "./header"

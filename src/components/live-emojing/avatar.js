@@ -32,7 +32,6 @@ const Avatar = () =>{
     img.src = url
   }
 
-
   const onChangeAvatar = (e) => {
     if(loadingAvatar)
       return
@@ -42,7 +41,6 @@ const Avatar = () =>{
     reactLocalStorage.set('understandsAvatarClick', true)
     setUnderstandsAvatarClick(true)
   }
-
 
   return (
     <p><img alt="" width={150} height={150} src={context.avatarUrl} onClick={onChangeAvatar} className={`${ loadingAvatar ? 'loading' : '' } ${(!understandsAvatarClick)?'pulse':''}  avatar`} aria-hidden="true" /></p>

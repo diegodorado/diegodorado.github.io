@@ -1,5 +1,5 @@
 import React, {useContext} from "react"
-import Layout from "../../layouts/live-emojing"
+import Layout from "../../layouts/main"
 import SEO from "../../components/seo"
 import Playground from '../../components/live-emojing/playground-midi'
 import Connection from '../../components/live-emojing/connection'

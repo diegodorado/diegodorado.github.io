@@ -965,7 +965,7 @@ class Signalling {
 
 const BingoIndex = ({location}) => {
   return (
-    <Layout location={location} >
+    <Layout location={location} bodyClass="bingo" >
       <SEO title="bingo" />
       <BingoProvider > 
         <BingoInner location={location}/>
@@ -1122,9 +1122,9 @@ const BingoHeader = () => {
       </h3>
     </div>
     {!state.isClient && wannaTry && (<>
-      <p>Hay una versión beta, muuuuy beta, casi alpha... ¿quieres probarla?</p>
-      <button onClick={()=>navigate('/bingo')}>SI</button>
-      <button onClick={()=>setWannaTry(false)}>NO</button>
+      <p>Prueba la nueva versión</p>
+      <button onClick={()=>navigate('/bingo')}>DALE</button>
+      <button onClick={()=>setWannaTry(false)}>NO, GRACIAS</button>
       <br/>
       <br/>
       <br/>
@@ -1140,7 +1140,7 @@ const BingoInner = ({location}) => {
 
   // single layout for master and clients
   return (
-    <div className={`bingo ${state.onlyMusic ? 'only-music' :  ''}`}>
+    <div className={`${state.onlyMusic ? 'only-music' :  ''}`}>
       <BingoHeader />
       <BingoSession location={location}/>
       { !state.loading && ( 

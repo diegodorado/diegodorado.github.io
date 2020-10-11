@@ -4,11 +4,15 @@ import React from "react"
 import Footer from "../components/footer"
 import Header from "../components/header"
 import Provider from "../components/provider"
+import Helmet from "react-helmet"
 
-const Layout = ({ children, location }) => (
+import "../styles/app.sass"
+require("prismjs/themes/prism-tomorrow.css")
+
+const Layout = ({ children, location, bodyClass }) => (
   <Provider>
     <div id="app">
-      <Header location={location} />
+      <Header location={location} bodyClass={bodyClass}  />
       <main>{children}</main>
       <Footer />
     </div>
