@@ -1,43 +1,17 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, {useContext} from "react"
+import React, {useState,useContext} from "react"
 import {CV2612Context} from "./context"
+import InstrumentControls from "./instrument-controls"
+import Slider from "./slider"
 import CvInput from "./cv_input"
 
 const Scene = (props) =>{
   const { state, dispatch } = useContext(CV2612Context)
 
-  const max = 1023
-  const code = 'scene'
-  const className = 'slider'
-    .concat(state.learning ? ' learn' : '')
-    .concat(state.activeParameter === code ? ' active' : '')
-    .concat(state.mapping[code]!==null ? ' mapped' : '')
-
-
-  const onChange = (ev) =>{
-    ev.preventDefault()
-    dispatch({ type: "update-param", code: code, value: parseInt(ev.target.value) })
-    dispatch({ type: "active-param", code: code })
-  }
-
-  const onClick = (ev) =>{
-    ev.preventDefault()
-    dispatch({ type: "active-param", code: code })
-  }
-
-  /*
-  const onSelectScene = (ev) =>{
-    ev.preventDefault()
-    const s = parseInt(ev.target.attributes.scene.value, 10)*256+127
-    dispatch({ type: "update-param", code: code, value: s })
-    dispatch({ type: "active-param", code: code })
-  }
-  */
-
   const storeScene = (ev) =>{
     ev.preventDefault()
     const s = parseInt(ev.target.attributes.scene.value, 10)
-    dispatch({ type: "update-param", code: code, value: s*256+127 })
+    //dispatch({ type: "update-param", code: code, value: s*256+127 })
     dispatch({ type: "set-patch", index: s })
   }
 
@@ -47,33 +21,131 @@ const Scene = (props) =>{
     dispatch({ type: "select-patch", index: s })
   }
 
+  const onLoadInstrument = ev => {
+    ev.preventDefault()
+    const index = parseInt(ev.target.value, 10)
+    dispatch({ type: "load-instrument", index})
+    ev.target.value = -1
+  }
+
+  const onCopyInstrument = ev => {
+    ev.preventDefault()
+    const index = parseInt(ev.target.value, 10)
+    dispatch({ type: "copy-from-instrument", index})
+    ev.target.value = -1
+  }
+
+  const onCopyPatch = ev => {
+    ev.preventDefault()
+    const index = parseInt(ev.target.value, 10)
+    dispatch({ type: "copy-from-patch", index})
+    ev.target.value = -1
+  }
+
+
+
+  const onChangeInstrument = index => ev => {
+    ev.preventDefault()
+    dispatch({ type: "change-instrument", index})
+  }
+
+
+  const onChangePatch = index => ev => {
+    ev.preventDefault()
+    dispatch({ type: "change-patch", index})
+  }
+
+
+  const onCopyToAllInstruments = ev => {
+    ev.preventDefault()
+    dispatch({ type: "copy-all-instruments"})
+  }
+
+  const onCopyToAllPatches = ev => {
+    ev.preventDefault()
+    dispatch({ type: "copy-all-patches"})
+  }
+
+
+  // 0:A , 21:A/B, 42:B, 63:B/C, 84:C, 105:C/D, 126/7:D
+  const blend = Math.min(state.params["bl"]/42, 3)
 
   return (
-    <>
-    <div className="scene">
-      <div className={className} onClick={onClick} aria-hidden="true" >
-        <input type="range" step={1} min={0} max={max} value={state.params[code]} onChange={onChange} />
-        <span>
-          {state.params[code] + (state.learning ? ` - CC ${state.mapping[code]}`: '') }
-        </span>
-      </div>
-      <CvInput code="x"/>
-      <CvInput code="y"/>
-      <CvInput code="z"/>
-    </div>
-    <div className="store-recall">
-      <nav>
-        <span> Store to:</span>
-        {[0,1,2,3].map(i => <a href="/" className={Math.floor(state.params[code]/(1024/4)) === i ? 'active':'' } key={i} scene={i} onClick={storeScene}>{'ABCD'[i]}</a>)}
-      </nav>
-      <nav>
-        <span> Recall from:</span>
-        {[0,1,2,3].map(i => <a href="/" key={i} scene={i} onClick={recallScene}>{'ABCD'[i]}</a>)}
-      </nav>
-    </div>
-    </>
-  )
-}
+      <>
+       <div className="four-cols">
+          <div className="col">
+          </div>
+          <div className="col">
+            <CvInput code="x"/>
+          </div>
+          <div className="col">
+            <CvInput code="y"/>
+          </div>
+          <div className="col">
+            <CvInput code="z"/>
+          </div>
+        </div>       
 
+        <div className="four-cols">
+          <div className="col">
+            <Slider name="bl"/>
+          </div>
+          <div className="col">
+            <Slider name="pm" />
+          </div>
+          <div className="col">
+            <Slider name="vs" />
+          </div>
+          <div className="col">
+            <Slider name="li"/>
+          </div>
+        </div>
+
+        <nav className="patches">
+          <span>PATCH </span>
+          {[0,1,2,3].map(i => <a href="/" style={{"--left":`${(blend-i)*100}%`}} className={state.patchIdx === i ? 'active':'' } key={i} onClick={onChangePatch(i)}>{'ABCD'[i]}</a>)}
+        </nav>
+
+        <nav className="clone">
+          <select onChange={onCopyPatch} >
+            <option value={-1}> {'--> Copy from <--'} </ option>
+            {[0,1,2,3].filter(i=>i!==state.patchIdx).map(i =><option key={i} value={i}>{'ABCD'[i]}</option>)}
+          </select>
+          <a href="/" onClick={onCopyToAllPatches} title={`Copy to all` }>Copy to All</a>
+        </nav>
+
+
+        <div className="four-cols">
+          <div className="col">
+            <Slider name="lfo"/>
+          </div>
+        </div>
+
+        <nav>
+          <span>INST </span>
+          {[0,1,2,3,4,5].map(i => <a href="/" className={state.instrumentIdx === i ? 'active':'' } key={i} onClick={onChangeInstrument(i)} title={`View ${i+1}` }>{`${i+1}` }</a>)}
+        </nav>
+
+        <nav className="clone">
+          <select onChange={onLoadInstrument} >
+            <option value={-1}> {'--> Load from <--'} </ option>
+            {state.instruments.map((p,i) =><option key={i} value={i}>{p.name}</option>)}
+          </select>
+          <select onChange={onCopyInstrument} >
+            <option value={-1}> {'--> Copy from <--'} </ option>
+            {[0,1,2,3,4,5].filter(i=>i!==state.instrumentIdx).map(i =><option key={i} value={i}>{i+1}</option>)}
+          </select>
+          <a href="/" onClick={onCopyToAllInstruments} title={`Copy to all` }>Copy to All</a>
+        </nav>
+
+        <br/>
+        <br/>
+
+        <InstrumentControls al={state.params['al']} />
+      </>
+  )
+
+
+}
 
 export default Scene

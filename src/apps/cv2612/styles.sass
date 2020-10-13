@@ -1,7 +1,7 @@
 @import "../../styles/colors"
 @import "../../styles/mixins"
 
-.cv2612
+.cv2612 main
   user-select: none
   *
     -webkit-user-drag: none
@@ -52,16 +52,30 @@
   .globals
     margin: 30px auto
     width: 100%
+  nav.patches
+    .active
+      position: relative
+      --left: 0
+      &::before
+        left: var(--left)
+        width: 100%
+        position: absolute
+        bottom: 0
+        content: ""
+        border-bottom: 4px solid $blue
 
   nav
     position: relative
     @extend %no-select
-    margin: 10px auto
-    width: 100%
-    border: 1px solid white
+    margin: 10px auto 0
+    border: 1px solid $white
     box-sizing: border-box
     display: flex
     align-items: stretch
+    &.clone
+      margin: 0 0 10px 33%
+      border-top: none
+
     span
       flex-grow: 0.5
       padding: 0.5em 0
@@ -77,7 +91,7 @@
       text-align: center
       &.active,&:active, &:hover
         background: #ddd
-        color: black
+        color: $black
 
     a[title]:after
       content: attr(title)
@@ -97,7 +111,7 @@
       opacity: 0.8
     select
       flex-grow: 5
-      font-size: 1.2em
+      font-size: 1em
       outline: 0
       margin: 3px 5px
       border: 0
@@ -155,24 +169,14 @@
         line-height: 25px
         padding: 0
 
-  .store-recall
-    margin: 20px 0
-    display: flex
-    nav
-      width: 50%
-      margin: 4px
-      height: 25px
-      border: 0
-      a, span
-        height: 25px
-        line-height: 25px
-        padding: 0
-
   .cv-input
     border: 2px solid transparent
-    width: 150px
+    width: 230px
     text-align: center
+    visibility: hidden
+    margin: 10px 0
     &.learn
+      visibility: visible
       background: rgba(0,255,255,0.12)
       &.mapped
         background: rgba(0,255,255,0.35)
@@ -239,10 +243,10 @@
 
 
 @keyframes blinkLed
-    from
-      background-color: $blue
-    50%
-      background-color: #24E0FF
-      box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #006 0 -1px 9px, #3F8CFF 0 2px 14px
-    to
-      background-color: $blue
+  from
+    background-color: $blue
+  50%
+    background-color: #24E0FF
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #006 0 -1px 9px, #3F8CFF 0 2px 14px
+  to
+    background-color: $blue

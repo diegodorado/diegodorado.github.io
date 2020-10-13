@@ -1,12 +1,10 @@
-import React, {useContext} from "react"
-import {CV2612Context} from "./context"
+import React from "react"
 import Operator from "./operator"
 import Slider from "./slider"
 import algorithmAscii from "./utils/algorithmAscii"
 
-const Channel = (props) =>{
-  const { state } = useContext(CV2612Context)
-  return (
+const InstrumentControls = ({al}) =>
+  (
     <div className="channel">
       <div className="four-cols">
         <div className="col">
@@ -22,7 +20,7 @@ const Channel = (props) =>{
         </div>
         <div className="col">
           <pre className="algorithm">
-            {algorithmAscii(state.params['al'])}
+            {algorithmAscii(al)}
           </pre>
         </div>
       </div>
@@ -34,6 +32,5 @@ const Channel = (props) =>{
       </div>
     </div>
   )
-}
 
-export default Channel
+export default InstrumentControls

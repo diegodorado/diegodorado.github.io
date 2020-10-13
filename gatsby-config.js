@@ -18,8 +18,8 @@ module.exports = {
     langs: ['en','es'],
     title: `diego dorado`,
     author: `Diego Dorado`,
-    description: `diego dorado portfolio.`,
-    siteUrl: `http://diegodorado.com/`,
+    description: `diego dorado's site.`,
+    siteUrl: `https://diegodorado.com/`,
     social: {
       twitter: `diegodorado`,
     },

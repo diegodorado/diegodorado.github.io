@@ -7,7 +7,7 @@ const state = {
 }
 
 // 1000 cc per seconds -> 250 nrpn per seconds -> interval 4
-const interval = 10
+const interval = 20
 const nrpn_queue = new Map()
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
@@ -33,15 +33,15 @@ const unsub = (event, callback) => {
 const setMidiCtrlInId = id => state.midiCtrlInId = id
 const setMidiOutId = id => state.midiOutId = id
 
-const init = () => {
-  navigator.requestMIDIAccess({
-    sysex: false
-  }).then(
-    (ma) => {
-      state.ma = ma
-      ma.onstatechange = refresh
-      refresh()
-    }, () => console.log('Could not access your MIDI devices.'))
+const init = async () => {
+  try{
+    const ma = await navigator.requestMIDIAccess()
+    state.ma = ma
+    ma.onstatechange = refresh
+    refresh()
+  }catch(e){
+    console.log('Could not access your MIDI devices.')
+  }
 }
 
 
@@ -74,6 +74,7 @@ const sendMidi = async data => {
 }
 
 
+//todo: make a web woker to handle mii out msasge queue
 const sendNRPN = async (channel, nrpn_msb, nrpn_lsb, data_msb, data_lsb) => {
   if (!state.ma)
     return
@@ -92,6 +93,7 @@ const sendNRPN = async (channel, nrpn_msb, nrpn_lsb, data_msb, data_lsb) => {
 
   let index = nrpn_queue.size
   let start = performance.now()
+  //todo: change this awful sleep with a queue and a worker
   await sleep(interval * index)
 
   if (nrpn_queue.has(key)) {

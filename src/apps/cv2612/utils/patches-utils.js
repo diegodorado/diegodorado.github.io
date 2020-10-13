@@ -1,33 +1,10 @@
-
-export const globalParams = ['lfo','scene','play-mode','cc-mode','x','y','z','vel-sensitivity','rgb-intensity','single-voice']
+// blend, play mode, cc mode, x, y, z, vel sensitivity, led intensity, single voice
+export const globalParams = ['lfo','bl','pm','cc','x','y','z','vs','li','sv']
 
 export const ctrlMap = ['ar','d1','sl','d2','rr','tl','mul','det','rs','am','al','fb','ams','fms','st','lfo']
 
-//rename to defaultParams
-export const emptyPatch = () =>{
-  const patch = {}
-
-  for (let g of globalParams) {
-    patch[g] = 0
-  }
-
-  patch['voices'] = []
-  for(let i=0;i<6;i++){
-    patch['voices'][i] = emptyVoice()
-  }
-  patch['name'] = 'empty'
-  patch['single-voice'] = true
-  patch['lfo'] = 0
-  patch['play-mode'] = 0
-  return patch
-}
-
-
-
-//rename to defaultParams
-export const emptyVoice = () =>{
+export const emptyInstrument = () =>{
   const params = {}
-
   params[`fms`] = 0
   params[`fb`] = 0
   params[`al`] = 0
@@ -49,7 +26,7 @@ export const emptyVoice = () =>{
 }
 
 export const emptyParams = () =>{
-  const params = emptyVoice()
+  const params = emptyInstrument()
   for (let g of globalParams) {
     params[g] = 0
   }
@@ -58,7 +35,6 @@ export const emptyParams = () =>{
 
 
 export const emptyMapping = () =>{
-
   const mapping = emptyParams()
   for (let key in mapping) {
     mapping[key] = null
@@ -66,16 +42,13 @@ export const emptyMapping = () =>{
   return mapping
 }
 
-
-export const dmp2voice = (d) =>{
+export const dmp2instrument = (d) =>{
+    const params = emptyInstrument()
     //version 9 or 11, genesis, FM patch
     if( (d[0]===0x09 && d[1]===0x01 && d[2]===0x00)
         || ( d[0]===0x0B && d[1]===0x02 && d[2]===0x01) ){
-
         /*
-
         http://www.deflemask.com/DMP_SPECS.txt
-
         1 Byte: LFO (FMS on YM2612, PMS on YM2151)
         1 Byte: FB
         1 Byte: ALG
@@ -93,15 +66,12 @@ export const dmp2voice = (d) =>{
           1 Byte: D2R
           1 Byte: SSGEG_Enabled <<3 | SSGEG
           */
-          const params = emptyVoice()
-
           params[`fms`] = d[3]
           params[`fb`] = d[4]
           params[`al`] = d[5]
           params[`ams`] = d[6]
           for(let op=0;op<4;op++){
             const o = op*11+7
-
             params[`mul_${op}`] = d[o+0]
             params[`tl_${op}`] = d[o+1]
             params[`ar_${op}`] = d[o+2]
@@ -113,12 +83,8 @@ export const dmp2voice = (d) =>{
             params[`det_${op}`] = d[o+8]
             params[`d2_${op}`] = d[o+9]
           }
-
-          return params
     }
-    //else
-    return null
-
+    return params
 }
 
 
