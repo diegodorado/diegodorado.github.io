@@ -1,3 +1,9 @@
+- image: labs/multiplayer.png
+  title: Multiplayer
+  description_es: Muestra de implementación de un juego cliente-servidor.
+  description_en: Sample implementation of a client-server architecture.
+  link: /labs/multiplayer/
+
 - image: labs/bingo.png
   title: Bingo Musical 
   description_es: Un regalo a mi madre durante la cuarentena del COVID-19.
