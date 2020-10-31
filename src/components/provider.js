@@ -7,7 +7,8 @@ import io from "socket.io-client"
 import auth from "@feathersjs/authentication-client"
 
 //const socket = io('http://localhost:3000')
-const socket = io("https://api.diegodorado.com")
+//const socket = io("https://api.diegodorado.com")
+const socket = io("https://api.apps.diegodorado.com")
 const api = feathers()
 api.configure(socketio(socket, { timeout: 2000 }))
 api.configure(auth())
