@@ -1,5 +1,5 @@
 ---
-title: VJing
+title: Visuales
 date: "2020-01-01"
 description: Software originalmente creado para hacer visuales en vivo en diferentes performances.
 cover: "./cover.png"

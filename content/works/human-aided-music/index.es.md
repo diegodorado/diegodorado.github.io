@@ -5,61 +5,63 @@ description: Un diálogo musical humano-máquina donde el líder no es clarament
 cover: "./cover.jpg"
 ---
 
-**Música Asistida por Humano** is a Human-Machine percussion duo where the machine learns from the human. It proposes a fluid dialogue between both, to the point where no one distinguishes who leads the music.
+**Música Asistida por Humano** es un dúo e percusión Humano-Máquina en el cual la máquina aprende del humano. Propone un diálogo fluído entre ambos, al punto en que no se distinga quién lidera la música.
 
-![](./poster.png)
+Se trata de una escultura robótica, llamada Bernardo, dotada de un programa de inteligencia artificial capaz de acompañar musicalmente a un intérprete humano.
 
-The work speaks about the creation of artificial life from an artistic perspective, wondering whether a *funky-drummer-machine* that can hold a musical conversation with a person could be credible spectacle.
-Credible not in the sense of deception, but in the sense of recognizing the human trace in the machine.
+![](./sm2.jpg)
 
-> *Would the spectator come to feel that in the machine, although in a rudimentary way, there is life?*
+La obra habla sobre la creación de vida artificial desde una perspectiva artística, preguntándose si una máquina-baterista-funky que pueda mantener una conversación musical con una persona podría ser un espectáculo creíble. Creíble no en el sentido del engaño, sino en el sentido de reconocer el rastro humano en la máquina.
 
-Even with a specific *funky-drumming* constraint, it poses delicate questions. What is the purpose of making a machine play the drums if we already have good drummers?
-What is the purpose of artificial life?  **Why Golems? Why Frankenstein's creatures?**
+> ¿Llegaría el espectador a sentir que en la máquina, aunque de forma rudimentaria, hay vida?
+
+![](./bernardo.jpg)
+
+Aún limitándose a un *baterista funky*, plantea cuestiones delicadas. 
+¿Cuál es el propósito de hacer que una máquina toque la batería si ya tenemos buenos bateristas? 
+¿Cuál es el propósito de la vida artificial? **¿Por qué Golems? ¿Por qué criaturas de Frankenstein?**
 
 
-The creation of life is associated with **horror**: *will we create monsters? will the machines replace us?* But associated also with the greatest desires of the human being: the search for immortality and the breaking of all limits
-
+La creación de vida siempre asociada al **horror**: *¿crearemos monstruos? ¿Nos reemplazarán las máquinas?*   
+Pero asociado también a los mayores deseos del ser humano: la búsqueda de la inmortalidad y la ruptura de todo límite.
 
 | | |
 |-|-|
 |![](./golem.jpg)|![](./deniro.jpg)|
 
-> *When you think of the Golem or Frankenstein, would you say they are human?
-Would you say that they are not?*
+> Cuando piensas en el Golem o Frankenstein, ¿dirías que son humanos? ¿Dirías que no lo son?
 
-We are still talking about *funky-drumming* ... but if we manage to transfer the skills of a drummer to an artificial intelligence program, what could we not, potentially?
+Seguimos hablando de *bateristas funky* ... pero si logramos transferir las habilidades de un baterista a un programa de inteligencia artificial, ¿qué no podríamos hacer, potencialmente?
 
 ---
 
-### Presentation
+### Presentaciones
 
-> The AI side of this project is still in development. *But I was anxious to give it a try so here I'm livecoding the machine along with some synths.*
+Presentación en el Centro Cultural San Martín, durante **Noviembre Electrónico 2019**.  
+La obra fue seleccionada para el programa de residencias arte-ciencia SM2.
+
+`video: https://youtu.be/C7oVKmWanwM`
+
+
+Presentación en Universidad Naciona de San Martín, en diciembre 2018.  
+La IA del proyecto aún estaba en desarrollo. Pero estaba ansioso por probarlo, así es que aquí estoy **livecodeando** a Bernardo junto con algunos sintetizadores.
 
 `video: https://youtu.be/aoeT3bze25c`
 
-> *UNSAM, BsAs, Argentina, December 2018. No AI yet: the machine is being live-coded*
-
-
-As an installation, the work will be available to the public with proper explanations of use, to promote participation and experimentation to communicate with a machine musically.
-As a performance it will be short presentations where the performer tries to make it evident to the audience that he is guiding the performance. At the beginning you will see how the machine tries to learn, and in the end how it accompanies the performer in duo.
-
-
-
-
 
 ---
-### Aesthetics
+### Estética
 
-The aesthetic proposal is to humanize the machine and "machinize" the human with the intention that this crossing will provoke the feeling of approach between them. Elements normally associated with the human are be transferred to the machine and vice versa.
+La propuesta estética es humanizar la máquina y "maquinizar" al humano con la intención de que este cruce provoque la sensación de cercanía entre ellos. Los elementos normalmente asociados con humanos se transfieren a la máquina y viceversa.
 
 | | |
 |-|-|
 |![](./cover.jpg)|![](./max.jpg)|
 
 
-While the machine strikes acoustic percussive bodies with electromagnetic actuators, the human have digital gear with synthetic sounds.
-The title also plays with this aesthetic cross: the term *computer-aided music* has been known for years, in which the human composer uses the machine to solve technical and high precision tasks in order to carry out his work. Here we propose the opposite: it is the machine who "composes", but needs the assistance of a human to inject emotion into his work.
+Mientras que la máquina golpea cuerpos de percusión acústica con actuadores electromagnéticos, el ser humano tiene equipos electrónicos con sonidos sintéticos. 
+El título juega también con este cruce: desde hace años se conoce el término música asistida por ordenador, en el que el compositor humano utiliza la máquina para resolver tareas técnicas y de alta precisión para realizar su obra. Aquí proponemos lo contrario: es la máquina la que “compone”, pero necesita la ayuda de un humano para inyectar emoción a su trabajo.
 
-The machine has a *machine-animal-humanoid* hybrid aspect without gender definition. It has all the signs of the imperfect and *unfinishedness*: lack of symmetry, fragments of different technologies and materials, and evidence of recent repairs.
-> *A unique creature rather than a device. A clear trace of having been sired.*
+Bernardo tiene un aspecto híbrido máquina-animal-humanoide y todos los signos de lo imperfecto e inacabado: falta de simetría, fragmentos de diferentes tecnologías y materiales, y evidencia de reparaciones recientes.
+
+> Una criatura única más que un dispositivo. Un rastro claro de haber sido engendrado.
