@@ -5,7 +5,7 @@ description: Un diálogo musical humano-máquina donde el líder no es clarament
 cover: "./cover.jpg"
 ---
 
-**Música Asistida por Humano** es un dúo e percusión Humano-Máquina en el cual la máquina aprende del humano. Propone un diálogo fluído entre ambos, al punto en que no se distinga quién lidera la música.
+**Música Asistida por Humano** es un dúo de percusión Humano-Máquina en el cual la máquina aprende del humano. Propone un diálogo fluído entre ambos, al punto en que no se distinga quién lidera la música.
 
 Se trata de una escultura robótica, llamada Bernardo, dotada de un programa de inteligencia artificial capaz de acompañar musicalmente a un intérprete humano.
 
