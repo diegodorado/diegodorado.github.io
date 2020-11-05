@@ -5,7 +5,8 @@ description: Obra robótica que teje de forma autónoma neo-representaciones de 
 cover: "./cover.jpg"
 ---
 
-**A.D.A.** es una obra robótica que teje autónomamente neo-representaciones de la chakana, síntesis de la cosmovisión andina.   
+**A.D.A.** es una obra robótica, realizada en colaboración con [ceiborg](https://ceiborg.com/), que teje autónomamente neo-representaciones de la chakana, síntesis de la cosmovisión andina.   
+
 Su nombre se refiere a una "Autotejedora de Diseños Algorítmicos", celebrando además el enfoque tecno-poético de Ada Lovelace, a quien vemos
 como el nexo entre las más primitivas técnicas de tejido y las actuales ciencias de la computación. 
 

@@ -5,7 +5,8 @@ description: Obra robótica que teje de forma autónoma neo-representaciones de 
 cover: "./cover.jpg"
 ---
 
-**A.D.A.** is a robotic work that autonomously weaves neo-representations of the chakana, synthesis of the Andean cosmovision.  
+**A.D.A.** is a robotic work, made in collaboration with [ceiborg](https://ceiborg.com/), that autonomously weaves neo-representations of the chakana, synthesis of the Andean cosmovision.  
+
 The name refers to an “Algorithmic Designs Self-Weaving Machine” (“Autotejedora de Diseños Algorítmicos” in Spanish) , also celebrating 
 the techno-poetic approach of Ada Lovelace, whom we see as the nexus between the most primitive weaving techniques and current computer science.
 
