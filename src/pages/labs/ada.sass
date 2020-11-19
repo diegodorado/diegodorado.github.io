@@ -1,0 +1,28 @@
+@import "../../styles/colors.sass"
+
+.ada-canvas
+  image-rendering: pixelated
+  width: 100%
+
+.ada-algorithm
+  canvas
+    width: calc(100% - 2px)
+    border: 1px solid #ddd
+  button
+    outline: 0
+    cursor: pointer
+    border: 3px solid #666
+    font-size: 1.2rem
+    padding: 0.5em
+    margin: 0.5em 1em 0.5em 0 
+    background: none
+    color: $white
+    &.on
+      color: darken($blue,20%) 
+      border-color: darken($blue, 20%)
+    &:hover
+      color: $blue
+      border-color: $blue
+    &::-moz-focus-inner 
+      border: 0
+
