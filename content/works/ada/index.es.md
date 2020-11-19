@@ -92,4 +92,5 @@ dejó entre notas técnicas poemas como el siguiente:
    
 <iframe src="/es/labs/ada/?embed" width="100" height="100" style="border:0;overflow:hidden" scrolling="no"></iframe>
 
+---   
 Para mas información sobre el algoritmo utilizado por A.D.A. para tejer, [entrar aquí](/es/labs/ada)

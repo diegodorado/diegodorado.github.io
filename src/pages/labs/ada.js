@@ -212,7 +212,7 @@ const AdaPage = ({location}) => {
         <h3>A.D.A. weaving algorithm. </h3>
         <p>
           The algorithm that A.D.A. weaves is 
-          an <a href="https://en.wikipedia.org/wiki/Elementary_cellular_automaton"> elementary elementary cellular automaton</a> where 
+          an <a href="https://en.wikipedia.org/wiki/Elementary_cellular_automaton" target="_blank"> elementary elementary cellular automaton</a> where 
           the rule to determine the state of a cell in the next generation depends only on its current state and its two immediate neighbors.
         </p>
         <p>
