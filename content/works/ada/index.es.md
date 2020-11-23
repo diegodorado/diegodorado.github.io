@@ -7,15 +7,14 @@ cover: "./cover.jpg"
 
 **A.D.A.** es una obra robótica, realizada en colaboración con [ceiborg](https://ceiborg.com/), que teje autónomamente neo-representaciones de la chakana, síntesis de la cosmovisión andina.   
 
-Su nombre se refiere a una "Autotejedora de Diseños Algorítmicos", celebrando además el enfoque tecno-poético de Ada Lovelace, a quien vemos
-como el nexo entre las más primitivas técnicas de tejido y las actuales ciencias de la computación. 
-
+Su nombre se refiere a una "Autotejedora de Diseños Algorítmicos", y celebra la mirada tecno-poética y el genio de **Ada** Lovelace, 
+conectando los primeros telares industriales con las ciencias de la computación. 
 
 
 ![](./artifact.jpg)
 
 > En el centro de una sala tranquila y de paredes vacías, una máquina extraña exhibe un tejido extenso.  
-> Se escucha además una percusión de dos tambores sin estridencias, que parece provenir del mismo sitio, repitiendo una secuencia casi ritual.  
+> Se escucha además una percusión sin estridencias, que parece provenir del mismo sitio, repitiendo una secuencia casi ritual.  
 > Cada cierto tiempo y de forma autónoma, el carro se mueve de un lado hacia el otro extendiendo el tejido.  Y al hacerlo, la secuencia percusiva cambia.  
 > -- ¿Estarán relacionados?  
 > El dibujo del tejido es algo abstracto, pero pueden intuirse reminiscencias de símbolos andinos. 

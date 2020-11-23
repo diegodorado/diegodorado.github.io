@@ -35,6 +35,13 @@
     "Cannot get channels list":"No se pudo obtener el listado de sesiones",
     "liveCodingSessions": "¡Que suerte! Hay una sesión activa.",
     "liveCodingSessions_plural": "¡Imposible! Hay {{count}} sesiones activas.",
+    "A.D.A. weaving algorithm.": "Algoritmo de tejido de A.D.A.",
+    "about-ada": "<0>A.D.A.</0> es una obra robótica que teje autónomamente neo-representaciones de la chakana.",
+    "elementary-cellular-automaton": "El algoritmo que <1>A.D.A.</1> teje es un <3>autómata celular elemental</3> donde la regla para determinar el estado de una celda en la próxima generación depende solo de su estado actual y sus dos vecinos inmediatos.",
+    "algorithm-explanation": "Partimos de un estado aleatorio y luego recorremos una selección de reglas cada <1>24</1> filas.",
+    "those-rules-are": "Esas reglas son {{rules}} según Stephen Wolfram.",
+    "keep-weaving": "Para que el tejido sea realizable, podríamos cambiar alguna celda si es necesario.",
+    "transformation-being-applied": "Se están aplicando las transformaciones de la regla {{rule}}.",
     "":""
   }
 }

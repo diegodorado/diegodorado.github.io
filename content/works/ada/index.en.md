@@ -7,24 +7,24 @@ cover: "./cover.jpg"
 
 **A.D.A.** is a robotic work, made in collaboration with [ceiborg](https://ceiborg.com/), that autonomously weaves neo-representations of the chakana, synthesis of the Andean cosmovision.  
 
-The name refers to an “Algorithmic Designs Self-Weaving Machine” (“Autotejedora de Diseños Algorítmicos” in Spanish) , also celebrating 
-the techno-poetic approach of Ada Lovelace, whom we see as the nexus between the most primitive weaving techniques and current computer science.
-
+The name refers to an “Algorithmic Designs Self-Weaving-Machine” (“Autotejedora de Diseños Algorítmicos” in Spanish) 
+and celebrates the technopoetic gaze and genius of **Ada** Lovelace, 
+connecting the first industrial looms with computer science.
 
 ![](./artifact.jpg)
 
-> In the center of a quiet, empty-walled room, a strange machine displays extensive weave. 
-> There is also a percussion of two drums without fanfare, which seems to come from the same place, repeating an almost ritual sequence. 
-> Every so often and autonomously, the carriage moves from one side to the other, spreading the weave. 
-> And as it does, the percussive sequence changes. 
-> -- Might they be related?
-> The pattern of the fabric is somewhat abstract, but reminiscences of Andean symbols can be perceived. 
-> And while the cadence of the percussion suggests repetition, the weave shows that what is constant is change.
-> The pace of work is so slow that rigor of mass production does not fit the scene. 
-> -- But, what is this machine about?
-> It weaves without haste, giving the impression of doing conscious work, displaying a drawing that, 
-> more than a garment, looks like a parchment.
-> Like a solitary intelligence whose mission is to preserve a primitive message.
+> In the center of a quiet, empty-walled room, a strange machine displays extensive weave.  
+> An unintrusive percussion is also heard, which seems to come from the same place, repeating an almost ritual sequence.  
+> Every so often and autonomously, the carriage moves from one side to the other, spreading the weave.   
+> And as it does, the percussive sequence changes.   
+> -- Might they be related?  
+> The pattern of the fabric is somewhat abstract, but reminiscences of Andean symbols can be perceived.   
+> And while the cadence of the percussion suggests repetition, the weave shows that what is constant is change.  
+> The pace of work is so slow that rigor of mass production does not fit the scene.   
+> -- But, what is this machine about?  
+> It weaves without haste, giving the impression of doing conscious work, displaying a drawing that,   
+> more than a garment, looks like a parchment.  
+> Like a solitary intelligence whose mission is to preserve a primitive message.  
 
 
 ---   
