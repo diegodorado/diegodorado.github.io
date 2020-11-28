@@ -153,14 +153,14 @@ Client.prototype.processServerMessages = function() {
 
       // If this is the first time we see this entity, create a local representation.
       if (!this.entities[state.entity_id]) {
-        var entity = new Entity();
-        entity.entity_id = state.entity_id;
-        this.entities[state.entity_id] = entity;
+        const e = new Entity();
+        e.entity_id = state.entity_id;
+        this.entities[state.entity_id] = e
       }
 
-      var entity = this.entities[state.entity_id];
+      const entity = this.entities[state.entity_id];
 
-      if (state.entity_id == this.entity_id) {
+      if (state.entity_id === this.entity_id) {
         // Received the authoritative position of this client's entity.
         entity.x = state.position;
 
@@ -211,7 +211,7 @@ Client.prototype.interpolateEntities = function(server_update_rate) {
     var entity = this.entities[i];
 
     // No point in interpolating this client's entity.
-    if (entity.entity_id == this.entity_id) {
+    if (entity.entity_id === this.entity_id) {
       continue;
     }
 
@@ -324,8 +324,8 @@ Server.prototype.sendWorldState = function() {
   }
 
   // Broadcast the state to all the clients.
-  for (var i = 0; i < num_clients; i++) {
-    var client = this.clients[i];
+  for (var j = 0; j < num_clients; j++) {
+    var client = this.clients[j];
     client.network.send(client.lag, world_state);
   }
 }
@@ -334,8 +334,6 @@ Server.prototype.sendWorldState = function() {
 // Render all the entities in the given canvas.
 const renderWorld = function(canvas, entities) {
   // Clear the canvas.
-  canvas.width = canvas.width;
-  var colours = ["blue", "red"];
   for (var i in entities) {
     var entity = entities[i];
     // Compute size and position.
@@ -380,22 +378,25 @@ const Page = ({location}) => {
   const [p2Status, setP2Status] = useState("Waiting for connection...")
   const [serverStatus, setServerStatus] = useState("")
 
-
   const rafRef = useRef(null)
-  const player1 = useRef(new Client)
-  const player2 = useRef(new Client)
-  const server = useRef(new Server)
+  const player1 = useRef(new Client())
+  const player2 = useRef(new Client())
+  const server = useRef(new Server())
 
   const p1Canvas = useRef(null)
   const p2Canvas = useRef(null)
   const sCanvas = useRef(null)
-
 
   const p1 = player1.current
   const p2 = player2.current
   const s = server.current
 
   useEffect(() => {
+
+    const p1 = player1.current
+    const p2 = player2.current
+    const s = server.current
+
 
     if (!(player1.current && player2.current && server.current))
       return
@@ -416,14 +417,14 @@ const Page = ({location}) => {
     // When the player presses the arrow keys, set the corresponding flag in the client.
     const keyHandler = function(e) {
       e = e || window.event;
-      if (e.keyCode == 39) {
-        p1.key_right = (e.type == "keydown")
-      } else if (e.keyCode == 37) {
-        p1.key_left = (e.type == "keydown")
-      } else if (e.key == 'd') {
-        p2.key_right = (e.type == "keydown")
-      } else if (e.key == 'a') {
-        p2.key_left = (e.type == "keydown")
+      if (e.keyCode === 39) {
+        p1.key_right = (e.type === "keydown")
+      } else if (e.keyCode === 37) {
+        p1.key_left = (e.type === "keydown")
+      } else if (e.key === 'd') {
+        p2.key_right = (e.type === "keydown")
+      } else if (e.key === 'a') {
+        p2.key_left = (e.type === "keydown")
       } else {
         console.log(e)
       }
@@ -449,7 +450,7 @@ const Page = ({location}) => {
     rafRef.current = requestAnimationFrame(draw)
 
     return () => cancelAnimationFrame(rafRef.current)
-  }, []) // Make sure the effect runs only once
+  }, [serverFps]) // Make sure the effect runs only once
 
 
   return (
