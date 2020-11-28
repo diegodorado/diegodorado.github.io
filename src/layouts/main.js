@@ -4,7 +4,6 @@ import React from "react"
 import Footer from "../components/footer"
 import Header from "../components/header"
 import Provider from "../components/provider"
-import Helmet from "react-helmet"
 
 import "../styles/app.sass"
 require("prismjs/themes/prism-tomorrow.css")
