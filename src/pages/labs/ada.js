@@ -6,16 +6,9 @@ import "./ada.sass"
 import {useTranslation, Trans } from 'react-i18next'
 
 const cardWidth = 24
-const colorsCount = (s) => {
-  return s.reduce( (a,e) => {
-    a[e]++
-    return a
-  } , [0,0])
-}
 
 //fixme: ugly hardcoding
 const validateState = (cells) => {
-  const length = cells.length
   const l = cells.slice(7,12).reduce((a, b) => a + b, 0)
   const r = cells.slice(12,17).reduce((a, b) => a + b, 0)
   if( l === 0 || l === 5){
@@ -187,29 +180,6 @@ const AdaPage = ({location}) => {
     }
   }
 
-  const draw = time => {
-    state.current.tick++
-    if(canvasRef.current){
-      const context = canvasRef.current.getContext('2d')
-      if((state.current.tick % 60) === 0){
-        draw_rule(context)
-        draw_line(context)
-        state.current.cells = applyRule(state.current.cells,state.current.rule)
-        state.current.row++
-        if(state.current.row % 24 === 0)
-          nextRule()
-      }
-    }
-    rafRef.current = requestAnimationFrame(draw)
-  }
-
-  const nextRule = () => {
-    state.current.ruleIndex++
-    state.current.ruleIndex %= rules.length
-    state.current.rule = rules[state.current.ruleIndex] 
-    setRule(state.current.rule)
-  }
-
   const downloadPunchcard = (ev) => {
     ev.preventDefault()
     const rows = generateRows(500, rules)
@@ -225,12 +195,33 @@ const AdaPage = ({location}) => {
   }
 
   useEffect(() => {
+
+    const draw = time => {
+      state.current.tick++
+      if(canvasRef.current){
+        const context = canvasRef.current.getContext('2d')
+        if((state.current.tick % 60) === 0){
+          draw_rule(context)
+          draw_line(context)
+          state.current.cells = applyRule(state.current.cells,state.current.rule)
+          state.current.row++
+          if(state.current.row % 24 === 0){
+            state.current.ruleIndex++
+            state.current.ruleIndex %= rules.length
+            state.current.rule = rules[state.current.ruleIndex] 
+            setRule(state.current.rule)
+          }
+        }
+      }
+      rafRef.current = requestAnimationFrame(draw)
+    }
+
     randomize(state.current.cells)
     rafRef.current = requestAnimationFrame(draw)
     return () => {
       cancelAnimationFrame(rafRef.current)
     }
-  }, []) // Make sure the effect runs only once
+  }, [rules]) // Make sure the effect runs only once
 
   if (embed)
     return (<>
@@ -255,7 +246,7 @@ const AdaPage = ({location}) => {
             <span>The algorithm that </span>
             <Link to="/works/ada">A.D.A</Link> 
             <span> weaves is an </span>
-            <a href="https://en.wikipedia.org/wiki/Elementary_cellular_automaton" target="_blank">elementary elementary cellular automaton</a> 
+            <a href="https://en.wikipedia.org/wiki/Elementary_cellular_automaton" rel="noreferrer" target="_blank">elementary elementary cellular automaton</a> 
             <span> where the rule to determine the state of a cell in the next generation depends only on its current state and its two immediate neighbors.</span>
           </Trans>       
         </p>
