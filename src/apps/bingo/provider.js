@@ -18,12 +18,18 @@ const reducer = (state, action) => {
       const storedId = action.storedId
       return { ...state, storedId}
     case "set-match":{
-      const balls = action.match ? action.match.balls : []
-      return { ...state, match: action.match, balls}
+      // fixme: we have duplicated state of balls
+      // on state and state.match ... 
+      // this is due to "music" page wich has no match
+      const {match} = action
+      const balls = match ? match.balls : []
+      return { ...state, match, balls}
     }
     case "add-ball":{
-      const balls = [action.ball, ...state.balls ]
-      return { ...state, balls}
+      //fixme: yes... duplicated state....
+      const balls = [action.ball, ...state.match.balls ]
+      const match = { ...state.match, balls}
+      return { ...state, match, balls}
     }
     case "add-message":
       const messages = [...state.messages, action.message]

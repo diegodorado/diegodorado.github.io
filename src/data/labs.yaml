@@ -55,8 +55,7 @@
   title: IO HEKA
   description_es: Juego de parejas arquetípicas de la mitología clásica.
   description_en: Game of archetypal couples from classical mythology.
-  link: /es/labs/io
-  absolute: true
+  link: /labs/io
 
 - image: labs/morse.png
   title: MORSE

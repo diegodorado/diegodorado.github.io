@@ -55,6 +55,7 @@ const MusicPosts = () => {
   // execute from https://diegodorado.bandcamp.com/
   // Array.from(document.getElementsByClassName('music-grid')[0].getElementsByTagName('li')).map(e=>parseInt(e.dataset.itemId.split('-')[1]))
   const albums = [
+    3457420195,
     3644547653,
     2587024292,
     3583596473,
@@ -79,6 +80,10 @@ const MusicPosts = () => {
           </article>
         )
       })}
+      {/*empty articles just to line up the grid*/}
+      <article></article>
+      <article></article>
+      <article></article>
     </section>
   )
 }

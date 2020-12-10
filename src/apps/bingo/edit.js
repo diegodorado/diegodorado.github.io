@@ -140,10 +140,16 @@ const Edit = () => {
     updateMatch({showJitsi: !match.showJitsi })
   }
 
-  const onStartClick = () => {
-    updateMatch({playing: true })
+  const onStartClick = async () => {
+    await updateMatch({playing: true })
     navigate(`/bingo/${matchId}/play`)
   }
+
+  const onEndClick = async () => {
+    await updateMatch({...match, balls:[],playing: false})
+    navigate(`/bingo/${matchId}/edit`)
+  }
+
 
   const onPrintClick = (p) => {
     setPreviewPlayer(p)
@@ -272,7 +278,8 @@ const Edit = () => {
                   <br/>
                   <br/>
                 </div>)}
-              <button onClick={onStartClick}>COMENZAR</button>
+              <button onClick={onStartClick}>{match.playing ? 'REANUDAR PARTIDA' : 'COMENZAR PARTIDA' }</button>
+              { match.playing && <button onClick={onEndClick}>FINALIZAR PARTIDA</button>}
             </div>
           </div>
         </div>

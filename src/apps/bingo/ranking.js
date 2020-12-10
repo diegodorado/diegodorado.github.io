@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState, useEffect} from "react"
 
 const matchRank = (match) => {
   // get players and cards ranking
@@ -28,7 +28,11 @@ const matchRank = (match) => {
 
 const Ranking = ({match}) => {
 
-  const rank = matchRank(match)
+  const [rank, setRank] = useState([])
+  useEffect(() => {
+    setRank(matchRank(match))
+    return () => {}
+  }, [match]) // update if match changed
 
   return (
           <table>

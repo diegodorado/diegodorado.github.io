@@ -43,11 +43,10 @@ const useBingo = (matchId) => {
     const storedId = reactLocalStorage.get('bingo-match-id',null)
     dispatch({type: "set-stored-id", storedId})
 
-    chatService.on('msg', onMsg)
     service.on('ball', onBall)
+    chatService.on('msg', onMsg)
 
     const fetchData = async () => {
-      console.log('fetching now')
       try{
         const match = await service.get(matchId)
         dispatch({type: "set-match", match})
@@ -72,7 +71,6 @@ const useBingo = (matchId) => {
   const createMatch =  async () => {
     try{
       const match = await service.create(newMatch)
-      console.log(state.storedId, match)
       reactLocalStorage.set('bingo-match-id',match._id)
       dispatch({type: "set-stored-id", storedId:match._id})
       return match
@@ -84,16 +82,13 @@ const useBingo = (matchId) => {
 
   const updateMatch = async (props) => {
     const match = {...state.match, ...props}
-    console.log('updating match',match, matchId)
     // optimistic UI
     dispatch({type: "set-match", match})
     try{
       const m = await service.patch(matchId,match)
-      console.log('updated match', m)
       dispatch({type: "set-match", match:m})
     }catch(error){
       dispatch({type: "set-match", match: null})
-      console.log('error', error)
     }
   }
 
@@ -113,7 +108,6 @@ const useBingo = (matchId) => {
   const sendText = async ({name,text}) => {
     const room = matchId
     await chatService.patch(room,{name,text,room})
-    //await service.addBall(room,{name,text,room})
   }
 
   return { ...state, createMatch, updateMatch, sendText, addBall, ownsMatch, ballsMax }

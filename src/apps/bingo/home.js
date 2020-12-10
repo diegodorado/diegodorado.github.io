@@ -14,7 +14,10 @@ const Home = () => {
   return (
     <div className="setup">
       <h4>¿Qué quieres hacer?</h4>
-      {storedId && <button onClick={() => navigate(`/bingo/${storedId}/edit`)}> Recuperar la partida anterior</button>}
+      {storedId && (<>
+        <button onClick={() => navigate(`/bingo/${storedId}/edit`)}> Editar partida anterior</button>
+        <button onClick={() => navigate(`/bingo/${storedId}/play`)}> Reanudar partida anterior</button>
+        </>)}
       <div>
         <button onClick={onCreateClick}>Crear una partida nueva</button>
         <button onClick={() => navigate('/bingo/music')}>
