@@ -1,5 +1,4 @@
 import React, {useState, useEffect,useRef} from "react"
-import Context from "../../components/context"
 import useBingo from "./useBingo"
 
 const Chat = ({name,room}) => {

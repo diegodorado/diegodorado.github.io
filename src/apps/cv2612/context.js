@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer} from "react"
 import {ctrlMap, globalParams, emptyParams, emptyMapping, bitness} from "./utils/patches-utils"
 import {calculateEnvelopePoints} from "./utils/envelopePoints"
-import {reactLocalStorage} from 'reactjs-localstorage'
+//import {reactLocalStorage} from 'reactjs-localstorage'
 import MidiIO from './midi-io'
 import PresetsIO from './presets-io'
 
@@ -24,7 +24,6 @@ const initialState = {
 
 
 const sendNRPN = (channel, patchIdx, code, value) => {
-  // console.log(channel, code, value)
   const lsbOffset = patchIdx * 10
   if(globalParams.includes(code)){
     if(code === 'lfo' ){
@@ -66,7 +65,7 @@ const updateParam = (state, code, value) =>{
     const preset = state.presets[state.presetIdx]
     const patch = preset.patches[state.patchIdx]
     const instrument = patch.instruments[state.instrumentIdx]
-    const codes = Object.keys(instrument).filter(c => c != "name")
+    const codes = Object.keys(instrument).filter(c => c !== "name")
 
     if(codes.includes(code)){
       instrument[code] = value
@@ -92,7 +91,7 @@ const updateParam = (state, code, value) =>{
 const updateParams = (state,sendMidi = true) =>{
 
   const lerp = (a,b,t) => a + t * (b - a)
-  const codes = Object.keys(state.instruments[0]).filter(c => c != "name")
+  const codes = Object.keys(state.instruments[0]).filter(c => c !== "name")
 
   const preset = state.presets[state.presetIdx]
   const blend = Math.min(state.params["bl"]/42, 3)

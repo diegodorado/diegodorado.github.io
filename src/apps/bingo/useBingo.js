@@ -102,7 +102,7 @@ const useBingo = (matchId) => {
   const addBall = async (ball) => {
     //dispatch({type: "add-ball", ball})
     const match = state.match
-    const m = await ballsService.patch(match._id,{ball})
+    await ballsService.patch(match._id,{ball})
   }
 
   const sendText = async ({name,text}) => {

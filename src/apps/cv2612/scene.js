@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, {useState,useContext} from "react"
+import React, {useContext} from "react"
 import {CV2612Context} from "./context"
 import InstrumentControls from "./instrument-controls"
 import Slider from "./slider"
@@ -8,6 +8,7 @@ import CvInput from "./cv_input"
 const Scene = (props) =>{
   const { state, dispatch } = useContext(CV2612Context)
 
+  /*
   const storeScene = (ev) =>{
     ev.preventDefault()
     const s = parseInt(ev.target.attributes.scene.value, 10)
@@ -20,6 +21,7 @@ const Scene = (props) =>{
     const s = parseInt(ev.target.attributes.scene.value, 10)
     dispatch({ type: "select-patch", index: s })
   }
+  */
 
   const onLoadInstrument = ev => {
     ev.preventDefault()
@@ -107,7 +109,7 @@ const Scene = (props) =>{
         </nav>
 
         <nav className="clone">
-          <select onChange={onCopyPatch} >
+          <select onBlur={onCopyPatch} >
             <option value={-1}> {'--> Copy from <--'} </ option>
             {[0,1,2,3].filter(i=>i!==state.patchIdx).map(i =><option key={i} value={i}>{'ABCD'[i]}</option>)}
           </select>
@@ -127,11 +129,11 @@ const Scene = (props) =>{
         </nav>
 
         <nav className="clone">
-          <select onChange={onLoadInstrument} >
+          <select onBlur={onLoadInstrument} >
             <option value={-1}> {'--> Load from <--'} </ option>
             {state.instruments.map((p,i) =><option key={i} value={i}>{p.name}</option>)}
           </select>
-          <select onChange={onCopyInstrument} >
+          <select onBlur={onCopyInstrument} >
             <option value={-1}> {'--> Copy from <--'} </ option>
             {[0,1,2,3,4,5].filter(i=>i!==state.instrumentIdx).map(i =><option key={i} value={i}>{i+1}</option>)}
           </select>

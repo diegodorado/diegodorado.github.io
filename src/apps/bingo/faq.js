@@ -1,6 +1,5 @@
 import React, {useState} from "react"
 import {navigate } from "gatsby"
-import Header from "./header"
 
 const FaqItem = ({startOpen=false,question,children}) => {
   const [open, setOpen] = useState(startOpen)

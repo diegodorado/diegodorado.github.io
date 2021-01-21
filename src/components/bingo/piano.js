@@ -111,7 +111,6 @@ const scales = [
  ,[2,3,4,5].reduce((arr,el) => [...arr, ...['C','D','E','F#','G#','A#',].map(x => x+el)],[])
  ,[2,3,4,5].reduce((arr,el) => [...arr, ...['C','D#','E','F','G#','A','B'].map(x => x+el)],[])
 ]
-console.log(scales)
 
 const sampler = () =>  new Tone.Sampler({
     "A0" : "A0.[mp3|ogg]",
