@@ -27,7 +27,7 @@ const Join = () => {
             const url = fullUrl(`/bingo/${matchId}/${p.i}/play`)
             return (
               <tr key={`${p.i}`}>
-                <td className={`player`}><a href={url} target="_blank" rel="noopener noreferrer">{p.name}</a></td>
+                <td className={`player`}><a href={url}>{p.name}</a></td>
                 <td className="action" onClick={(ev)=>copyLink(url,ev.currentTarget)} ><FaShareAlt /></td>
               </tr>
             )
