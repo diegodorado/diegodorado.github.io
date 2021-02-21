@@ -1,7 +1,7 @@
 ---
 title: A.D.A.
 date: "2020-10-01"
-description: Obra robótica que teje de forma autónoma neo-representaciones de la cruz andina.
+description: Robotic work that autonomously weaves neo-representations of the Andean cross.
 cover: "./cover.jpg"
 ---
 
