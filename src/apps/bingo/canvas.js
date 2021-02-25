@@ -65,7 +65,9 @@ const Canvas = ({onlyMusic=false}) => {
     rafRef.current = requestAnimationFrame(draw)
 
     return () => cancelAnimationFrame(rafRef.current)
-  }, [addBall,balls, ballsMax, onlyMusic]) // Make sure the effect runs only once
+  }, []) // Make sure the effect runs only once
+  //fixme: see how to make this right
+  //}, [addBall,balls, ballsMax, onlyMusic]) // Make sure the effect runs only once
 
   const onTogglePiano = () => {
     const on = !pianoOn
