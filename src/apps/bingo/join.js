@@ -2,8 +2,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */ 
 import React  from "react"
 import {useParams} from "@reach/router"
-import { FaShareAlt} from 'react-icons/fa'
-import {copyLink, fullUrl } from  "./utils"
+import {fullUrl } from  "./utils"
 import useBingo from "./useBingo"
 import Loading from "./loading"
 
@@ -20,7 +19,7 @@ const Join = () => {
 
   return (
     <div className="setup">
-      <p>Haz click en tu nombre para ver tus cartones (o copia el enlace para compartirlo)</p>
+      <p>Haz click en tu nombre para ver tus cartones</p>
       <table>
         <tbody>
           {sortedPlayers.map(p => {
@@ -28,7 +27,6 @@ const Join = () => {
             return (
               <tr key={`${p.i}`}>
                 <td className={`player`}><a href={url}>{p.name}</a></td>
-                <td className="action" onClick={(ev)=>copyLink(url,ev.currentTarget)} ><FaShareAlt /></td>
               </tr>
             )
           })}
