@@ -36,12 +36,16 @@ const useBingo = (matchId) => {
 
   useEffect( () => {
 
+    // remember the storedId
+    if (state.storedId === null) {
+      const storedId = reactLocalStorage.get('bingo-match-id',null)
+      dispatch({type: "set-stored-id", storedId})
+    }
+
     if(state.initialized || !matchId)
       return
 
     dispatch({type: "set-initialized"})
-    const storedId = reactLocalStorage.get('bingo-match-id',null)
-    dispatch({type: "set-stored-id", storedId})
 
     service.on('ball', onBall)
     chatService.on('msg', onMsg)
