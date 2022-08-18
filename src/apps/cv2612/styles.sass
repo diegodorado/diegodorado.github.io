@@ -6,23 +6,6 @@
   *
     -webkit-user-drag: none
 
-  .emulator
-    @extend %no-select
-    margin: 10px auto
-    width: 100%
-    border: 1px solid white
-    box-sizing: border-box
-    display: flex
-    align-items: stretch
-    nav
-      border-width: 0 1px 1px 0
-      margin: 0 auto auto
-
-    canvas
-      margin: 6px
-      box-sizing: border-box
-      border: 1px solid rgba(255,255,255,0.4)
-
   select, button, input
     font-family: inherit
   h4
@@ -52,17 +35,6 @@
   .globals
     margin: 30px auto
     width: 100%
-  nav.patches
-    .active
-      position: relative
-      --left: 0
-      &::before
-        left: var(--left)
-        width: 100%
-        position: absolute
-        bottom: 0
-        content: ""
-        border-bottom: 4px solid $blue
 
   nav
     position: relative
@@ -139,8 +111,15 @@
         select.in, select.out
           background: #81e5ff
 
+  .two-cols
+    display: flex
+    gap: 12px
+    .col
+      width: 50%
+
   .four-cols
     display: flex
+    gap: 12px
     .col
       width: 25%
 
@@ -168,29 +147,6 @@
         height: 25px
         line-height: 25px
         padding: 0
-
-  .cv-input
-    border: 2px solid transparent
-    width: 230px
-    text-align: center
-    visibility: hidden
-    margin: 10px 0
-    &.learn
-      visibility: visible
-      background: rgba(0,255,255,0.12)
-      &.mapped
-        background: rgba(0,255,255,0.35)
-        border-color: transparent
-      &.active
-        border: 2px dashed rgba(0,255,255,0.35)
-      &:hover
-        cursor: pointer
-        border: 2px dashed rgba(0,255,255,0.2)
-    span
-      display: block
-      height: 30px
-      line-height: 30px
-      pointer-events: none
 
   .slider
     position: relative

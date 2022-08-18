@@ -71,15 +71,15 @@ Global parameters do not take into account the MIDI channel used.
 |    38    |    0     | 38 | 1-7     | RS        | Rate Scaling                       |
 |    39    |    0     | 39 | 1-7     | AM        | Amplitude Modulation Enable        |
 |          |          |    |         |           | *Operator 2 ...*                   |
-|          |    1     | 40 | 1-7     | AR        | Attack Rate                        |
+|    40    |    1     | 40 | 1-7     | AR        | Attack Rate                        |
 |          |   ...    |    |         |           | *Operator 3 ...*                   |
-|          |    2     | 50 | 1-7     | AR        | Attack Rate                        |
+|    50    |    2     | 50 | 1-7     | AR        | Attack Rate                        |
 |          |   ...    |    |         |           | *Operator 4 ...*                   |
-|          |    3     | 60 | 1-7     | AR        | Attack Rate                        |
+|    60    |    3     | 60 | 1-7     | AR        | Attack Rate                        |
 |          |   ...    |    |         |           |                                    |
 |          |          |    |         |           | * Commands *                       |
-|    64    |    0     | -  | -       | -         | Set a patch                        |
-|    64    |    1     | -  | -       | -         | Select a patch                     |
+|    70    |    0     | -  | -       | -         | Set a patch                        |
+|    71    |    1     | -  | -       | -         | Select a patch                     |
 
 
 

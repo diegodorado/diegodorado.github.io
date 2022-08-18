@@ -1,41 +1,53 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, {useContext} from "react"
-import {CV2612Context} from "./context"
-import {bitness} from "./utils/patches-utils"
+import React, { useContext } from "react"
+import { CV2612Context } from "./context"
 
-const Slider = (props) =>{
+const Slider = ({ label, cc, bits, noChannel = false }) => {
   const { state, dispatch } = useContext(CV2612Context)
 
-  const bits = bitness(props.name)
-  const max = Math.pow(2,bits)-1
-  const code = (props.op === undefined) ? props.name : `${props.name}_${props.op}`
-  const className = 'slider'
-    .concat(state.learning ? ' learn' : '')
-    .concat(state.activeParameter === code ? ' active' : '')
-    .concat(state.mapping[code]!==null ? ' mapped' : '')
+  // get the cc channel
+  const ch = noChannel ? 0 : state.channelIdx
 
+  const patch = state.patches[state.patchIdx]
+  const ccs = patch[ch]
 
-  const onChange = (ev) =>{
+  const max = 127 >> (7 - bits)
+  const className = "slider".concat(state.activeBinding ? " learn" : "")
+  // .concat(state.mapping[code] !== null ? " mapped" : "")
+  const value = ccs[cc] >> (7 - bits)
+
+  const onChange = ev => {
     ev.preventDefault()
-    dispatch({ type: "update-param", code: code, value: parseInt(ev.target.value) })
-    dispatch({ type: "active-param", code: code })
+    const val = parseInt(ev.target.value) << (7 - bits)
+
+    dispatch({
+      type: "update-param",
+      ch,
+      cc,
+      val,
+    })
+    // dispatch({ type: "active-param", code: code })
   }
 
-  const onClick = (ev) =>{
+  const onClick = ev => {
     ev.preventDefault()
-    dispatch({ type: "active-param", code: code })
+    // dispatch({ type: "active-param", code: code })
   }
 
   return (
-    <div className={className} onClick={onClick} aria-hidden="true" >
-      <label>{props.name}</label>
-      <input type="range" step={1} min={0} max={max} value={state.params[code]} onChange={onChange} />
-      <span>
-        {state.params[code] + (state.learning ? ` - CC ${state.mapping[code]}`: '') }
-      </span>
+    <div className={className} onClick={onClick} aria-hidden="true">
+      <label>{label}</label>
+      <input
+        type="range"
+        step={1}
+        min={0}
+        max={max}
+        value={value}
+        onChange={onChange}
+      />
+      <span>{value}</span>
     </div>
   )
 }
-
 
 export default Slider
