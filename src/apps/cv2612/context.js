@@ -9,7 +9,7 @@ const CV2612Context = React.createContext()
  * What defines a patch is the value of the whole parameters set,
  * which can be defined by a set of CC values.
  */
-export const emptyPatch = () => {
+const emptyPatch = () => {
   const ccsPerChannel = []
   for (let i = 0; i < 6; i++) {
     const ccs = {
@@ -38,7 +38,7 @@ export const emptyPatch = () => {
   return ccsPerChannel
 }
 
-export const emptyPatches = () => {
+const emptyPatches = () => {
   const patches = []
   for (let i = 0; i < 4; i++) {
     patches.push(emptyPatch())
@@ -53,6 +53,17 @@ const initialState = {
   patches: emptyPatches(),
   patchIdx: 0,
   channelIdx: 0,
+}
+
+const updateEnvelope = (patch, ch, op) => {
+  const ar = patch[ch][30 + 10 * op + 0] / 127
+  const d1 = patch[ch][30 + 10 * op + 1] / 127
+  const sl = patch[ch][30 + 10 * op + 2] / 127
+  const d2 = patch[ch][30 + 10 * op + 3] / 127
+  const rr = patch[ch][30 + 10 * op + 4] / 127
+  const tl = patch[ch][30 + 10 * op + 5] / 127
+
+  return calculateEnvelopePoints({ ar, d1, sl, d2, rr, tl })
 }
 
 const updateParam = (state, ch, cc, val) => {
@@ -71,72 +82,77 @@ const updateParam = (state, ch, cc, val) => {
     // get operator index from cc
     const op = Math.floor((cc - 30) / 10, 0)
 
-    const ar = patch[ch][30 + 10 * op + 0] / 127
-    const d1 = patch[ch][30 + 10 * op + 1] / 127
-    const sl = patch[ch][30 + 10 * op + 2] / 127
-    const d2 = patch[ch][30 + 10 * op + 3] / 127
-    const rr = patch[ch][30 + 10 * op + 4] / 127
-    const tl = patch[ch][30 + 10 * op + 5] / 127
-
-    envelopes[op] = calculateEnvelopePoints({ ar, d1, sl, d2, rr, tl })
+    envelopes[op] = updateEnvelope(patch, ch, op)
   }
 
   return { ...state, envelopes }
 }
 
 const updateParams = (state, sendMidi = true) => {
-  console.log(state, sendMidi)
+  const envelopes = { ...state.envelopes }
+  const patch = state.patches[state.patchIdx]
+  const ch = state.channelIdx
+
+  // TODO: do not asume envelopes have changed
+  for (let op = 0; op < 4; op++) {
+    envelopes[op] = updateEnvelope(patch, ch, op)
+  }
 
   if (sendMidi) {
     //TODO: cache a sync status between device and webpage
     //have a first sync, and then update only changed params
+
+    patch.forEach((ccs, ch) => {
+      Object.entries(ccs).forEach(([key, val]) => {
+        const cc = parseInt(key, 10)
+        // sync midi cc
+        MidiIO.sendCC(ch, cc, val)
+      })
+    })
   }
 
-  // TODO: do not asume envelopes have changed
-  //return updateEnvelopes(state)
-  return state
+  return { ...state, envelopes }
 }
 
 //TODO: udpateParams without sending MIDI out
 const reducer = (state, action) => {
   switch (action.type) {
-    case "set-mapping":
-      return { ...state, mapping: action.mapping }
+    case "provider-ready":
+      return updateParams(state, true)
     case "update-param":
       return updateParam(state, action.ch, action.cc, action.val)
-    case "active-param":
+    case "touch-param":
       if (state.activeBinding) {
         const bindings = { ...state.bindings }
-        if (bindings[state.activeBinding].includes(action.code)) {
+        if (bindings[state.activeBinding].includes(action.cc)) {
+          console.log("included", bindings[state.activeBinding])
           bindings[state.activeBinding] = bindings[state.activeBinding].filter(
-            code => code !== action.code
+            cc => cc !== action.cc
           )
         } else {
-          bindings[state.activeBinding].push(action.code)
+          bindings[state.activeBinding].push(action.cc)
         }
-
-        console.log(bindings)
+        // TODO: sendCC to bin on device
+        return { ...state, bindings }
+      } else {
+        return state
       }
-      return { ...state, activeParameter: action.code }
+
     case "toggle-binding":
       return {
         ...state,
         activeBinding:
           action.binding === state.activeBinding ? null : action.binding,
       }
-    case "provider-ready":
-      return state
     case "change-patch":
+      // TODO: prompt user to save
       const patchIdx = action.index
       return updateParams({ ...state, patchIdx }, false)
     case "change-channel":
       const channelIdx = action.index
       return updateParams({ ...state, channelIdx }, false)
-    case "set-patch":
+    case "save-patch":
       MidiIO.sendNRPN(0, 64, 0, action.index, 0)
-      return state
-    case "select-patch":
-      MidiIO.sendNRPN(0, 64, 1, action.index, 0)
       return state
     default:
       throw new Error("Invalid action type")

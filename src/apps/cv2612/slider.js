@@ -13,7 +13,6 @@ const Slider = ({ label, cc, bits, noChannel = false }) => {
 
   const max = 127 >> (7 - bits)
   const className = "slider".concat(state.activeBinding ? " learn" : "")
-  // .concat(state.mapping[code] !== null ? " mapped" : "")
   const value = ccs[cc] >> (7 - bits)
 
   const onChange = ev => {
@@ -26,17 +25,21 @@ const Slider = ({ label, cc, bits, noChannel = false }) => {
       cc,
       val,
     })
-    // dispatch({ type: "active-param", code: code })
   }
 
   const onClick = ev => {
     ev.preventDefault()
-    // dispatch({ type: "active-param", code: code })
+    dispatch({ type: "touch-param", cc })
   }
 
   return (
     <div className={className} onClick={onClick} aria-hidden="true">
-      <label>{label}</label>
+      <label>
+        {label}
+        <i className={state.bindings.x.includes(cc) ? "x" : ""} />
+        <i className={state.bindings.y.includes(cc) ? "y" : ""} />
+        <i className={state.bindings.z.includes(cc) ? "z" : ""} />
+      </label>
       <input
         type="range"
         step={1}

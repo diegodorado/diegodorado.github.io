@@ -21,14 +21,14 @@ const Scene = () => {
   }
   */
 
-  const onChangeChannel = index => ev => {
-    ev.preventDefault()
-    dispatch({ type: "change-channel", index })
-  }
-
   const onChangePatch = index => ev => {
     ev.preventDefault()
     dispatch({ type: "change-patch", index })
+  }
+
+  const onChangeChannel = index => ev => {
+    ev.preventDefault()
+    dispatch({ type: "change-channel", index })
   }
 
   return (

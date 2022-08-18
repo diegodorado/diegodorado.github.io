@@ -84,14 +84,14 @@ const Midi = () => {
           <a
             href="/"
             title={`Bind parameters to ${i.toUpperCase()}`}
-            className={state.activeBinding === i ? "active" : ""}
+            className={`${i} ${state.activeBinding === i ? "active" : ""}`}
             onClick={ev => {
               ev.preventDefault()
               dispatch({ type: "toggle-binding", binding: i })
             }}
             key={i}
           >
-            {i}
+            {i.toUpperCase()}
           </a>
         ))}
       </nav>

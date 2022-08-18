@@ -8,6 +8,7 @@ const state = {
 // 1000 cc per seconds -> 250 nrpn per seconds -> interval 4
 const interval = 20
 const cc_queue = new Map()
+const cc_cache = new Map()
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -60,6 +61,11 @@ const sendCC = async (channel, number, value) => {
   //throw new Error("No midi Out.")
 
   let key = `${channel}-${number}`
+
+  if (cc_cache.has(key) && cc_cache.get(key) === value) {
+    return
+  }
+
   cc_queue.set(key, value)
 
   let index = cc_queue.size
@@ -70,6 +76,7 @@ const sendCC = async (channel, number, value) => {
   if (cc_queue.has(key)) {
     const value = cc_queue.get(key)
 
+    cc_cache.set(key, value)
     midiOut.send([0xb0 + channel, number, value])
 
     cc_queue.delete(key)

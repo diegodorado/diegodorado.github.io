@@ -110,7 +110,14 @@
       &.connected
         select.in, select.out
           background: #81e5ff
-
+      a
+        font-weight: bold
+        &.x
+          color: red
+        &.y
+          color: green
+        &.z
+          color: blue
   .two-cols
     display: flex
     gap: 12px
@@ -153,13 +160,13 @@
     padding: 0
     border: 2px solid transparent
     width: 230px
+    &.boundToX
+      background: rgba(255,0,0,1)
     &.learn
       background: rgba(0,255,255,0.12)
       &.mapped
         background: rgba(0,255,255,0.35)
         border-color: transparent
-      &.active
-        border: 2px dashed rgba(0,255,255,0.35)
       &:hover
         cursor: pointer
         border: 2px dashed rgba(0,255,255,0.2)
@@ -168,6 +175,24 @@
       width: 32px
       display: inline-block
       vertical-align: super
+      position: relative
+      i
+        &.x, &.y, &.z
+          position: absolute
+          bottom: -12px
+          height: 6px
+          width: 6px
+          border-radius: 50%
+          box-shadow: 0 0 2px white
+        &.x
+          left: 0
+          background: red
+        &.y
+          background: green
+          left: 10px
+        &.z
+          background: blue
+          left: 20px
     span
       position: absolute
       top: 3px
