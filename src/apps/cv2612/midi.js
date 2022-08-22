@@ -78,8 +78,6 @@ const Midi = () => {
         </select>
         <span> </span>
         <span> </span>
-        <span> </span>
-        <span> </span>
         {"xyz".split("").map(i => (
           <a
             href="/"
@@ -94,6 +92,28 @@ const Midi = () => {
             {i.toUpperCase()}
           </a>
         ))}
+        <span> </span>
+        <span> </span>
+        <a
+          href="/"
+          title={`Sync Midi`}
+          onClick={ev => {
+            ev.preventDefault()
+            dispatch({ type: "sync-midi" })
+          }}
+        >
+          SYNC
+        </a>
+        <a
+          href="/"
+          title={`Save patch`}
+          onClick={ev => {
+            ev.preventDefault()
+            dispatch({ type: "save-patch" })
+          }}
+        >
+          SAVE
+        </a>
       </nav>
     </>
   )

@@ -13,7 +13,7 @@ const Operator = ({ op }) => {
       <Slider label="tl" cc={30 + op * 10 + 5} bits={7} />
       <Envelope op={op} />
       <Slider label="mul" cc={30 + op * 10 + 6} bits={4} />
-      <Slider label="det" cc={30 + op * 10 + 7} bits={7} />
+      <Slider label="det" cc={30 + op * 10 + 7} bits={3} />
       <Slider label="rs" cc={30 + op * 10 + 8} bits={2} />
       <Slider label="am" cc={30 + op * 10 + 9} bits={1} />
     </div>

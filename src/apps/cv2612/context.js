@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer } from "react"
 import { calculateEnvelopePoints } from "./utils/envelopePoints"
+import { reactLocalStorage } from "reactjs-localstorage"
 import MidiIO from "./midi-io"
 
 const CV2612Context = React.createContext()
@@ -66,6 +67,33 @@ const updateEnvelope = (patch, ch, op) => {
   return calculateEnvelopePoints({ ar, d1, sl, d2, rr, tl })
 }
 
+const bindingsMap = { x: 110, y: 111, z: 112 }
+
+const touchParam = (state, cc) => {
+  if (state.activeBinding) {
+    const bindings = { ...state.bindings }
+
+    const exists = bindings[state.activeBinding].includes(cc)
+
+    if (exists) {
+      bindings[state.activeBinding] = bindings[state.activeBinding].filter(
+        i => i !== cc
+      )
+    } else {
+      bindings[state.activeBinding].push(cc)
+    }
+
+    // re-send cc value to make it the lastParameter
+    MidiIO.sendCC(0, cc, state.patches[state.patchIdx][cc])
+    // bind parameter
+    MidiIO.sendCC(0, bindingsMap[state.activeBinding], exists ? 0 : 127)
+
+    return { ...state, bindings }
+  } else {
+    return state
+  }
+}
+
 const updateParam = (state, ch, cc, val) => {
   const patch = state.patches[state.patchIdx]
 
@@ -88,7 +116,7 @@ const updateParam = (state, ch, cc, val) => {
   return { ...state, envelopes }
 }
 
-const updateParams = (state, sendMidi = true) => {
+const updateParams = state => {
   const envelopes = { ...state.envelopes }
   const patch = state.patches[state.patchIdx]
   const ch = state.channelIdx
@@ -98,46 +126,36 @@ const updateParams = (state, sendMidi = true) => {
     envelopes[op] = updateEnvelope(patch, ch, op)
   }
 
-  if (sendMidi) {
-    //TODO: cache a sync status between device and webpage
-    //have a first sync, and then update only changed params
-
-    patch.forEach((ccs, ch) => {
-      Object.entries(ccs).forEach(([key, val]) => {
-        const cc = parseInt(key, 10)
-        // sync midi cc
-        MidiIO.sendCC(ch, cc, val)
-      })
-    })
-  }
-
   return { ...state, envelopes }
+}
+
+const syncMidi = state => {
+  const patch = state.patches[state.patchIdx]
+
+  patch.forEach((ccs, ch) => {
+    Object.entries(ccs).forEach(([key, val]) => {
+      const cc = parseInt(key, 10)
+      // sync midi cc
+      MidiIO.sendCC(ch, cc, val)
+      if (ch === 0) {
+        // sync bindings
+        MidiIO.sendCC(0, 110, state.bindings.x.includes(cc) ? 127 : 0)
+        MidiIO.sendCC(0, 111, state.bindings.y.includes(cc) ? 127 : 0)
+        MidiIO.sendCC(0, 112, state.bindings.z.includes(cc) ? 127 : 0)
+      }
+    })
+  })
 }
 
 //TODO: udpateParams without sending MIDI out
 const reducer = (state, action) => {
   switch (action.type) {
     case "provider-ready":
-      return updateParams(state, true)
+      return updateParams(action.savedState ? action.savedState : state)
+    case "touch-param":
+      return touchParam(state, action.cc)
     case "update-param":
       return updateParam(state, action.ch, action.cc, action.val)
-    case "touch-param":
-      if (state.activeBinding) {
-        const bindings = { ...state.bindings }
-        if (bindings[state.activeBinding].includes(action.cc)) {
-          console.log("included", bindings[state.activeBinding])
-          bindings[state.activeBinding] = bindings[state.activeBinding].filter(
-            cc => cc !== action.cc
-          )
-        } else {
-          bindings[state.activeBinding].push(action.cc)
-        }
-        // TODO: sendCC to bin on device
-        return { ...state, bindings }
-      } else {
-        return state
-      }
-
     case "toggle-binding":
       return {
         ...state,
@@ -145,15 +163,21 @@ const reducer = (state, action) => {
           action.binding === state.activeBinding ? null : action.binding,
       }
     case "change-patch":
-      // TODO: prompt user to save
       const patchIdx = action.index
+      MidiIO.sendCC(0, 120, patchIdx * 32)
       return updateParams({ ...state, patchIdx }, false)
     case "change-channel":
       const channelIdx = action.index
-      return updateParams({ ...state, channelIdx }, false)
-    case "save-patch":
-      MidiIO.sendNRPN(0, 64, 0, action.index, 0)
+      return updateParams({ ...state, channelIdx })
+    case "sync-midi":
+      syncMidi(state)
       return state
+    case "save-patch":
+      // TODO save on device
+      MidiIO.sendCC(0, 121, state.patchIdx)
+      const savedState = { ...state, activeBinding: null }
+      reactLocalStorage.set("savedState", JSON.stringify(savedState))
+      return savedState
     default:
       throw new Error("Invalid action type")
   }
@@ -166,7 +190,9 @@ const CV2612Provider = ({ children }) => {
   useEffect(() => {
     ;(async () => {
       await MidiIO.init()
-      dispatch({ type: "provider-ready" })
+      const str = await reactLocalStorage.get("savedState")
+      const savedState = str ? JSON.parse(str) : null
+      dispatch({ type: "provider-ready", savedState })
     })()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,12 +1,9 @@
 const state = {
   ma: null,
-  //used to prevent loopback
-  lastMsg: null,
   midiOutId: null,
 }
 
-// 1000 cc per seconds -> 250 nrpn per seconds -> interval 4
-const interval = 20
+const interval = 30
 const cc_queue = new Map()
 const cc_cache = new Map()
 
@@ -45,6 +42,8 @@ const refresh = () => {
   const inputs = Array.from(state.ma.inputs.values())
   const outputs = Array.from(state.ma.outputs.values())
 
+  // inputs.forEach(m => (m.onmidimessage = msg => console.log(msg)))
+
   pub("midiStateChanged", {
     inputs,
     outputs,
@@ -60,9 +59,10 @@ const sendCC = async (channel, number, value) => {
   if (!midiOut) return
   //throw new Error("No midi Out.")
 
-  let key = `${channel}-${number}`
+  const key = `${channel}-${number}`
 
-  if (cc_cache.has(key) && cc_cache.get(key) === value) {
+  // do not cache above CC70
+  if (cc_cache.has(key) && cc_cache.get(key) === value && number < 70) {
     return
   }
 
@@ -77,7 +77,8 @@ const sendCC = async (channel, number, value) => {
     const value = cc_queue.get(key)
 
     cc_cache.set(key, value)
-    midiOut.send([0xb0 + channel, number, value])
+    const msg = [0xb0 + channel, number, value]
+    midiOut.send(msg)
 
     cc_queue.delete(key)
 
