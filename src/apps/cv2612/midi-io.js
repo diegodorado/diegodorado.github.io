@@ -61,10 +61,11 @@ const sendCC = async (channel, number, value) => {
 
   const key = `${channel}-${number}`
 
+  // TODO: enable cache properly
   // do not cache above CC70
-  if (cc_cache.has(key) && cc_cache.get(key) === value && number < 70) {
-    return
-  }
+  // if (cc_cache.has(key) && cc_cache.get(key) === value && number < 70) {
+  //   return
+  // }
 
   cc_queue.set(key, value)
 

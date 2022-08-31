@@ -5,11 +5,16 @@ import algorithmAscii from "./utils/algorithmAscii"
 import { CV2612Context } from "./context"
 
 const Channel = () => {
-  const { state } = useContext(CV2612Context)
+  const { state, dispatch } = useContext(CV2612Context)
 
   const patch = state.patches[state.patchIdx]
   // get the patch/channel algorithm
   const al = patch[state.channelIdx][20] >> 4
+
+  const onAlgorithmClick = ev => {
+    ev.preventDefault()
+    dispatch({ type: "reset-channel" })
+  }
 
   return (
     <>
@@ -27,7 +32,13 @@ const Channel = () => {
           <Slider label="fb" cc={21} bits={3} />
         </div>
         <div className="col">
-          <pre className="algorithm">{algorithmAscii(al)}</pre>
+          <a
+            href="!#"
+            onClick={onAlgorithmClick}
+            style={{ textDecoration: "none" }}
+          >
+            <pre className="algorithm">{algorithmAscii(al)}</pre>
+          </a>
         </div>
       </div>
       <div className="four-cols">

@@ -2,6 +2,7 @@
 import React, { useContext } from "react"
 import { CV2612Context } from "./context"
 import Channel from "./channel"
+import Slider from "./slider"
 
 const Scene = () => {
   const { state, dispatch } = useContext(CV2612Context)
@@ -33,6 +34,18 @@ const Scene = () => {
 
   return (
     <>
+      <br />
+      <br />
+      <div className="four-cols">
+        <div className="col">
+          <Slider label="pm" cc={122} noChannel bits={3} />
+          <Slider label="li" cc={123} noChannel bits={7} />
+        </div>
+        <div className="col"></div>
+        <div className="col"></div>
+        <div className="col"></div>
+      </div>
+
       <div className="two-cols">
         <div className="col">
           <nav>

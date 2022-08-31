@@ -16,12 +16,10 @@ const Midi = () => {
   useEffect(() => {
     MidiIO.sub("midiStateChanged", onStateChange)
     MidiIO.sub("midiOutProgress", onMidiOutProgress)
-    MidiIO.sub("midiLoopback", onLoopBack)
 
     return () => {
       MidiIO.unsub("midiStateChanged", onStateChange)
       MidiIO.unsub("midiOutProgress", onMidiOutProgress)
-      MidiIO.unsub("midiLoopback", onLoopBack)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,11 +36,6 @@ const Midi = () => {
   const onMidiOutProgress = ({ done }) => {
     setMidiOutActivity(true)
     if (done) setTimeout(() => setMidiOutActivity(false), activityDuration)
-  }
-
-  const onLoopBack = () => {
-    setMidiOutId("")
-    console.error("Loopback prevented")
   }
 
   const onStateChange = ({ outputs }) => {

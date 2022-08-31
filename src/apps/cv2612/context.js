@@ -147,6 +147,56 @@ const syncMidi = state => {
   })
 }
 
+const resetChannel = state => {
+  const patch = state.patches[state.patchIdx]
+  const ch = state.channelIdx
+
+  const updateAndSync = (ch, cc, val) => {
+    // update patch state
+    patch[ch][cc] = val
+    // sync midi cc
+    MidiIO.sendCC(ch, cc, val)
+  }
+
+  updateAndSync(0, 1, 0)
+  updateAndSync(ch, 20, 127)
+  updateAndSync(ch, 21, 0)
+  updateAndSync(ch, 22, 0)
+  updateAndSync(ch, 23, 0)
+  updateAndSync(ch, 24, 127)
+
+  return resetOperator(
+    resetOperator(resetOperator(resetOperator(state, 0), 1), 2),
+    3
+  )
+}
+
+const resetOperator = (state, op) => {
+  const patch = state.patches[state.patchIdx]
+  const ch = state.channelIdx
+
+  const updateAndSync = (cc, val) => {
+    // update patch state
+    patch[ch][cc] = val
+    // sync midi cc
+    MidiIO.sendCC(ch, cc, val)
+  }
+
+  updateAndSync(30 + op * 10 + 0, 127)
+  updateAndSync(30 + op * 10 + 1, 0)
+  updateAndSync(30 + op * 10 + 2, 0)
+  updateAndSync(30 + op * 10 + 3, 0)
+  updateAndSync(30 + op * 10 + 4, 127)
+  updateAndSync(30 + op * 10 + 5, 0)
+
+  updateAndSync(30 + op * 10 + 6, 32)
+  updateAndSync(30 + op * 10 + 7, 64)
+  updateAndSync(30 + op * 10 + 8, 0)
+  updateAndSync(30 + op * 10 + 9, 0)
+
+  return updateParams(state)
+}
+
 //TODO: udpateParams without sending MIDI out
 const reducer = (state, action) => {
   switch (action.type) {
@@ -162,6 +212,10 @@ const reducer = (state, action) => {
         activeBinding:
           action.binding === state.activeBinding ? null : action.binding,
       }
+    case "reset-channel":
+      return resetChannel(state)
+    case "reset-operator":
+      return resetOperator(state, action.op)
     case "change-patch":
       const patchIdx = action.index
       MidiIO.sendCC(0, 120, patchIdx * 32)
@@ -173,7 +227,6 @@ const reducer = (state, action) => {
       syncMidi(state)
       return state
     case "save-patch":
-      // TODO save on device
       MidiIO.sendCC(0, 121, state.patchIdx)
       const savedState = { ...state, activeBinding: null }
       reactLocalStorage.set("savedState", JSON.stringify(savedState))
