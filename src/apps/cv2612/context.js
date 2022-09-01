@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from "react"
 import { calculateEnvelopePoints } from "./utils/envelopePoints"
-import { reactLocalStorage } from "reactjs-localstorage"
+// import { reactLocalStorage } from "reactjs-localstorage"
 import MidiIO from "./midi-io"
 
 const CV2612Context = React.createContext()
@@ -229,23 +229,45 @@ const reducer = (state, action) => {
     case "save-patch":
       MidiIO.sendCC(0, 121, state.patchIdx)
       const savedState = { ...state, activeBinding: null }
-      reactLocalStorage.set("savedState", JSON.stringify(savedState))
+      // reactLocalStorage.set("savedState", JSON.stringify(savedState))
       return savedState
     default:
       throw new Error("Invalid action type")
   }
 }
 
+let saveId = null
 const CV2612Provider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const value = { state, dispatch }
 
+  const doSaveState = () => {
+    const str = btoa(JSON.stringify(state))
+    // push the state
+    window.history.pushState(null, null, `#${str}`)
+  }
+
+  const saveStateDelayed = () => {
+    if (saveId) {
+      clearTimeout(saveId)
+    }
+    saveId = setTimeout(doSaveState, 500)
+  }
+
+  useEffect(saveStateDelayed, [state])
+
   useEffect(() => {
     ;(async () => {
       await MidiIO.init()
-      const str = await reactLocalStorage.get("savedState")
-      const savedState = str ? JSON.parse(str) : null
-      dispatch({ type: "provider-ready", savedState })
+      // const str = await reactLocalStorage.get("savedState")
+      // const savedState = str ? JSON.parse(str) : null
+      // dispatch({ type: "provider-ready", savedState })
+      const parts = window.location.hash.split("#")
+      if (parts.length === 2) {
+        const str = atob(parts[1])
+        const savedState = JSON.parse(str)
+        dispatch({ type: "provider-ready", savedState })
+      }
     })()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
