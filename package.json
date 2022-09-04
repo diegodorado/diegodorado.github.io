@@ -44,6 +44,7 @@
     "i18next": "^19.0.3",
     "i18next-browser-languagedetector": "^4.0.1",
     "isomorphic-ws": "^4.0.1",
+    "lzutf8": "^0.6.3",
     "matter-js": "^0.14.2",
     "morsify": "^2.3.1",
     "mr-emoji": "^1.1.4",

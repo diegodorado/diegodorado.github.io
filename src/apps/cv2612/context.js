@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from "react"
 import { calculateEnvelopePoints } from "./utils/envelopePoints"
 // import { reactLocalStorage } from "reactjs-localstorage"
 import MidiIO from "./midi-io"
+import { compress, decompress } from "lzutf8"
 
 const CV2612Context = React.createContext()
 
@@ -12,13 +13,14 @@ const CV2612Context = React.createContext()
  */
 const emptyPatch = () => {
   const ccsPerChannel = []
+
   for (let i = 0; i < 6; i++) {
     const ccs = {
-      20: 0, // al
+      20: 7 << (7 - 3), // al
       21: 0, // fb
       22: 0, // ams
       23: 0, // fms
-      24: 3 << 5, // st
+      24: 3 << (7 - 2), // st
     }
     for (let op = 0; op < 4; op++) {
       ccs[`${30 + op * 10 + 0}`] = 0 // ar
@@ -236,13 +238,76 @@ const reducer = (state, action) => {
   }
 }
 
+const encodeState = state => {
+  const patches = state.patches.reduce(
+    (acc, p) =>
+      acc +
+      p.reduce(
+        (acc, ccs) =>
+          acc +
+          Object.values(ccs).reduce(
+            (acc, val) => acc + val.toString(16).padStart(2, "0"),
+            ""
+          ),
+        ""
+      ),
+    ""
+  )
+
+  const bindings = Object.values(state.bindings).reduce(
+    (acc, p) =>
+      acc +
+      "|" +
+      p.reduce((acc, ccs) => acc + ccs.toString(16).padStart(2, "0"), ""),
+    ""
+  )
+
+  const output = compress(`${patches}${bindings}`, {
+    outputEncoding: "Base64",
+  })
+
+  return output
+}
+
+const decodeState = str => {
+  const output = decompress(str, {
+    inputEncoding: "Base64",
+  })
+
+  const values = output.split("|").map(s =>
+    s
+      .split(/(.{2})/)
+      .filter(s => s)
+      .map(s => parseInt(s, 16))
+  )
+
+  const { patches, bindings } = { ...initialState }
+
+  const patchValues = values.shift()
+  patches.forEach(p => {
+    p.forEach(ch => {
+      Object.entries(ch).forEach(([k, v]) => {
+        ch[k] = patchValues.shift()
+      })
+    })
+  })
+
+  Object.entries(bindings).forEach(([k, v]) => {
+    const bindingValues = values.shift()
+    bindings[k] = [...bindingValues]
+  })
+
+  return { patches, bindings }
+}
+
 let saveId = null
 const CV2612Provider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const value = { state, dispatch }
 
   const doSaveState = () => {
-    const str = btoa(JSON.stringify(state))
+    const str = encodeState(state)
+
     // push the state
     window.history.pushState(null, null, `#${str}`)
   }
@@ -264,8 +329,8 @@ const CV2612Provider = ({ children }) => {
       // dispatch({ type: "provider-ready", savedState })
       const parts = window.location.hash.split("#")
       if (parts.length === 2) {
-        const str = atob(parts[1])
-        const savedState = JSON.parse(str)
+        const str = parts[1]
+        const savedState = { ...state, ...decodeState(str) }
         dispatch({ type: "provider-ready", savedState })
       }
     })()
