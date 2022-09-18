@@ -1,8 +1,8 @@
 const path = require(`path`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
 
-const locales = ['en','es']
-const defaultLocale = 'en'
+const locales = ["en", "es"]
+const defaultLocale = "en"
 
 // I create pages for works, but not for cv
 exports.createPages = ({ graphql, actions }) => {
@@ -11,13 +11,22 @@ exports.createPages = ({ graphql, actions }) => {
   const workPost = path.resolve(`./src/templates/work-post.js`)
   const cvTemplate = path.resolve(`./src/templates/cv.js`)
 
-
   // I just use this array to create pagination, which  works with unlocalized
   // slug, so it makes no difference if I filter by 'en'
   return graphql(
     `
       {
-        allMarkdownRemark(filter:{fields:{ locale: {in:["es",""]}, type:{eq:"works"},index:{eq:true}}} sort: {fields: [frontmatter___date], order: DESC}, limit: 1000) {
+        allMarkdownRemark(
+          filter: {
+            fields: {
+              locale: { in: ["es", ""] }
+              type: { eq: "works" }
+              index: { eq: true }
+            }
+          }
+          sort: { fields: [frontmatter___date], order: DESC }
+          limit: 1000
+        ) {
           edges {
             node {
               fields {
@@ -34,8 +43,9 @@ exports.createPages = ({ graphql, actions }) => {
     }
 
     // an array of main article slugs
-    const main_works = result.data.allMarkdownRemark.edges.map(p => p.node.fields.slug)
-
+    const main_works = result.data.allMarkdownRemark.edges.map(
+      p => p.node.fields.slug
+    )
 
     return graphql(
       `
@@ -65,21 +75,25 @@ exports.createPages = ({ graphql, actions }) => {
         throw result.errors
       }
 
-      const works = result.data.allMarkdownRemark.edges.filter(p => p.node.fields.type==="works")
+      const works = result.data.allMarkdownRemark.edges.filter(
+        p => p.node.fields.type === "works"
+      )
 
       works.forEach((work, index) => {
-
         // Use the fields created in exports.onCreateNode
-        const {locale,slug} = work.node.fields
+        const { locale, slug } = work.node.fields
 
         // get the corresponding slug
-        const i = main_works.reduce((acc, cur, idx) => slug.startsWith(cur) ? idx : acc,0)
+        const i = main_works.reduce(
+          (acc, cur, idx) => (slug.startsWith(cur) ? idx : acc),
+          0
+        )
 
         const previous = i === main_works.length - 1 ? null : main_works[i + 1]
         const next = i === 0 ? null : main_works[i - 1]
 
-        const generatePage = (locale) => {
-          createPage( {
+        const generatePage = locale => {
+          createPage({
             path: `/${locale}${slug}`,
             component: workPost,
             context: {
@@ -88,28 +102,22 @@ exports.createPages = ({ graphql, actions }) => {
               locales,
               previous,
               next,
-            }
+            },
           })
         }
 
-        if(locale===''){
+        if (locale === "") {
           // duplicate one page for each locale
           locales.forEach(locale => {
             generatePage(locale)
           })
-        } else{
+        } else {
           generatePage(locale)
         }
-
       })
-
-
     })
   })
 }
-
-
-
 
 // As you don't want to manually add the correct languge to the frontmatter of each file
 // a new node is created automatically with the filename
@@ -127,14 +135,13 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     // name returns "name-with-dashes.lang"
     // So grab the lang from that string
     // If not localized, pass empty string for that
-    const lang = localized ? name.split(`.`)[1] : ''
+    const lang = localized ? name.split(`.`)[1] : ""
     let slug = createFilePath({ node, getNode })
-    if(localized){
+    if (localized) {
       //remove .lang and index.lang from slug
-      slug = slug.replace(`.${lang}`,'')
-      slug = slug.replace(`/index`,'')
+      slug = slug.replace(`.${lang}`, "")
+      slug = slug.replace(`/index`, "")
     }
-
 
     //what kind of file is it? .. or which folder was it in
     // this may throw an error if regex doesnt match
@@ -142,10 +149,9 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
     //generic nodes
     createNodeField({ node, name: `locale`, value: lang })
-    createNodeField({ node, name: `index`,value: name.startsWith('index')})
-    createNodeField({ node, name: `slug`,value: `/${folder}${slug}`})
-    createNodeField({ node, name: `type`,value: folder})
-
+    createNodeField({ node, name: `index`, value: name.startsWith("index") })
+    createNodeField({ node, name: `slug`, value: `/${folder}${slug}` })
+    createNodeField({ node, name: `type`, value: folder })
   }
 }
 
@@ -153,15 +159,13 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 // called after every page is created.
 exports.onCreatePage = async ({ page, actions }) => {
   const { createPage } = actions
-
 }
-
 
 // this is to localize pages
 exports.onCreatePage = ({ page, actions }) => {
   const { createPage, deletePage } = actions
 
-  const generatePage = (locale) => {
+  const generatePage = locale => {
     return {
       ...page,
       path: `/${locale}${page.path}`,
@@ -174,19 +178,12 @@ exports.onCreatePage = ({ page, actions }) => {
     }
   }
 
-  if (['/','/dev-404-page/','/404/','/404.html'].includes(page.path)) {
+  if (["/", "/dev-404-page/", "/404/", "/404.html"].includes(page.path)) {
     return
   }
 
   if (page.path.match(/^\/bingo/)) {
     page.matchPath = "/bingo/*"
-    console.log(page.path, page.matchPath)
-    createPage(page)
-    return
-  }
-
-  if (page.path.match(/^\/cv2612/)) {
-    page.matchPath = "/cv2612/*"
     console.log(page.path, page.matchPath)
     createPage(page)
     return
@@ -202,7 +199,6 @@ exports.onCreatePage = ({ page, actions }) => {
     return
   }
 
-
   deletePage(page)
 
   //check if article is localized or not
@@ -210,20 +206,18 @@ exports.onCreatePage = ({ page, actions }) => {
   // Files are defined with "name-with-dashes.lang.js"
   // name returns "name-with-dashes.lang"
   // So grab the lang from that string
-  if(localized){
+  if (localized) {
     const [page_path, locale] = page.path.split(`.`)
-    page.path = (page_path + '/').replace(`/index`,'')
-    const localePage = generatePage(locale.replace('/',''))
+    page.path = (page_path + "/").replace(`/index`, "")
+    const localePage = generatePage(locale.replace("/", ""))
     createPage(localePage)
-  } else{
+  } else {
     // duplicate one page for each locale
     locales.forEach(l => {
       const localePage = generatePage(l)
       createPage(localePage)
     })
   }
-
-
 }
 
 // adds optional defaults to frontmatter

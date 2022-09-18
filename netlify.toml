@@ -9,7 +9,7 @@
   status = 200
 
 [[redirects]]
-  from = "/bingo/*"
-  to = "/bingo/index.html"
-  status = 200
+  from = "/cv2612/*"
+  to = "https://cv2612.netlify.app/"
+  status = 301
 
