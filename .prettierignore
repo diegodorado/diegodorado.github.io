@@ -1,0 +1,7 @@
+# static
+static/
+
+*.lock
+
+# typescript
+.tsbuild/

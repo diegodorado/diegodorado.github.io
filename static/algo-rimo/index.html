@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Algo Rimo</title>
+  <script src="assets/js/elm-3521d4515b58446d1bb4dca6960b495d.min.js"></script>
+  <script src="assets/js/howler.min.js"></script>
+  <link rel="shortcut icon" href="favicon.ico">
+  <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet"/>
+  <style>
+    *{user-select: none;-webkit-tap-highlight-color:  rgba(255, 255, 255, 0); }
+    *:focus {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
+    @font-face {
+        font-family: 'Pixelated';
+        src: url('assets/fonts/sfpixelate-webfont.woff2') format('woff2'),
+             url('assets/fonts/sfpixelate-webfont.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+
+    }
+    @font-face {
+        font-family: 'Pixelated';
+        src: url('assets/fonts/sfpixelate-bold-webfont.woff2') format('woff2'),
+             url('assets/fonts/sfpixelate-bold-webfont.woff') format('woff');
+        font-weight: bold;
+        font-style: normal;
+
+    }
+
+
+  </style>
+</head>
+
+<body>
+  <div id="elm"></div>
+  <script>
+    const sounds =[
+      {
+        change: [
+          new Howl({
+            src: ['assets/audio/handwriting/change1.webm']
+          }),
+          new Howl({
+            src: ['assets/audio/handwriting/change2.webm']
+          })
+        ],
+        select: [
+          new Howl({
+            src: ['assets/audio/handwriting/select1.webm']
+          }),
+          new Howl({
+            src: ['assets/audio/handwriting/select2.webm']
+          })
+        ],
+        random: [
+          new Howl({
+            src: ['assets/audio/handwriting/random1.webm']
+          }),
+          new Howl({
+            src: ['assets/audio/handwriting/random2.webm']
+          })
+        ]
+      },
+      {
+        change: [
+          new Howl({
+            src: ['assets/audio/computer/change1.webm']
+          }),
+          new Howl({
+            src: ['assets/audio/computer/change2.webm']
+          }),
+        ],
+        select: [
+          new Howl({
+            src: ['assets/audio/computer/select1.webm']
+          }),
+          new Howl({
+            src: ['assets/audio/computer/select2.webm']
+          }),
+        ],
+        random: [
+          new Howl({
+            src: ['assets/audio/computer/random1.webm']
+          }),
+          new Howl({
+            src: ['assets/audio/computer/random2.webm']
+          }),
+          new Howl({
+            src: ['assets/audio/computer/random3.webm']
+          }),
+        ]
+      },
+      {
+        change: [
+          new Howl({
+            src: ['assets/audio/book/change1.webm']
+          }),
+        ],
+        select: [
+          new Howl({
+            src: ['assets/audio/book/select1.webm']
+          }),
+        ],
+        random: [
+          new Howl({
+            src: ['assets/audio/book/random1.webm']
+          }),
+        ]
+      },
+    ]
+
+    const playSound = ([theme, name]) => {
+      const items = sounds[theme][name]
+      console.assert(items != null, `Unknown sound: ${name}`)
+      const item = items[Math.floor(Math.random() * items.length)]
+      const rate = theme ==1 ? 1 : 0.5 + Math.random() * 1.5
+      item.rate(rate)
+      item.play()
+    };
+
+    const app = Elm.Main.init({
+      node: document.getElementById('elm')
+    })
+
+    app.ports.playSound.subscribe(sound => playSound(sound))
+  </script>
+</body>
+
+</html>
