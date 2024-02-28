@@ -16,6 +16,8 @@ const config: GatsbyConfig = {
   plugins: [
     'gatsby-plugin-sass',
     // "gatsby-plugin-google-gtag",
+    'gatsby-plugin-sharp',
+    'gatsby-transformer-sharp',
     'gatsby-plugin-image',
     {
       resolve: 'gatsby-plugin-manifest',
@@ -90,8 +92,6 @@ const config: GatsbyConfig = {
         ],
       },
     },
-    'gatsby-plugin-sharp',
-    'gatsby-transformer-sharp',
     {
       resolve: 'gatsby-source-filesystem',
       options: {
