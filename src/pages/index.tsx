@@ -3,7 +3,7 @@ import type { HeadFC, PageProps } from 'gatsby'
 import { navigate } from 'gatsby'
 import { useTranslation } from 'react-i18next'
 import Layout from '../layouts/main'
-import { SEO } from '../components/seo'
+import { Seo } from '../components/seo'
 
 const Home: FC<PageProps> = ({ location }) => {
   const [, i18n] = useTranslation()
@@ -21,4 +21,4 @@ const Home: FC<PageProps> = ({ location }) => {
 
 export default Home
 
-export const Head: HeadFC = () => <SEO title="home" />
+export const Head: HeadFC = () => <Seo title="home" />

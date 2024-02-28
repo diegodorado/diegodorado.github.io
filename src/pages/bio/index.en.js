@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from '../../layouts/main'
-import { SEO } from '../../components/seo'
+import { Seo } from '../../components/seo'
 import BioImage from '../../components/bio/bioImage'
 import Pics from '../../components/bio/pics'
 import Link from '../../components/link'
@@ -40,4 +40,4 @@ const BioIndex = (props) => (
 
 export default BioIndex
 
-export const Head = () => <SEO title="bio" />
+export const Head = () => <Seo title="bio" />

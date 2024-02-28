@@ -1,6 +1,6 @@
 import React from "react"
 import { Router} from "@reach/router"
-import SEO from "../../components/seo"
+import Seo from "../../components/seo"
 
 import "./styles.sass"
 import "./print.sass"
@@ -23,7 +23,7 @@ const Bingo = () => (
   <div className={`bingo`}>
     <Provider>
       <Header/>
-      <SEO title="bingo" />
+      <Seo title="bingo" />
       <Router>
         <Home path="/" />
         <Edit path=":matchId/edit" />

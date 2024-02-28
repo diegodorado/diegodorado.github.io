@@ -3,11 +3,11 @@ import { useSiteMetadata } from '../hooks/use-site-metadata'
 
 // htmlAttributes={{ lang, }}
 
-type SEOProps = {
+type SeoProps = {
   title: string
 }
 
-const SEO: FC<SEOProps> = ({ title }) => {
+const Seo: FC<SeoProps> = ({ title }) => {
   const { title: titlePrefix, description, image, siteUrl } = useSiteMetadata()
 
   const imageUrl = `${siteUrl}${image}`
@@ -25,4 +25,4 @@ const SEO: FC<SEOProps> = ({ title }) => {
   )
 }
 
-export { SEO }
+export { Seo }

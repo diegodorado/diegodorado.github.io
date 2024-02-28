@@ -1,7 +1,7 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../layouts/main'
-import { SEO } from '../components/seo'
+import { Seo } from '../components/seo'
 import Link from '../components/link'
 
 const WorkPostTemplate = ({ data, pageContext, location }) => {
@@ -65,7 +65,7 @@ export const Head = ({ data }) => {
   const post = data.markdownRemark
 
   return (
-    <SEO
+    <Seo
       title={post.frontmatter.title}
       description={post.frontmatter.description || post.excerpt}
     />

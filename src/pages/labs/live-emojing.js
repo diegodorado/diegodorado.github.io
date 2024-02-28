@@ -2,7 +2,7 @@ import './live-emojing.sass'
 
 import React, { useContext } from 'react'
 import Layout from '../../layouts/main'
-import { SEO } from '../../components/seo'
+import { Seo } from '../../components/seo'
 import Playground from '../../components/live-emojing/playground'
 import Connection from '../../components/live-emojing/connection'
 import LiveEmojingStore from '../../components/live-emojing/store'
@@ -28,4 +28,4 @@ const LiveEmojingIndex = ({ location }) => {
 
 export default LiveEmojingIndex
 
-export const Head = () => <SEO title="live emojing" />
+export const Head = () => <Seo title="live emojing" />

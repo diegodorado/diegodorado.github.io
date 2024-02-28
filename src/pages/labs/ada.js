@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Layout from '../../layouts/main'
 import Link from '../../components/link'
-import { SEO } from '../../components/seo'
+import { Seo } from '../../components/seo'
 import './ada.sass'
 import { useTranslation, Trans } from 'react-i18next'
 
@@ -302,4 +302,4 @@ const AdaPage = ({ location }) => {
 
 export default AdaPage
 
-export const Head = () => <SEO title="ADA elementary cellular automaton" />
+export const Head = () => <Seo title="ADA elementary cellular automaton" />

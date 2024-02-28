@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
 import Layout from "../layouts/main"
-import SEO from "../components/seo"
+import Seo from "../components/seo"
 import { Trans, useTranslation } from "react-i18next"
 import Context from "../components/context"
 
@@ -23,7 +23,7 @@ const MusicIndex = ({ location }) => {
   const [t] = useTranslation()
   return (
     <Layout location={location}>
-      <SEO title="music" />
+      <Seo title="music" />
       <p className="spacey">
         <Trans i18nKey="MusicIntro" i18nIsDynamicList>
           <span>Listen to the albums produced by Diego Dorado here or on </span>

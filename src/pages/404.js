@@ -2,7 +2,7 @@ import React from 'react'
 import { graphql } from 'gatsby'
 
 import Layout from '../layouts/main'
-import { SEO } from '../components/seo'
+import { Seo } from '../components/seo'
 
 class NotFoundPage extends React.Component {
   render() {
@@ -30,4 +30,4 @@ export const pageQuery = graphql`
   }
 `
 
-export const Head = () => <SEO title="404: Not Found" />
+export const Head = () => <Seo title="404: Not Found" />

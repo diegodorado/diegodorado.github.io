@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from '../../layouts/main'
-import { SEO } from '../../components/seo'
+import { Seo } from '../../components/seo'
 import { graphql } from 'gatsby'
 
 const CvIndex = (props) => {
@@ -34,4 +34,4 @@ export const pageQuery = graphql`
   }
 `
 
-export const Head = () => <SEO title="bio" />
+export const Head = () => <Seo title="bio" />

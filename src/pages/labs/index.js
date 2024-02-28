@@ -3,7 +3,7 @@ import { graphql } from 'gatsby'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import Link from '../../components/link'
 import Layout from '../../layouts/main'
-import { SEO } from '../../components/seo'
+import { Seo } from '../../components/seo'
 import { useTranslation } from 'react-i18next'
 
 const link = (to, inner, absolute) =>
@@ -76,4 +76,4 @@ export const pageQuery = graphql`
 
 export default LabsIndex
 
-export const Head = () => <SEO title="labs" />
+export const Head = () => <Seo title="labs" />
