@@ -1,17 +1,16 @@
-import React, { useContext } from "react"
-import Layout from "../layouts/main"
-import Seo from "../components/seo"
-import { Trans, useTranslation } from "react-i18next"
-import Context from "../components/context"
+import React from 'react'
+import Layout from '../layouts/main'
+import { Seo } from '../components/seo'
+import { Trans, useTranslation } from 'react-i18next'
 
 const urls = {
-  bandcamp: "https://diegodorado.bandcamp.com/",
-  spotify: "https://open.spotify.com/artist/6TiMRef3nqRA74LKQ810t8",
-  apple: "https://music.apple.com/us/artist/diego-dorado/1495558877",
+  bandcamp: 'https://diegodorado.bandcamp.com/',
+  spotify: 'https://open.spotify.com/artist/6TiMRef3nqRA74LKQ810t8',
+  apple: 'https://music.apple.com/us/artist/diego-dorado/1495558877',
   amazon:
-    "https://www.amazon.com/s?k=Diego+Dorado&i=digital-music&search-type=ss&ref=ntt_srch_drd_B084155L66",
-  youtube: "https://music.youtube.com/channel/UCz6uOhdNUiTAjt1mBzoV-AA",
-  deezer: "https://www.deezer.com/us/artist/83574592",
+    'https://www.amazon.com/s?k=Diego+Dorado&i=digital-music&search-type=ss&ref=ntt_srch_drd_B084155L66',
+  youtube: 'https://music.youtube.com/channel/UCz6uOhdNUiTAjt1mBzoV-AA',
+  deezer: 'https://www.deezer.com/us/artist/83574592',
 }
 const links = Object.entries(urls).map(([k, v]) => (
   <a href={v} target="_blank" rel="noopener noreferrer">
@@ -19,11 +18,19 @@ const links = Object.entries(urls).map(([k, v]) => (
   </a>
 ))
 
+const colors = 'bgcol=333333/linkcol=ffffff'
+
+// execute from https://diegodorado.bandcamp.com/
+// Array.from(document.getElementsByClassName('music-grid')[0].getElementsByTagName('li')).map(e=>parseInt(e.dataset.itemId.split('-')[1]))
+const albums = [
+  3457420195, 3644547653, 2587024292, 3583596473, 121085935, 1868484386,
+  956909203, 3975334759,
+]
+
 const MusicIndex = ({ location }) => {
   const [t] = useTranslation()
   return (
     <Layout location={location}>
-      <Seo title="music" />
       <p className="spacey">
         <Trans i18nKey="MusicIntro" i18nIsDynamicList>
           <span>Listen to the albums produced by Diego Dorado here or on </span>
@@ -31,8 +38,8 @@ const MusicIndex = ({ location }) => {
             {links.map((l, i) => (
               <span key={i}>
                 {l}
-                {i < links.length - 2 && ", "}
-                {i === links.length - 2 && ` ${t("or")} `}
+                {i < links.length - 2 && ', '}
+                {i === links.length - 2 && ` ${t('or')} `}
               </span>
             ))}
           </>
@@ -45,29 +52,9 @@ const MusicIndex = ({ location }) => {
 }
 
 const MusicPosts = () => {
-  const { state } = useContext(Context)
-
-  const colors =
-    state.theme === "dark"
-      ? "bgcol=333333/linkcol=ffffff"
-      : "bgcol=ffffff/linkcol=333333"
-
-  // execute from https://diegodorado.bandcamp.com/
-  // Array.from(document.getElementsByClassName('music-grid')[0].getElementsByTagName('li')).map(e=>parseInt(e.dataset.itemId.split('-')[1]))
-  const albums = [
-    3457420195,
-    3644547653,
-    2587024292,
-    3583596473,
-    121085935,
-    1868484386,
-    956909203,
-    3975334759,
-  ]
-
   return (
     <section className="music posts">
-      {albums.map(id => {
+      {albums.map((id) => {
         return (
           <article key={id}>
             <div className="bandcamp">
@@ -89,3 +76,5 @@ const MusicPosts = () => {
 }
 
 export default MusicIndex
+
+export const Head = () => <Seo title="music" />
