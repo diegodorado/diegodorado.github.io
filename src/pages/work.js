@@ -3,7 +3,7 @@ import { graphql } from 'gatsby'
 import Link from '../components/link'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import Layout from '../layouts/main'
-import SEO from '../components/seo'
+import { SEO } from '../components/seo'
 import { useTranslation } from 'react-i18next'
 
 const WorkIndex = ({ data, location }) => {
@@ -13,7 +13,6 @@ const WorkIndex = ({ data, location }) => {
 
   return (
     <Layout location={location} title={siteTitle}>
-      <SEO title="work" />
       <p className="spacey">{t('Intro')}</p>
       <p>{t('Recent works')}:</p>
       <section className="posts">
@@ -83,3 +82,5 @@ export const pageQuery = graphql`
     }
   }
 `
+
+export const Head = () => <SEO title="work" />

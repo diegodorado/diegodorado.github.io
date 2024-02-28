@@ -1,11 +1,11 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../layouts/main'
-import SEO from '../components/seo'
+import { SEO } from '../components/seo'
 import Link from '../components/link'
 
 const WorkPostTemplate = ({ data, pageContext, location }) => {
-  const post = data.mdx
+  const post = data.markdownRemark
   const siteTitle = data.site.siteMetadata.title
   let { previous, next } = pageContext
 
@@ -20,10 +20,6 @@ const WorkPostTemplate = ({ data, pageContext, location }) => {
 
   return (
     <Layout location={location} title={siteTitle}>
-      <SEO
-        title={post.frontmatter.title}
-        description={post.frontmatter.description || post.excerpt}
-      />
       <div className="work-title">
         <h2>{post.frontmatter.title}</h2>
         {pagination}
@@ -64,3 +60,14 @@ export const pageQuery = graphql`
     }
   }
 `
+
+export const Head = ({ data, pageContext }) => {
+  const post = data.markdownRemark
+
+  return (
+    <SEO
+      title={post.frontmatter.title}
+      description={post.frontmatter.description || post.excerpt}
+    />
+  )
+}
