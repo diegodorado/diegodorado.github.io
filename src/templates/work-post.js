@@ -1,11 +1,11 @@
-import React from "react"
-import { graphql } from "gatsby"
-import Layout from "../layouts/main"
-import SEO from "../components/seo"
-import Link from "../components/link"
+import React from 'react'
+import { graphql } from 'gatsby'
+import Layout from '../layouts/main'
+import SEO from '../components/seo'
+import Link from '../components/link'
 
 const WorkPostTemplate = ({ data, pageContext, location }) => {
-  const post = data.markdownRemark
+  const post = data.mdx
   const siteTitle = data.site.siteMetadata.title
   let { previous, next } = pageContext
 
@@ -30,7 +30,7 @@ const WorkPostTemplate = ({ data, pageContext, location }) => {
       </div>
       <div
         className={`${
-          post.frontmatter.style ? post.frontmatter.style : ""
+          post.frontmatter.style ? post.frontmatter.style : ''
         } work-post`}
         dangerouslySetInnerHTML={{ __html: post.html }}
       />

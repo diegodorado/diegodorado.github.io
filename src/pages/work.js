@@ -1,10 +1,10 @@
-import React from "react"
-import { graphql } from "gatsby"
-import Link from "../components/link"
-import Img from "gatsby-image"
-import Layout from "../layouts/main"
-import SEO from "../components/seo"
-import { useTranslation } from "react-i18next"
+import React from 'react'
+import { graphql } from 'gatsby'
+import Link from '../components/link'
+import { GatsbyImage } from 'gatsby-plugin-image'
+import Layout from '../layouts/main'
+import SEO from '../components/seo'
+import { useTranslation } from 'react-i18next'
 
 const WorkIndex = ({ data, location }) => {
   const [t, i18n] = useTranslation()
@@ -14,20 +14,24 @@ const WorkIndex = ({ data, location }) => {
   return (
     <Layout location={location} title={siteTitle}>
       <SEO title="work" />
-      <p className="spacey">{t("Intro")}</p>
-      <p>{t("Recent works")}:</p>
+      <p className="spacey">{t('Intro')}</p>
+      <p>{t('Recent works')}:</p>
       <section className="posts">
         {works
           .filter(
             ({ node }) =>
-              node.fields.locale === "" ||
+              node.fields.locale === '' ||
               node.fields.locale === i18n.languages[0]
           )
           .map(({ node }) => {
             return (
               <article key={node.fields.slug}>
                 <Link to={node.fields.slug}>
-                  <Img fixed={node.frontmatter.cover.childImageSharp.fixed} />
+                  <GatsbyImage
+                    image={
+                      node.frontmatter.cover.childImageSharp.gatsbyImageData
+                    }
+                  />
                 </Link>
                 <h3>
                   <Link to={node.fields.slug}>{node.frontmatter.title}</Link>
@@ -48,7 +52,7 @@ const WorkIndex = ({ data, location }) => {
 export default WorkIndex
 
 export const pageQuery = graphql`
-  query {
+  {
     site {
       siteMetadata {
         title
@@ -70,9 +74,7 @@ export const pageQuery = graphql`
             description
             cover {
               childImageSharp {
-                fixed(width: 320, height: 320) {
-                  ...GatsbyImageSharpFixed
-                }
+                gatsbyImageData(width: 320, height: 320, layout: FIXED)
               }
             }
           }

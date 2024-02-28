@@ -1,35 +1,31 @@
 import React from "react"
 import { StaticQuery, graphql } from "gatsby"
-import Img from 'gatsby-image'
+import { GatsbyImage } from "gatsby-plugin-image";
 import CyclicFade from '../cyclic-fade'
 import { Trans } from 'react-i18next'
 
 const Pics = props => (
   <StaticQuery
-    query={graphql`
-      query {
-        allFile(filter: {extension: {regex: "/(jpg)|(jpeg)|(png)/"}, relativeDirectory: {eq: "pics"}}) {
-            edges {
-              node {
-                id
-                name
-                childImageSharp {
-                  fluid(maxWidth: 1000, maxHeight: 563) {
-                    ...GatsbyImageSharpFluid
-                  }
-                }
-              }
-            }
-          }
+    query={graphql`{
+  allFile(
+    filter: {extension: {regex: "/(jpg)|(jpeg)|(png)/"}, relativeDirectory: {eq: "pics"}}
+  ) {
+    edges {
+      node {
+        id
+        name
+        childImageSharp {
+          gatsbyImageData(layout: FULL_WIDTH)
         }
-    `}
+      }
+    }
+  }
+}`}
     render={data =>
       <>
         <CyclicFade speed={2000}>
           {data.allFile.edges.map(({ node }) => {
-            return (
-              <Img key={node.id} fluid={node.childImageSharp.fluid} />
-              )
+            return <GatsbyImage image={node.childImageSharp.gatsbyImageData} key={node.id} />;
             })}
         </CyclicFade>
         <p>

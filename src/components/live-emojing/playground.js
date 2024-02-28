@@ -1,45 +1,52 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, {useState, useEffect, useContext} from "react"
-import Helmet from "react-helmet"
-import {reactLocalStorage} from 'reactjs-localstorage'
-import { Picker,emojiIndex } from 'mr-emoji'
-import '../../../node_modules/mr-emoji/css/emoji-mart.css'
-import { FaBackspace,
-         FaCaretLeft,
-         FaCaretRight,
-         FaPlay,
-         FaStop,
-         FaDice,
-         FaExpand,
-         FaCompress,
-         FaQuestionCircle
-        } from 'react-icons/fa'
+import React, { useState, useEffect, useContext } from 'react'
+import { reactLocalStorage } from 'reactjs-localstorage'
+
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
+
+import {
+  FaBackspace,
+  FaCaretLeft,
+  FaCaretRight,
+  FaPlay,
+  FaStop,
+  FaDice,
+  FaExpand,
+  FaCompress,
+  FaQuestionCircle,
+} from 'react-icons/fa'
 
 import scheduler from './scheduler'
 import Canvas from './canvas'
-import {alphaEmoji,
-        randomPattern,
-        emojiArray,
-        customEmojis,
-        recentEmojis,
-        includeEmojis,
-        sanitizeEmojiId,
-        i18nEmojis } from './utils'
+import {
+  alphaEmoji,
+  randomPattern,
+  emojiArray,
+  customEmojis,
+  recentEmojis,
+  includeEmojis,
+  sanitizeEmojiId,
+  i18nEmojis,
+} from './utils'
 
-import parser from "./tidal"
-import Pattern from "./pattern"
+import parser from './tidal'
+import Pattern from './pattern'
 import LiveEmojingContext from './context'
-import {useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 //todo: split this file in smaller modules! please!!
-const emoji_ids = Object.values(emojiIndex.emojis)
-  .reduce((o,e)=>Object.assign(o,{[e.native]:sanitizeEmojiId(e.id)}),{})
+const emojiIndex = { emojis: {} }
+const emoji_ids = Object.values(emojiIndex.emojis).reduce(
+  (o, e) => Object.assign(o, { [e.native]: sanitizeEmojiId(e.id) }),
+  {}
+)
 
 let backspaceOn = null
 let parsedGrammar = null
 
-const Playground = ({pattern}) =>{
-  const [t, ] = useTranslation();
+const Playground = ({ pattern }) => {
+  const [t] = useTranslation()
 
   const context = useContext(LiveEmojingContext)
   const [expanded, setExpanded] = useState(false)
@@ -51,35 +58,34 @@ const Playground = ({pattern}) =>{
   const [prevPattern, setPrevPattern] = useState('a b c d')
   const [right, setRight] = useState('')
 
-  useEffect(()=>{
+  useEffect(() => {
+    if (context.playingAlone) scheduler.init()
 
-    if(context.playingAlone)
-      scheduler.init()
-
-    setIsDesktop(typeof window.orientation === "undefined")
+    setIsDesktop(typeof window.orientation === 'undefined')
 
     //todo: open play alone when pattern is on url
     //got pattern from url?
     //setLeft( pattern ? pattern : reactLocalStorage.get('pattern', randomPattern()))
-    setLeft(left=> pattern ? pattern : reactLocalStorage.get('pattern', randomPattern()))
+    setLeft((left) =>
+      pattern ? pattern : reactLocalStorage.get('pattern', randomPattern())
+    )
 
-    setShowInstructions(reactLocalStorage.get('showInstructions', 'true')=== 'true')
+    setShowInstructions(
+      reactLocalStorage.get('showInstructions', 'true') === 'true'
+    )
 
     document.addEventListener('fullscreenchange', onFullScreenChange)
 
     // Specify how to clean up after this effect:
     return () => {
       document.removeEventListener('fullscreenchange', onFullScreenChange)
-      if(context.playingAlone)
-        scheduler.kill()
+      if (context.playingAlone) scheduler.kill()
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  }, [])
 
-
-
-  useEffect(()=>{
+  useEffect(() => {
     //re-attach listener if left, right or error have changed
     window.addEventListener('keydown', onKeyPress)
     // Specify how to clean up after this effect:
@@ -87,73 +93,66 @@ const Playground = ({pattern}) =>{
       window.removeEventListener('keydown', onKeyPress)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[left, right, error])
+  }, [left, right, error])
 
-
-
-  useEffect(()=>{
-
-    if(context.playingAlone)
-      scheduler.ensureSamples( emojiArray(left+right))
+  useEffect(() => {
+    if (context.playingAlone) scheduler.ensureSamples(emojiArray(left + right))
 
     try {
-
-      if(context.playingAlone){
+      if (context.playingAlone) {
         //todo: use s single parser
-        parsedGrammar = parser.parse(left+right)
-
-      }else{
+        parsedGrammar = parser.parse(left + right)
+      } else {
         //use charlie's parser
-        const sounds = emojiArray(left+right)
-          .map(c => (c.codePointAt(0) < 128) ? c : `[${emoji_ids[c]}]`)
+        const sounds = emojiArray(left + right)
+          .map((c) => (c.codePointAt(0) < 128 ? c : `[${emoji_ids[c]}]`))
           .join('')
 
         Pattern(sounds)
       }
 
       setError(false)
-    }
-    catch(error) {
+    } catch (error) {
       setError(true)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[left, right])
+  }, [left, right])
 
-
-  const onFullScreenChange = () =>{
+  const onFullScreenChange = () => {
     setExpanded(isFullScreen())
   }
 
-  const isFullScreen = () =>{
-    const fse= document.fullscreenElement
-        || document.mozFullScreenElement
-        || document.webkitFullscreenElement
-        || document.msFullscreenElement
-    return (fse !== undefined)
+  const isFullScreen = () => {
+    const fse =
+      document.fullscreenElement ||
+      document.mozFullScreenElement ||
+      document.webkitFullscreenElement ||
+      document.msFullscreenElement
+    return fse !== undefined
   }
 
   const onExpandClick = (e) => {
     const el = document.documentElement
-    const rfs = el.requestFullscreen
-        || el.webkitRequestFullScreen
-        || el.mozRequestFullScreen
-        || el.msRequestFullscreen
-    const cfs = document.exitFullscreen
-        || document.mozCancelFullScreen
-        || document.webkitExitFullscreen
-        || document.msExitFullscreen
+    const rfs =
+      el.requestFullscreen ||
+      el.webkitRequestFullScreen ||
+      el.mozRequestFullScreen ||
+      el.msRequestFullscreen
+    const cfs =
+      document.exitFullscreen ||
+      document.mozCancelFullScreen ||
+      document.webkitExitFullscreen ||
+      document.msExitFullscreen
 
     e.preventDefault()
     e.stopPropagation()
-    if(isFullScreen())
-      cfs.call(document)
-    else
-      rfs.call(el)
+    if (isFullScreen()) cfs.call(document)
+    else rfs.call(el)
   }
 
-  const addEmoji= (e) => {
-    setLeft( l => l + (!e.custom ? e.native : e.name))
+  const addEmoji = (e) => {
+    setLeft((l) => l + (!e.custom ? e.native : e.name))
   }
 
   const onCommitClick = (e) => {
@@ -162,53 +161,43 @@ const Playground = ({pattern}) =>{
     commit()
   }
 
-
   const onKeyPress = (e) => {
     //todo: implement copy/paste
-    if( e.ctrlKey /* || e.altKey || e.metaKey || e.shiftKey   || e.repeat*/ )
+    if (e.ctrlKey /* || e.altKey || e.metaKey || e.shiftKey   || e.repeat*/)
       return
 
     const c = e.key.toLowerCase()
 
-    if( c.length===1 &&  c >='a' && c <='z'){
+    if (c.length === 1 && c >= 'a' && c <= 'z') {
       const i = c.charCodeAt(0) - 'a'.charCodeAt(0)
-      setLeft( l => l + alphaEmoji[i])
-    }
-    else if(customEmojis.map((e)=>e.name).includes(e.key)){
+      setLeft((l) => l + alphaEmoji[i])
+    } else if (customEmojis.map((e) => e.name).includes(e.key)) {
       e.preventDefault()
-      setLeft( l => l + e.key)
-    }
-    else if(c === 'arrowleft'){
+      setLeft((l) => l + e.key)
+    } else if (c === 'arrowleft') {
       onLeftClick(e)
-    }
-    else if(c === 'arrowright'){
+    } else if (c === 'arrowright') {
       onRightClick(e)
-    }
-    else if(c === 'backspace'){
+    } else if (c === 'backspace') {
       onBackspaceClick(e)
-    }
-    else if(c === 'delete'){
+    } else if (c === 'delete') {
       e.preventDefault()
-      if(right.length>0){
+      if (right.length > 0) {
         const r = emojiArray(right)
         r.shift()
         setRight(r.join(''))
       }
-    }
-    else if(c === 'enter'){
+    } else if (c === 'enter') {
       onCommitClick(e)
-    }
-    else if(c === 'home'){
+    } else if (c === 'home') {
       e.preventDefault()
       setLeft('')
       setRight(left + right)
-    }
-    else if(c === 'end'){
+    } else if (c === 'end') {
       e.preventDefault()
       setLeft(left + right)
       setRight('')
-    }
-    else if(c === 'tab'){
+    } else if (c === 'tab') {
       onRandomClick(e)
     }
   }
@@ -222,7 +211,7 @@ const Playground = ({pattern}) =>{
 
   const onBackspaceClick = (e) => {
     e.preventDefault()
-    if(left.length>0){
+    if (left.length > 0) {
       let l = emojiArray(left)
       l.pop()
       setLeft(l.join(''))
@@ -235,8 +224,8 @@ const Playground = ({pattern}) =>{
   }
 
   const onBackspaceUp = (e) => {
-    const delta =  Date.now() - backspaceOn
-    if(delta>700){
+    const delta = Date.now() - backspaceOn
+    if (delta > 700) {
       setLeft('')
       setRight('')
     }
@@ -244,17 +233,17 @@ const Playground = ({pattern}) =>{
 
   const onLeftClick = (e) => {
     e.preventDefault()
-    if(left.length>0){
+    if (left.length > 0) {
       let l = emojiArray(left)
       const c = l.pop()
       setLeft(l.join(''))
-      setRight(c + right )
+      setRight(c + right)
     }
   }
 
   const onRightClick = (e) => {
     e.preventDefault()
-    if(right.length>0){
+    if (right.length > 0) {
       let r = emojiArray(right)
       const c = r.shift()
       setLeft(left + c)
@@ -262,19 +251,16 @@ const Playground = ({pattern}) =>{
     }
   }
 
-
-  const moveCarret = (isLeft,index) => {
+  const moveCarret = (isLeft, index) => {
     const l = emojiArray(left)
     const r = emojiArray(right)
     const all = l.concat(r)
 
-    if(!isLeft)
-      index += l.length
+    if (!isLeft) index += l.length
 
-    setLeft(all.slice(0,index).join(''))
+    setLeft(all.slice(0, index).join(''))
     setRight(all.slice(index).join(''))
   }
-
 
   const onHideInstructionsClick = (e) => {
     e.preventDefault()
@@ -283,7 +269,6 @@ const Playground = ({pattern}) =>{
     setShowInstructions(false)
   }
 
-
   const onToggleHelpClick = (e) => {
     e.preventDefault()
     reactLocalStorage.set('showInstructions', !showInstructions)
@@ -291,20 +276,19 @@ const Playground = ({pattern}) =>{
   }
 
   const commit = () => {
-    if(error)
-      return
+    if (error) return
 
-    const p = left+right
+    const p = left + right
     reactLocalStorage.set('pattern', p)
     //fixme: what is this for???
     setPrevPattern(p)
 
     setHighlighted(true)
-    setTimeout(() => setHighlighted(false),300)
+    setTimeout(() => setHighlighted(false), 300)
 
-    if(context.playingAlone){
+    if (context.playingAlone) {
       scheduler.play(parsedGrammar)
-    }else{
+    } else {
       context.sendPattern(p)
     }
   }
@@ -315,64 +299,130 @@ const Playground = ({pattern}) =>{
     scheduler.stop()
   }
 
-
-  const canStop = () => context.playingAlone && (prevPattern === (left+right))
+  const canStop = () => context.playingAlone && prevPattern === left + right
 
   //todo: decide which emojis to show
-  const emojisToShowFilter = (e)=>{
+  const emojisToShowFilter = (e) => {
     const emoji = emojiIndex.emojis[e.short_names[0]]
-    return (emoji && alphaEmoji.includes(emoji.native))
+    return emoji && alphaEmoji.includes(emoji.native)
   }
 
+  // <Helmet htmlAttributes={{class:(expanded ? 'full-screen':'normal') }} />
   return (
     <div className="play">
-      <Helmet htmlAttributes={{class:(expanded ? 'full-screen':'normal') }} />
-      {context.playingAlone && <Canvas/>}
-      {showInstructions &&
+      {context.playingAlone && <Canvas />}
+      {showInstructions && (
         <div className="instructions" aria-hidden="true">
-          {context.playingAlone ? null :
+          {context.playingAlone ? null : (
             <div className="welcome">
               <img alt="" src={context.avatarUrl} width={90} />
               <p>
-                {t('Hi')} {context.nick}.<br/>
-                {t('You joined')} {context.channel}.<br/>
-                <em>(<a href="/" onClick={context.toggleConfiguring}>{t('change')}</a>)</em>
+                {t('Hi')} {context.nick}.<br />
+                {t('You joined')} {context.channel}.<br />
+                <em>
+                  (
+                  <a href="/" onClick={context.toggleConfiguring}>
+                    {t('change')}
+                  </a>
+                  )
+                </em>
               </p>
-            </div>}
+            </div>
+          )}
           <h4>{t('Instructions')}:</h4>
           <ul>
-            <li>{t('Role a')} <a className="dice-btn" href="/" onClick={onRandomClick}><span role="img" aria-label="dice">🎲</span></a> {isDesktop && (<>[TAB] </>)}.</li>
-            <li>{t('Play')} <a className="play-btn" href="/" onClick={onCommitClick}><FaPlay /></a> {isDesktop && (<>[ENTER] </>)}.</li>
-            <li>{t('Go full screen')} <FaExpand className="fullscreen-btn" onClick={onExpandClick}/></li>
-            {(false && context.playingAlone) ? <li>Tap screen to set tempo</li>: null}
-            {isDesktop && (<li>{t('Magical keyboard!')} ( A={alphaEmoji[0]}, B={alphaEmoji[1]}, {t('so on')})</li>)}
-            <li>{t('Got it? Then')} <a href="/" onClick={onHideInstructionsClick}>{t('hide this')}</a></li>
+            <li>
+              {t('Role a')}{' '}
+              <a className="dice-btn" href="/" onClick={onRandomClick}>
+                <span role="img" aria-label="dice">
+                  🎲
+                </span>
+              </a>{' '}
+              {isDesktop && <>[TAB] </>}.
+            </li>
+            <li>
+              {t('Play')}{' '}
+              <a className="play-btn" href="/" onClick={onCommitClick}>
+                <FaPlay />
+              </a>{' '}
+              {isDesktop && <>[ENTER] </>}.
+            </li>
+            <li>
+              {t('Go full screen')}{' '}
+              <FaExpand className="fullscreen-btn" onClick={onExpandClick} />
+            </li>
+            {false && context.playingAlone ? (
+              <li>Tap screen to set tempo</li>
+            ) : null}
+            {isDesktop && (
+              <li>
+                {t('Magical keyboard!')} ( A={alphaEmoji[0]}, B={alphaEmoji[1]},{' '}
+                {t('so on')})
+              </li>
+            )}
+            <li>
+              {t('Got it? Then')}{' '}
+              <a href="/" onClick={onHideInstructionsClick}>
+                {t('hide this')}
+              </a>
+            </li>
           </ul>
-        </div>}
+        </div>
+      )}
       <a className="expand" href="/" onClick={onExpandClick}>
-        <FaExpand/>
-        <FaCompress/>
+        <FaExpand />
+        <FaCompress />
       </a>
-      <FaQuestionCircle className="help" onClick={onToggleHelpClick}/>
-      <div className={`${ error ? 'error' : '' } input`}>
-        <span className="clipper" role="img" aria-label="doubt">🤔</span>
-        <pre className={`${highlighted ? 'highlight' : '' } preview`} aria-hidden="true">
-          {emojiArray(left).map((e,i) => <span key={i} onClick={()=>moveCarret(true,i)} aria-hidden="true">{e}</span>)}
+      <FaQuestionCircle className="help" onClick={onToggleHelpClick} />
+      <div className={`${error ? 'error' : ''} input`}>
+        <span className="clipper" role="img" aria-label="doubt">
+          🤔
+        </span>
+        <pre
+          className={`${highlighted ? 'highlight' : ''} preview`}
+          aria-hidden="true"
+        >
+          {emojiArray(left).map((e, i) => (
+            <span
+              key={i}
+              onClick={() => moveCarret(true, i)}
+              aria-hidden="true"
+            >
+              {e}
+            </span>
+          ))}
           <span className="carret"></span>
-          {emojiArray(right).map((e,i) => <span key={i} onClick={()=>moveCarret(false,i)} aria-hidden="true">{e}</span>)}
+          {emojiArray(right).map((e, i) => (
+            <span
+              key={i}
+              onClick={() => moveCarret(false, i)}
+              aria-hidden="true"
+            >
+              {e}
+            </span>
+          ))}
         </pre>
         <nav>
-          <FaCaretLeft onClick={onLeftClick}/>
-          <FaCaretRight onClick={onRightClick}/>
-          <FaBackspace  onClick={onBackspaceClick} onTouchStart={onBackspaceDown} onTouchEnd={onBackspaceUp} onMouseDown={onBackspaceDown} onMouseUp={onBackspaceUp} />
-          <FaDice onClick={onRandomClick}/>
-          {canStop()?<FaStop onClick={onStopClick}/>:<FaPlay className="commit-btn" onClick={onCommitClick}/>}
+          <FaCaretLeft onClick={onLeftClick} />
+          <FaCaretRight onClick={onRightClick} />
+          <FaBackspace
+            onClick={onBackspaceClick}
+            onTouchStart={onBackspaceDown}
+            onTouchEnd={onBackspaceUp}
+            onMouseDown={onBackspaceDown}
+            onMouseUp={onBackspaceUp}
+          />
+          <FaDice onClick={onRandomClick} />
+          {canStop() ? (
+            <FaStop onClick={onStopClick} />
+          ) : (
+            <FaPlay className="commit-btn" onClick={onCommitClick} />
+          )}
         </nav>
       </div>
-      <Picker style={{width:'100%',borderRadius:'0',border:0}} showPreview={false} emojiSize={36} native={true} onClick={addEmoji} i18n={i18nEmojis} recent={recentEmojis} custom={customEmojis} color="#222" include={includeEmojis} emojisToShowFilter={emojisToShowFilter}/>
+      <Picker data={data} onEmojiSelect={addEmoji} />
     </div>
   )
 }
-
 
 export default Playground

@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "gatsby"
-import Img from "gatsby-image"
+import { GatsbyImage } from "gatsby-plugin-image";
 import Layout from "../layouts/main"
 import SEO from "../components/seo"
 //holaaa
@@ -16,7 +16,7 @@ const LogIndex = ({ data, location }) => {
         {posts.map(({ node }) => {
           return (
             <article key={node.fields.slug}>
-              <Img fixed={node.frontmatter.cover.childImageSharp.fixed} />
+              <GatsbyImage image={node.frontmatter.cover.childImageSharp.gatsbyImageData} />
               <div className="text">
                 <h3>
                   <Link to={node.fields.slug}>{node.frontmatter.title}</Link>
@@ -24,11 +24,11 @@ const LogIndex = ({ data, location }) => {
                 <p>{node.frontmatter.description}</p>
               </div>
             </article>
-          )
+          );
         })}
       </section>
     </Layout>
-  )
+  );
 }
 
 export default LogIndex
