@@ -1,10 +1,10 @@
 import Fraction from 'fraction.js'
 import { sanitizeEmojiId } from './utils'
-import Tone from 'tone'
+import * as Tone from 'tone'
 import StartAudioContext from 'startaudiocontext'
 
 // FIXME
-const emojiIndex = {}
+const emojiIndex = { emojis: {} }
 //todo: split this file in smaller modules! please!!
 const emojis = Object.values(emojiIndex.emojis).map((e) => e.native)
 const emoji_ids = Object.values(emojiIndex.emojis).reduce(

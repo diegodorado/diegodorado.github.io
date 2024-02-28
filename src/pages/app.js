@@ -1,6 +1,6 @@
-import React from "react"
-import { Router } from "@reach/router"
-import Layout from "../layouts/main"
+import React from 'react'
+import { Router } from '@reach/router'
+import Layout from '../layouts/main'
 
 const NotFound = () => <div>Sorry, nothing here.</div>
 

@@ -1,29 +1,26 @@
-import React from "react"
-import { Router} from "@reach/router"
-import Seo from "../../components/seo"
+import React from 'react'
+import { Router } from '@reach/router'
+import { Seo } from '../../components/seo'
 
-import "./styles.sass"
-import "./print.sass"
+import './styles.sass'
+import './print.sass'
 
-import Header from "./header"
-import Faq from "./faq"
-import Home from "./home"
-import Music from "./music"
-import Edit from "./edit"
-import Join from "./join"
-import Lead from "./lead"
-import Play from "./play"
-import Provider from "./provider"
+import Header from './header'
+import Faq from './faq'
+import Home from './home'
+import Music from './music'
+import Edit from './edit'
+import Join from './join'
+import Lead from './lead'
+import Play from './play'
+import Provider from './provider'
 
-const NotFound = () => (
-  <div>Sorry, nothing here.</div>
-)
+const NotFound = () => <div>Sorry, nothing here.</div>
 
 const Bingo = () => (
   <div className={`bingo`}>
     <Provider>
-      <Header/>
-      <Seo title="bingo" />
+      <Header />
       <Router>
         <Home path="/" />
         <Edit path=":matchId/edit" />
@@ -39,3 +36,13 @@ const Bingo = () => (
 )
 
 export default Bingo
+
+export const Head = (p) => {
+  console.log('PPPP', p)
+  return (
+    <>
+      <Seo title="bingo" />
+      <Seo title="bingo" />
+    </>
+  )
+}
