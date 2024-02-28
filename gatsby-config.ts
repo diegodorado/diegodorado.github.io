@@ -122,6 +122,13 @@ const config: GatsbyConfig = {
         path: `./src/data/`,
       },
     },
+    {
+      resolve: `gatsby-plugin-google-fonts`,
+      options: {
+        fonts: [`Inconsolata\:400,700`],
+        display: 'swap',
+      },
+    },
   ],
 }
 
