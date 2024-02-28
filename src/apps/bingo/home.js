@@ -12,15 +12,13 @@ const Home = () => {
 
   return (
     <div className="setup">
-      <h4>¿Qué quieres eh hacer?</h4>
+      <h4>¿Qué quieres hacer?</h4>
       {storedId && (
         <>
           <button onClick={() => navigate(`/bingo/${storedId}/edit`)}>
-            {' '}
             Editar partida anterior
           </button>
           <button onClick={() => navigate(`/bingo/${storedId}/play`)}>
-            {' '}
             Reanudar partida anterior
           </button>
         </>

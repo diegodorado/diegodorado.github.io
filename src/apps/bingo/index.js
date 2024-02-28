@@ -36,13 +36,3 @@ const Bingo = () => (
 )
 
 export default Bingo
-
-export const Head = (p) => {
-  console.log('PPPP', p)
-  return (
-    <>
-      <Seo title="bingo" />
-      <Seo title="bingo" />
-    </>
-  )
-}
