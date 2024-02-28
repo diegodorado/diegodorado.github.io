@@ -61,7 +61,7 @@ export const pageQuery = graphql`
   }
 `
 
-export const Head = ({ data, pageContext }) => {
+export const Head = ({ data }) => {
   const post = data.markdownRemark
 
   return (

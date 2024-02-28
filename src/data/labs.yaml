@@ -1,11 +1,11 @@
 - image: labs/ada.png
   title: A.D.A. weaves
-  description_es: Simulador del algoritmo de tejido de A.D.A. 
+  description_es: Simulador del algoritmo de tejido de A.D.A.
   description_en: A.D.A. weaving algorithm simulator.
   link: /labs/ada/
 
 - image: labs/bingo.png
-  title: Bingo Musical 
+  title: Bingo Musical
   description_es: Un regalo a mi madre durante la cuarentena del COVID-19.
   description_en: A present to my mother during COVID-19 lock down.
   link: /bingo/
@@ -44,22 +44,3 @@
   description_en: Synth/drum machine/thingie with fm sounds developed by munshkr.
   link: /fmtribe/
   absolute: true
-
-- image: labs/heka.png
-  title: IO HEKA
-  description_es: Juego de parejas arquetípicas de la mitología clásica.
-  description_en: Game of archetypal couples from classical mythology.
-  link: /labs/io
-
-- image: labs/morse.png
-  title: MORSE
-  description_es: Generador de mensajes cifrados en clave Morse.
-  description_en: Morse key encrypted message generator.
-  link: /labs/morse
-
-- image: labs/tateti.png
-  title: TA TE TI
-  description_es: Ta Te Ti basado en minimax, imposible de ganar.
-  description_en: Tic Tac Toe based on minimax, impossible to win.
-  link: /labs/tateti
-
