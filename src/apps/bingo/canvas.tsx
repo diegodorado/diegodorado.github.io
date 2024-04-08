@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react"
-import Bingo from "../../components/bingo/bingo"
-import { startPiano } from "../../components/bingo/piano"
-import { FaCog } from "react-icons/fa"
-import useBingo from "./useBingo"
+import React, { useState, useEffect, useRef } from 'react'
+import Bingo from '../../components/bingo/bingo'
+import { startPiano } from '../../components/bingo/piano'
+import { FaCog } from 'react-icons/fa'
+import { useBingo } from './useBingo'
 
 const Canvas = ({ onlyMusic = false }) => {
   const canvasRef = useRef(null)
@@ -24,9 +24,8 @@ const Canvas = ({ onlyMusic = false }) => {
       pianoRef.current = await startPiano()
     })()
 
-    const draw = time => {
-      const bingo = bingoRef.current
-      bingo.update()
+    const draw = (time) => {
+      bingoRef.current?.update()
       rafRef.current = requestAnimationFrame(draw)
     }
 
@@ -55,8 +54,8 @@ const Canvas = ({ onlyMusic = false }) => {
       onCollisionBall
     )
 
-    const allNums = [...Array(ballsMax()).keys()].map(x => x + 1)
-    const remaining = allNums.filter(x => !balls.includes(x))
+    const allNums = [...Array(ballsMax()).keys()].map((x) => x + 1)
+    const remaining = allNums.filter((x) => !balls.includes(x))
     bingoRef.current.start(remaining)
 
     //draw first frame
@@ -108,22 +107,22 @@ const Canvas = ({ onlyMusic = false }) => {
         {configOpen && (
           <div className="config">
             <button onClick={onToggleAutomatic}>
-              {autoCall ? "AUTOMATIC" : "MANUAL"}
+              {autoCall ? 'AUTOMATIC' : 'MANUAL'}
             </button>
-            <button className={pianoOn ? "on" : ""} onClick={onTogglePiano}>
-              {pianoOn ? "MUSIC ON" : "MUSIC OFF"}
+            <button className={pianoOn ? 'on' : ''} onClick={onTogglePiano}>
+              {pianoOn ? 'MUSIC ON' : 'MUSIC OFF'}
             </button>
             <button onClick={onClickPianoScale}>{` ${
-              ["PENTATONIC", "DORIAN", "ONIRIC", "ARABIC"][pianoScale]
+              ['PENTATONIC', 'DORIAN', 'ONIRIC', 'ARABIC'][pianoScale]
             }`}</button>
             <button
-              className={vfx !== 0 ? "on" : ""}
+              className={vfx !== 0 ? 'on' : ''}
               onClick={onClickVfx}
-            >{`VFX ${["OFF", "LOW", "MID", "HIGH"][vfx]}`}</button>
+            >{`VFX ${['OFF', 'LOW', 'MID', 'HIGH'][vfx]}`}</button>
           </div>
         )}
         {!autoCall && mayCall && <button onClick={onCallClick}>LANZAR</button>}
-        <button className={configOpen ? "on" : ""} onClick={toggleConfig}>
+        <button className={configOpen ? 'on' : ''} onClick={toggleConfig}>
           {configOpen ? <FaCog /> : <FaCog />}
         </button>
       </div>

@@ -27,6 +27,7 @@ const WorkIndex = ({ data, location }) => {
               <article key={node.fields.slug}>
                 <Link to={node.fields.slug}>
                   <GatsbyImage
+                    alt={node.frontmatter.description}
                     image={
                       node.frontmatter.cover.childImageSharp.gatsbyImageData
                     }
