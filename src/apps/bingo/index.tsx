@@ -1,13 +1,13 @@
-import React from 'react'
 import { Router } from '@reach/router'
+import React from 'react'
 
-import './styles.sass'
 import './print.sass'
+import './styles.sass'
 
-import Header from './header'
-import Faq from './faq'
-import Home from './home'
 import Edit from './edit'
+import Faq from './faq'
+import Header from './header'
+import Home from './home'
 import Join from './join'
 import Lead from './lead'
 import Play from './play'

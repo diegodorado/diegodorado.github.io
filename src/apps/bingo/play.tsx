@@ -1,38 +1,36 @@
-import React from 'react'
 import { useParams } from '@reach/router'
-import { useBingo } from './useBingo'
-import Card from './card'
+import React from 'react'
 import Balls from './balls'
+import Card from './card'
 import Loading from './loading'
+import { useBingoPlayer } from './useBingo'
 
 const Play = () => {
   const { matchId, playerId } = useParams()
-  const { players, matchStyle } = useBingo(matchId)
-  console.log(players, matchId)
+  const { player, style } = useBingoPlayer(matchId, playerId)
 
-  // if (match === null) return <Loading />
+  console.log(player, matchId)
 
-  //fixme: indexed player will be problematic if players change
-  const player = players[playerId]
-  if (!player) return <h4>Invalid Link</h4>
 
   const handlePrintClick = () => {
     window.print()
   }
+
+  if (player === undefined) return <Loading />
 
   return (
     <>
       <div className="preview">
         <h4>Cartones de {player.name}</h4>
         {player.cards.map((c, i) => (
-          <Card key={i} card={c} style={matchStyle} />
+          <Card key={i} card={c} style={style} />
         ))}
       </div>
       <div className="play">
         <h4>¡Hola {player.name}!</h4>
         <Balls reversed={true} />
         {player.cards.map((c, i) => (
-          <Card key={i} card={c} style={matchStyle} />
+          <Card key={i} card={c} style={style} />
         ))}
         <br />
         <br />

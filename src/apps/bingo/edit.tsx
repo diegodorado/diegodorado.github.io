@@ -1,24 +1,24 @@
+import { useParams } from '@reach/router'
+import { navigate } from 'gatsby'
 import React, {
-  useState,
-  useEffect,
-  useRef,
   ChangeEventHandler,
   KeyboardEventHandler,
+  useEffect,
+  useRef,
+  useState,
 } from 'react'
-import { Player, useBingo } from './useBingo'
-import { useParams } from '@reach/router'
-import { copyLink, fullUrl } from './utils'
-import { FaShareAlt, FaPrint, FaEye, FaTrashAlt } from 'react-icons/fa'
-import { navigate } from 'gatsby'
-import Loading from './loading'
+import { FaEye, FaPrint, FaShareAlt, FaTrashAlt } from 'react-icons/fa'
 import Card from './card'
+import Loading from './loading'
+import { Player, useBingo } from './useBingo'
+import { copyLink, fullUrl } from './utils'
 
 const Edit = () => {
   const { matchId } = useParams()
-  const { match, addPlayer, removePlayerAt, toggleStyle, isOwner } =
+  const { match, addPlayer, removePlayer, toggleStyle, isOwner } =
     useBingo(matchId)
 
-  console.log(isOwner, matchId, match.id)
+  console.log(isOwner, matchId, match)
 
   const [previewPlayer, setPreviewPlayer] = useState<Player | null>(null)
   const [playerName, setPlayerName] = useState('')
@@ -81,9 +81,9 @@ const Edit = () => {
     }
   }, [previewPlayer])
 
-  // if (!owner) return <h4>Invalid match...</h4>
+  if (match === undefined) return <Loading />
 
-  // if (initialized === false) return <Loading />
+  const playersCount = Object.keys(match.players).length
 
   return (
     <>
@@ -111,13 +111,13 @@ const Edit = () => {
         <br />
         <div className="game">
           <div className="main">
-            {match.players.length === 0 ? (
+            {playersCount === 0 ? (
               <p>Agrega participantes a la partida.</p>
             ) : (
               <>
                 <p>
-                  Hay <strong>{match.players.length}</strong> participantes en
-                  la partida.{' '}
+                  Hay <strong>{playersCount}</strong> participantes en la
+                  partida.{' '}
                 </p>
                 <br />
               </>
@@ -142,7 +142,7 @@ const Edit = () => {
               </select>
               <button onClick={onAddPlayerClick}>Agregar</button>
             </div>
-            {match.players.length > 0 && (
+            {playersCount > 0 && (
               <>
                 <table>
                   <thead>
@@ -152,15 +152,15 @@ const Edit = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {match.players.map((p, i) => {
-                      const url = fullUrl(`/bingo/${matchId}/${i}/play`)
+                    {Object.entries(match.players).map(([key, player]) => {
+                      const url = fullUrl(`/bingo/${matchId}/${key}/play`)
                       return (
-                        <tr key={`${i}`}>
-                          <td className={`player`}>{p.name}</td>
-                          <td>{p.cards.length}</td>
+                        <tr key={key}>
+                          <td className={`player`}>{player.name}</td>
+                          <td>{player.cards.length}</td>
                           <td
                             className="action"
-                            onClick={() => onPrintClick(p)}
+                            onClick={() => onPrintClick(player)}
                           >
                             <FaPrint />
                           </td>
@@ -181,7 +181,7 @@ const Edit = () => {
                           </td>
                           <td
                             className="action"
-                            onClick={() => removePlayerAt(i)}
+                            onClick={() => removePlayer(key)}
                           >
                             <FaTrashAlt />
                           </td>

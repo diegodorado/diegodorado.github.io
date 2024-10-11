@@ -5,7 +5,9 @@ type BallsProps = {
   reversed?: boolean
 }
 const Balls = ({ reversed = false }: BallsProps) => {
-  const { balls, rollingBall } = useBingo()
+  const { match, rollingBall } = useBingo()
+  const balls = match?.balls ?? []
+
   return (
     <div className="balls">
       {(reversed ? balls.reverse() : balls).map((b, i) => (

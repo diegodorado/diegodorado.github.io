@@ -1,9 +1,9 @@
-import React from 'react'
 import { navigate } from 'gatsby'
+import React from 'react'
 import { useBingo } from './useBingo'
 
 const Home = () => {
-  const { createMatch, match, isOwner } = useBingo()
+  const { test, createMatch, match, isOwner } = useBingo()
 
   const onCreateClick = () => {
     const match = createMatch()
@@ -12,7 +12,7 @@ const Home = () => {
 
   return (
     <div className="setup">
-      {isOwner && (
+      {match && isOwner && (
         <div>
           <button onClick={() => navigate(`/bingo/${match.id}/edit`)}>
             Editar partida anterior
@@ -28,6 +28,7 @@ const Home = () => {
           Necesito más información
         </button>
       </div>
+      <button onClick={test}>TEST</button>
     </div>
   )
 }
