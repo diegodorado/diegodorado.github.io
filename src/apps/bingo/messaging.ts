@@ -22,16 +22,19 @@ const connect = async () => {
 type Subscriber = {
   key: string
   topic: string
-  callback: (message: string) => void
+  callback: (sender: string, data: object) => void
 }
 const subscribers: Subscriber[] = []
 
 const randomKey = () => Math.floor(Math.random() * Date.now()).toString(16)
 
-const pub = (topic: string, message: object) => {
+const pub = (topic: string, message: Record<string, string | number>) => {
   const dispatch = async () => {
     await connect()
+    message.topic = topic
+    console.log('pub', topic, message)
     await nknClient.publish(topic, JSON.stringify(message))
+    console.log('published')
   }
   dispatch()
 }
@@ -42,7 +45,9 @@ const sub = (topic: string, callback: Subscriber['callback']) => {
 
   const dispatch = async () => {
     await connect()
+    console.log('sub', topic)
     await nknClient.subscribe(topic, 100)
+    console.log('subscribed')
   }
   dispatch()
 
@@ -56,7 +61,9 @@ const sub = (topic: string, callback: Subscriber['callback']) => {
 }
 
 nknClient.onMessage((message) => {
-  console.log('got message', message)
+  const data = JSON.parse(message.payload as string)
+  const sender = message.src
+  console.log('got message', data.topic, sender, data)
 })
 
 const client = {
