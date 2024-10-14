@@ -8,27 +8,27 @@ import { useBingo } from './useBingo'
 
 const Lead = () => {
   const { matchId } = useParams()
-  const { players, balls, updateMatch, owner } = useBingo(matchId)
+  const { restartMatch, match } = useBingo(matchId)
 
-  const onRestartClick = async () => {
-    await updateMatch({ balls: [] })
+  const onRestartClick = () => {
+    restartMatch()
   }
 
-  const onEndClick = async () => {
-    await updateMatch({ balls: [], playing: false })
+  const onEndClick = () => {
+    restartMatch()
     navigate(`/bingo/${matchId}/edit`)
   }
 
-  if (!owner) return <h4>Invalid match...</h4>
+  if (match === undefined) return <h4>Invalid match...</h4>
 
   return (
     <div className="game">
       <div className="main">
         <Canvas />
-        <Balls />
+        <Balls reversed={false} balls={match.balls} />
       </div>
       <div className="aside">
-        <Ranking players={players} balls={balls} />
+        <Ranking players={match.players} balls={match.balls} />
         <button onClick={() => navigate(`/bingo/${matchId}/edit`)}>
           EDITAR PARTIDA
         </button>

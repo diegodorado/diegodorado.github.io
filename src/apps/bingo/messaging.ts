@@ -1,74 +1,85 @@
-import { MultiClient } from 'nkn-sdk'
-// @ts-ignore
-import nkn from '../../../node_modules/nkn-sdk/dist/nkn.min.js'
+//const socket = new WebSocket('ws://localhost:8080/')
+const socket = new WebSocket('wss://bin-go.apps.diegodorado.com/')
 
-const nknClient: MultiClient = new nkn.MultiClient()
-
-let connectPromise: Promise<void>
-const connect = async () => {
-  if (connectPromise === undefined) {
-    connectPromise = new Promise<void>((resolve, reject) => {
-      nknClient.onConnect(() => resolve())
-      nknClient.onConnectFailed(reject)
-    })
-  }
-  try {
-    await connectPromise
-  } catch (e) {
-    console.error(e)
-  }
-}
+const connect = new Promise<void>((resolve, reject) => {
+  socket.onerror = () => reject()
+  socket.onopen = () => resolve()
+})
 
 type Subscriber = {
-  key: string
   topic: string
-  callback: (sender: string, data: object) => void
+  callback: (data: object) => void
 }
 const subscribers: Subscriber[] = []
 
-const randomKey = () => Math.floor(Math.random() * Date.now()).toString(16)
+const send = (
+  type: 'pub' | 'sub' | 'unsub',
+  topic: string,
+  content?: object
+) => {
+  socket.send(
+    JSON.stringify({
+      type,
+      topic,
+      content: content !== undefined ? JSON.stringify(content) : undefined,
+    })
+  )
+}
 
-const pub = (topic: string, message: Record<string, string | number>) => {
+const pub = (topic: string, content: object) => {
   const dispatch = async () => {
-    await connect()
-    message.topic = topic
-    console.log('pub', topic, message)
-    await nknClient.publish(topic, JSON.stringify(message))
-    console.log('published')
+    await connect
+    console.log('pub', topic, content)
+    send('pub', topic, content)
   }
   dispatch()
 }
 
 const sub = (topic: string, callback: Subscriber['callback']) => {
-  const key = randomKey()
-  subscribers.push({ key, topic, callback })
+  subscribers.push({ topic, callback })
 
   const dispatch = async () => {
-    await connect()
+    await connect
     console.log('sub', topic)
-    await nknClient.subscribe(topic, 100)
-    console.log('subscribed')
+    send('sub', topic)
   }
   dispatch()
+}
 
-  // returns an ussub function that removes the subscriber
-  return () => {
-    const index = subscribers.findIndex((s) => s.key === key)
-    if (index > -1) {
-      subscribers.splice(index, 1)
-    }
+const unsub = (topic: string) => {
+  const dispatch = async () => {
+    await connect
+    console.log('unsub', topic)
+    send('unsub', topic)
+  }
+  const index = subscribers.findIndex((s) => s.topic === topic)
+  if (index > -1) {
+    dispatch()
+    subscribers.splice(index, 1)
   }
 }
 
-nknClient.onMessage((message) => {
-  const data = JSON.parse(message.payload as string)
-  const sender = message.src
-  console.log('got message', data.topic, sender, data)
-})
+socket.onmessage = function (e) {
+  const data = JSON.parse(e.data)
+
+  if (data.type === 'pub') {
+    const content = JSON.parse(data.content)
+    subscribers.forEach((s) => {
+      if (s.topic === data.topic) {
+        s.callback(content)
+      }
+    })
+  }
+}
+
+socket.onclose = function () {
+  console.log('closed')
+}
 
 const client = {
   sub,
   pub,
+  unsub,
 }
 
 export { client }

@@ -3,15 +3,15 @@ import StartAudioContext from 'startaudiocontext'
 
 const noiseGen = () => {
   let scale = 1
-  const lerp = (a, b, t) => a * (1 - t) + b * t
-  const r = []
+  const lerp = (a: number, b: number, t: number) => a * (1 - t) + b * t
+  const r: number[] = []
   for (let i = 0; i < 1024; ++i) r.push(Math.random())
   const l = r.length - 1
   return {
-    scale: (x) => {
+    scale: (x: number) => {
       scale = x
     },
-    sample: (x) => {
+    sample: (x: number) => {
       const s = x * scale
       const f = Math.floor(s)
       const t = s - f
@@ -22,26 +22,27 @@ const noiseGen = () => {
 }
 
 class Piano {
+  ng = noiseGen()
+  _step = 0
+  last = 0
+  notes: string[] = []
+  sampler = sampler()
+  muted = false
+  scaleIndex = 0
+
   constructor() {
-    this.ng = noiseGen()
     this.ng.scale(0.3)
-    this._step = 0
-    this.last = 0
-    this.notes = []
-    this.sampler = sampler()
-    this.muted = false
-    this.scaleIndex = 0
   }
 
   step() {
     return this.ng.sample(this._step++)
   }
 
-  setScale(index) {
+  setScale(index: number) {
     this.scaleIndex = index
   }
 
-  playRandomNote(velocity) {
+  playRandomNote(velocity?: number) {
     const t = performance.now()
     const dt = t - this.last
     //prevent double triggers
@@ -54,7 +55,7 @@ class Piano {
 
     this.notes.unshift(note)
     if (this.notes.length > 4) {
-      const n = this.notes.pop()
+      const n = this.notes.pop() as string
       this.sampler.triggerRelease(n, '+0.5')
     }
     this.sampler.triggerAttack(note, undefined, velocity)
@@ -63,7 +64,7 @@ class Piano {
   playStart() {
     if (this.muted || !this.sampler.loaded) return
     this.sampler.releaseAll()
-    const idxs = []
+    const idxs: number[] = []
     const scale = scales[this.scaleIndex]
     while (idxs.length < 3) {
       //skip some steps
@@ -117,7 +118,7 @@ const startPiano = async () => {
 const scales = [
   [2, 3, 4, 5].reduce(
     (arr, el) => [...arr, ...'CDEGA'.split('').map((x) => x + el)],
-    []
+    [] as string[]
   ),
   [1, 2].reduce(
     (a, e) => [
@@ -126,21 +127,21 @@ const scales = [
         (x, i) => x + (e * 2 + (i > 3 ? 1 : 0))
       ),
     ],
-    []
+    [] as string[]
   ),
   [2, 3, 4, 5].reduce(
     (arr, el) => [
       ...arr,
       ...['C', 'D', 'E', 'F#', 'G#', 'A#'].map((x) => x + el),
     ],
-    []
+    [] as string[]
   ),
   [2, 3, 4, 5].reduce(
     (arr, el) => [
       ...arr,
       ...['C', 'D#', 'E', 'F', 'G#', 'A', 'B'].map((x) => x + el),
     ],
-    []
+    [] as string[]
   ),
 ]
 
@@ -187,4 +188,4 @@ const sampler = () =>
     }
   ).toDestination()
 
-export { startPiano }
+export { startPiano, Piano }

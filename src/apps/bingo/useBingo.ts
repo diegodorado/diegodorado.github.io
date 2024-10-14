@@ -28,28 +28,15 @@ type BingoState = {
 
 type BingoActions = {
   toggleStyle: () => void
+  restartMatch: () => void
   createMatch: () => Match
-  test: () => void
   addBall: (ball: number) => void
   addPlayer: (name: string, numCards: number) => void
   removePlayer: (key: string) => void
 }
 
-const randomEnough = () =>
-  Math.floor(Math.random() * Date.now())
-    .toString(16)
-    .substring(0, 2)
-
-const restoreMatch = () => {
-  const stringifiedMatch = reactLocalStorage.get<string>('bingo-match')
-  if (stringifiedMatch) {
-    const match = JSON.parse(stringifiedMatch) as Match
-    client.sub(`join-${match.id}`, (m) => {
-      console.log('resotre ', m)
-    })
-    return match
-  }
-}
+const randomEnough = () => Math.floor(Math.random() * Date.now()).toString(16)
+//.substring(0, 2)
 
 const saveMatch = (match: Match) => {
   const stringifiedMatch = JSON.stringify(match)
@@ -65,26 +52,29 @@ const createMatch = () => {
     players: {},
     style: 'bingo90',
   }
-  client.sub(`join-${match.id}`, (m) => {
-    console.log('create', m)
-  })
   saveMatch(match)
   return match
 }
 
 const useBingoStore = create<BingoState & BingoActions>((set, _get) => ({
   ready: false,
-  match: restoreMatch(),
   rollingBall: 0,
-
-  test() {
-    client.pub('something', { who: 'am i?' })
-  },
 
   createMatch: () => {
     const match = createMatch()
     set({ match })
     return match
+  },
+
+  restartMatch: () => {
+    set((state) => {
+      if (state.match === undefined) {
+        throw new Error('no match yet')
+      }
+      const match = { ...state.match, balls: [] }
+      saveMatch(match)
+      return { match }
+    })
   },
 
   addBall: (ball) => {
@@ -94,7 +84,10 @@ const useBingoStore = create<BingoState & BingoActions>((set, _get) => ({
       }
       const match = { ...state.match }
       match.balls = [ball, ...match.balls]
-      client.pub('ball', { ball })
+
+      client.pub(`balls-${match.id}`, {
+        balls: match.balls,
+      })
       saveMatch(match)
       return { match }
     })
@@ -157,32 +150,46 @@ const useBingoStore = create<BingoState & BingoActions>((set, _get) => ({
   },
 }))
 
+type PlayerJoinedMessage = {
+  playerId: string
+}
+
+const handlePlayerJoined = (data: object) => {
+  const { playerId } = data as PlayerJoinedMessage
+  console.log('player joined:', playerId)
+  const { balls, style, players, id } = useBingoStore.getState().match as Match
+  client.pub(`player-${id}-${playerId}`, {
+    player: players[playerId],
+    style,
+  })
+  client.pub(`balls-${id}`, {
+    balls,
+  })
+}
+
 useBingoStore.subscribe((state, prevState) => {
+  console.log('new match is', state.match?.id, prevState.match?.id)
   if (prevState.match) {
-    console.log('prev match was', prevState.match.id)
-    // client.unsubscribe(prevState.match.id) //, prevState.match.id)
+    client.unsub(`join-${prevState.match.id}`)
   }
 
   if (state.match) {
-    console.log('new match is', state.match.id)
-    // subscribeTopics(state.match.id)
+    client.sub(`join-${state.match.id}`, handlePlayerJoined)
   }
 })
 
-const updateMatch = (match: Match) => {
-  saveMatch(match)
-  console.log('update match: ', match)
+const tryRestoreMatch = () => {
+  const stringifiedMatch = reactLocalStorage.get<string>('bingo-match')
+  if (stringifiedMatch) {
+    const match = JSON.parse(stringifiedMatch) as Match
+    useBingoStore.setState({ match })
+  }
 }
+
+tryRestoreMatch()
 
 const useBingo = (matchId?: string) =>
   useBingoStore((state) => {
-    useEffect(() => {
-      if (matchId && state.match?.id !== matchId) {
-        // state.setMatchId(matchId)
-        console.log('init', matchId, state.match?.id)
-      }
-    }, [matchId, state.match?.id])
-
     const ballsMax = () => {
       return state.match?.style === 'bingo90' ? 90 : 75
     }
@@ -199,25 +206,35 @@ const useBingo = (matchId?: string) =>
 const useBingoPlayer = (matchId: string, playerId: string) => {
   const [loading, setLoading] = useState(true)
   const [player, setPlayer] = useState<Player>()
+  const [balls, setBalls] = useState<number[]>([])
   const [style, setStyle] = useState<string>('bingo90')
 
   useEffect(() => {
-    let match = useBingoStore.getState().match
-    if (match?.id !== matchId) {
-      console.log('need to join')
-      client.pub(`join-${matchId}`, { playerId })
-    }
+    client.sub(`player-${matchId}-${playerId}`, (m) => {
+      // @ts-ignore
+      setPlayer(m.player)
+      // @ts-ignore
+      setStyle(m.style)
+      setLoading(false)
+    })
+    client.sub(`balls-${matchId}`, (m) => {
+      // @ts-ignore
+      setBalls(m.balls)
+      // @ts-ignore
+    })
+    client.pub(`join-${matchId}`, { playerId })
 
-    // setPlayer(match.players[playerId])
-    // setStyle(match.style)
-    // state.setMatchId(matchId)
-    console.log('init', matchId, playerId)
+    return () => {
+      client.unsub(`player-${matchId}-${playerId}`)
+      client.unsub(`balls-${matchId}`)
+    }
   }, [matchId, playerId])
 
   return {
     style,
     loading,
     player,
+    balls,
   }
 }
 

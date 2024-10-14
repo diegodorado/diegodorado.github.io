@@ -8,7 +8,7 @@ import {
   Vector,
 } from 'matter-js'
 
-class Bingo {
+class Cage {
   constructor(canvas, callback, audioCallback) {
     this.audioCallback = audioCallback
     this.statusCallback = callback
@@ -416,4 +416,4 @@ class Bingo {
   }
 }
 
-export default Bingo
+export default Cage

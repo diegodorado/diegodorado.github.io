@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Bingo from '../../components/bingo/bingo'
-import { startPiano } from '../../components/bingo/piano'
+import Cage from './cage'
+import { startPiano, Piano } from './piano'
 import { FaCog } from 'react-icons/fa'
 import { useBingo } from './useBingo'
 
 const Canvas = ({ onlyMusic = false }) => {
   const canvasRef = useRef(null)
-  const rafRef = useRef(null)
-  const bingoRef = useRef(null)
-  const pianoRef = useRef(null)
+  const rafRef = useRef<number>()
+  const cageRef = useRef<Cage>()
+  const pianoRef = useRef<Piano>()
   const [configOpen, setConfigOpen] = useState(false)
   const [pianoOn, setPianoOn] = useState(true)
   const [pianoScale, setPianoScale] = useState(0)
   const [autoCall, setAutoCall] = useState(false)
   const [vfx, setVfx] = useState(2)
   const [mayCall, setMayCall] = useState(true)
-  const { balls, ballsMax, addBall } = useBingo()
+  const { match, ballsMax, addBall } = useBingo()
 
   useEffect(() => {
     //todo: async wrapper uselles unless i need something after
@@ -24,42 +24,42 @@ const Canvas = ({ onlyMusic = false }) => {
       pianoRef.current = await startPiano()
     })()
 
-    const draw = (time) => {
-      bingoRef.current?.update()
+    const draw = () => {
+      cageRef.current?.update()
       rafRef.current = requestAnimationFrame(draw)
     }
 
-    const onBingoStatusChanged = (status, number, position, force) => {
-      if (status === 2) pianoRef.current.playStart()
+    const onBingoStatusChanged = (status: number, number: number) => {
+      if (status === 2) pianoRef.current?.playStart()
       if (status === 3) {
       }
       if (status === 4) {
         if (!onlyMusic) addBall(number)
-        pianoRef.current.playEnd()
-        bingoRef.current.complete()
+        pianoRef.current?.playEnd()
+        cageRef.current?.complete()
         setTimeout(() => {
           setMayCall(true)
-          if (bingoRef.current.automatic) bingoRef.current.call()
+          if (cageRef.current?.automatic) cageRef.current?.call()
         }, 2000)
       }
     }
 
     const onCollisionBall = () => {
-      if (pianoRef.current) pianoRef.current.playRandomNote()
+      pianoRef.current?.playRandomNote()
     }
 
-    bingoRef.current = new Bingo(
+    cageRef.current = new Cage(
       canvasRef.current,
       onBingoStatusChanged,
       onCollisionBall
     )
 
     const allNums = [...Array(ballsMax()).keys()].map((x) => x + 1)
-    const remaining = allNums.filter((x) => !balls.includes(x))
-    bingoRef.current.start(remaining)
+    const remaining = allNums.filter((x) => !match?.balls.includes(x))
+    cageRef.current.start(remaining)
 
     //draw first frame
-    bingoRef.current.draw()
+    cageRef.current.draw()
     rafRef.current = requestAnimationFrame(draw)
 
     return () => cancelAnimationFrame(rafRef.current)
@@ -83,19 +83,19 @@ const Canvas = ({ onlyMusic = false }) => {
   const onToggleAutomatic = () => {
     const a = !autoCall
     setAutoCall(a)
-    if (bingoRef.current) bingoRef.current.automatic = a
+    if (cageRef.current) cageRef.current.automatic = a
     if (a) onCallClick()
   }
 
   const onClickVfx = () => {
     const l = (vfx + 1) % 4
     setVfx(l)
-    if (bingoRef.current) bingoRef.current.setVfxLevel(l)
+    if (cageRef.current) cageRef.current.setVfxLevel(l)
   }
 
   const onCallClick = () => {
     setMayCall(false)
-    bingoRef.current.call()
+    cageRef.current?.call()
   }
 
   const toggleConfig = () => setConfigOpen(!configOpen)

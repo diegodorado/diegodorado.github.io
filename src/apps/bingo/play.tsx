@@ -7,10 +7,7 @@ import { useBingoPlayer } from './useBingo'
 
 const Play = () => {
   const { matchId, playerId } = useParams()
-  const { player, style } = useBingoPlayer(matchId, playerId)
-
-  console.log(player, matchId)
-
+  const { player, style, balls } = useBingoPlayer(matchId, playerId)
 
   const handlePrintClick = () => {
     window.print()
@@ -28,7 +25,7 @@ const Play = () => {
       </div>
       <div className="play">
         <h4>¡Hola {player.name}!</h4>
-        <Balls reversed={true} />
+        <Balls reversed={true} balls={balls} />
         {player.cards.map((c, i) => (
           <Card key={i} card={c} style={style} />
         ))}

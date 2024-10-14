@@ -15,10 +15,7 @@ import { copyLink, fullUrl } from './utils'
 
 const Edit = () => {
   const { matchId } = useParams()
-  const { match, addPlayer, removePlayer, toggleStyle, isOwner } =
-    useBingo(matchId)
-
-  console.log(isOwner, matchId, match)
+  const { match, addPlayer, removePlayer, toggleStyle } = useBingo(matchId)
 
   const [previewPlayer, setPreviewPlayer] = useState<Player | null>(null)
   const [playerName, setPlayerName] = useState('')

@@ -3,7 +3,7 @@ import React from 'react'
 import { useBingo } from './useBingo'
 
 const Home = () => {
-  const { test, createMatch, match, isOwner } = useBingo()
+  const { createMatch, match, isOwner } = useBingo()
 
   const onCreateClick = () => {
     const match = createMatch()
@@ -28,7 +28,6 @@ const Home = () => {
           Necesito más información
         </button>
       </div>
-      <button onClick={test}>TEST</button>
     </div>
   )
 }

@@ -1,19 +1,14 @@
 import React from 'react'
-import { useBingo } from './useBingo'
 
 type BallsProps = {
-  reversed?: boolean
+  reversed: boolean
+  balls: number[]
 }
-const Balls = ({ reversed = false }: BallsProps) => {
-  const { match, rollingBall } = useBingo()
-  const balls = match?.balls ?? []
-
+const Balls = ({ reversed, balls }: BallsProps) => {
   return (
     <div className="balls">
       {(reversed ? balls.reverse() : balls).map((b, i) => (
-        <span key={i} className={b === rollingBall ? 'rolling' : ''}>
-          {b}
-        </span>
+        <span key={i}>{b}</span>
       ))}
     </div>
   )
